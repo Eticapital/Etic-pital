@@ -1,0 +1,35 @@
+/* Project preview */
+
+.project-preview {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .project-preview .project-title {
+    padding-top: 0.5rem;
+  }
+}
+
+.project-preview .small {
+  display: inline-block;
+  line-height: 120%;
+}
+
+@media (max-width: 991px) {
+  .project-preview .project-title {
+    display: inline-block;
+    padding-top: 0.75rem;
+  }
+  .project-preview .project-img {
+      height: 400px;
+    }
+ }
+
+ @media (max-width: 768px) {
+   .project-preview .project-title {
+     padding-top: 1.5rem;
+   }
+  }

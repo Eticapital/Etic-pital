@@ -1,0 +1,132 @@
+/* Project */
+
+/* Project image */
+
+@media (min-width: 576px) {
+  .project-img {
+    height: 400px;
+  }
+}
+
+@media (min-width: 768px) {
+  .project-img {
+    height: 100%;
+  }
+}
+
+/* User image */
+
+.user-img {
+  width: 100px;
+  height: 100px;
+}
+
+/* Team member */
+
+.team-member {
+  width: 100%;
+  border-radius: 100px;
+  margin-bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.team-member p {
+  padding: 0px;
+  margin: 0px 10px;
+}
+
+.team-img {
+  width: 80px;
+  height: 80px;
+  margin: 10px;
+  border-radius: 50%;
+}
+
+/* KPI table */
+
+.kpi-name, .kpi-line, .kpi-text {
+  vertical-align: top;
+  position: relative;
+}
+
+.kpi-name {
+  text-align: right;
+  padding-right: 21px;
+  top:-0.25rem;
+}
+
+.kpi-bullet {
+	border-radius: 50%;
+	width: 21px;
+	height: 21px;
+  background-color: #144EBA;
+  padding-top: 2px;
+}
+
+.kpi-line {
+  border-left: 2px solid #9B9B9B;
+  margin-left: 21px;
+  left: -12px;
+  top: -1px;
+}
+
+tr:last-child .kpi-line {
+  border-left: 0px !important;
+}
+
+.kpi-text {
+  top: -1rem;
+  text-align: justify;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+/* Documents */
+
+.documents {
+  position: relative;
+  width: 100%;
+}
+
+.documents .list-group {
+  height: 240px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.5rem 0px;
+}
+
+.documents .list-group-item {
+  border: 0px;
+  width: 50%;
+  background-color: inherit;
+  display: flex;
+  align-items: center;
+}
+
+.documents .list-group-item:before{
+  content: "";
+  width:42px;
+  height:48px;
+  background: url("../img/data_room_icon.png");
+  display: block;
+  float: left;
+  margin-right: 1rem;
+}
+
+.no-access {
+  width: 100%;
+  background-color:rgba(0,0,0,0.5);
+  z-index: 1030;
+  color: #FFFFFF;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.documents .no-access{
+  height: 240px;
+}

@@ -1,0 +1,15 @@
+#invertir {
+  background-image: url("../img/comofunciona_bg1.jpg");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: cover;
+  color: #fff;
+}
+
+#levantar-fondos {
+  background-image: url("../img/comofunciona_bg2.jpg");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: cover;
+  color: #fff;
+}

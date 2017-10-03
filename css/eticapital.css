@@ -69,6 +69,15 @@ body {
   background-size: cover;
 }
 
+/*File upload button*/
+
+.file-upload .file-trigger {
+  opacity: 0;
+  height: 1px;
+  width: 1px;
+}
+
+
 /* Col */
 /* Todo se sustituye con $grid-gutter-width: 80px; */
 

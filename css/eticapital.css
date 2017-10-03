@@ -69,12 +69,19 @@ body {
   background-size: cover;
 }
 
-/*File upload button*/
+/* Custom form */
 
+/* File upload button */
+/* Para ocultar el campo por default para subir archivos */
 .file-upload .file-trigger {
   opacity: 0;
   height: 1px;
   width: 1px;
+}
+
+/* Field remove button */
+.new-field .close {
+  padding-top: 0.35rem;
 }
 
 

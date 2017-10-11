@@ -7,6 +7,19 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
+a {
+  color: #84BE00;
+}
+
+a:hover {
+  color:#74A503;
+}
+
+/* Links color blanco */
+.text-white a {
+  color: #fff;
+}
+
 /* Navigation */
 
 @media (max-width: 768px) {
@@ -208,3 +221,8 @@ body {
     background-color: #74A503;
     border-color: #74A503;
 }
+
+/* Bg-dark */
+.bg-dark {
+    background-color: #4A4A4A !important;
+  }

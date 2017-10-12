@@ -72,10 +72,8 @@ a:hover {
 /* Content padding */
 
 .content {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
   padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-bottom: 2.5rem;
 }
 
 .content p, .footer p {
@@ -84,8 +82,6 @@ a:hover {
 
 /* Footer */
 .footer {
-  margin-top: 0.5rem;
-  margin-bottom: 0rem;
   padding-top: 2rem;
   padding-bottom: 2rem;
   position: absolute;

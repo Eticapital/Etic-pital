@@ -116,6 +116,50 @@ a:hover {
   padding-top: 0.35rem;
 }
 
+/* Rating by numbers */
+
+.form-rating {
+  display: flex;
+  flex-wrap: nowrap;
+  width:100%;
+}
+
+.rating-option{
+  width:100%;
+  margin-left: -1px;
+}
+
+.rating-option input[type="radio"] {
+	opacity: 0;
+	width: 0;
+  height: 0;
+  display: block;
+}
+
+.rating-option input[type="radio"] ~ label {
+  opacity: 1;
+  text-align: center;
+  padding: 0.6rem 0rem;
+  color: #84BE00;
+  background-color: #fff;
+  border: 1px solid #CDCDCD;
+  width: 100%;
+}
+
+.rating-option input[type="radio"]:checked ~ label, .form-rating input[type="radio"]:active ~ label  {
+  color: #74A503;
+  background-color: #e9ecef;
+}
+
+.rating-option:first-child input[type="radio"] ~ label {
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
+}
+
+.rating-option:last-child input[type="radio"] ~ label {
+  border-top-right-radius: 100px;
+  border-bottom-right-radius: 100px;
+}
 
 /* Col */
 /* Todo se sustituye con $grid-gutter-width: 80px; */

@@ -219,7 +219,7 @@ a:hover {
 .btn {
     padding: .75rem .75rem;
     border-radius: 1.5rem;
-    width: 200px;
+    min-width: 200px;
   }
 
 /* Pagination */

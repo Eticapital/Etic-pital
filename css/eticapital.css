@@ -161,6 +161,17 @@ a:hover {
   border-bottom-right-radius: 100px;
 }
 
+/* Bullets */
+
+.bullet {
+border-radius: 50%;
+width: 21px;
+height: 21px;
+background-color: #144EBA;
+padding-top: 2px;
+}
+
+
 /* Col */
 /* Todo se sustituye con $grid-gutter-width: 80px; */
 

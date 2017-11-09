@@ -56,14 +56,6 @@
   top:-0.25rem;
 }
 
-.kpi-bullet {
-	border-radius: 50%;
-	width: 21px;
-	height: 21px;
-  background-color: #144EBA;
-  padding-top: 2px;
-}
-
 .kpi-line {
   border-left: 2px solid #9B9B9B;
   margin-left: 21px;

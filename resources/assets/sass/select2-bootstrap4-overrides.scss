@@ -1,0 +1,55 @@
+// Import this file after select2 bootstrap theme. Content won't be centered if you don't include this file.
+//
+.select2-container--bootstrap {
+    .select2-selection {
+        box-shadow: $input-box-shadow;
+    }
+    .select2-selection--multiple {
+        .select2-selection__choice {
+            margin-top: calc(#{$s2bs-padding-base-vertical} - 1px);
+        }
+
+        .select2-search--inline .select2-search__field {
+            height: $s2bs-input-height-base;
+        }
+    }
+
+    .select2-selection--multiple.input-sm,
+    .input-group-sm & .select2-selection--multiple,
+    .form-group-sm & .select2-selection--multiple {
+        .select2-selection__choice {
+            margin-top: calc(#{$s2bs-padding-small-vertical} - 1px);
+        }
+
+        .select2-search--inline .select2-search__field {
+            height: $s2bs-input-height-small;
+        }
+    }
+
+    .select2-selection--multiple.input-lg,
+    .input-group-lg & .select2-selection--multiple,
+    .form-group-lg & .select2-selection--multiple {
+        .select2-selection__choice {
+            margin-top: calc(#{$s2bs-padding-large-vertical} - 1px) ;
+        }
+
+        .select2-search--inline .select2-search__field {
+            height: $s2bs-input-height-large;
+        }
+    }
+}
+
+.input-group > .select2-container--bootstrap {
+    flex: 1 1 auto;
+
+    > .selection > {
+        flex: 1 1 auto;
+
+        .select2-selection.form-control {
+            float: none;
+        }
+    }
+}
+.select2-container--bootstrap .select2-selection--single .select2-selection__arrow b {
+    border-color: #333 transparent transparent transparent;
+}

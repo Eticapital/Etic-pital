@@ -1,0 +1,44 @@
+{
+  "globals": {
+    "App": true,
+    "app": true,
+    "Vue": true,
+    "Form": true,
+    "axios" :true,
+    "_" :true,
+    "$" :true,
+    "uniqid" :true,
+    "bus" :true,
+    "router" :true,
+    "growl" :true,
+    "swal" :true,
+    "notify" :true,
+    "format" :true,
+  },
+  "parserOptions": {
+    "sourceType": "module",
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "jasmine": true
+  },
+  extends: [
+    'standard',
+    'plugin:vue/recommended'
+  ],
+  rules: {
+    'vue/order-in-components': 'error',
+    'vue/attribute-hyphenation': 'error',
+    'vue/no-multi-spaces': 'error',
+    'vue/no-duplicate-attributes': 'error',
+    'vue/html-self-closing': 'error',
+    'vue/name-property-casing': 'error',
+  },
+  plugins: [
+    'html',
+  ],
+  "settings": {
+    "html/html-extensions": [".html"],
+  }
+}

@@ -1,53 +1,50 @@
+require('vue2-animate/dist/vue2-animate.min.css')
 
 window._ = require('lodash');
 
-/**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
- */
+window.moment = require('moment');
+import 'moment/locale/es';
 
-try {
-    window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap-sass');
-} catch (e) {}
+window.$ = window.jQuery = require('jquery');
 
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
+// window.Tether = require('tether')
+
+// ES6 Modules or TypeScript
+import swal from 'sweetalert2'
+swal.setDefaults({
+    buttonsStyling: false,
+    confirmButtonText: 'Ok',
+    cancelButtonText: 'Cancelar',
+    confirmButtonClass: 'btn btn-lg btn-primary',
+    cancelButtonClass: 'btn btn-lg btn-secondary',
+    inputClass: 'form-control',
+    padding: 30
+});
+
+window.swal = swal;
+
+window.Vue = require('vue');
+
+window.Velocity = require('velocity-animate');
 
 window.axios = require('axios');
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.format = require('string-template');
 
-/**
- * Next we will register the CSRF Token as a common header with Axios so that
- * all outgoing HTTP requests automatically have it attached. This is just
- * a simple convenience so we don't have to attach every token manually.
- */
+window.select2 = require('select2');
+$.fn.select2.defaults.set('language', 'es');
 
-let token = document.head.querySelector('meta[name="csrf-token"]');
+window.axios.defaults.headers.common = {
+    'X-CSRF-TOKEN': App.csrfToken,
+    'X-Requested-With': 'XMLHttpRequest'
+};
 
-if (token) {
-    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-} else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-}
+import Echo from 'laravel-echo'
 
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
+window.Pusher = require('pusher-js');
 
-// import Echo from 'laravel-echo'
-
-// window.Pusher = require('pusher-js');
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: 'your-pusher-key'
-// });
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'cd7cbb4ba8beea72c553',
+});

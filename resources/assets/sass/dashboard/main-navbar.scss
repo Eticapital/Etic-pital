@@ -1,0 +1,108 @@
+
+.navbar-header {
+    @include media-breakpoint-up(lg) {
+        display: flex;
+        flex: 0 0 $side-navbar-width;
+        background: $brand-dark-primary;
+        border-bottom: 1px solid $brand-dark-secondary;
+    }
+
+    @include media-breakpoint-down(md) {
+        padding: 0 15px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        height: $main-navbar-sm-height;
+    }
+}
+
+.navbar-title {
+    text-align: center;
+    width: 100%;
+    display: block;
+
+    > a {
+        color: #FFF;
+        &:hover,
+        &:active {
+            color: #FFF;
+            text-decoration: none;
+        }
+    }
+
+    @include media-breakpoint-up(lg) {
+        > a {
+            overflow: hidden;
+            width: 100%;
+            display: block;
+            line-height: $main-navbar-height;
+        }
+
+        .navbar-title-icon {
+            border-bottom: 1px solid $brand-dark-secondary;
+            font-size: $main-navbar-height/2;
+            line-height: $main-navbar-height;
+            display: block;
+        }
+
+        .navbar-title-label {
+            display: none;
+        }
+    }
+
+    @include media-breakpoint-down(md) {
+        font-size: 19px;
+        flex: 1;
+        padding-right: 25px;
+    }
+}
+
+.navbar-title-img {
+    @include media-breakpoint-up(lg) {
+        > a {
+            height: 0;
+            padding: ($main-navbar-height - 1) 0 0 0;
+            background-repeat: no-repeat;
+            background-position: center center;
+            @include img-retina(#{$img-path}#{$logo-default}, #{$img-path}#{$logo-default-2x}, $logo-default-width, $logo-default-height);
+        }
+    }
+}
+
+.main-nav-toggler {
+    @include media-breakpoint-up(lg) {
+        display: none;
+    }
+
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 41px;
+    background: $brand-dark-primary;
+    font-size: 18px;
+    color: $white;
+}
+
+.navbar-notifications {
+    .nav-link {
+        font-size: 28px;
+    }
+    @include media-breakpoint-down(md) {
+        background: $brand-dark-primary;
+        display: block;
+        text-align: center;
+        .nav-item {
+            display: inline-block;
+        }
+        .nav-link {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            .badge {
+                background-color: $primary !important;
+            }
+        }
+    }
+}
+

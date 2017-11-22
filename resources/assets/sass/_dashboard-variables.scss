@@ -1,0 +1,29 @@
+// Logo
+$img-path: '/img/';
+$logo-default: 'logo.png';
+$logo-default-width: 45px;
+$logo-default-height: 45px;
+$logo-default-2x: 'logo@2x.png';
+$logo-full: 'logo-full.png';
+$logo-full-width: 206px;
+$logo-full-height: 39px;
+$logo-full-2x: 'logo-full@2x.png';
+
+// Layout
+$side-navbar-width: 100px;
+
+// Main Navbar
+$main-navbar-height: 80px;
+$main-navbar-sm-height: 70px;
+$main-navbar-spacing: 18px;
+
+$brand-dark-primary: #3d3c3c;
+$brand-dark-secondary: #474646;
+$brand-dark-secondary-light: lighten($brand-dark-secondary, 3%);
+$brand-dark-secondary-lighter: lighten($brand-dark-secondary, 7%);
+
+$gray-lightest: $gray-400;
+$gray-lighter: $gray-300;
+$gray-light: $gray-200;
+
+$text-light: #8a8a8a;

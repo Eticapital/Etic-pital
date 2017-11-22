@@ -1,0 +1,16 @@
+.user-avatar {
+  border-radius: 50%;
+  padding: 3px;
+  background: #FFF;
+  width: 210px;
+  max-width: 100%;
+  margin: 0 auto 15px;
+  border: 2px solid #666;
+  > img {
+    width: 200px;
+    max-width: 100%;
+    height: auto;;
+    line-height: 200px;
+    border-radius: 50%;
+  }
+}

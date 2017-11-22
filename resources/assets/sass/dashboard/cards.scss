@@ -1,0 +1,26 @@
+// // .card-header {
+//     padding-left: 0;
+//     padding-right: 0;
+//     margin-left: $card-spacer-x;
+//     margin-right: $card-spacer-x;
+//     border-bottom: $card-border-width solid $gray-lighter;
+//     font-size: 18px;
+//     font-weight: 300;
+// }
+
+.card-table {
+    .card-body {
+        padding: 0;
+    }
+    .card-title {
+        padding: $card-spacer-y $card-spacer-x;
+        margin-bottom: 0;
+    }
+    // $card-spacer-y:                     .75rem !default;
+// $card-spacer-x:                     1.25rem !default;
+
+    .table {
+
+        margin-bottom: 0;
+    }
+}

@@ -1,0 +1,23 @@
+// Fonts
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+// Libraries
+// Icomoon
+@import "resources/assets/lib/icomoon/style";
+
+@import "globals";
+
+// Bootstrap
+@import "node_modules/bootstrap/scss/bootstrap";
+
+// Select 2
+// @import "node_modules/select2/src/scss/core.scss";
+// @import "select2-bootstrap4.scss";
+// @import "node_modules/select2-bootstrap-theme/src/select2-bootstrap.scss";
+// @import "select2-bootstrap4-overrides.scss";
+
+@import "dashboard";
+
+[v-cloak] {
+  display: none !important;
+}

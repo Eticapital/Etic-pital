@@ -1,0 +1,35 @@
+// Animate.css Attention seekers
+@import "node_modules/animatewithsass/_properties.scss";
+@import "node_modules/animatewithsass/_attention-seekers/attention-seekers.scss";
+
+@import "libs/sweetalert2.scss";
+
+@import "dashboard/main-navbar.scss";
+@import "dashboard/side-navbar.scss";
+@import "dashboard/styles.scss";
+@import "dashboard/layout.scss";
+@import "dashboard/animations.scss";
+@import "dashboard/vue2-scrollbar.scss";
+
+@import "dashboard/media-list.scss";
+
+// Bootrap components overrides
+@import "dashboard/buttons.scss";
+@import "dashboard/dropdown.scss";
+@import "dashboard/cards.scss";
+
+// Dashboard sections
+@import "dashboard/datatable.scss";
+
+// Dashboard sections
+@import "dashboard/user.scss";
+@import "dashboard/spinner.scss";
+
+.swing {
+  @include swing();
+}
+
+
+[v-cloak] {
+  display: none;
+}

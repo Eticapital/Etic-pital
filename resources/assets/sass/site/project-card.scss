@@ -1,0 +1,28 @@
+/* Project Card */
+
+a.project-card {
+  color: $body-color !important;
+  text-decoration: none !important;
+}
+
+a.project-card:hover {
+  background-color: #F8F9FA;
+}
+
+.card.project-card {
+    border: 0px;
+    border-radius: 0rem;
+  }
+
+@media (max-width: 992px) {
+  .project-card-columns {
+  column-count: 2;
+  }
+ }
+
+
+@media (max-width: 768px) {
+  .project-card-columns {
+  column-count: 1;
+  }
+ }

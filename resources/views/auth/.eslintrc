@@ -1,0 +1,16 @@
+{
+  "parserOptions": {
+    "sourceType": "module",
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "jasmine": true
+  },
+  plugins: [
+    'html',
+  ],
+  "settings": {
+    "html/html-extensions": [".html", ".blade.php"],
+  }
+}

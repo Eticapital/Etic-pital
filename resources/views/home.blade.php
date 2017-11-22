@@ -68,7 +68,7 @@
         <div class="card-columns project-card-columns">
 
           @foreach(range(1, 6) as $i)
-          <a href="="{{ route('fondear-mi-proyecto') }}" class="card project-card">
+          <a href="{{ route('proyecto-dummy') }}" class="card project-card">
             <div class="project-img"></div>
             <div class="card-body">
               <p><span class="h3 card-title">Nombre del proyecto</span></p>

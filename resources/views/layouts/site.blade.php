@@ -26,9 +26,9 @@
         <nav id="navbarheader" class="{{ @$is_home ? 'navbar navbar-expand-lg navbar-dark pt-3 px-0' : 'navbar navbar-expand-lg navbar-light bg-white sticky-top'}}">
           <a class="navbar-brand" href="{{ route('home') }}">
             @if(@$is_home)
-            <img id="logo" src="img/logolight.png" alt="Eticapital">
+            <img id="logo" src="{{ asset('img/logolight.png') }}" alt="Eticapital">
             @else
-            <img id="logo" src="img/logodark.png" alt="Eticapital">
+            <img id="logo" src="{{ asset('img/logodark.png') }}" alt="Eticapital">
             @endif
           </a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,9 +49,15 @@
               <li class="nav-item">
                 <a class="nav-link" href="{{ route('nosotros') }}">Nosotros</a>
               </li>
+              @if(auth()->user())
               <li class="nav-item">
-                <a class="nav-link" href="{{ route('login') }}">Login</a>
+                <a class="nav-link" href="{{ route('login') }}"><i class="fa fa-user"></i> Logueado</a>
               </li>
+              @else
+              <li class="nav-item">
+                <a class="nav-link" href="{{ route('login') }}">Ingresar</a>
+              </li>
+              @endif
             </ul> <!-- / .navbar-nav -->
           </div> <!-- / #navbarSupportedContent -->
         </nav> <!-- / #navbarheader -->

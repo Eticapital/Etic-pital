@@ -3,7 +3,7 @@
     <form @submit.prevent="onSubmit" autocomplete="off">
       <form-text :form="form" name="display_name" label="Nombre del grupo" />
       <form-text :form="form" name="description" label="Descripción (opcional)" />
-      <button type="submit" :class="['btn btn-primary', form.busy ? 'btn-loading' : '']" :disabled="form.errors.hasErrors()||form.busy">Guardar</button>
+      <form-button-submit :form="form">Guardar</form-button-submit>
     </form>
   </b-card>
 </template>

@@ -28,6 +28,7 @@ Vue.component('form-float', require('./forms/form-float.vue'))
 Vue.component('form-money', require('./forms/form-money.vue'))
 Vue.component('form-textarea', require('./forms/form-textarea.vue'))
 Vue.component('form-checkbox', require('./forms/form-checkbox.vue'))
+Vue.component('form-button-submit', require('./forms/form-button-submit.vue'))
 
 // Form inputs
 Vue.component('input-float', require('./forms/input-float.vue'))

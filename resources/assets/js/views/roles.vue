@@ -9,15 +9,11 @@
     >
       <template slot="actions" slot-scope="props">
         <div class="btn-group  btn-group-sm" v-if="canDataTable(props, 'permissions|users|update|delete')">
-          <router-link v-if="canDataTable(props, 'permissions')" class="btn btn-secondary" :to="{ name: 'roles.permissions', params: { id: props.rowData.id } }">
+          <router-link v-if="canDataTable(props, 'permissions')" class="btn btn-primary" :to="{ name: 'roles.permissions', params: { id: props.rowData.id } }">
             <i class="icon-checkmark"></i> Permisos
           </router-link>
 
-          <router-link v-if="canDataTable(props, 'users')" class="btn btn-secondary" :to="{ name: 'roles.users', params: { id: props.rowData.id } }">
-            <i class="icon-group"></i> Usuarios
-          </router-link>
-
-          <router-link v-if="canDataTable(props, 'update')" class="btn btn-secondary" :to="{ name: 'roles.edit', params: { id: props.rowData.id } }">
+          <router-link v-if="canDataTable(props, 'update')" class="btn btn-primary" :to="{ name: 'roles.edit', params: { id: props.rowData.id } }">
             <i class="icon-pen"></i> Editar
           </router-link>
 

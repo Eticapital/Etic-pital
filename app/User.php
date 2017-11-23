@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Models\Traits\HasPolicyAttributes;
+use App\Models\Traits\LazyAppends;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,7 +12,7 @@ use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
 {
-    use Notifiable, LaratrustUserTrait, Searchable;
+    use Notifiable, LaratrustUserTrait, Searchable, HasPolicyAttributes, LazyAppends;
 
     use Authorizable {
         LaratrustUserTrait::can insteadof Authorizable;
@@ -33,6 +35,10 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password', 'remember_token',
+    ];
+
+    protected $appendable = [
+        'can_update', 'can_destroy', 'can_show'
     ];
 
     /**

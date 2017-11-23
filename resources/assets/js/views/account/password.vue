@@ -4,8 +4,8 @@
       <form-text :form="form" type="password" name="old_password" label="Tu contraseña actual" />
       <form-text :form="form" type="password" name="password" label="Nueva contraseña" />
       <form-text :form="form" type="password" name="password_confirmation" label="Repite tu nueva contraseña" />
-      <button type="submit" :class="['btn btn-primary', form.busy ? 'btn-loading' : '']" :disabled="form.errors.hasErrors()||form.busy">Guardar</button>
-  </form>
+      <form-button-submit :form="form">Guardar</form-button-submit>
+    </form>
   </b-card>
 </template>
 

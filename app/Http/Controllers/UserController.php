@@ -15,13 +15,21 @@ class UserController extends Controller
             ? User::search(request()->input('query'))
             : User::latest();
 
-        return $query->paginate(request()->input('per_page', 10));
+        $results = $query->paginate(request()->input('per_page', 10));
+
+        if (request()->input('appends')) {
+            return tap($results)->each(function ($user) {
+                $user->lazyAppend(request()->input('appends'));
+            });
+        }
+
+        return $results;
     }
 
     public function show(User $user)
     {
         if (request()->input('appends')) {
-            $user->append(explode(',', request()->input('appends')));
+            $user->lazyAppend(request()->input('appends'));
         }
 
         return $user;
@@ -39,7 +47,7 @@ class UserController extends Controller
 
         $data = $this->validate($request, [
             'name' => 'required',
-            'password' => 'required',
+            'password' => 'required|confirmed',
             'email' => 'required|email|unique:users',
         ]);
 
@@ -52,9 +60,13 @@ class UserController extends Controller
 
         $data = $this->validate($request, [
             'name' => 'required',
-            'password' => 'required',
+            'password' => 'sometimes|nullable|confirmed',
             'email' => 'email|unique:users,email,'.$user->id,
         ]);
+
+        if (!$data['password']) {
+            unset($data['password']);
+        }
 
         return tap($user)->update($data);
     }

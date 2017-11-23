@@ -8,7 +8,7 @@ Route::get('/nav', 'NavController@get');
 Route::get('account', 'AccountController@index')->name('account.index');
 Route::put('account', 'AccountController@update')->name('account.update');
 Route::put('account/password', 'AccountController@password')->name('account.password');
-
+Route::get('account/permissions', 'AccountController@permissions')->name('account.permissions');
 
 // Administrar usuarios
 Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);

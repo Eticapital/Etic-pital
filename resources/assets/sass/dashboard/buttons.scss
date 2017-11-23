@@ -1,10 +1,13 @@
-.btn {
-    display: inline-flex;
+.btn-primary {
+    color: #FFF;
+}
+
+.btn.btn-loading {
+        display: inline-flex;
     position: relative;
     justify-content: center;
     vertical-align: top;
-}
-.btn.btn-loading {
+
     color: transparent !important;
     pointer-events: none;
     &:after {

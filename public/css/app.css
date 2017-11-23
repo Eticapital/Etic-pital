@@ -12085,7 +12085,11 @@ body {
   height: 70px;
 }
 
-.btn {
+.btn-primary {
+  color: #FFF;
+}
+
+.btn.btn-loading {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -12094,9 +12098,6 @@ body {
       -ms-flex-pack: center;
           justify-content: center;
   vertical-align: top;
-}
-
-.btn.btn-loading {
   color: transparent !important;
   pointer-events: none;
 }

@@ -6,6 +6,7 @@ require('./functions.js');
 
 // Crud Forms
 require('./forms/bootstrap');
+require('./forms/inputs')
 
 // Módulos para Vue
 require('./bootstrap_modules');
@@ -21,17 +22,6 @@ Vue.component('page-header', require('./components/PageHeader.vue'));
 Vue.component('no-results', require('./components/NoResults.vue'));
 Vue.component('content-loading', require('./components/ContentLoading.vue'));
 Vue.component('loading-anchor', require('./components/LoadingAnchor.vue'));
-
-// Form groups
-Vue.component('form-text', require('./forms/form-text.vue'))
-Vue.component('form-float', require('./forms/form-float.vue'))
-Vue.component('form-money', require('./forms/form-money.vue'))
-Vue.component('form-textarea', require('./forms/form-textarea.vue'))
-Vue.component('form-checkbox', require('./forms/form-checkbox.vue'))
-Vue.component('form-button-submit', require('./forms/form-button-submit.vue'))
-
-// Form inputs
-Vue.component('input-float', require('./forms/input-float.vue'))
 
 // // Rutas de la aplicación para Vue Router
 import router from './router';

@@ -11,7 +11,7 @@
     </span>
     <b-form-textarea
       :state="form.errors.has(name) ? 'invalid' : ''"
-      v-model.trim="form[name]"
+      v-model="form[name]"
       ref="input"
       :rows="rows"
       :placeholder="placeholder"

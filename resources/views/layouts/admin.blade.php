@@ -9,7 +9,7 @@
 
     <title>{{ config('app.name') }}</title>
 
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('app_assets/css/app.css') }}" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <script>
@@ -37,6 +37,6 @@
         </div>
     </div><!-- /#app -->
 
-    <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ mix('app_assets/js/app.js') }}"></script>
   </body>
 </html>

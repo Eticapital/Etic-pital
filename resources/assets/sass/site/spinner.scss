@@ -1,0 +1,20 @@
+@keyframes anim-rotate {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+.spinner {
+    display: inline-block;
+    height: 1em;
+    line-height: 1;
+    animation: anim-rotate 2s infinite linear;
+}
+.spinner--steps {
+    animation: anim-rotate 1s infinite steps(8);
+}
+.spinner--steps2 {
+    animation: anim-rotate 1s infinite steps(12);
+}

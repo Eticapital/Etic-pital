@@ -1,5 +1,8 @@
 @extends('layouts.site')
 
+@push('scripts_after')
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.googlemaps.key') }}"></script>
+@endpush
 @section('content')
 <div class="container">
       <div class="content">
@@ -12,97 +15,15 @@
         </div> <!-- / .row -->
       </div> <!-- / .content -->
     </div> <!-- / .container -->
-
+    <project-form google-maps-api-key="{{ config('services.googlemaps.key') }}" v-cloak></project-form>
     <form>
-      <div class="container-fluid bg-light">
-        <div class="container">
-          <div class="content">
-            <div class="row justify-content-center">
-              <div class="col-lg-8">
-                <fieldset>
-                <p><legend><span class="h2 text-primary">1.</span> <span class="h3">Datos Generales</span></legend></p>
-                  <div class="form-group">
-                    <label>Nombre del proyecto</label>
-                    <input type="text" class="form-control">
-                  </div> <!-- / .form-group -->
-                  <div class="form-group">
-                    <label>Nombre del titular</label>
-                    <input type="text" class="form-control">
-                  </div> <!-- / .form-group -->
-                  <div class="form-group">
-                    <label>Teléfono de contacto</label>
-                    <input type="tel" class="form-control">
-                  </div> <!-- / .form-group -->
-                  <div class="form-group">
-                    <label>Correo de contacto</label>
-                    <input type="email" class="form-control">
-                  </div> <!-- / .form-group -->
-                  <div class="form-group">
-                    <label>Video de la iniciativa</label>
-                    <input type="url" class="form-control" value="http://">
-                  </div> <!-- / .form-group -->
-                  <div class="form-group">
-                    <label>Ubicación</label>
-                    <input type="text" class="form-control">
-                  </div> <!-- / .form-group -->
-                </fieldset>
-              </div> <!-- / .col-lg-8 -->
-            </div> <!-- / .row -->
-          </div> <!-- / .content -->
-        </div> <!-- / .container -->
-      </div> <!-- / .container-fluid -->
 
-      <div class="container">
-        <div class="content">
-          <div class="row justify-content-center">
-            <div class="col-lg-8">
-              <fieldset>
-              <p><legend><span class="h2 text-primary">2.</span> <span class="h3">Resumen</span></legend></p>
-                <div class="form-group">
-                  <label>A qué te dedicas, cuánto tiempo llevas haciéndolo, resultados en ventas, validación de la idea y por qué comenzaste a hacerlo.</label>
-                  <textarea class="form-control" rows="3"></textarea>
-                </div> <!-- / .form-group -->
-              </fieldset>
-            </div> <!-- / .col-lg-8 -->
-          </div> <!-- / .row -->
-        </div> <!-- / .content -->
-      </div> <!-- / .container -->
 
-      <div class="container-fluid bg-light">
-        <div class="container">
-          <div class="content">
-            <div class="row justify-content-center">
-              <div class="col-lg-8">
-                <fieldset>
-                <p><legend><span class="h2 text-primary">3.</span> <span class="h3">Oportunidad de inversión</span></legend></p>
-                  <div class="form-group">
-                    <label>
-                      <p><strong>Ejemplo 1:</strong> Actualmente en México se está viviendo un crecimiento en la industria, en los últimos 4 años el número de empresas cerveceras pasó de 18 a 40, sin embargo, existe un mercado virgen en el centro y sur del país…</p>
-                      <p><strong>Ejemplo 2:</strong> Los fundadores han invertido más de 7 millones de pesos de su propio capital durante los 3 años que han trabajado en esto y se han incubado en…)</p>
-                    </label>
-                    <textarea class="form-control" rows="3"></textarea>
-                  </div> <!-- / .form-group -->
-                </fieldset>
-              </div> <!-- / .col-lg-8 -->
-            </div> <!-- / .row -->
-          </div> <!-- / .content -->
-        </div> <!-- / .container -->
-      </div> <!-- / .container-fluid -->
 
-      <div class="container">
-        <div class="content">
-          <div class="row justify-content-center">
-            <div class="col-lg-8">
-              <fieldset>
-              <p><legend><span class="h2 text-primary">4.</span> <span class="h3">Competencia</span></legend></p>
-                <div class="form-group">
-                  <textarea class="form-control" rows="3"></textarea>
-                </div> <!-- / .form-group -->
-              </fieldset>
-            </div> <!-- / .col-lg-8 -->
-          </div> <!-- / .row -->
-        </div> <!-- / .content -->
-      </div> <!-- / .container -->
+
+
+
+
 
       <div class="container-fluid bg-light">
         <div class="container">

@@ -1,6 +1,7 @@
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Lato:400,700|Open+Sans");
 
+@import "resources/assets/lib/icomoon_site/style";
 @import "../globals";
 
 // Bootstrap
@@ -13,3 +14,5 @@
 @import "project-card";
 @import "project-preview";
 @import "buttons";
+@import "spinner";
+

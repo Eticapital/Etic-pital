@@ -23,17 +23,17 @@ class NavController extends Controller
                 'hide' => true,
                 'items' => [
                     [
-                        'title' => 'Editar detalles de mi cuenta',
+                        'title' => 'Actualizar datos de mi cuenta',
                         'icon' => 'pencil2',
-                        'text' => 'Editar detalles',
+                        'text' => 'Actualizar datos de mi cuenta',
                         'route' => 'account.edit',
                         'in_top_menu' => true,
                         'return' => true,
                     ],
                     [
-                        'title' => 'Actualizar contraseña',
+                        'title' => 'Actualizar mi contraseña',
                         'icon' => 'key',
-                        'text' => 'Actualizar contraseña',
+                        'text' => 'Actualizar mi contraseña',
                         'route' => 'account.password',
                         'in_top_menu' => true,
                         'return' => true,

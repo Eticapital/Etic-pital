@@ -12,6 +12,7 @@
         :type="type"
         ref="input"
         :disabled="form.busy"
+        :placeholder="placeholder"
         @input="form.errors.clear(name)"
         @change="form.errors.clear(name)"
       />
@@ -23,6 +24,7 @@
       :type="type"
       ref="input"
       :disabled="form.busy"
+      :placeholder="placeholder"
       @input="form.errors.clear(name)"
       @change="form.errors.clear(name)"
     />
@@ -46,6 +48,10 @@ export default {
       required: false
     },
     label: {
+      type: String,
+      required: false
+    },
+    placeholder: {
       type: String,
       required: false
     },

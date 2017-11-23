@@ -15,16 +15,22 @@ class CreateProjectsTable extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
+            // 1.
             $table->string('name');
             $table->string('holder');
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('video')->nullable();
+            $table->mediumText('address')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
+            // 2.
             $table->longText('description')->nullable();
+            // 3.
             $table->longText('opportunity')->nullable();
+            // 4.
             $table->longText('competition')->nullable();
+
             $table->integer('stage_id')->unsigned()->nullable();
 
             $table->longText('business_model')->nullable();

@@ -1,5 +1,5 @@
 <template>
-  <b-card v-if="user" title="Datos del usuario" class="card-table">
+  <b-card v-if="user" title="Datos de mi cuenta" class="card-table">
     <table class="table">
       <tr>
         <td>Nombre:</td>

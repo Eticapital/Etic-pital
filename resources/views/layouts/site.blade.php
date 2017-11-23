@@ -5,18 +5,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Open+Sans" rel="stylesheet">
-    <link rel="stylesheet" href="css/eticapital.css">
-    <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/project-card.css"> -->
-
     <title>{{ config('app.name', 'Eticapital') }}</title>
 
     <link rel="stylesheet" href="{{ mix('/css/site.css') }}">
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <script>
+        window.App = {!! json_encode([
+          'csrfToken' => csrf_token()
+        ]) !!};
+    </script>
   </head>
   <body>
+  <div id="app">
 
     @if(@$is_home)
     <div class="jumbotron-fluid" id="header">
@@ -105,13 +107,8 @@
         </div> <!-- / .row -->
       </div> <!-- / .container -->
     </footer>
-
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-    <script src="js/eticapital.js"></script>
+    </div><!-- /#app -->
+    @stack('scripts_after')
+    <script src="{{ mix('js/site.js')}}"></script>
   </body>
 </html>

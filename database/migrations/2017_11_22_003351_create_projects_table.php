@@ -49,7 +49,7 @@ class CreateProjectsTable extends Migration
             $table->bigInteger('expected_sales_year_2')->nullable();
             $table->bigInteger('expected_sales_year_3')->nullable();
 
-            $table->text('rewards')->default('[]');
+            $table->longText('rewards')->nullable();
 
             $table
                 ->foreign('stage_id')

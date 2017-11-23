@@ -242,9 +242,7 @@
             <div class="col-lg-8">
               <fieldset>
                 <p><legend><span class="h2 text-primary">11.</span> <span class="h3">Miembros del equipo</span></legend></p>
-                <form-textarea
-                  :form="form"
-                  name="business_model" label="¿Cómo generas dinero? ¿Qué tipo de producto o servicio vendes y quién te lo compra? ¿A través de qué medios lo comercializas o cómo cierras tus ventas?" />
+                <project-form-team-members v-model="form.team" />
               </fieldset>
             </div> <!-- / .col-lg-8 -->
           </div> <!-- / .row -->
@@ -298,10 +296,12 @@
 
 <script>
 import ProjectFormLinks from './project-form-links'
+import ProjectFormTeamMembers from './project-form-team-members'
 
 export default {
   components: {
-    ProjectFormLinks
+    ProjectFormLinks,
+    ProjectFormTeamMembers
   },
 
   props: {
@@ -352,7 +352,7 @@ export default {
         expected_sales_year_3: null,
         rewards: [],
         // 11.
-        //
+        team: [{ id: uniqid(), links: [''], name: '' }],
         // 12.
         //
         // 13.

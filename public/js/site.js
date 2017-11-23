@@ -2751,7 +2751,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form-team-members-member.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2774,274 +2774,52 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    ProjectFormLinks: __WEBPACK_IMPORTED_MODULE_0__project_form_links___default.a
+  },
+
+  props: {
+    index: {
+      type: Number,
+      required: true
+    },
+    member: {
+      type: Object,
+      required: true
+    }
+  },
+
+  data: function data() {
+    return {
+      currentMember: this.member
+    };
+  },
+
+
+  watch: {
+    currentMember: {
+      handler: function handler(member) {
+        this.$emit('changed', member, this.index);
+      },
+
+      deep: true
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form-team-members.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__project_form_team_members_member__ = __webpack_require__("./resources/assets/js/project/project-form-team-members-member.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__project_form_team_members_member___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__project_form_team_members_member__);
 //
 //
 //
@@ -3061,7 +2839,365 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    ProjectFormLinks: __WEBPACK_IMPORTED_MODULE_0__project_form_links___default.a
+    TeamMember: __WEBPACK_IMPORTED_MODULE_0__project_form_team_members_member___default.a
+  },
+
+  props: {
+    value: {
+      type: Array
+    }
+  },
+
+  data: function data() {
+    return {
+      members: []
+    };
+  },
+
+
+  watch: {
+    members: {
+      handler: function handler(members) {
+        this.$emit('input', members);
+      },
+
+      deep: true
+    }
+  },
+
+  created: function created() {
+    this.members = this.value;
+  },
+
+
+  methods: {
+    memberChanged: function memberChanged(member, index) {
+      Vue.set(this.members, index, member);
+    },
+    removeMember: function removeMember(index) {
+      this.members.splice(index, 1);
+    },
+    addMember: function addMember(member, index) {
+      this.members.push({ id: uniqid(), links: [''], name: '' });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__project_form_links__ = __webpack_require__("./resources/assets/js/project/project-form-links.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__project_form_links___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__project_form_links__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__project_form_team_members__ = __webpack_require__("./resources/assets/js/project/project-form-team-members.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__project_form_team_members___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__project_form_team_members__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    ProjectFormLinks: __WEBPACK_IMPORTED_MODULE_0__project_form_links___default.a,
+    ProjectFormTeamMembers: __WEBPACK_IMPORTED_MODULE_1__project_form_team_members___default.a
   },
 
   props: {
@@ -3112,7 +3248,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         expected_sales_year_3: null,
         rewards: [],
         // 11.
-        //
+        team: [{ id: uniqid(), links: [''], name: '' }],
         // 12.
         //
         // 13.
@@ -47419,12 +47555,13 @@ var render = function() {
                     _vm._m(15, false, false),
                     _c("p"),
                     _vm._v(" "),
-                    _c("form-textarea", {
-                      attrs: {
-                        form: _vm.form,
-                        name: "business_model",
-                        label:
-                          "¿Cómo generas dinero? ¿Qué tipo de producto o servicio vendes y quién te lo compra? ¿A través de qué medios lo comercializas o cómo cierras tus ventas?"
+                    _c("project-form-team-members", {
+                      model: {
+                        value: _vm.form.team,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "team", $$v)
+                        },
+                        expression: "form.team"
                       }
                     })
                   ],
@@ -47778,6 +47915,82 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-3abdb180", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-59fee05e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/project/project-form-team-members-member.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "b-form-group",
+        [
+          _vm._t("label", [
+            _c("d", { staticClass: "d-flex" }, [
+              _vm._v("\n        Nombre\n        "),
+              _vm.index > 0
+                ? _c(
+                    "a",
+                    {
+                      staticClass: "text-danger ml-auto",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.$emit("remove")
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "icon-bin" }), _vm._v(" Eliminar")]
+                  )
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
+          _c("b-form-input", {
+            model: {
+              value: _vm.currentMember.name,
+              callback: function($$v) {
+                _vm.$set(_vm.currentMember, "name", $$v)
+              },
+              expression: "currentMember.name"
+            }
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c("project-form-links", {
+        attrs: { label: "Redes sociales" },
+        model: {
+          value: _vm.currentMember.links,
+          callback: function($$v) {
+            _vm.$set(_vm.currentMember, "links", $$v)
+          },
+          expression: "currentMember.links"
+        }
+      }),
+      _vm._v(" "),
+      _c("hr")
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-59fee05e", module.exports)
   }
 }
 
@@ -48181,6 +48394,64 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-b5986036", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e96a59b4\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/project/project-form-team-members.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _vm._l(_vm.members, function(member, index) {
+        return _c("team-member", {
+          key: member.id,
+          attrs: { member: member, index: index },
+          on: {
+            changed: _vm.memberChanged,
+            remove: function($event) {
+              _vm.removeMember(index)
+            }
+          }
+        })
+      }),
+      _vm._v(" "),
+      _c(
+        "p",
+        [
+          _c(
+            "b-btn",
+            {
+              attrs: { variant: "secondary" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  _vm.addMember($event)
+                }
+              }
+            },
+            [_vm._v("Agregar otro miembro")]
+          )
+        ],
+        1
+      )
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-e96a59b4", module.exports)
   }
 }
 
@@ -61353,6 +61624,104 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-813f0be8", Component.options)
   } else {
     hotAPI.reload("data-v-813f0be8", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/project/project-form-team-members-member.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form-team-members-member.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-59fee05e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/project/project-form-team-members-member.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/project/project-form-team-members-member.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-59fee05e", Component.options)
+  } else {
+    hotAPI.reload("data-v-59fee05e", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/project/project-form-team-members.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form-team-members.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e96a59b4\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/project/project-form-team-members.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/project/project-form-team-members.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e96a59b4", Component.options)
+  } else {
+    hotAPI.reload("data-v-e96a59b4", Component.options)
 ' + '  }
   module.hot.dispose(function (data) {
     disposed = true

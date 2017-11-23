@@ -250,6 +250,19 @@
       </div> <!-- / .container -->
     </div> <!-- / .container-fluid -->
 
+    <div class="container">
+      <div class="content">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <fieldset>
+              <p><legend><span class="h2 text-primary">12.</span> <span class="h3">Indicadores claves de rendimiento (KPIs)</span></legend></p>
+              <project-form-kpis v-model="form.kpis" />
+            </fieldset>
+          </div> <!-- / .col-lg-8 -->
+        </div> <!-- / .row -->
+      </div> <!-- / .content -->
+    </div> <!-- / .container -->
+
     <div class="container-fluid bg-light">
       <div class="container">
         <div class="content">
@@ -284,24 +297,30 @@
           <div class="row justify-content-center">
             <div class="col-lg-8">
               <p class="text-center">
-                <form-button-submit variant="primary" :form="form">Enviar solicitud</form-button-submit>
+                <form-button-submit variant="primary" :form="form" @click.prevent.native="submitProject">Enviar solicitud</form-button-submit>
               </p>
             </div> <!-- / .col-lg-8 -->
           </div> <!-- / .row -->
         </div> <!-- / .content -->
       </div> <!-- / .container -->
     </div> <!-- / .container-fluid -->
+<b-card v-if="results" title="Resultados del formulario: (Temporal)">
+<pre>{{ results }}</pre>
+</b-card>
+
   </form>
 </template>
 
 <script>
 import ProjectFormLinks from './project-form-links'
 import ProjectFormTeamMembers from './project-form-team-members'
+import ProjectFormKpis from './project-form-kpis'
 
 export default {
   components: {
     ProjectFormLinks,
-    ProjectFormTeamMembers
+    ProjectFormTeamMembers,
+    ProjectFormKpis
   },
 
   props: {
@@ -354,7 +373,7 @@ export default {
         // 11.
         team: [{ id: uniqid(), links: [''], name: '' }],
         // 12.
-        //
+        kpis: [{ id: uniqid(), time: '', description: '' }],
         // 13.
         key_files: [],
         // 14.
@@ -368,7 +387,10 @@ export default {
         'Participación',
         'Revenue share',
         'Mixto'
-      ]
+      ],
+
+      // TEMPORAL
+      results: null
     }
   },
 
@@ -401,7 +423,7 @@ export default {
     submitProject () {
       App.post('/projects', this.form)
         .then(response => {
-          console.log(response)
+          this.results = response
         }).catch(errors => {
           console.log(errors)
         })

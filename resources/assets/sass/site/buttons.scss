@@ -1,3 +1,28 @@
 .btn-primary {
     color: #FFF
 }
+
+.btn.btn-loading {
+    display: inline-flex;
+    position: relative;
+    justify-content: center;
+    vertical-align: top;
+
+    color: transparent !important;
+    pointer-events: none;
+    &:after {
+        -webkit-animation: spinAround 500ms infinite linear;
+        animation: spinAround 500ms infinite linear;
+        border: 2px solid #dbdbdb;
+        border-radius: 290486px;
+        border-right-color: transparent;
+        border-top-color: transparent;
+        content: "";
+        display: block;
+        height: 1em;
+        width: 1em;
+        left: calc(50% - (1em / 2));
+        top: calc(50% - (1em / 2));
+        position: absolute !important;
+    }
+}

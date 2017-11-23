@@ -9,6 +9,6 @@ class ProjectStageController extends Controller
 {
     public function index()
     {
-        return ProjectStage::orderBy('label')->get();
+        return ProjectStage::orderBy('id')->get();
     }
 }

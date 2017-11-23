@@ -9004,6 +9004,46 @@ a.text-dark:focus, a.text-dark:hover {
   visibility: hidden !important;
 }
 
+@-webkit-keyframes anim-rotate {
+  0% {
+    -webkit-transform: rotate(0);
+            transform: rotate(0);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes anim-rotate {
+  0% {
+    -webkit-transform: rotate(0);
+            transform: rotate(0);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  display: inline-block;
+  height: 1em;
+  line-height: 1;
+  -webkit-animation: anim-rotate 2s infinite linear;
+          animation: anim-rotate 2s infinite linear;
+}
+
+.spinner--steps {
+  -webkit-animation: anim-rotate 1s infinite steps(8);
+          animation: anim-rotate 1s infinite steps(8);
+}
+
+.spinner--steps2 {
+  -webkit-animation: anim-rotate 1s infinite steps(12);
+          animation: anim-rotate 1s infinite steps(12);
+}
+
 /* Links color blanco */
 .text-white a {
   color: #fff;
@@ -9527,42 +9567,31 @@ a.project-card:hover {
   color: #FFF;
 }
 
-@-webkit-keyframes anim-rotate {
-  0% {
-    -webkit-transform: rotate(0);
-            transform: rotate(0);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
+.btn.btn-loading {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  position: relative;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  vertical-align: top;
+  color: transparent !important;
+  pointer-events: none;
 }
 
-@keyframes anim-rotate {
-  0% {
-    -webkit-transform: rotate(0);
-            transform: rotate(0);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-
-.spinner {
-  display: inline-block;
+.btn.btn-loading:after {
+  -webkit-animation: spinAround 500ms infinite linear;
+  animation: spinAround 500ms infinite linear;
+  border: 2px solid #dbdbdb;
+  border-radius: 290486px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
   height: 1em;
-  line-height: 1;
-  -webkit-animation: anim-rotate 2s infinite linear;
-          animation: anim-rotate 2s infinite linear;
-}
-
-.spinner--steps {
-  -webkit-animation: anim-rotate 1s infinite steps(8);
-          animation: anim-rotate 1s infinite steps(8);
-}
-
-.spinner--steps2 {
-  -webkit-animation: anim-rotate 1s infinite steps(12);
-          animation: anim-rotate 1s infinite steps(12);
+  width: 1em;
+  left: calc(50% - (1em / 2));
+  top: calc(50% - (1em / 2));
+  position: absolute !important;
 }

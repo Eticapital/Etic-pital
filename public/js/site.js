@@ -2573,6 +2573,134 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form-kpis-kpi.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    index: {
+      type: Number,
+      required: true
+    },
+    kpi: {
+      type: Object,
+      required: true
+    }
+  },
+
+  data: function data() {
+    return {
+      currentKpi: this.kpi
+    };
+  },
+
+
+  watch: {
+    currentKpi: {
+      handler: function handler(kpi) {
+        this.$emit('changed', kpi, this.index);
+      },
+
+      deep: true
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form-kpis.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__project_form_kpis_kpi__ = __webpack_require__("./resources/assets/js/project/project-form-kpis-kpi.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__project_form_kpis_kpi___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__project_form_kpis_kpi__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    Kpi: __WEBPACK_IMPORTED_MODULE_0__project_form_kpis_kpi___default.a
+  },
+
+  props: {
+    value: {
+      type: Array
+    }
+  },
+
+  data: function data() {
+    return {
+      kpis: []
+    };
+  },
+
+
+  watch: {
+    kpis: {
+      handler: function handler(kpis) {
+        this.$emit('input', kpis);
+      },
+
+      deep: true
+    }
+  },
+
+  created: function created() {
+    this.kpis = this.value;
+  },
+
+
+  methods: {
+    kpiChanged: function kpiChanged(kpi, index) {
+      Vue.set(this.kpis, index, kpi);
+    },
+    removeKpi: function removeKpi(index) {
+      this.kpis.splice(index, 1);
+    },
+    addKpi: function addKpi(kpi, index) {
+      this.kpis.push({ id: uniqid(), time: '', description: '' });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form-links-link.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2957,6 +3085,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__project_form_links___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__project_form_links__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__project_form_team_members__ = __webpack_require__("./resources/assets/js/project/project-form-team-members.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__project_form_team_members___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__project_form_team_members__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__project_form_kpis__ = __webpack_require__("./resources/assets/js/project/project-form-kpis.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__project_form_kpis___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__project_form_kpis__);
 //
 //
 //
@@ -3253,6 +3383,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -3260,7 +3408,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     ProjectFormLinks: __WEBPACK_IMPORTED_MODULE_0__project_form_links___default.a,
-    ProjectFormTeamMembers: __WEBPACK_IMPORTED_MODULE_1__project_form_team_members___default.a
+    ProjectFormTeamMembers: __WEBPACK_IMPORTED_MODULE_1__project_form_team_members___default.a,
+    ProjectFormKpis: __WEBPACK_IMPORTED_MODULE_2__project_form_kpis___default.a
   },
 
   props: {
@@ -3313,7 +3462,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         // 11.
         team: [{ id: uniqid(), links: [''], name: '' }],
         // 12.
-        //
+        kpis: [{ id: uniqid(), time: '', description: '' }],
         // 13.
         key_files: [],
         // 14.
@@ -3321,7 +3470,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }),
       sectors: null,
       stages: null,
-      rewards: ['Deuda simple', 'Deuda convertible', 'Participación', 'Revenue share', 'Mixto']
+      rewards: ['Deuda simple', 'Deuda convertible', 'Participación', 'Revenue share', 'Mixto'],
+
+      // TEMPORAL
+      results: null
     };
   },
 
@@ -3352,8 +3504,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   methods: {
     onSubmit: function onSubmit() {},
     submitProject: function submitProject() {
+      var _this = this;
+
       App.post('/projects', this.form).then(function (response) {
-        console.log(response);
+        _this.results = response;
       }).catch(function (errors) {
         console.log(errors);
       });
@@ -3363,17 +3517,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.form.longitude = coordinates.lng;
     },
     loadSectors: function loadSectors() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get('/sectors').then(function (response) {
-        _this.sectors = response.data;
+        _this2.sectors = response.data;
       });
     },
     loadStages: function loadStages() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('/stages').then(function (response) {
-        _this2.stages = response.data;
+        _this3.stages = response.data;
       });
     }
   }
@@ -46950,7 +47104,7 @@ var render = function() {
             staticClass: "File__iconstatus text-danger",
             attrs: { title: _vm.errorMessage }
           },
-          [_vm._v("\n    i.icon-warning\n    (más)\n  ")]
+          [_c("i", { staticClass: "icon-warning" }), _vm._v("\n    (más)\n  ")]
         )
       : _vm.file.success
         ? _c("i", {
@@ -47041,6 +47195,64 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-1e063877", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-20ca4e68\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/project/project-form-kpis.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _vm._l(_vm.kpis, function(kpi, index) {
+        return _c("kpi", {
+          key: kpi.id,
+          attrs: { kpi: kpi, index: index },
+          on: {
+            changed: _vm.kpiChanged,
+            remove: function($event) {
+              _vm.removeKpi(index)
+            }
+          }
+        })
+      }),
+      _vm._v(" "),
+      _c(
+        "p",
+        [
+          _c(
+            "b-btn",
+            {
+              attrs: { variant: "secondary" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  _vm.addKpi($event)
+                }
+              }
+            },
+            [_vm._v("Agregar otro KPI")]
+          )
+        ],
+        1
+      )
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-20ca4e68", module.exports)
   }
 }
 
@@ -47310,7 +47522,7 @@ var render = function() {
                     _vm.sectors === null
                       ? _c("p", [
                           _c("i", { staticClass: "icon-spinner spinner" }),
-                          _vm._v(" Cargando sectores...\n              ")
+                          _vm._v(" Cargando sectores...\n                ")
                         ])
                       : _c(
                           "b-form-checkbox-group",
@@ -47368,7 +47580,7 @@ var render = function() {
                   _vm.stages === null
                     ? _c("p", [
                         _c("i", { staticClass: "icon-spinner spinner" }),
-                        _vm._v(" Cargando etapas...\n            ")
+                        _vm._v(" Cargando etapas...\n              ")
                       ])
                     : _c(
                         "b-form-radio-group",
@@ -47388,11 +47600,11 @@ var render = function() {
                             { key: stage.id, attrs: { value: stage.id } },
                             [
                               _vm._v(
-                                "\n                " +
+                                "\n                  " +
                                   _vm._s(stage.label) +
                                   " (" +
                                   _vm._s(stage.description) +
-                                  ")\n              "
+                                  ")\n                "
                               )
                             ]
                           )
@@ -47677,6 +47889,34 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "content" }, [
+          _c("div", { staticClass: "row justify-content-center" }, [
+            _c("div", { staticClass: "col-lg-8" }, [
+              _c(
+                "fieldset",
+                [
+                  _c("p"),
+                  _vm._m(16, false, false),
+                  _c("p"),
+                  _vm._v(" "),
+                  _c("project-form-kpis", {
+                    model: {
+                      value: _vm.form.kpis,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "kpis", $$v)
+                      },
+                      expression: "form.kpis"
+                    }
+                  })
+                ],
+                1
+              )
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
       _c("div", { staticClass: "container-fluid bg-light" }, [
         _c("div", { staticClass: "container" }, [
           _c("div", { staticClass: "content" }, [
@@ -47686,7 +47926,7 @@ var render = function() {
                   "fieldset",
                   [
                     _c("p"),
-                    _vm._m(16, false, false),
+                    _vm._m(17, false, false),
                     _c("p"),
                     _vm._v(" "),
                     _c("form-files", {
@@ -47715,7 +47955,7 @@ var render = function() {
                 "fieldset",
                 [
                   _c("p"),
-                  _vm._m(17, false, false),
+                  _vm._m(18, false, false),
                   _c("p"),
                   _vm._v(" "),
                   _c("form-files", {
@@ -47746,7 +47986,15 @@ var render = function() {
                   [
                     _c(
                       "form-button-submit",
-                      { attrs: { variant: "primary", form: _vm.form } },
+                      {
+                        attrs: { variant: "primary", form: _vm.form },
+                        nativeOn: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.submitProject($event)
+                          }
+                        }
+                      },
                       [_vm._v("Enviar solicitud")]
                     )
                   ],
@@ -47756,8 +48004,17 @@ var render = function() {
             ])
           ])
         ])
-      ])
-    ]
+      ]),
+      _vm._v(" "),
+      _vm.results
+        ? _c(
+            "b-card",
+            { attrs: { title: "Resultados del formulario: (Temporal)" } },
+            [_c("pre", [_vm._v(_vm._s(_vm.results))])]
+          )
+        : _vm._e()
+    ],
+    1
   )
 }
 var staticRenderFns = [
@@ -47930,6 +48187,18 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("legend", [
+      _c("span", { staticClass: "h2 text-primary" }, [_vm._v("12.")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "h3" }, [
+        _vm._v("Indicadores claves de rendimiento (KPIs)")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("legend", [
       _c("span", { staticClass: "h2 text-primary" }, [_vm._v("13.")]),
       _vm._v(" "),
       _c("span", { staticClass: "h3" }, [_vm._v("Documentos  Clave")])
@@ -48095,6 +48364,90 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-59fee05e", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-68aaa0ba\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/project/project-form-kpis-kpi.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "b-form-group",
+        [
+          _vm._t("label", [
+            _c("div", { staticClass: "d-flex" }, [
+              _vm._v("\n        Tiempo:\n        "),
+              _vm.index > 0
+                ? _c(
+                    "a",
+                    {
+                      staticClass: "text-danger ml-auto",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.$emit("remove")
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "icon-bin" }), _vm._v(" Eliminar")]
+                  )
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
+          _c("b-form-input", {
+            attrs: { placeholder: "Dos semanas, un mes, un año" },
+            model: {
+              value: _vm.currentKpi.time,
+              callback: function($$v) {
+                _vm.$set(_vm.currentKpi, "time", $$v)
+              },
+              expression: "currentKpi.time"
+            }
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "b-form-group",
+        { attrs: { label: "Descripcion:" } },
+        [
+          _c("b-form-textarea", {
+            attrs: { rows: "4" },
+            model: {
+              value: _vm.currentKpi.description,
+              callback: function($$v) {
+                _vm.$set(_vm.currentKpi, "description", $$v)
+              },
+              expression: "currentKpi.description"
+            }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("hr")
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-68aaa0ba", module.exports)
   }
 }
 
@@ -61648,6 +62001,104 @@ Vue.component('form-files', __webpack_require__("./resources/assets/js/forms/for
 
 // Form inputs
 Vue.component('input-float', __webpack_require__("./resources/assets/js/forms/input-float.vue"));
+
+/***/ }),
+
+/***/ "./resources/assets/js/project/project-form-kpis-kpi.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form-kpis-kpi.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-68aaa0ba\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/project/project-form-kpis-kpi.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/project/project-form-kpis-kpi.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-68aaa0ba", Component.options)
+  } else {
+    hotAPI.reload("data-v-68aaa0ba", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/project/project-form-kpis.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form-kpis.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-20ca4e68\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/project/project-form-kpis.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/project/project-form-kpis.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-20ca4e68", Component.options)
+  } else {
+    hotAPI.reload("data-v-20ca4e68", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
 
 /***/ }),
 

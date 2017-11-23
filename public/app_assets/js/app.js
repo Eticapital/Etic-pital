@@ -84849,7 +84849,7 @@ var render = function() {
             staticClass: "File__iconstatus text-danger",
             attrs: { title: _vm.errorMessage }
           },
-          [_vm._v("\n    i.icon-warning\n    (más)\n  ")]
+          [_c("i", { staticClass: "icon-warning" }), _vm._v("\n    (más)\n  ")]
         )
       : _vm.file.success
         ? _c("i", {

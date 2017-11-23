@@ -1,5 +1,5 @@
 <template>
-  <form action="">
+  <form @submit.prevent="submitProject" novalidate>
     <div class="container-fluid bg-light">
       <div class="container">
         <div class="content">
@@ -11,7 +11,7 @@
                 <form-text :form="form" name="holder" label="Nombre del titular:" />
                 <form-text :form="form" name="phone" label="Teléfono de contacto:" />
                 <form-text :form="form" name="email" label="Correo de contacto:" />
-                <project-form-links v-model="form.links" label="Redes sociales del titular" />
+                <project-form-links v-model="form.holder_links" label="Redes sociales del titular" />
                 <form-text :form="form" name="video" placeholder="https://" label="Video de la iniciativa:" />
                 <form-map
                   v-model="form.address"
@@ -84,11 +84,7 @@
             <div class="col-lg-8">
               <fieldset>
                 <p><legend><span class="h2 text-primary">5.</span> <span class="h3">Presentación y videos adicionales de la empresa</span></legend></p>
-                <form-files v-model="form.company_files" />
-                <!-- <div class="form-group file-upload">
-                  <label><span class="btn btn-secondary file-button">Subir presentación</span></label>
-                  <input type="file" class="file-trigger">
-                </div> <!-- / .form-group -->
+                <form-files v-model="form.company_files" btn-text="Subir presentación, foto(s) o video(s)" />
               </fieldset>
             </div> <!-- / .col-lg-8 -->
           </div> <!-- / .row -->
@@ -96,6 +92,207 @@
       </div> <!-- / .container -->
     </div> <!-- / .container-fluid -->
 
+    <div class="container">
+      <div class="content">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <fieldset>
+              <p><legend><span class="h2 text-primary">6.</span> <span class="h3">Página y redes de la empresa</span></legend></p>
+              <project-form-links v-model="form.links" label="Tu página oficial, página de facebook, twitter, etc." />
+            </fieldset>
+          </div> <!-- / .col-lg-8 -->
+        </div> <!-- / .row -->
+      </div> <!-- / .content -->
+    </div> <!-- / .container -->
+
+    <div class="container-fluid bg-light">
+      <div class="container">
+        <div class="content">
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <fieldset>
+                <p><legend><span class="h2 text-primary">7.</span> <span class="h3">Sectores a lo que pertenece la innovación</span></legend></p>
+                <p v-if="sectors === null">
+                  <i class="icon-spinner spinner"></i> Cargando sectores...
+                </p>
+                  <b-form-checkbox-group v-else class="form-row" v-model="form.sectors">
+                    <div v-for="(chunk, index) in sectorsColumns" class="col" :key="index">
+                      <div class="form-check" v-for="sector in chunk" :key="sector.id">
+                        <b-form-checkbox :value="sector.id">{{ sector.label }}</b-form-checkbox>
+                      </div><!-- /.form-check -->
+                    </div>
+                  </b-form-checkbox-group>
+              </fieldset>
+            </div> <!-- / .col-lg-8 -->
+          </div> <!-- / .row -->
+        </div> <!-- / .content -->
+      </div> <!-- / .container -->
+    </div> <!-- / .container-fluid -->
+
+    <div class="container">
+      <div class="content">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <fieldset>
+              <p><legend><span class="h2 text-primary">8.</span> <span class="h3">Etapa de desarrollo de capital</span></legend></p>
+              <p v-if="stages === null">
+                <i class="icon-spinner spinner"></i> Cargando etapas...
+              </p>
+              <b-form-radio-group v-else v-model="form.stage_id" stacked>
+                <b-form-radio v-for="stage in stages" :key="stage.id" :value="stage.id">
+                  {{ stage.label }} ({{stage.description}})
+                </b-form-radio>
+              </b-form-radio-group>
+
+            </fieldset>
+          </div> <!-- / .col-lg-8 -->
+        </div> <!-- / .row -->
+      </div> <!-- / .content -->
+    </div> <!-- / .container -->
+
+    <div class="container-fluid bg-light">
+      <div class="container">
+        <div class="content">
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <fieldset>
+                <p><legend><span class="h2 text-primary">9.</span> <span class="h3">Modelo de negocio</span></legend></p>
+                <form-textarea
+                  :form="form"
+                  name="business_model" label="¿Cómo generas dinero? ¿Qué tipo de producto o servicio vendes y quién te lo compra? ¿A través de qué medios lo comercializas o cómo cierras tus ventas?" />
+              </fieldset>
+            </div> <!-- / .col-lg-8 -->
+          </div> <!-- / .row -->
+        </div> <!-- / .content -->
+      </div> <!-- / .container -->
+    </div> <!-- / .container-fluid -->
+
+    <div class="container">
+      <div class="content">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <fieldset>
+              <p><legend><span class="h2 text-primary">10.</span> <span class="h3">Datos de inversión</span></legend></p>
+              <form-money :form="form" :in-cents="true" name="previous_capital" label="Capital previamente obtenido (si aplica)" />
+              <form-money :form="form" :in-cents="true" name="total_sales" label="Ventas totales al día de hoy (si aplica)" />
+              <form-money :form="form" :in-cents="true" name="round_size" label="Tamaño de la ronda (¿Cuánto necesitas?)" />
+            </fieldset>
+            <fieldset>
+              <div class="form-row">
+                <legend class="col-form-legend">¿Tienes algún inversionista interesado?</legend>
+                <b-form-radio-group v-model="form.has_interested_investor">
+                    <b-form-radio :value="true">Sí</b-form-radio>
+                    <b-form-radio :value="false">No</b-form-radio>
+                </b-form-radio-group>
+              </div> <!-- / .form-row -->
+              <form-text v-if="form.has_interested_investor" :form="form" name="interested_investor_name" label="¿Qué inversionista?" placeholder="Opcional" />
+            </fieldset>
+            <fieldset>
+              <legend class="col-form-legend">Ventas esperadas en los próximos tres años</legend>
+              <div class="form-group">
+                <div class="form-row">
+                  <div class="col-2">
+                    <label class="col-form-label">Año 1:</label>
+                  </div> <!-- / .col-2 -->
+                  <div class="col-6">
+                    <form-money :form="form" :in-cents="true" name="expected_sales_year_1" class="mb-0" />
+                  </div> <!-- / .col-6 -->
+                </div> <!-- / .form-row -->
+              </div> <!-- / .form-group -->
+              <div class="form-group">
+                <div class="form-row">
+                  <div class="col-2">
+                    <label class="col-form-label">Año 2:</label>
+                  </div> <!-- / .col-2 -->
+                  <div class="col-6">
+                    <form-money :form="form" :in-cents="true" name="expected_sales_year_2" class="mb-0" />
+                  </div> <!-- / .col-6 -->
+                </div> <!-- / .form-row -->
+              </div> <!-- / .form-group -->
+              <div class="form-group">
+                <div class="form-row">
+                  <div class="col-2">
+                    <label class="col-form-label">Año 3:</label>
+                  </div> <!-- / .col-2 -->
+                  <div class="col-6">
+                    <form-money :form="form" :in-cents="true" name="expected_sales_year_3" class="mb-0" />
+                  </div> <!-- / .col-6 -->
+                </div> <!-- / .form-row -->
+              </div> <!-- / .form-group -->
+            </fieldset>
+            <fieldset>
+              <legend class="col-form-legend">¿Qué das a cambio de la inversión?</legend>
+              <b-form-checkbox-group class="form-row" v-model="form.rewards">
+                <div v-for="(chunk, index) in rewardsColumns" class="col" :key="index">
+                  <div class="form-check" v-for="reward in chunk" :key="reward">
+                    <b-form-checkbox :value="reward">{{ reward }}</b-form-checkbox>
+                  </div><!-- /.form-check -->
+                </div>
+              </b-form-checkbox-group>
+            </fieldset>
+          </div> <!-- / .col-lg-8 -->
+        </div> <!-- / .row -->
+      </div> <!-- / .content -->
+    </div> <!-- / .container -->
+
+    <div class="container-fluid bg-light">
+      <div class="container">
+        <div class="content">
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <fieldset>
+                <p><legend><span class="h2 text-primary">11.</span> <span class="h3">Miembros del equipo</span></legend></p>
+                <form-textarea
+                  :form="form"
+                  name="business_model" label="¿Cómo generas dinero? ¿Qué tipo de producto o servicio vendes y quién te lo compra? ¿A través de qué medios lo comercializas o cómo cierras tus ventas?" />
+              </fieldset>
+            </div> <!-- / .col-lg-8 -->
+          </div> <!-- / .row -->
+        </div> <!-- / .content -->
+      </div> <!-- / .container -->
+    </div> <!-- / .container-fluid -->
+
+    <div class="container-fluid bg-light">
+      <div class="container">
+        <div class="content">
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <fieldset>
+                <p><legend><span class="h2 text-primary">13.</span> <span class="h3">Documentos  Clave</span></legend></p>
+                <form-files v-model="form.key_files" />
+              </fieldset>
+            </div> <!-- / .col-lg-8 -->
+          </div> <!-- / .row -->
+        </div> <!-- / .content -->
+      </div> <!-- / .container -->
+    </div> <!-- / .container-fluid -->
+
+    <div class="container">
+      <div class="content">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <fieldset>
+              <p><legend><span class="h2 text-primary">14.</span> <span class="h3">Material extra</span></legend></p>
+              <form-files v-model="form.extra_files" />
+            </fieldset>
+          </div> <!-- / .col-lg-8 -->
+        </div> <!-- / .row -->
+      </div> <!-- / .content -->
+    </div> <!-- / .container -->
+
+    <div class="container-fluid bg-light">
+      <div class="container">
+        <div class="content">
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <p class="text-center">
+                <form-button-submit variant="primary" :form="form">Enviar solicitud</form-button-submit>
+              </p>
+            </div> <!-- / .col-lg-8 -->
+          </div> <!-- / .row -->
+        </div> <!-- / .content -->
+      </div> <!-- / .container -->
+    </div> <!-- / .container-fluid -->
   </form>
 </template>
 
@@ -126,7 +323,7 @@ export default {
         address: '',
         latitude: 19.4336626,
         longitude: -99.1410542,
-        links: [''],
+        holder_links: [''],
         // 2.
         description: '',
         // 3.
@@ -134,15 +331,96 @@ export default {
         // 4.
         competition: '',
         // 5.
-        company_files: []
-      })
+        company_files: [],
+        // 6.
+        links: [''],
+        // 7.
+        sectors: [],
+        // 8.
+        stage_id: null,
+        // 9.
+        business_model: '',
+        // 10.
+        previous_capital: null,
+        total_sales: null,
+        round_size: null,
+        minimal_needed: null,
+        has_interested_investor: null,
+        interested_investor_name: '',
+        expected_sales_year_1: null,
+        expected_sales_year_2: null,
+        expected_sales_year_3: null,
+        rewards: [],
+        // 11.
+        //
+        // 12.
+        //
+        // 13.
+        key_files: [],
+        // 14.
+        extra_files: []
+      }),
+      sectors: null,
+      stages: null,
+      rewards: [
+        'Deuda simple',
+        'Deuda convertible',
+        'Participación',
+        'Revenue share',
+        'Mixto'
+      ]
     }
   },
 
+  computed: {
+    sectorsColumns () {
+      if (!this.sectors) {
+        return []
+      }
+
+      return _.chunk(this.sectors, Math.ceil(this.sectors.length / 2))
+    },
+    rewardsColumns () {
+      if (!this.rewards) {
+        return []
+      }
+
+      return _.chunk(this.rewards, Math.ceil(this.rewards.length / 2))
+    }
+  },
+
+  created () {
+    this.loadSectors()
+    this.loadStages()
+  },
+
   methods: {
+    submitProject () {
+      App.post('/projects', this.form)
+        .then(response => {
+          console.log(response)
+        }).catch(errors => {
+          console.log(errors)
+        })
+    },
+
     locationUpdated (coordinates, isManualChanged) {
       this.form.latitude = coordinates.lat
       this.form.longitude = coordinates.lng
+    },
+
+    loadSectors () {
+      axios.get('/sectors')
+        .then(response => {
+          this.sectors = response.data
+        })
+    },
+
+    loadStages () {
+      axios.get('/stages')
+        .then(response => {
+          this.stages = response.data
+        })
     }
   }
 }

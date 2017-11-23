@@ -3592,7 +3592,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -3601,6 +3600,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   components: {
     FileUpload: __WEBPACK_IMPORTED_MODULE_0_vue_upload_component___default.a,
     FormFile: __WEBPACK_IMPORTED_MODULE_1__form_files_file___default.a
+  },
+
+  props: {
+    btnText: {
+      type: String,
+      default: 'Subir documentos'
+    }
   },
 
   data: function data() {
@@ -4212,16 +4218,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   watch: {
     /**
-     * Cuando se cambia el valor real emito un "input"
-     */
+           * Cuando se cambia el valor real emito un "input"
+           */
     realValue: function realValue(_realValue) {
       this.$emit('input', _realValue);
     },
 
 
     /**
-     * Me aseguro de que cada que cambie el texto se actualice el valor local
-     */
+           * Me aseguro de que cada que cambie el texto se actualice el valor local
+           */
     text: function text(_text) {
       var value = this.toFloat(_text);
       this.localValue = value;
@@ -4229,8 +4235,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     /**
-     * Me aseguro de que cada que cambie el valor se actualice el texto
-     */
+           * Me aseguro de que cada que cambie el valor se actualice el texto
+           */
     value: function value(_value) {
       this.localValue = this.calculateLocalValue(_value);
       this.text = this.textInAppropriateFormat;
@@ -4238,9 +4244,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     /**
-     * Cunado está enfocado el texto se muestra sin formato para evitar
-     * problemas, por ejemplo al copiar y pegar el valor
-     */
+           * Cunado está enfocado el texto se muestra sin formato para evitar
+           * problemas, por ejemplo al copiar y pegar el valor
+           */
     isFocus: function isFocus(_isFocus) {
       this.text = this.textInAppropriateFormat;
     }
@@ -4254,9 +4260,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   computed: {
     /**
-     * Valor real del input
-     * @return intenger
-     */
+           * Valor real del input
+           * @return intenger
+           */
     realValue: function realValue() {
       var value = this.localValue;
 
@@ -4269,48 +4275,58 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     /**
-     * Valor con formato
-     * @return string
-     */
+           * Valor con formato
+           * @return string
+           */
     formattedText: function formattedText() {
       return this.formatText(this.localValue);
     },
 
 
     /**
-     * Valor con formato
-     * @return string
-     */
+           * Valor con formato
+           * @return string
+           */
     unformattedText: function unformattedText() {
       return this.unFormatText(this.localValue);
     },
 
 
     /**
-     * El texto en el formato adecuado segun el estado del input
-     * @return string
-     */
+           * El texto en el formato adecuado segun el estado del input
+           * @return string
+           */
     textInAppropriateFormat: function textInAppropriateFormat() {
       return this.isFocus ? this.unformattedText : this.formattedText;
     }
   },
 
   methods: {
+    formatMoney: function formatMoney(n, c, d, t) {
+      var c = isNaN(c = Math.abs(c)) ? 2 : c,
+          d = d == undefined ? '.' : d,
+          t = t == undefined ? ',' : t,
+          s = n < 0 ? '-' : '',
+          i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+          j = (j = i.length) > 3 ? j % 3 : 0;
+      return s + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '');
+    },
+
     /**
-     * Valor local
-     * @return integer
-     */
+           * Valor local
+           * @return integer
+           */
     calculateLocalValue: function calculateLocalValue(value) {
       return value == null ? null : this.toFloat(this.inCents ? Math.round(value / 100) : value);
     },
 
     /**
-     * Convierte cualquier numero en formato valido a un número entero
-     * multiplicado por 100 para evitar los decimales
-     */
+           * Convierte cualquier numero en formato valido a un número entero
+           * multiplicado por 100 para evitar los decimales
+           */
     toFloat: function toFloat(str) {
-      if (str !== null && str !== "") {
-        var value = parseFloat(String(str).replace(/[^0-9\.]+/g, ""));
+      if (str !== null && str !== '') {
+        var value = parseFloat(String(str).replace(/[^0-9\.]+/g, ''));
         return value;
       }
 
@@ -4319,20 +4335,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     /**
-     * Da el formato al numero
-     */
+           * Da el formato al numero
+           */
     formatText: function formatText(value) {
-      var text = value !== null ? value.formatMoney(2, '.', ',') : '';
+      var text = value !== null ? this.formatMoney(value, 2, '.', ',') : '';
 
       return text && text.endsWith('.00') ? text.replace('.00', '') : text;
     },
 
 
     /**
-     * Remueve el formato del numero
-     */
+           * Remueve el formato del numero
+           */
     unFormatText: function unFormatText(value) {
-      var text = value !== null ? value.formatMoney(2, '.', '') : '';
+      var text = value !== null ? this.formatMoney(value, 2, '.', '') : '';
 
       return text && text.endsWith('.00') ? text.replace('.00', '') : text;
     }
@@ -84833,7 +84849,7 @@ var render = function() {
             staticClass: "File__iconstatus text-danger",
             attrs: { title: _vm.errorMessage }
           },
-          [_c("i", { staticClass: "icon-warning" }), _vm._v("\n    (más)\n  ")]
+          [_vm._v("\n    i.icon-warning\n    (más)\n  ")]
         )
       : _vm.file.success
         ? _c("i", {
@@ -85364,7 +85380,7 @@ var render = function() {
             expression: "files"
           }
         },
-        [_vm._v("\n    Subir presentación, foto(s) o video(s)\n  ")]
+        [_vm._v("\n    " + _vm._s(_vm.btnText) + "\n  ")]
       )
     ],
     1

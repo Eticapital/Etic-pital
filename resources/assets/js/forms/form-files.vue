@@ -19,11 +19,10 @@
       @input-file="inputFile"
       :size="maxFileSize"
       ref="upload">
-      Subir presentación, foto(s) o video(s)
+      {{ btnText }}
     </file-upload>
   </div>
 </template>
-
 
 <script>
 import FileUpload from 'vue-upload-component'
@@ -33,6 +32,13 @@ export default {
   components: {
     FileUpload,
     FormFile
+  },
+
+  props: {
+    btnText: {
+      type: String,
+      default: 'Subir documentos'
+    }
   },
 
   data () {

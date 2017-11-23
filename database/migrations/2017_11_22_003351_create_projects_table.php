@@ -31,22 +31,25 @@ class CreateProjectsTable extends Migration
             // 4.
             $table->longText('competition')->nullable();
 
+            // 8.
             $table->integer('stage_id')->unsigned()->nullable();
-
+            // 9.
             $table->longText('business_model')->nullable();
 
+            // 10.
             $table->bigInteger('previous_capital')->nullable();
             $table->bigInteger('total_sales')->nullable();
             $table->bigInteger('round_size')->nullable();
             $table->bigInteger('minimal_needed')->nullable();
 
             $table->boolean('has_interested_investor')->nullable();
+            $table->string('interested_investor_name')->nullable();
 
             $table->bigInteger('expected_sales_year_1')->nullable();
             $table->bigInteger('expected_sales_year_2')->nullable();
             $table->bigInteger('expected_sales_year_3')->nullable();
 
-            $table->text('reward')->default('[]');
+            $table->text('rewards')->default('[]');
 
             $table
                 ->foreign('stage_id')

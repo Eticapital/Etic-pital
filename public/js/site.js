@@ -1808,7 +1808,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -1817,6 +1816,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   components: {
     FileUpload: __WEBPACK_IMPORTED_MODULE_0_vue_upload_component___default.a,
     FormFile: __WEBPACK_IMPORTED_MODULE_1__form_files_file___default.a
+  },
+
+  props: {
+    btnText: {
+      type: String,
+      default: 'Subir documentos'
+    }
   },
 
   data: function data() {
@@ -2428,16 +2434,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   watch: {
     /**
-     * Cuando se cambia el valor real emito un "input"
-     */
+           * Cuando se cambia el valor real emito un "input"
+           */
     realValue: function realValue(_realValue) {
       this.$emit('input', _realValue);
     },
 
 
     /**
-     * Me aseguro de que cada que cambie el texto se actualice el valor local
-     */
+           * Me aseguro de que cada que cambie el texto se actualice el valor local
+           */
     text: function text(_text) {
       var value = this.toFloat(_text);
       this.localValue = value;
@@ -2445,8 +2451,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     /**
-     * Me aseguro de que cada que cambie el valor se actualice el texto
-     */
+           * Me aseguro de que cada que cambie el valor se actualice el texto
+           */
     value: function value(_value) {
       this.localValue = this.calculateLocalValue(_value);
       this.text = this.textInAppropriateFormat;
@@ -2454,9 +2460,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     /**
-     * Cunado está enfocado el texto se muestra sin formato para evitar
-     * problemas, por ejemplo al copiar y pegar el valor
-     */
+           * Cunado está enfocado el texto se muestra sin formato para evitar
+           * problemas, por ejemplo al copiar y pegar el valor
+           */
     isFocus: function isFocus(_isFocus) {
       this.text = this.textInAppropriateFormat;
     }
@@ -2470,9 +2476,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   computed: {
     /**
-     * Valor real del input
-     * @return intenger
-     */
+           * Valor real del input
+           * @return intenger
+           */
     realValue: function realValue() {
       var value = this.localValue;
 
@@ -2485,48 +2491,58 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     /**
-     * Valor con formato
-     * @return string
-     */
+           * Valor con formato
+           * @return string
+           */
     formattedText: function formattedText() {
       return this.formatText(this.localValue);
     },
 
 
     /**
-     * Valor con formato
-     * @return string
-     */
+           * Valor con formato
+           * @return string
+           */
     unformattedText: function unformattedText() {
       return this.unFormatText(this.localValue);
     },
 
 
     /**
-     * El texto en el formato adecuado segun el estado del input
-     * @return string
-     */
+           * El texto en el formato adecuado segun el estado del input
+           * @return string
+           */
     textInAppropriateFormat: function textInAppropriateFormat() {
       return this.isFocus ? this.unformattedText : this.formattedText;
     }
   },
 
   methods: {
+    formatMoney: function formatMoney(n, c, d, t) {
+      var c = isNaN(c = Math.abs(c)) ? 2 : c,
+          d = d == undefined ? '.' : d,
+          t = t == undefined ? ',' : t,
+          s = n < 0 ? '-' : '',
+          i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+          j = (j = i.length) > 3 ? j % 3 : 0;
+      return s + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '');
+    },
+
     /**
-     * Valor local
-     * @return integer
-     */
+           * Valor local
+           * @return integer
+           */
     calculateLocalValue: function calculateLocalValue(value) {
       return value == null ? null : this.toFloat(this.inCents ? Math.round(value / 100) : value);
     },
 
     /**
-     * Convierte cualquier numero en formato valido a un número entero
-     * multiplicado por 100 para evitar los decimales
-     */
+           * Convierte cualquier numero en formato valido a un número entero
+           * multiplicado por 100 para evitar los decimales
+           */
     toFloat: function toFloat(str) {
-      if (str !== null && str !== "") {
-        var value = parseFloat(String(str).replace(/[^0-9\.]+/g, ""));
+      if (str !== null && str !== '') {
+        var value = parseFloat(String(str).replace(/[^0-9\.]+/g, ''));
         return value;
       }
 
@@ -2535,20 +2551,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     /**
-     * Da el formato al numero
-     */
+           * Da el formato al numero
+           */
     formatText: function formatText(value) {
-      var text = value !== null ? value.formatMoney(2, '.', ',') : '';
+      var text = value !== null ? this.formatMoney(value, 2, '.', ',') : '';
 
       return text && text.endsWith('.00') ? text.replace('.00', '') : text;
     },
 
 
     /**
-     * Remueve el formato del numero
-     */
+           * Remueve el formato del numero
+           */
     unFormatText: function unFormatText(value) {
-      var text = value !== null ? value.formatMoney(2, '.', '') : '';
+      var text = value !== null ? this.formatMoney(value, 2, '.', '') : '';
 
       return text && text.endsWith('.00') ? text.replace('.00', '') : text;
     }
@@ -2843,6 +2859,203 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2870,7 +3083,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         address: '',
         latitude: 19.4336626,
         longitude: -99.1410542,
-        links: [''],
+        holder_links: [''],
         // 2.
         description: '',
         // 3.
@@ -2878,16 +3091,90 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         // 4.
         competition: '',
         // 5.
-        company_files: []
-      })
+        company_files: [],
+        // 6.
+        links: [''],
+        // 7.
+        sectors: [],
+        // 8.
+        stage_id: null,
+        // 9.
+        business_model: '',
+        // 10.
+        previous_capital: null,
+        total_sales: null,
+        round_size: null,
+        minimal_needed: null,
+        has_interested_investor: null,
+        interested_investor_name: '',
+        expected_sales_year_1: null,
+        expected_sales_year_2: null,
+        expected_sales_year_3: null,
+        rewards: [],
+        // 11.
+        //
+        // 12.
+        //
+        // 13.
+        key_files: [],
+        // 14.
+        extra_files: []
+      }),
+      sectors: null,
+      stages: null,
+      rewards: ['Deuda simple', 'Deuda convertible', 'Participación', 'Revenue share', 'Mixto']
     };
   },
 
 
+  computed: {
+    sectorsColumns: function sectorsColumns() {
+      if (!this.sectors) {
+        return [];
+      }
+
+      return _.chunk(this.sectors, Math.ceil(this.sectors.length / 2));
+    },
+    rewardsColumns: function rewardsColumns() {
+      if (!this.rewards) {
+        return [];
+      }
+
+      return _.chunk(this.rewards, Math.ceil(this.rewards.length / 2));
+    }
+  },
+
+  created: function created() {
+    this.loadSectors();
+    this.loadStages();
+  },
+
+
   methods: {
+    submitProject: function submitProject() {
+      App.post('/projects', this.form).then(function (response) {
+        console.log(response);
+      }).catch(function (errors) {
+        console.log(errors);
+      });
+    },
     locationUpdated: function locationUpdated(coordinates, isManualChanged) {
       this.form.latitude = coordinates.lat;
       this.form.longitude = coordinates.lng;
+    },
+    loadSectors: function loadSectors() {
+      var _this = this;
+
+      axios.get('/sectors').then(function (response) {
+        _this.sectors = response.data;
+      });
+    },
+    loadStages: function loadStages() {
+      var _this2 = this;
+
+      axios.get('/stages').then(function (response) {
+        _this2.stages = response.data;
+      });
     }
   }
 });
@@ -46423,7 +46710,7 @@ var render = function() {
             staticClass: "File__iconstatus text-danger",
             attrs: { title: _vm.errorMessage }
           },
-          [_c("i", { staticClass: "icon-warning" }), _vm._v("\n    (más)\n  ")]
+          [_vm._v("\n    i.icon-warning\n    (más)\n  ")]
         )
       : _vm.file.success
         ? _c("i", {
@@ -46526,8 +46813,106 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("form", { attrs: { action: "" } }, [
-    _c("div", { staticClass: "container-fluid bg-light" }, [
+  return _c(
+    "form",
+    {
+      attrs: { novalidate: "" },
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          _vm.submitProject($event)
+        }
+      }
+    },
+    [
+      _c("div", { staticClass: "container-fluid bg-light" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "content" }, [
+            _c("div", { staticClass: "row justify-content-center" }, [
+              _c("div", { staticClass: "col-lg-8" }, [
+                _c(
+                  "fieldset",
+                  [
+                    _c("p"),
+                    _vm._m(0, false, false),
+                    _c("p"),
+                    _vm._v(" "),
+                    _c("form-text", {
+                      attrs: {
+                        form: _vm.form,
+                        name: "name",
+                        label: "Nombre del proyecto:"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("form-text", {
+                      attrs: {
+                        form: _vm.form,
+                        name: "holder",
+                        label: "Nombre del titular:"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("form-text", {
+                      attrs: {
+                        form: _vm.form,
+                        name: "phone",
+                        label: "Teléfono de contacto:"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("form-text", {
+                      attrs: {
+                        form: _vm.form,
+                        name: "email",
+                        label: "Correo de contacto:"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("project-form-links", {
+                      attrs: { label: "Redes sociales del titular" },
+                      model: {
+                        value: _vm.form.holder_links,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "holder_links", $$v)
+                        },
+                        expression: "form.holder_links"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("form-text", {
+                      attrs: {
+                        form: _vm.form,
+                        name: "video",
+                        placeholder: "https://",
+                        label: "Video de la iniciativa:"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("form-map", {
+                      attrs: {
+                        "api-key": _vm.googleMapsApiKey,
+                        "initial-latitude": _vm.form.latitude,
+                        "initial-longitude": _vm.form.longitude
+                      },
+                      on: { "location-updated": _vm.locationUpdated },
+                      model: {
+                        value: _vm.form.address,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "address", $$v)
+                        },
+                        expression: "form.address"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
       _c("div", { staticClass: "container" }, [
         _c("div", { staticClass: "content" }, [
           _c("div", { staticClass: "row justify-content-center" }, [
@@ -46536,43 +46921,124 @@ var render = function() {
                 "fieldset",
                 [
                   _c("p"),
-                  _vm._m(0, false, false),
+                  _vm._m(1, false, false),
                   _c("p"),
                   _vm._v(" "),
-                  _c("form-text", {
+                  _c("form-textarea", {
                     attrs: {
                       form: _vm.form,
-                      name: "name",
-                      label: "Nombre del proyecto:"
+                      name: "description",
+                      label:
+                        "A qué te dedicas, cuánto tiempo llevas haciéndolo, resultados en ventas, validación de la idea y por qué comenzaste a hacerlo."
                     }
-                  }),
+                  })
+                ],
+                1
+              )
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container-fluid bg-light" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "content" }, [
+            _c("div", { staticClass: "row justify-content-center" }, [
+              _c("div", { staticClass: "col-lg-8" }, [
+                _c(
+                  "fieldset",
+                  [
+                    _c("p"),
+                    _vm._m(2, false, false),
+                    _c("p"),
+                    _vm._v(" "),
+                    _vm._m(3, false, false),
+                    _vm._v(" "),
+                    _vm._m(4, false, false),
+                    _vm._v(" "),
+                    _c("form-textarea", {
+                      attrs: { form: _vm.form, name: "opportunity" }
+                    })
+                  ],
+                  1
+                )
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "content" }, [
+          _c("div", { staticClass: "row justify-content-center" }, [
+            _c("div", { staticClass: "col-lg-8" }, [
+              _c(
+                "fieldset",
+                [
+                  _c("p"),
+                  _vm._m(5, false, false),
+                  _c("p"),
                   _vm._v(" "),
-                  _c("form-text", {
-                    attrs: {
-                      form: _vm.form,
-                      name: "holder",
-                      label: "Nombre del titular:"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("form-text", {
-                    attrs: {
-                      form: _vm.form,
-                      name: "phone",
-                      label: "Teléfono de contacto:"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("form-text", {
-                    attrs: {
-                      form: _vm.form,
-                      name: "email",
-                      label: "Correo de contacto:"
-                    }
-                  }),
+                  _c("form-textarea", {
+                    attrs: { form: _vm.form, name: "competition" }
+                  })
+                ],
+                1
+              )
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container-fluid bg-light" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "content" }, [
+            _c("div", { staticClass: "row justify-content-center" }, [
+              _c("div", { staticClass: "col-lg-8" }, [
+                _c(
+                  "fieldset",
+                  [
+                    _c("p"),
+                    _vm._m(6, false, false),
+                    _c("p"),
+                    _vm._v(" "),
+                    _c("form-files", {
+                      attrs: {
+                        "btn-text": "Subir presentación, foto(s) o video(s)"
+                      },
+                      model: {
+                        value: _vm.form.company_files,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "company_files", $$v)
+                        },
+                        expression: "form.company_files"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "content" }, [
+          _c("div", { staticClass: "row justify-content-center" }, [
+            _c("div", { staticClass: "col-lg-8" }, [
+              _c(
+                "fieldset",
+                [
+                  _c("p"),
+                  _vm._m(7, false, false),
+                  _c("p"),
                   _vm._v(" "),
                   _c("project-form-links", {
-                    attrs: { label: "Redes sociales del titular" },
+                    attrs: {
+                      label:
+                        "Tu página oficial, página de facebook, twitter, etc."
+                    },
                     model: {
                       value: _vm.form.links,
                       callback: function($$v) {
@@ -46580,119 +47046,426 @@ var render = function() {
                       },
                       expression: "form.links"
                     }
-                  }),
+                  })
+                ],
+                1
+              )
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container-fluid bg-light" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "content" }, [
+            _c("div", { staticClass: "row justify-content-center" }, [
+              _c("div", { staticClass: "col-lg-8" }, [
+                _c(
+                  "fieldset",
+                  [
+                    _c("p"),
+                    _vm._m(8, false, false),
+                    _c("p"),
+                    _vm._v(" "),
+                    _vm.sectors === null
+                      ? _c("p", [
+                          _c("i", { staticClass: "icon-spinner spinner" }),
+                          _vm._v(" Cargando sectores...\n              ")
+                        ])
+                      : _c(
+                          "b-form-checkbox-group",
+                          {
+                            staticClass: "form-row",
+                            model: {
+                              value: _vm.form.sectors,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "sectors", $$v)
+                              },
+                              expression: "form.sectors"
+                            }
+                          },
+                          _vm._l(_vm.sectorsColumns, function(chunk, index) {
+                            return _c(
+                              "div",
+                              { key: index, staticClass: "col" },
+                              _vm._l(chunk, function(sector) {
+                                return _c(
+                                  "div",
+                                  { key: sector.id, staticClass: "form-check" },
+                                  [
+                                    _c(
+                                      "b-form-checkbox",
+                                      { attrs: { value: sector.id } },
+                                      [_vm._v(_vm._s(sector.label))]
+                                    )
+                                  ],
+                                  1
+                                )
+                              })
+                            )
+                          })
+                        )
+                  ],
+                  1
+                )
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "content" }, [
+          _c("div", { staticClass: "row justify-content-center" }, [
+            _c("div", { staticClass: "col-lg-8" }, [
+              _c(
+                "fieldset",
+                [
+                  _c("p"),
+                  _vm._m(9, false, false),
+                  _c("p"),
                   _vm._v(" "),
-                  _c("form-text", {
+                  _vm.stages === null
+                    ? _c("p", [
+                        _c("i", { staticClass: "icon-spinner spinner" }),
+                        _vm._v(" Cargando etapas...\n            ")
+                      ])
+                    : _c(
+                        "b-form-radio-group",
+                        {
+                          attrs: { stacked: "" },
+                          model: {
+                            value: _vm.form.stage_id,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "stage_id", $$v)
+                            },
+                            expression: "form.stage_id"
+                          }
+                        },
+                        _vm._l(_vm.stages, function(stage) {
+                          return _c(
+                            "b-form-radio",
+                            { key: stage.id, attrs: { value: stage.id } },
+                            [
+                              _vm._v(
+                                "\n                " +
+                                  _vm._s(stage.label) +
+                                  " (" +
+                                  _vm._s(stage.description) +
+                                  ")\n              "
+                              )
+                            ]
+                          )
+                        })
+                      )
+                ],
+                1
+              )
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container-fluid bg-light" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "content" }, [
+            _c("div", { staticClass: "row justify-content-center" }, [
+              _c("div", { staticClass: "col-lg-8" }, [
+                _c(
+                  "fieldset",
+                  [
+                    _c("p"),
+                    _vm._m(10, false, false),
+                    _c("p"),
+                    _vm._v(" "),
+                    _c("form-textarea", {
+                      attrs: {
+                        form: _vm.form,
+                        name: "business_model",
+                        label:
+                          "¿Cómo generas dinero? ¿Qué tipo de producto o servicio vendes y quién te lo compra? ¿A través de qué medios lo comercializas o cómo cierras tus ventas?"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "content" }, [
+          _c("div", { staticClass: "row justify-content-center" }, [
+            _c("div", { staticClass: "col-lg-8" }, [
+              _c(
+                "fieldset",
+                [
+                  _c("p"),
+                  _vm._m(11, false, false),
+                  _c("p"),
+                  _vm._v(" "),
+                  _c("form-money", {
                     attrs: {
                       form: _vm.form,
-                      name: "video",
-                      placeholder: "https://",
-                      label: "Video de la iniciativa:"
+                      "in-cents": true,
+                      name: "previous_capital",
+                      label: "Capital previamente obtenido (si aplica)"
                     }
                   }),
                   _vm._v(" "),
-                  _c("form-map", {
+                  _c("form-money", {
                     attrs: {
-                      "api-key": _vm.googleMapsApiKey,
-                      "initial-latitude": _vm.form.latitude,
-                      "initial-longitude": _vm.form.longitude
-                    },
-                    on: { "location-updated": _vm.locationUpdated },
-                    model: {
-                      value: _vm.form.address,
-                      callback: function($$v) {
-                        _vm.$set(_vm.form, "address", $$v)
-                      },
-                      expression: "form.address"
+                      form: _vm.form,
+                      "in-cents": true,
+                      name: "total_sales",
+                      label: "Ventas totales al día de hoy (si aplica)"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("form-money", {
+                    attrs: {
+                      form: _vm.form,
+                      "in-cents": true,
+                      name: "round_size",
+                      label: "Tamaño de la ronda (¿Cuánto necesitas?)"
                     }
                   })
                 ],
                 1
-              )
-            ])
-          ])
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "content" }, [
-        _c("div", { staticClass: "row justify-content-center" }, [
-          _c("div", { staticClass: "col-lg-8" }, [
-            _c(
-              "fieldset",
-              [
-                _c("p"),
-                _vm._m(1, false, false),
-                _c("p"),
-                _vm._v(" "),
-                _c("form-textarea", {
-                  attrs: {
-                    form: _vm.form,
-                    name: "description",
-                    label:
-                      "A qué te dedicas, cuánto tiempo llevas haciéndolo, resultados en ventas, validación de la idea y por qué comenzaste a hacerlo."
-                  }
-                })
-              ],
-              1
-            )
-          ])
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "container-fluid bg-light" }, [
-      _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "content" }, [
-          _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "col-lg-8" }, [
+              ),
+              _vm._v(" "),
               _c(
                 "fieldset",
                 [
-                  _c("p"),
-                  _vm._m(2, false, false),
-                  _c("p"),
+                  _c(
+                    "div",
+                    { staticClass: "form-row" },
+                    [
+                      _c("legend", { staticClass: "col-form-legend" }, [
+                        _vm._v("¿Tienes algún inversionista interesado?")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "b-form-radio-group",
+                        {
+                          model: {
+                            value: _vm.form.has_interested_investor,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "has_interested_investor", $$v)
+                            },
+                            expression: "form.has_interested_investor"
+                          }
+                        },
+                        [
+                          _c("b-form-radio", { attrs: { value: true } }, [
+                            _vm._v("Sí")
+                          ]),
+                          _vm._v(" "),
+                          _c("b-form-radio", { attrs: { value: false } }, [
+                            _vm._v("No")
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
-                  _vm._m(3, false, false),
+                  _vm.form.has_interested_investor
+                    ? _c("form-text", {
+                        attrs: {
+                          form: _vm.form,
+                          name: "interested_investor_name",
+                          label: "¿Qué inversionista?",
+                          placeholder: "Opcional"
+                        }
+                      })
+                    : _vm._e()
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("fieldset", [
+                _c("legend", { staticClass: "col-form-legend" }, [
+                  _vm._v("Ventas esperadas en los próximos tres años")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("div", { staticClass: "form-row" }, [
+                    _vm._m(12, false, false),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-6" },
+                      [
+                        _c("form-money", {
+                          staticClass: "mb-0",
+                          attrs: {
+                            form: _vm.form,
+                            "in-cents": true,
+                            name: "expected_sales_year_1"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("div", { staticClass: "form-row" }, [
+                    _vm._m(13, false, false),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-6" },
+                      [
+                        _c("form-money", {
+                          staticClass: "mb-0",
+                          attrs: {
+                            form: _vm.form,
+                            "in-cents": true,
+                            name: "expected_sales_year_2"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("div", { staticClass: "form-row" }, [
+                    _vm._m(14, false, false),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-6" },
+                      [
+                        _c("form-money", {
+                          staticClass: "mb-0",
+                          attrs: {
+                            form: _vm.form,
+                            "in-cents": true,
+                            name: "expected_sales_year_3"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "fieldset",
+                [
+                  _c("legend", { staticClass: "col-form-legend" }, [
+                    _vm._v("¿Qué das a cambio de la inversión?")
+                  ]),
                   _vm._v(" "),
-                  _vm._m(4, false, false),
-                  _vm._v(" "),
-                  _c("form-textarea", {
-                    attrs: { form: _vm.form, name: "opportunity" }
-                  })
+                  _c(
+                    "b-form-checkbox-group",
+                    {
+                      staticClass: "form-row",
+                      model: {
+                        value: _vm.form.rewards,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "rewards", $$v)
+                        },
+                        expression: "form.rewards"
+                      }
+                    },
+                    _vm._l(_vm.rewardsColumns, function(chunk, index) {
+                      return _c(
+                        "div",
+                        { key: index, staticClass: "col" },
+                        _vm._l(chunk, function(reward) {
+                          return _c(
+                            "div",
+                            { key: reward, staticClass: "form-check" },
+                            [
+                              _c(
+                                "b-form-checkbox",
+                                { attrs: { value: reward } },
+                                [_vm._v(_vm._s(reward))]
+                              )
+                            ],
+                            1
+                          )
+                        })
+                      )
+                    })
+                  )
                 ],
                 1
               )
             ])
           ])
         ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "content" }, [
-        _c("div", { staticClass: "row justify-content-center" }, [
-          _c("div", { staticClass: "col-lg-8" }, [
-            _c(
-              "fieldset",
-              [
-                _c("p"),
-                _vm._m(5, false, false),
-                _c("p"),
-                _vm._v(" "),
-                _c("form-textarea", {
-                  attrs: { form: _vm.form, name: "competition" }
-                })
-              ],
-              1
-            )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container-fluid bg-light" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "content" }, [
+            _c("div", { staticClass: "row justify-content-center" }, [
+              _c("div", { staticClass: "col-lg-8" }, [
+                _c(
+                  "fieldset",
+                  [
+                    _c("p"),
+                    _vm._m(15, false, false),
+                    _c("p"),
+                    _vm._v(" "),
+                    _c("form-textarea", {
+                      attrs: {
+                        form: _vm.form,
+                        name: "business_model",
+                        label:
+                          "¿Cómo generas dinero? ¿Qué tipo de producto o servicio vendes y quién te lo compra? ¿A través de qué medios lo comercializas o cómo cierras tus ventas?"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ])
+            ])
           ])
         ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "container-fluid bg-light" }, [
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container-fluid bg-light" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "content" }, [
+            _c("div", { staticClass: "row justify-content-center" }, [
+              _c("div", { staticClass: "col-lg-8" }, [
+                _c(
+                  "fieldset",
+                  [
+                    _c("p"),
+                    _vm._m(16, false, false),
+                    _c("p"),
+                    _vm._v(" "),
+                    _c("form-files", {
+                      model: {
+                        value: _vm.form.key_files,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "key_files", $$v)
+                        },
+                        expression: "form.key_files"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
       _c("div", { staticClass: "container" }, [
         _c("div", { staticClass: "content" }, [
           _c("div", { staticClass: "row justify-content-center" }, [
@@ -46701,16 +47474,16 @@ var render = function() {
                 "fieldset",
                 [
                   _c("p"),
-                  _vm._m(6, false, false),
+                  _vm._m(17, false, false),
                   _c("p"),
                   _vm._v(" "),
                   _c("form-files", {
                     model: {
-                      value: _vm.form.company_files,
+                      value: _vm.form.extra_files,
                       callback: function($$v) {
-                        _vm.$set(_vm.form, "company_files", $$v)
+                        _vm.$set(_vm.form, "extra_files", $$v)
                       },
-                      expression: "form.company_files"
+                      expression: "form.extra_files"
                     }
                   })
                 ],
@@ -46719,9 +47492,32 @@ var render = function() {
             ])
           ])
         ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container-fluid bg-light" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "content" }, [
+            _c("div", { staticClass: "row justify-content-center" }, [
+              _c("div", { staticClass: "col-lg-8" }, [
+                _c(
+                  "p",
+                  { staticClass: "text-center" },
+                  [
+                    _c(
+                      "form-button-submit",
+                      { attrs: { variant: "primary", form: _vm.form } },
+                      [_vm._v("Enviar solicitud")]
+                    )
+                  ],
+                  1
+                )
+              ])
+            ])
+          ])
+        ])
       ])
-    ])
-  ])
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
@@ -46797,6 +47593,116 @@ var staticRenderFns = [
         _vm._v("Presentación y videos adicionales de la empresa")
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("legend", [
+      _c("span", { staticClass: "h2 text-primary" }, [_vm._v("6.")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "h3" }, [
+        _vm._v("Página y redes de la empresa")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("legend", [
+      _c("span", { staticClass: "h2 text-primary" }, [_vm._v("7.")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "h3" }, [
+        _vm._v("Sectores a lo que pertenece la innovación")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("legend", [
+      _c("span", { staticClass: "h2 text-primary" }, [_vm._v("8.")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "h3" }, [
+        _vm._v("Etapa de desarrollo de capital")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("legend", [
+      _c("span", { staticClass: "h2 text-primary" }, [_vm._v("9.")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "h3" }, [_vm._v("Modelo de negocio")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("legend", [
+      _c("span", { staticClass: "h2 text-primary" }, [_vm._v("10.")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "h3" }, [_vm._v("Datos de inversión")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-2" }, [
+      _c("label", { staticClass: "col-form-label" }, [_vm._v("Año 1:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-2" }, [
+      _c("label", { staticClass: "col-form-label" }, [_vm._v("Año 2:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-2" }, [
+      _c("label", { staticClass: "col-form-label" }, [_vm._v("Año 3:")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("legend", [
+      _c("span", { staticClass: "h2 text-primary" }, [_vm._v("11.")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "h3" }, [_vm._v("Miembros del equipo")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("legend", [
+      _c("span", { staticClass: "h2 text-primary" }, [_vm._v("13.")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "h3" }, [_vm._v("Documentos  Clave")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("legend", [
+      _c("span", { staticClass: "h2 text-primary" }, [_vm._v("14.")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "h3" }, [_vm._v("Material extra")])
+    ])
   }
 ]
 render._withStripped = true
@@ -46859,7 +47765,7 @@ var render = function() {
             expression: "files"
           }
         },
-        [_vm._v("\n    Subir presentación, foto(s) o video(s)\n  ")]
+        [_vm._v("\n    " + _vm._s(_vm.btnText) + "\n  ")]
       )
     ],
     1

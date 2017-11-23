@@ -6,7 +6,7 @@
 
     <span class="File__name">{{ file.name }}</span>
     <span v-if="file.error" class="File__iconstatus text-danger" v-b-tooltip.hover :title="errorMessage">
-      <i class="icon-warning"></i>
+      i.icon-warning
       (más)
     </span>
     <i v-else-if="file.success" class="File__iconstatus icon-checkmark text-success"></i>

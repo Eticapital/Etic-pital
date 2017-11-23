@@ -1,54 +1,52 @@
 <template>
-    <div class="header-form-search">
-        <div class="input-group">
-          <input @keyup="search" v-model="query" class="form-control" type="text" placeholder="Buscar...">
-          <span class="input-group-btn">
-            <button @click.prevent="search" class="btn btn-secondary" type="button"><i class="icon-search"></i></button>
-          </span>
-          <span v-if="query" class="input-group-btn">
-            <button @click.prevent="reset" class="btn btn-secondary" type="button"><i class="icon-cross"></i></button>
-          </span>
-        </div>
-    </div>
+  <b-nav-form @submit.prevent="search">
+    <b-input-group size="sm">
+      <b-input-group-button>
+        <b-button @click.prevent="search"><i class="icon-search"></i></b-button>
+      </b-input-group-button>
+      <b-form-input @keyup="search" v-model="query" type="text" placeholder="Buscar..." />
+      <b-input-group-button v-if="query">
+        <b-button variant="danger" @click.prevent="reset" ><i class="icon-cross"></i></b-button>
+      </b-input-group-button>
+    </b-input-group>
+  </b-nav-form>
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                query:''
-            }
-        },
-
-        methods: {
-            search () {
-                bus.$emit('header-query-set', this.query)
-            },
-            reset () {
-                this.query = ''
-                this.search();
-                bus.$emit('header-query-reset', this.query)
-            }
-        },
-
-        watch: {
-            '$route': function () {
-                this.query = '';
-            },
-        },
-
-        created() {
-            bus.$on('header-query-clear', function () {
-                this.reset()
-            }.bind(this));
-        }
+export default {
+  data () {
+    return {
+      query: ''
     }
+  },
+
+  watch: {
+    '$route': function () {
+      this.query = ''
+    }
+  },
+
+  created () {
+    bus.$on('header-query-clear', () => {
+      this.reset()
+    })
+  },
+
+  watch: {
+    query (query) {
+      this.search()
+    }
+  },
+
+  methods: {
+    search () {
+      bus.$emit('header-query-set', this.query)
+    },
+
+    reset () {
+      this.query = ''
+      bus.$emit('header-query-reset', this.query)
+    }
+  }
+}
 </script>
-
-<style lang="scss">
-    @import "resources/assets/sass/globals";
-
-    .header-form-search {
-        float: right;
-    }
-</style>

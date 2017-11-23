@@ -30,6 +30,18 @@ class Role extends LaratrustRole
     protected $fillable = ['display_name', 'description'];
 
     /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return collect($this->toArray())
+            ->only('id', 'display_name')
+            ->toArray();
+    }
+
+    /**
      * Return the sluggable configuration array for this model.
      *
      * @return array

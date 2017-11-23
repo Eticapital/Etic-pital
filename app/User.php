@@ -46,4 +46,14 @@ class User extends Authenticatable
             ->only('id', 'name', 'email')
             ->toArray();
     }
+
+    /**
+     * Regresa solo el primer nombre
+     *
+     * @return string
+     */
+    public function getShortNameAttribute()
+    {
+        return collect(explode(' ', trim($this->name)))->first();
+    }
 }

@@ -11,7 +11,7 @@
 
     <b-collapse is-nav id="nav_collapse">
 
-      <b-navbar-nav>
+      <b-navbar-nav class="mr-auto">
         <nav-item
           v-for="(link, index) in main_nav_items"
           :link="link"
@@ -19,12 +19,13 @@
           :key="index"></nav-item>
       </b-navbar-nav>
 
-      <b-navbar-nav class="ml-auto">
+      <header-search-form v-if="searchable"></header-search-form>
 
+      <b-navbar-nav>
         <b-nav-item-dropdown right>
           <!-- Using button-content slot -->
           <template slot="button-content">
-            <em>{{ auth()->user()->name }}</em>
+            <em>{{ auth()->user()->short_name }}</em>
           </template>
 
           <b-dropdown-item exact :to="{ name: 'account.index' }">

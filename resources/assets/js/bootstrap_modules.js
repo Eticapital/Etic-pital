@@ -24,15 +24,20 @@ Vue.use(VueMoment)
 
 
 // Data tables para
-// import Vuetable from 'vuetable-2/src/components/Vuetable'
-import Datatable from './components/gui/DataTable.vue'
-import DatatablePagination from './components/gui/DataTablePagination'
-import DataTablePaginationInfo from './components/gui/DataTablePaginationInfo'
+import { Vuetable } from 'vuetable-2';
+
+Vue.component('vuetable', Vuetable);
+
+Vue.component("data-table", require('./components/gui/DataTable'))
+Vue.component("data-table-pagination", require('./components/gui/DataTablePagination'))
+
+// import DatatablePagination from './components/gui/DataTablePagination'
+// import DataTablePaginationInfo from './components/gui/DataTablePaginationInfo'
 // import VuetablePaginationDropdown  from 'vuetable-2/src/components/VuetablePaginationDropdown.vue';
 
-Vue.component("data-table", Datatable);
-Vue.component("data-table-pagination", DatatablePagination);
-Vue.component("data-table-pagination-info", DataTablePaginationInfo);
+// ;
+// Vue.component("data-table-pagination", DatatablePagination);
+// Vue.component("data-table-pagination-info", DataTablePaginationInfo);
 // Vue.component("data-table-pagination-dropdown", VuetablePaginationDropdown);
 
 Vue.http.headers.common['X-CSRF-TOKEN'] = App.csrfToken;

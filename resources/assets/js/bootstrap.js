@@ -28,7 +28,12 @@ window.Vue = require('vue');
 
 window.Velocity = require('velocity-animate');
 
-window.axios = require('axios');
+import axios from 'axios';
+import axiosCancel from 'axios-cancel';
+axiosCancel(axios, {
+  debug: false // default
+});
+window.axios = axios
 
 window.format = require('string-template');
 

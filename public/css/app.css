@@ -2,8 +2,8 @@
 
 @font-face {
   font-family: 'icomoon';
-  src: url(/fonts/icomoon.eot?cfe71e030e7a241a6da3d44ef9e60929);
-  src: url(/fonts/icomoon.eot?cfe71e030e7a241a6da3d44ef9e60929) format("embedded-opentype"), url(/fonts/icomoon.woff2?b0867a9d1c0a77d99cc4260308583a6c) format("woff2"), url(/fonts/icomoon.ttf?13fecc85e4766334256edfd0fe3eebcc) format("truetype"), url(/fonts/icomoon.woff?8fd55f6fcadcff5be30d8ca99199d59b) format("woff"), url(/fonts/icomoon.svg?71de1aa371c6b75df2c030ce232ddea6) format("svg");
+  src: url(/fonts/icomoon.eot?f8a736fd54f666793e420f7b4eb8cdac);
+  src: url(/fonts/icomoon.eot?f8a736fd54f666793e420f7b4eb8cdac) format("embedded-opentype"), url(/fonts/icomoon.woff2?fa59d6d430bf5831c3e221a9a1b0cc46) format("woff2"), url(/fonts/icomoon.ttf?b0e11cc98aba0e5ad9d9d97bbb282ca7) format("truetype"), url(/fonts/icomoon.woff?674b08363bf47373159eedf073db05d3) format("woff"), url(/fonts/icomoon.svg?b8167fa88c1220330a2897b4247b7288) format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -27,24 +27,12 @@
   content: "\EA66";
 }
 
-.icon-man-woman:before {
-  content: "\ECFD";
-}
-
 .icon-notification:before {
   content: "\E914";
 }
 
 .icon-warning:before {
   content: "\E915";
-}
-
-.icon-male:before {
-  content: "\E916";
-}
-
-.icon-female:before {
-  content: "\E917";
 }
 
 .icon-file-spreadsheet:before {
@@ -203,48 +191,12 @@
   content: "\E900";
 }
 
-.icon-room_service:before {
-  content: "\E913";
-}
-
-.icon-bed2:before {
-  content: "\E90F";
-}
-
-.icon-group:before {
-  content: "\E90C";
-}
-
-.icon-sort-asc:before {
-  content: "\E909";
-}
-
-.icon-sort-desc:before {
-  content: "\E90A";
-}
-
-.icon-sort:before {
-  content: "\E90B";
-}
-
 .icon-calendar-full:before {
   content: "\E912";
 }
 
 .icon-users:before {
   content: "\E911";
-}
-
-.icon-bed:before {
-  content: "\E90E";
-}
-
-.icon-hotel:before {
-  content: "\E90E";
-}
-
-.icon-sleep:before {
-  content: "\E90E";
 }
 
 .icon-home:before {
@@ -267,16 +219,8 @@
   content: "\E6CC";
 }
 
-.icon-library2:before {
-  content: "\E719";
-}
-
 .icon-user:before {
   content: "\E71E";
-}
-
-.icon-credit-card:before {
-  content: "\E759";
 }
 
 .icon-bubble-dots:before {
@@ -341,6 +285,22 @@
 
 .icon-arrow-right:before {
   content: "\E944";
+}
+
+.icon-group:before {
+  content: "\E90C";
+}
+
+.icon-sort-asc:before {
+  content: "\E909";
+}
+
+.icon-sort-desc:before {
+  content: "\E90A";
+}
+
+.icon-sort:before {
+  content: "\E90B";
 }
 
 /*!

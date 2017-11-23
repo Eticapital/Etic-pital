@@ -1,7 +1,7 @@
 <template>
     <div v-if="page_title||items.length" class="page-header hidden-sm-down">
         <b-breadcrumb :items="items"/>
-        <header-search-form v-if="searchable"/>
+        <!-- <header-search-form v-if="searchable"/> -->
         <!-- <h2 v-if="page_title" class="page-header-title">{{ page_title }}</h2> -->
     </div>
 </template>

@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?phhlht');
-  src:  url('fonts/icomoon.eot?phhlht#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.woff2?phhlht') format('woff2'),
-    url('fonts/icomoon.ttf?phhlht') format('truetype'),
-    url('fonts/icomoon.woff?phhlht') format('woff'),
-    url('fonts/icomoon.svg?phhlht#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?w3rg8u');
+  src:  url('fonts/icomoon.eot?w3rg8u#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.woff2?w3rg8u') format('woff2'),
+    url('fonts/icomoon.ttf?w3rg8u') format('truetype'),
+    url('fonts/icomoon.woff?w3rg8u') format('woff'),
+    url('fonts/icomoon.svg?w3rg8u#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -28,20 +28,11 @@
 .icon-calendar-week:before {
   content: "\ea66";
 }
-.icon-man-woman:before {
-  content: "\ecfd";
-}
 .icon-notification:before {
   content: "\e914";
 }
 .icon-warning:before {
   content: "\e915";
-}
-.icon-male:before {
-  content: "\e916";
-}
-.icon-female:before {
-  content: "\e917";
 }
 .icon-file-spreadsheet:before {
   content: "\e910";
@@ -160,38 +151,11 @@
 .icon-spinner:before {
   content: "\e900";
 }
-.icon-room_service:before {
-  content: "\e913";
-}
-.icon-bed2:before {
-  content: "\e90f";
-}
-.icon-group:before {
-  content: "\e90c";
-}
-.icon-sort-asc:before {
-  content: "\e909";
-}
-.icon-sort-desc:before {
-  content: "\e90a";
-}
-.icon-sort:before {
-  content: "\e90b";
-}
 .icon-calendar-full:before {
   content: "\e912";
 }
 .icon-users:before {
   content: "\e911";
-}
-.icon-bed:before {
-  content: "\e90e";
-}
-.icon-hotel:before {
-  content: "\e90e";
-}
-.icon-sleep:before {
-  content: "\e90e";
 }
 .icon-home:before {
   content: "\e600";
@@ -208,14 +172,8 @@
 .icon-clipboard-check:before {
   content: "\e6cc";
 }
-.icon-library2:before {
-  content: "\e719";
-}
 .icon-user:before {
   content: "\e71e";
-}
-.icon-credit-card:before {
-  content: "\e759";
 }
 .icon-bubble-dots:before {
   content: "\e7d8";
@@ -264,4 +222,16 @@
 }
 .icon-arrow-right:before {
   content: "\e944";
+}
+.icon-group:before {
+  content: "\e90c";
+}
+.icon-sort-asc:before {
+  content: "\e909";
+}
+.icon-sort-desc:before {
+  content: "\e90a";
+}
+.icon-sort:before {
+  content: "\e90b";
 }

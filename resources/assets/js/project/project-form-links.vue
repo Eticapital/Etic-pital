@@ -1,30 +1,19 @@
 <template>
   <div>
-  <b-form-group
-    :label="label"
-    :feedback="''"
-    :state="''"
-  >
-    <project-form-link
-      v-for="(link, index) in links"
-      :key="link.id"
-      :index="index"
-      :link="link.link"
-      :total-links="links.length"
-      @new-link="newLink"
-      @remove-link="removeLink(index)"
-      @input="updateLink"
-    />
-  </b-form-group>
-  <b-button
-      v-if="links.length > 1"
-      @click.prevent="newLink"
-      size="sm"
-      variant="secondary"
-      class="mb-2"
+    <b-form-group
+      :label="label"
     >
-      Agregar link
-    </b-button>
+      <project-form-link
+        v-for="(link, index) in links"
+        :key="link.id"
+        :index="index"
+        :link="link.link"
+        :total-links="links.length"
+        @new-link="newLink"
+        @remove-link="removeLink(index)"
+        @input="updateLink"
+      />
+    </b-form-group>
   </div>
 </template>
 
@@ -61,9 +50,14 @@ export default {
   watch: {
     links: {
       handler (links) {
-        this.$emit('input', links.map(link => {
-          return link.link
-        }))
+        let input = links
+          .filter(link => {
+            return link.link
+          })
+          .map(link => {
+            return link.link
+          })
+        this.$emit('input', input)
       },
       deep: true
     }

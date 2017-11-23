@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submitProject" novalidate>
+  <form @submit.prevent="onSubmit" novalidate>
     <div class="container-fluid bg-light">
       <div class="container">
         <div class="content">
@@ -395,6 +395,9 @@ export default {
   },
 
   methods: {
+    onSubmit () {
+
+    },
     submitProject () {
       App.post('/projects', this.form)
         .then(response => {

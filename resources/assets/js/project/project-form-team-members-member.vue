@@ -2,15 +2,15 @@
   <div>
     <b-form-group>
       <slot name="label" class="d-flex">
-        <d class="d-flex">
+        <div class="d-flex">
           Nombre
           <a v-if="index > 0" class="text-danger ml-auto" href="#" @click.prevent="$emit('remove')"><i class="icon-bin"></i> Eliminar</a>
-        </d><!-- /.flex -->
+        </div><!-- /.flex -->
       </slot>
       <b-form-input v-model="currentMember.name" />
     </b-form-group>
     <project-form-links v-model="currentMember.links" label="Redes sociales" />
-    <hr />
+    <hr>
   </div>
 </template>
 
@@ -46,6 +46,6 @@ export default {
       },
       deep: true
     }
-  },
+  }
 }
 </script>

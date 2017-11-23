@@ -2606,6 +2606,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2625,18 +2637,77 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   data: function data() {
     return {
-      currentValue: ''
+      currentValue: '',
+      error: false
     };
   },
 
 
+  computed: {
+    icon: function icon() {
+      // Vimeo o Youtube
+      if (/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/.test(this.currentValue)) {
+        return 'youtube';
+      }
+      if (/(?:https?:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*?(\/)?([^\/?]*)/.test(this.currentValue)) {
+        return 'facebook';
+      }
+      if (/(?:http:\/\/)?(?:www\.)?twitter\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/.test(this.currentValue)) {
+        return 'twitter';
+      }
+      if (/https?:\/\/(www\.)?instagram\.com\/([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)/.test(this.currentValue)) {
+        return 'instagram';
+      }
+      if (/((http|https):\/\/|)(www\.|)youtube\.com\/(channel\/|user\/)?[a-zA-Z0-9\-]{1,}/.test(this.currentValue)) {
+        return 'youtube';
+      }
+      if (/https?:\/\/plus\.google\.com\/\+[^/]+|\d{21}/.test(this.currentValue)) {
+        return 'google-plus';
+      }
+      if (/http(s)?:\/\/([\w]+\.)?linkedin\.com\/pub\/[A-z 0-9 _ -]+(\/[A-z 0-9]+){3}\/?/.test(this.currentValue)) {
+        return 'linkedin';
+      }
+      if (/http(s)?:\/\/([\w]+\.)?linkedin\.com\/in\/(A-z 0-9 _ -)\/?/.test(this.currentValue)) {
+        return 'linkedin';
+      }
+      if (/^(http\:\/\/|https\:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/.test(this.currentValue)) {
+        return 'vimeo';
+      }
+
+      return 'sphere';
+    }
+  },
+
   watch: {
     currentValue: function currentValue(link) {
+      this.error = false;
       this.$emit('input', this.index, link);
     }
   },
 
   methods: {
+    newLink: function newLink() {
+      if (!this.currentValue || !this.isValidUrl(this.currentValue)) {
+        this.error = true;
+      } else {
+        this.$emit('new-link');
+      }
+    },
+    onChange: function onChange() {
+      this.addHttps();
+      if (this.isValidUrl(this.currentValue)) {
+        this.newLink();
+      }
+    },
+    isValidUrl: function isValidUrl(url) {
+      var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+      return pattern.test(url);
+    },
     addHttps: function addHttps() {
       var le = new RegExp('^(http|https)://', 'i');
       if (!le.test(this.currentValue)) {
@@ -2655,17 +2726,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__project_form_links_link__ = __webpack_require__("./resources/assets/js/project/project-form-links-link.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__project_form_links_link___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__project_form_links_link__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -2719,9 +2779,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   watch: {
     links: {
       handler: function handler(links) {
-        this.$emit('input', links.map(function (link) {
+        var input = links.filter(function (link) {
           return link.link;
-        }));
+        }).map(function (link) {
+          return link.link;
+        });
+        this.$emit('input', input);
       },
 
       deep: true
@@ -3287,6 +3350,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   methods: {
+    onSubmit: function onSubmit() {},
     submitProject: function submitProject() {
       App.post('/projects', this.form).then(function (response) {
         console.log(response);
@@ -15476,6 +15540,21 @@ vueUse(VuePlugin);
 
 /* harmony default export */ __webpack_exports__["a"] = (VuePlugin);
 //# sourceMappingURL=bootstrap-vue.esm.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-17d119cb\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/project/project-form-links-link.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.ProjectLink {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  padding: 10px;\n  border-top: 1px solid #ebeef0;\n}\n", ""]);
+
+// exports
 
 
 /***/ }),
@@ -46751,58 +46830,83 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { class: { "d-flex": true, "mt-2": _vm.index > 0 } },
-    [
-      _c("b-form-input", {
-        attrs: { placeholder: "https://" },
-        on: { change: _vm.addHttps },
-        model: {
-          value: _vm.currentValue,
-          callback: function($$v) {
-            _vm.currentValue = $$v
+  return _vm.index < _vm.totalLinks - 1
+    ? _c("div", { staticClass: "ProjectLink" }, [
+        _c("a", { attrs: { href: _vm.currentValue, target: "_blank" } }, [
+          _c("i", { class: "icon-" + _vm.icon }),
+          _vm._v("\n    " + _vm._s(_vm.currentValue) + "\n  ")
+        ]),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "ml-auto text-danger",
+            attrs: { href: "#" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                _vm.$emit("remove-link")
+              }
+            }
           },
-          expression: "currentValue"
-        }
-      }),
-      _vm._v(" "),
-      _vm.totalLinks == 1
-        ? _c(
+          [_c("i", { staticClass: "icon-bin" }), _vm._v(" Eliminar\n  ")]
+        )
+      ])
+    : _c(
+        "div",
+        { class: { "d-flex": true, "mt-2": _vm.index > 0 } },
+        [
+          _c("b-form-input", {
+            attrs: {
+              placeholder: "https://",
+              state: _vm.error ? "invalid" : ""
+            },
+            on: { change: _vm.onChange },
+            nativeOn: {
+              keyup: function($event) {
+                if (
+                  !("button" in $event) &&
+                  _vm._k($event.keyCode, "enter", 13, $event.key)
+                ) {
+                  return null
+                }
+                _vm.newLink($event)
+              }
+            },
+            model: {
+              value: _vm.currentValue,
+              callback: function($$v) {
+                _vm.currentValue = $$v
+              },
+              expression: "currentValue"
+            }
+          }),
+          _vm._v(" "),
+          _c(
             "b-button",
             {
               staticClass: "ml-2",
-              attrs: { size: "sm", variant: "secondary" },
+              attrs: {
+                size: "sm",
+                variant: _vm.error ? "danger" : "secondary"
+              },
               on: {
                 click: function($event) {
                   $event.preventDefault()
-                  _vm.$emit("new-link")
+                  _vm.newLink($event)
                 }
               }
             },
-            [_vm._v("\n    Agregar link\n  ")]
+            [
+              _vm.totalLinks > 1
+                ? [_vm._v("Agregar otro link")]
+                : [_vm._v("Agregar link")]
+            ],
+            2
           )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.totalLinks > 1
-        ? _c(
-            "b-button",
-            {
-              staticClass: "ml-2",
-              attrs: { size: "sm", variant: "danger" },
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.$emit("remove-link")
-                }
-              }
-            },
-            [_c("i", { staticClass: "icon-bin" })]
-          )
-        : _vm._e()
-    ],
-    1
-  )
+        ],
+        1
+      )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -46956,7 +47060,7 @@ var render = function() {
       on: {
         submit: function($event) {
           $event.preventDefault()
-          _vm.submitProject($event)
+          _vm.onSubmit($event)
         }
       }
     },
@@ -47934,7 +48038,7 @@ var render = function() {
         "b-form-group",
         [
           _vm._t("label", [
-            _c("d", { staticClass: "d-flex" }, [
+            _c("div", { staticClass: "d-flex" }, [
               _vm._v("\n        Nombre\n        "),
               _vm.index > 0
                 ? _c(
@@ -48075,7 +48179,7 @@ var render = function() {
     [
       _c(
         "b-form-group",
-        { attrs: { label: _vm.label, feedback: "", state: "" } },
+        { attrs: { label: _vm.label } },
         _vm._l(_vm.links, function(link, index) {
           return _c("project-form-link", {
             key: link.id,
@@ -48093,24 +48197,7 @@ var render = function() {
             }
           })
         })
-      ),
-      _vm._v(" "),
-      _vm.links.length > 1
-        ? _c(
-            "b-button",
-            {
-              staticClass: "mb-2",
-              attrs: { size: "sm", variant: "secondary" },
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.newLink($event)
-                }
-              }
-            },
-            [_vm._v("\n    Agregar link\n  ")]
-          )
-        : _vm._e()
+      )
     ],
     1
   )
@@ -48453,6 +48540,33 @@ if (false) {
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-e96a59b4", module.exports)
   }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-17d119cb\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/project/project-form-links-link.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-17d119cb\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/project/project-form-links-link.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("47574f7c", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-17d119cb\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./project-form-links-link.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-17d119cb\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./project-form-links-link.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
 }
 
 /***/ }),
@@ -61541,6 +61655,10 @@ Vue.component('input-float', __webpack_require__("./resources/assets/js/forms/in
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-17d119cb\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/project/project-form-links-link.vue")
+}
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form-links-link.vue")
@@ -61549,7 +61667,7 @@ var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/templa
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */

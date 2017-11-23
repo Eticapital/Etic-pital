@@ -1,7 +1,7 @@
 <template>
   <div>
   <b-form-group
-    label="Redes sociales"
+    :label="label"
     :feedback="''"
     :state="''"
   >
@@ -37,7 +37,8 @@ export default {
   },
 
   props: {
-    value: Array
+    value: Array,
+    label: String
   },
 
   data () {

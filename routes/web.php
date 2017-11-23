@@ -9,4 +9,7 @@ Route::view('/fondo-de-inversion', 'fondo-de-inversion')->name('fondo-de-inversi
 Route::view('/proyecto', 'proyecto')->name('proyecto');
 Route::view('/proyecto-dummy', 'proyecto-dummy')->name('proyecto-dummy');
 
+
+Route::post('/upload', 'UploadController@uploadToTempFolder');
+
 Auth::routes();

@@ -44,6 +44,7 @@
     "vuetable-2": "^1.7.0"
   },
   "dependencies": {
-    "axios-cancel": "^0.2.2"
+    "axios-cancel": "^0.2.2",
+    "vue-upload-component": "^2.7.1"
   }
 }

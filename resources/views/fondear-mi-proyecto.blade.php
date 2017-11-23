@@ -18,32 +18,6 @@
     <project-form google-maps-api-key="{{ config('services.googlemaps.key') }}" v-cloak></project-form>
     <form>
 
-
-
-
-
-
-
-
-      <div class="container-fluid bg-light">
-        <div class="container">
-          <div class="content">
-            <div class="row justify-content-center">
-              <div class="col-lg-8">
-                <fieldset>
-                  <p><legend><span class="h2 text-primary">5.</span> <span class="h3">Presentación y videos adicionales de la empresa</span></legend></p>
-                  <div class="form-group file-upload">
-                    <label><span class="btn btn-secondary file-button">Subir presentación</span></label>
-                    <input type="file" class="file-trigger">
-                  </div> <!-- / .form-group -->
-                  <span class="btn btn-secondary add-url-button">Agregar video</span>
-                </fieldset>
-              </div> <!-- / .col-lg-8 -->
-            </div> <!-- / .row -->
-          </div> <!-- / .content -->
-        </div> <!-- / .container -->
-      </div> <!-- / .container-fluid -->
-
       <div class="container">
         <div class="content">
           <div class="row justify-content-center">

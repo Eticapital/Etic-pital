@@ -13,7 +13,8 @@
 
     <script>
         window.App = {!! json_encode([
-          'csrfToken' => csrf_token()
+          'csrfToken' => csrf_token(),
+          'maxFileSize' => intval(file_upload_max_size()),
         ]) !!};
     </script>
   </head>

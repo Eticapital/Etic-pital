@@ -11,7 +11,7 @@
                 <form-text :form="form" name="holder" label="Nombre del titular:" />
                 <form-text :form="form" name="phone" label="Teléfono de contacto:" />
                 <form-text :form="form" name="email" label="Correo de contacto:" />
-                <project-form-links v-model="form.links" />
+                <project-form-links v-model="form.links" label="Redes sociales del titular" />
                 <form-text :form="form" name="video" placeholder="https://" label="Video de la iniciativa:" />
                 <form-map
                   v-model="form.address"
@@ -49,10 +49,10 @@
               <fieldset>
                 <p><legend><span class="h2 text-primary">3.</span> <span class="h3">Oportunidad de inversión</span></legend></p>
                 <p><strong>Ejemplo 1:</strong> Actualmente en México se está viviendo un crecimiento en la industria, en los últimos 4 años el número de empresas cerveceras pasó de 18 a 40, sin embargo, existe un mercado virgen en el centro y sur del país…</p>
-                    <p><strong>Ejemplo 2:</strong> Los fundadores han invertido más de 7 millones de pesos de su propio capital durante los 3 años que han trabajado en esto y se han incubado en…)</p>
+                <p><strong>Ejemplo 2:</strong> Los fundadores han invertido más de 7 millones de pesos de su propio capital durante los 3 años que han trabajado en esto y se han incubado en…)</p>
                 <form-textarea
-                  :form="form"
-                  name="opportunity"
+                :form="form"
+                name="opportunity"
                 />
               </fieldset>
             </div> <!-- / .col-lg-8 -->
@@ -67,15 +67,34 @@
           <div class="col-lg-8">
             <fieldset>
               <p><legend><span class="h2 text-primary">4.</span> <span class="h3">Competencia</span></legend></p>
-               <form-textarea
-                  :form="form"
-                  name="competition"
-                />
+              <form-textarea
+              :form="form"
+              name="competition"
+              />
             </fieldset>
           </div> <!-- / .col-lg-8 -->
         </div> <!-- / .row -->
       </div> <!-- / .content -->
     </div> <!-- / .container -->
+
+    <div class="container-fluid bg-light">
+      <div class="container">
+        <div class="content">
+          <div class="row justify-content-center">
+            <div class="col-lg-8">
+              <fieldset>
+                <p><legend><span class="h2 text-primary">5.</span> <span class="h3">Presentación y videos adicionales de la empresa</span></legend></p>
+                <form-files v-model="form.company_files" />
+                <!-- <div class="form-group file-upload">
+                  <label><span class="btn btn-secondary file-button">Subir presentación</span></label>
+                  <input type="file" class="file-trigger">
+                </div> <!-- / .form-group -->
+              </fieldset>
+            </div> <!-- / .col-lg-8 -->
+          </div> <!-- / .row -->
+        </div> <!-- / .content -->
+      </div> <!-- / .container -->
+    </div> <!-- / .container-fluid -->
 
   </form>
 </template>
@@ -113,7 +132,9 @@ export default {
         // 3.
         opportunity: '',
         // 4.
-        competition: ''
+        competition: '',
+        // 5.
+        company_files: []
       })
     }
   },

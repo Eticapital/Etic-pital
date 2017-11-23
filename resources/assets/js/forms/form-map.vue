@@ -19,10 +19,6 @@
 <script>
 export default {
   props: {
-    form: {
-      type: Object,
-      required: true
-    },
     apiKey: {
       type: String,
       required: true
@@ -36,7 +32,7 @@ export default {
       default: -7.309233337402361
     },
     value: {
-      type: String,
+      type: String
     },
     isAddressPredefined: {
       type: Boolean,

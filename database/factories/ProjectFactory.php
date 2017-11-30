@@ -20,6 +20,7 @@ $factory->define(Project::class, function (Faker $faker) {
     return [
         'name' => $faker->company . ' ' . $faker->companySuffix,
         'holder' => $faker->name,
+        // 'holder_links' => null,
         'phone' => $faker->phoneNumber,
         'email' => $faker->email,
         'video' => $videos->random(),

@@ -15,6 +15,7 @@
         </div> <!-- / .row -->
       </div> <!-- / .content -->
     </div> <!-- / .container -->
-
-    <project-form google-maps-api-key="{{ config('services.googlemaps.key') }}" v-cloak></project-form>
+    <project-form google-maps-api-key="{{ config('services.googlemaps.key') }}">
+      <p class="my-4 h4 text-primary text-center"><i class="icon-spinner spinner"></i> Cargando formulario...</p>
+    </project-form>
 @endsection

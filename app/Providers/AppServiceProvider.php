@@ -17,6 +17,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
+        \Illuminate\Pagination\AbstractPaginator::defaultView("pagination::bootstrap-4");
+
         Validator::extend('old_password', function ($attribute, $value, $parameters, $validator) {
             return \Illuminate\Support\Facades\Hash::check($value, current($parameters));
         });

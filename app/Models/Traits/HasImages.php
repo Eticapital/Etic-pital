@@ -93,10 +93,10 @@ trait HasImages
         }
 
         if ($size) {
-            return Storage::url($image['path'] . $this->getImageName($name, $image, $size));
+            return Storage::disk('public')->url($image['path'] . $this->getImageName($name, $image, $size));
         }
 
-        return Storage::url($image['path'] . $this->getImageName($name, $image, $size));
+        return Storage::disk('public')->url($image['path'] . $this->getImageName($name, $image, $size));
     }
 
     /**

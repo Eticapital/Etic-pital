@@ -2,14 +2,14 @@
   <div>
     <b-form-group
       label="Imagen principal"
-      :feedback="form.errors.get('image')"
-      :state="form.errors.has('image') ? 'invalid' : ''"
+      :feedback="form.errors.get(name)"
+      :state="form.errors.has(name) ? 'invalid' : ''"
     >
       <div class="align-items-center justify-content-center justify-content-md-start">
         <div :class="{'PhotoInput': true, 'PhotoInput--active': active }">
           <div class="PhotoInput__wrapper">
             <div @click.prevent="croppa.chooseFile()">
-              <img v-if="hasImage" class="PhotoInput__image" :src="uploadedImageUrl" :alt="form.image" >
+              <img v-if="hasImage" class="PhotoInput__image" :src="uploadedImageUrl" :alt="form[name]" >
               <i v-else class="PhotoInput__icon icon-camera" ></i>
             </div>
             <div v-show="active">
@@ -58,8 +58,8 @@
           <button
             :class="{
               'btn': true,
-              'btn-secondary': !form.errors.has('image'),
-              'btn-danger': form.errors.has('image'),
+              'btn-secondary': !form.errors.has(name),
+              'btn-danger': form.errors.has(name),
               'disabled': choosing
             }"
             @click.prevent="croppa.chooseFile()">
@@ -83,6 +83,10 @@ export default {
     form: {
       type: Object,
       required: true
+    },
+    name: {
+      type: String,
+      required: true
     }
   },
 
@@ -100,7 +104,7 @@ export default {
 
   computed: {
     hasImage () {
-      return this.form.image
+      return this.form[this.name]
     },
     /**
        * El tamaño en MB
@@ -117,7 +121,7 @@ export default {
         axiosFileupload('/upload/image', image)
           .then(response => {
             console.log(response.data.url)
-            this.form.image = response.data.name
+            this.form[this.name] = response.data.name
             this.uploadedImageUrl = response.data.url
             this.active = false
             this.saving = false
@@ -141,7 +145,7 @@ export default {
        */
     newImage () {
       this.choosing = false
-      this.form.errors.clear('image')
+      this.form.errors.clear(this.name)
       this.active = true
     },
 
@@ -149,7 +153,7 @@ export default {
        * Cuando el tipo de archivo no sea válido
        */
     onFileTypeMismatch () {
-      this.form.errors.add('image', 'Tipo de archivo no permitido, solo aceptamos imágenes JPG y PNG')
+      this.form.errors.add(this.name, 'Tipo de archivo no permitido, solo aceptamos imágenes JPG y PNG')
       this.onError()
     },
 
@@ -164,7 +168,7 @@ export default {
        * Cuando la imagen selecciona es muy grande
        */
     onFileSizeExceed () {
-      this.form.errors.add('image', 'La imagen que seleccionaste es muy grande, el tamaño máximo permitido es ' + this.maxFileSizeInMb + 'MB')
+      this.form.errors.add(this.name, 'La imagen que seleccionaste es muy grande, el tamaño máximo permitido es ' + this.maxFileSizeInMb + 'MB')
       this.onError()
     }
 

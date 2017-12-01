@@ -25,21 +25,22 @@ $factory->define(Project::class, function (Faker $faker) {
     ]);
 
 
-    $cover = (string) Zttp::get('http://placeimg.com/854/480/any')->getBody();
+    $cover = (string) Zttp::get('http://placeimg.com/1280/720/nature')->getBody();
     $image = Image::make($cover);
-    $image_name = $faker->uuid . '.jpg';
+    $slug = $faker->uuid;
+    $image_name = $slug . '.jpg';
     Storage::disk('public')->put('projects/images/' . $image_name, $image->stream());
 
     // $about_us = (string) \Zttp\Zttp::get('http://loripsum.net/api/3/short/ul')->getBody();
-    // collect(\App\Models\Project::$images['cover']['sizes'])->each(function ($size) use ($image, $slug) {
-    //     list($width, $height) = str_contains($size, ':') ? explode(':', $size) : [$size, $size];
-    //     $image = $image->fit($width, $height, function ($constraint) {
-    //         $constraint->upsize();
-    //     });
-    //     $image_name = $slug . '@' . $width . '.jpg';
-    //     \Storage::put('projects/covers/' . $image_name, $image->stream());
-    // });
-    //
+    collect(\App\Models\Project::$images['photo']['sizes'])->each(function ($size) use ($image, $slug) {
+        list($width, $height) = str_contains($size, ':') ? explode(':', $size) : [$size, $size];
+        $image = $image->fit($width, $height, function ($constraint) {
+            $constraint->upsize();
+        });
+        $image_name = $slug . '@' . $width . '.jpg';
+        Storage::disk('public')->put('projects/images/' . $image_name, $image->stream());
+    });
+
     $has_interested_investor = $faker->boolean;
 
 
@@ -52,10 +53,10 @@ $factory->define(Project::class, function (Faker $faker) {
         }),
         'phone' => $faker->phoneNumber,
         'email' => $faker->email,
-        'image' => $image_name,
+        'photo' => $image_name,
         'video' => $videos->random(),
         'email' => $faker->email,
-        'address' => $faker->email,
+        'address' => $faker->address,
         'latitude' => $faker->latitude,
         'longitude' => $faker->longitude,
 

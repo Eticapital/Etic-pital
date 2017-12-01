@@ -92,3 +92,15 @@ if (! function_exists('file_upload_max_size')) {
         return $max_size;
     }
 }
+
+
+if (! function_exists('money')) {
+    /**
+     * Devuelve el máximo tamaño permitdo para cargas
+     * @return intenger
+     */
+    function money($amount, $decimals = 0, $symbol = '$', $is_cents = true)
+    {
+        return $symbol . number_format($is_cents ? $amount / 100 : $amount, $decimals);
+    }
+}

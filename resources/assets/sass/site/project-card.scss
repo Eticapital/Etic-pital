@@ -5,9 +5,15 @@ a.project-card {
   text-decoration: none !important;
 }
 
+.project-card-address{
+text-decoration: underline;
+text-decoration-style: dashed !important;
+}
+
 a.project-card:hover {
   background-color: #F8F9FA;
 }
+
 
 .card.project-card {
     border: 0px;

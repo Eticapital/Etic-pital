@@ -65,30 +65,39 @@
           </div>
         </div> <!-- / .row -->
 
-        <div class="card-columns project-card-columns">
-
-          @foreach(range(1, 6) as $i)
-          <a href="{{ route('proyecto-dummy') }}" class="card project-card">
-            <div class="project-img"></div>
-            <div class="card-body">
-              <p><span class="h3 card-title">Nombre del proyecto</span></p>
-              <div class="row">
-                <div class="col">
-                  <small class="card-text text-muted">Ubicación</small>
-                </div> <!-- / .col -->
-                <div class="col text-right">
-                  <small class="card-text text-muted">Industria</small>
-                </div> <!-- / .col -->
-              </div> <!-- / .row -->
-              <p class="card-text text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc rutrum, nisi eu hendrerit auctor, nisi nulla hendrerit nibh, ac laoreet sapien ex ut odio.</p>
-              <p>
-                <small class="card-text text-muted">Fondos recaudados:</small>
-                <br><span class="h3 text-primary">$00,000</span> / $00,000
-              </p>
-            </div> <!-- / .card-body -->
-          </a> <!-- / .project-card -->
+        @if($projects->count())
+          @foreach($projects->chunk(3) as $chunk)
+          <div class="row mb-3">
+            @foreach($chunk as $project)
+            <div class="col-lg-4">
+              <a href="{{$project->link}}" class="card project-card">
+                <div class="project-img">
+                  <img src="{{ $project->photo_380_url }}" alt="{{ $project->name }}" />
+                </div>
+                <div class="card-body">
+                  <p><span class="h3 card-title">{{ $project->name }}</span></p>
+                  <div class="d-flex">
+                    <div class="">
+                      <small title="{{ $project->address }}" v-b-tooltip.hover class="project-card-address card-text text-muted">Ubicación</small>
+                    </div> <!-- / .col -->
+                    <div class="ml-auto">
+                      <small class="card-text text-muted">{{ $project->sector }}</small>
+                    </div> <!-- / .col -->
+                  </div> <!-- / .row -->
+                  <p class="card-text text-justify">{!! nl2br($project->short_description) !!}</p>
+                  <p>
+                    <small class="card-text text-muted">Fondos recaudados:</small>
+                    <br><span class="h3 text-primary">{{ money($project->collected) }}</span> / {{ money($project->goal) }}
+                  </p>
+                </div> <!-- / .card-body -->
+              </a> <!-- / .project-card -->
+            </div><!-- /.col-lg -->
+            @endforeach
+          </div> <!-- / .card-columns -->
           @endforeach
-        </div> <!-- / .card-columns -->
+        @else
+          <p class="h5 text-center">Estamos seleccionando los mejores proyectos aún. ¡Regresa pronto!</p>
+        @endif
       </div> <!-- / .content -->
     </div> <!-- / .container -->
 @endsection

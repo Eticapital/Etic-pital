@@ -12,7 +12,7 @@
                 <form-text :form="form" name="phone" label="Teléfono de contacto:" />
                 <form-text :form="form" name="email" label="Correo de contacto:" />
                 <project-form-links v-model="form.holder_links" label="Redes sociales del titular" />
-                <project-form-photo :form="form" />
+                <project-form-photo :form="form" name="photo" />
                 <form-text :form="form" name="video" placeholder="https://" label="Video de la iniciativa:" />
                 <form-map
                   v-model="form.address"
@@ -345,7 +345,7 @@ export default {
         phone: null,
         email: null,
         holder_links: null,
-        image: null,
+        photo: null,
         video: null,
         address: null,
         latitude: 19.4336626,

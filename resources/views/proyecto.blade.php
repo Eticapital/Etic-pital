@@ -5,36 +5,40 @@
       <div class="container-fluid">
         <div class="row no-gutters text-center text-md-left">
           <div class="col-12 col-md-6">
-            <div class="project-img"></div>
+            <div class="project-img">
+              <img src="{{ $project->photo_854_url }}" alt="{{ $project->name }}" />
+            </div>
           </div> <!-- / .col-md-6 -->
           <div class="col-12 col-md-6">
             <div class="container">
                 <div class="row pt-3">
                   <div class="col">
-                    <p class="text-muted">Ubicación</p>
+                    <p>
+                        <a href="#ubicacion" class="text-muted project-card-address" title="{{ $project->address }}" v-b-tooltip.hover>
+                          <i class="fa fa-map-marker" aria-hidden="true" ></i> Ubicación</a>
+                      </p>
                   </div> <!-- / .col -->
                   <div class="col">
-                    <p class="text-muted">Industria</p>
+                    <p class="text-muted"  v-b-tooltip.hover title="{{ $project->sectors }}">{{ $project->sector }}</p>
                   </div> <!-- / .col -->
                 </div> <!-- / .row -->
-              <p><span class="h2 text-primary">Nombre del proyecto</span></p>
+              <p><span class="h2 text-primary">{{ $project->name }}</span></p>
               <div class="row py-3">
                 <div class="col">
                   <p>Fondos recaudados
-                  <br><span class="h3">$00,000</span></p>
+                  <br><span class="h3">{{ money($project->collected) }}</span></p>
                 </div> <!-- / .col -->
                 <div class="col">
                   <p>Tamaño de la ronda
-                  <br>$00,000</p>
+                  <br>{{ money($project->goal) }}</p>
                 </div> <!-- / .col -->
               </div> <!-- / .row -->
               <p class="py-3"><button class="btn btn-primary">Invertir</button></p>
             </div> <!-- / .container -->
             <div class="container-fluid bg-light d-inline-flex align-items-center">
-                <img class="user-img rounded-circle m-3" src="img/placeholdergrey.png">
-                <p class="pl-4 mb-0"><span class="h3">Lorem Ipsum</span>
-                <br>Director general
-                <br>Redes sociales</p>
+                <img class="user-img rounded-circle m-3" src="/img/placeholdergrey.png">
+                <p class="pl-4 mb-0">Titular del proyecto:
+                <br><span class="h3">{{ $project->owner->name }}</span></p>
             </div> <!-- / .container-fluid -->
           </div> <!-- / .col-md-6 -->
         </div> <!-- / .row -->
@@ -46,12 +50,14 @@
         <div class="row">
 
           <div class="col-12 col-md-6 col-lg-8 order-md-12">
+            <p><span class="h3">Sobre el proyecto</span></p>
+            <div class="text-justify">{!! str_replace("\n", "</p>\n<p>", '<p>'.nl2br($project->description).'</p>') !!}</div>
             <p><span class="h3">Oportunidad de inversión</span></p>
-            <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis faucibus nibh. Fusce faucibus lacus id orci suscipit suscipit. Aliquam congue, diam a volutpat tempor, velit tortor blandit nisl, finibus placerat justo nulla vitae est. Nullam sollicitudin vitae nulla id ultrices. Aliquam tempus arcu eu mollis accumsan. Sed ornare placerat tincidunt. Donec magna velit, rutrum id pharetra non, rutrum sit amet elit. Proin sapien libero, elementum vitae dolor in, vehicula maximus velit. </p>
+            <div class="text-justify">{!! str_replace("\n", "</p>\n<p>", '<p>'.nl2br($project->opportunity).'</p>') !!}</div>
             <p><span class="h3">Modelo de negocio</span></p>
-            <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis faucibus nibh. Fusce faucibus lacus id orci suscipit suscipit. Aliquam congue, diam a volutpat tempor, velit tortor blandit nisl, finibus placerat justo nulla vitae est. Nullam sollicitudin vitae nulla id ultrices. Aliquam tempus arcu eu mollis accumsan. Sed ornare placerat tincidunt. Donec magna velit, rutrum id pharetra non, rutrum sit amet elit. Proin sapien libero, elementum vitae dolor in, vehicula maximus velit. </p>
+            <div class="text-justify">{!! str_replace("\n", "</p>\n<p>", '<p>'.nl2br($project->business_model).'</p>') !!}</div>
             <p><span class="h3">Competencia</span></p>
-            <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis faucibus nibh. Fusce faucibus lacus id orci suscipit suscipit. Aliquam congue, diam a volutpat tempor, velit tortor blandit nisl, finibus placerat justo nulla vitae est. Nullam sollicitudin vitae nulla id ultrices. Aliquam tempus arcu eu mollis accumsan. Sed ornare placerat tincidunt. Donec magna velit, rutrum id pharetra non, rutrum sit amet elit. Proin sapien libero, elementum vitae dolor in, vehicula maximus velit. </p>
+            <div class="text-justify">{!! str_replace("\n", "</p>\n<p>", '<p>'.nl2br($project->competition).'</p>') !!}</div>
             <p><span class="h3">Equipo</span></p>
             <div class="team-member bg-light">
               <img class="team-img" src="img/placeholdergrey.png">
@@ -71,8 +77,10 @@
           </div> <!-- / .col-lg-8 -->
 
           <div class="col-12 col-md-6 col-lg-4 order-md-1">
+            <p><span class="h3" id="ubicacion">Ubicación</span>
+            <p><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30332.22485154439!2d-96.81867992425157!3d18.13957035843407!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85c43cdd1161f62d%3A0x4bd35257856751e!2sSan+Andr%C3%A9s+Hidalgo%2C+Oax.!5e0!3m2!1ses!2smx!4v1510251206930" width="300" height="200" frameborder="0" style="border:0" allowfullscreen></iframe></p>
             <p><span class="h3">Etapa de desarrollo del capital</span></p>
-            <p>Lorem ipsum</p>
+            <p>Crecimiento</p>
             <p><span class="h3">KPIs</span></p>
             <p>
               <table>
@@ -142,4 +150,27 @@
 
       </div> <!-- / .container -->
     </div> <!-- / .container-fluid -->
+
+    <div class="jumbotron-fluid">
+      <div class="content">
+        <div class="container">
+          <p><span class="h3">Data Room</span></p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc rutrum, nisi eu hendrerit auctor, nisi nulla hendrerit nibh, ac laoreet sapien ex ut odio.</p>
+        </div> <!-- / .container -->
+        <div class="documents">
+          <div class="container">
+            <ul class="list-group">
+              <li class="list-group-item">Cras justo odio</li>
+              <li class="list-group-item">Dapibus ac facilisis in</li>
+              <li class="list-group-item">Morbi leo risus</li>
+              <li class="list-group-item">Porta ac consectetur ac</li>
+              <li class="list-group-item">Vestibulum at eros</li>
+            </ul> <!-- / .list-group -->
+          </div> <!-- / .container -->
+          <div class="no-access">
+            <span class="h3">El acceso es sólo para inversionistas</span>
+          </div> <!-- / .no-access -->
+        </div> <!-- / .documents -->
+      </div> <!-- / .content -->
+    </div> <!-- / .jumbotron-fluid -->
 @endsection

@@ -4627,6 +4627,10 @@ var axiosFileupload = __webpack_require__("./node_modules/axios-fileupload/index
     form: {
       type: Object,
       required: true
+    },
+    name: {
+      type: String,
+      required: true
     }
   },
 
@@ -4645,7 +4649,7 @@ var axiosFileupload = __webpack_require__("./node_modules/axios-fileupload/index
 
   computed: {
     hasImage: function hasImage() {
-      return this.form.image;
+      return this.form[this.name];
     },
 
     /**
@@ -4664,7 +4668,7 @@ var axiosFileupload = __webpack_require__("./node_modules/axios-fileupload/index
       this.croppa.generateBlob(function (image) {
         axiosFileupload('/upload/image', image).then(function (response) {
           console.log(response.data.url);
-          _this.form.image = response.data.name;
+          _this.form[_this.name] = response.data.name;
           _this.uploadedImageUrl = response.data.url;
           _this.active = false;
           _this.saving = false;
@@ -4689,7 +4693,7 @@ var axiosFileupload = __webpack_require__("./node_modules/axios-fileupload/index
        */
     newImage: function newImage() {
       this.choosing = false;
-      this.form.errors.clear('image');
+      this.form.errors.clear(this.name);
       this.active = true;
     },
 
@@ -4698,7 +4702,7 @@ var axiosFileupload = __webpack_require__("./node_modules/axios-fileupload/index
        * Cuando el tipo de archivo no sea válido
        */
     onFileTypeMismatch: function onFileTypeMismatch() {
-      this.form.errors.add('image', 'Tipo de archivo no permitido, solo aceptamos imágenes JPG y PNG');
+      this.form.errors.add(this.name, 'Tipo de archivo no permitido, solo aceptamos imágenes JPG y PNG');
       this.onError();
     },
 
@@ -4715,7 +4719,7 @@ var axiosFileupload = __webpack_require__("./node_modules/axios-fileupload/index
        * Cuando la imagen selecciona es muy grande
        */
     onFileSizeExceed: function onFileSizeExceed() {
-      this.form.errors.add('image', 'La imagen que seleccionaste es muy grande, el tamaño máximo permitido es ' + this.maxFileSizeInMb + 'MB');
+      this.form.errors.add(this.name, 'La imagen que seleccionaste es muy grande, el tamaño máximo permitido es ' + this.maxFileSizeInMb + 'MB');
       this.onError();
     }
   }
@@ -5217,7 +5221,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         phone: null,
         email: null,
         holder_links: null,
-        image: null,
+        photo: null,
         video: null,
         address: null,
         latitude: 19.4336626,
@@ -50924,7 +50928,9 @@ var render = function() {
                       }
                     }),
                     _vm._v(" "),
-                    _c("project-form-photo", { attrs: { form: _vm.form } }),
+                    _c("project-form-photo", {
+                      attrs: { form: _vm.form, name: "photo" }
+                    }),
                     _vm._v(" "),
                     _c("form-text", {
                       attrs: {
@@ -51840,8 +51846,8 @@ var render = function() {
         {
           attrs: {
             label: "Imagen principal",
-            feedback: _vm.form.errors.get("image"),
-            state: _vm.form.errors.has("image") ? "invalid" : ""
+            feedback: _vm.form.errors.get(_vm.name),
+            state: _vm.form.errors.has(_vm.name) ? "invalid" : ""
           }
         },
         [
@@ -51875,7 +51881,7 @@ var render = function() {
                               staticClass: "PhotoInput__image",
                               attrs: {
                                 src: _vm.uploadedImageUrl,
-                                alt: _vm.form.image
+                                alt: _vm.form[_vm.name]
                               }
                             })
                           : _c("i", {
@@ -52098,8 +52104,8 @@ var render = function() {
                   {
                     class: {
                       btn: true,
-                      "btn-secondary": !_vm.form.errors.has("image"),
-                      "btn-danger": _vm.form.errors.has("image"),
+                      "btn-secondary": !_vm.form.errors.has(_vm.name),
+                      "btn-danger": _vm.form.errors.has(_vm.name),
                       disabled: _vm.choosing
                     },
                     on: {

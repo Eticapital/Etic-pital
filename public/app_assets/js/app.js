@@ -5999,6 +5999,38 @@ function vueUse(VuePlugin) {
   }
 }
 
+/*
+ * Consitant and stable sort function across JavsaScript platforms
+ *
+ * Inconsistant sorts can cause SSR problems between client and server
+ * such as in <b-table> if sortBy is applied to the data on server side render.
+ * Chrome and V8 native sorts are inconsistant/unstable
+ *
+ * This function uses native sort with fallback to index compare when the a and b
+ * compare returns 0
+ *
+ * Algorithm bsaed on:
+ * https://stackoverflow.com/questions/1427608/fast-stable-sorting-algorithm-implementation-in-javascript/45422645#45422645
+ *
+ * @param {array} array to sort
+ * @param {function} sortcompare function
+ * @return {array}
+ */
+
+function stableSort(array, compareFn) {
+  // Using `.bind(compareFn)` on the wrapped anonymous function improves
+  // performance by avoiding the function call setup. We don't use an arrow
+  // function here as it binds `this` to the `stableSort` context rather than
+  // the `compareFn` context, which wouldn't give us the performance increase.
+  return array.map(function (a, index) {
+    return [index, a];
+  }).sort(function (a, b) {
+    return this(a[1], b[1]) || a[0] - b[0];
+  }.bind(compareFn)).map(function (e) {
+    return e[1];
+  });
+}
+
 /**
  * Suffix can be a falsey value so nothing is appended to string.
  * (helps when looping over props & some shouldn't change)
@@ -6597,10 +6629,7 @@ var btnProps = {
   },
   size: {
     type: String,
-    default: null,
-    validator: function validator(size) {
-      return arrayIncludes(['sm', '', 'lg'], size);
-    }
+    default: null
   },
   variant: {
     type: String,
@@ -7054,7 +7083,7 @@ var clickoutMixin = {
       document.documentElement.addEventListener('click', this._clickOutListener);
     }
   },
-  destroyed: function destroyed() {
+  beforeDestroy: function beforeDestroy() {
     if (typeof document !== 'undefined') {
       document.removeEventListener('click', this._clickOutListener);
     }
@@ -7123,7 +7152,7 @@ var listenOnRootMixin = {
     }
   },
 
-  destroyed: function destroyed() {
+  beforeDestroy: function beforeDestroy() {
     if (this[BVRL] && isArray(this[BVRL])) {
       while (this[BVRL].length > 0) {
         // shift to process in order
@@ -7202,7 +7231,7 @@ var dropdownMixin = {
       inNavbar: null
     };
   },
-  created: function created() {
+  mounted: function mounted() {
     var _this = this;
 
     var listener = function listener(vm) {
@@ -7218,6 +7247,14 @@ var dropdownMixin = {
     this.listenOnRoot('clicked::link', listener);
     // Use new namespaced events
     this.listenOnRoot('bv::link::clicked', listener);
+  },
+  beforeDestroy: function beforeDestroy() {
+    if (this._popper) {
+      // Ensure popper event listeners are removed cleanly
+      this._popper.destroy();
+    }
+    this._popper = null;
+    this.setTouchStart(false);
   },
 
   watch: {
@@ -7244,15 +7281,6 @@ var dropdownMixin = {
       return this.$refs.toggle.$el || this.$refs.toggle;
     }
   },
-  destroyed: function destroyed() {
-    if (this._popper) {
-      // Ensure popper event listeners are removed cleanly
-      this._popper.destroy();
-    }
-    this._popper = null;
-    this.setTouchStart(false);
-  },
-
   methods: {
     showMenu: function showMenu() {
       if (this.disabled) {
@@ -7263,19 +7291,23 @@ var dropdownMixin = {
       // Ensure other menus are closed
       this.emitOnRoot('bv::dropdown::shown', this);
 
-      // If popper not installed, then fallback gracefully to dropdown only with left alignment
-      if (typeof __WEBPACK_IMPORTED_MODULE_0_popper_js__["a" /* default */] === 'function') {
-        // Are we in a navbar ?
-        if (this.inNavbar === null && this.isNav) {
-          this.inNavbar = Boolean(closest('.navbar', this.$el));
-        }
-        // for dropup with alignment we use the parent element as popper container
-        var element = this.dropup && this.right || this.split || this.inNavbar ? this.$el : this.$refs.toggle;
-        // Make sure we have a reference to an element, not a component!
-        element = element.$el || element;
+      // Are we in a navbar ?
+      if (this.inNavbar === null && this.isNav) {
+        this.inNavbar = Boolean(closest('.navbar', this.$el));
+      }
 
-        // Instantiate popper.js
-        this._popper = new __WEBPACK_IMPORTED_MODULE_0_popper_js__["a" /* default */](element, this.$refs.menu, this.getPopperConfig());
+      // Disable totally Popper.js for Dropdown in Navbar
+      if (!this.inNavbar) {
+        if (typeof __WEBPACK_IMPORTED_MODULE_0_popper_js__["a" /* default */] === 'undefined') {
+          warn('b-dropdown: Popper.js not found. Falling back to CSS positioning.');
+        } else {
+          // for dropup with alignment we use the parent element as popper container
+          var element = this.dropup && this.right || this.split ? this.$el : this.$refs.toggle;
+          // Make sure we have a reference to an element, not a component!
+          element = element.$el || element;
+          // Instantiate popper.js
+          this._popper = new __WEBPACK_IMPORTED_MODULE_0_popper_js__["a" /* default */](element, this.$refs.menu, this.getPopperConfig());
+        }
       }
 
       this.setTouchStart(true);
@@ -7316,10 +7348,6 @@ var dropdownMixin = {
           },
           flip: {
             enabled: !this.noFlip
-          },
-          applyStyle: {
-            // Disable Popper.js for Dropdown in Navbar
-            enabled: !this.inNavbar
           }
         }
       };
@@ -7329,11 +7357,11 @@ var dropdownMixin = {
       var _this2 = this;
 
       /*
-             If this is a touch-enabled device we add extra
-             empty mouseover listeners to the body's immediate children;
-             only needed because of broken event delegation on iOS
-             https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
-             */
+       * If this is a touch-enabled device we add extra
+       * empty mouseover listeners to the body's immediate children;
+       * only needed because of broken event delegation on iOS
+       * https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
+       */
       if ('ontouchstart' in document.documentElement) {
         var children = from(document.body.children);
         children.forEach(function (el) {
@@ -7785,7 +7813,7 @@ var formStateMixin = {
 var idMixin = {
   props: {
     id: {
-      typ: String,
+      type: String,
       default: null
     }
   },
@@ -7990,15 +8018,16 @@ var paginationMixin = {
       if (t.disabled) {
         inner = h('span', { class: ['page-link'], domProps: { innerHTML: pageNum } });
       } else {
+        var active = t.isActive(page.number);
         inner = h('b-link', {
           class: t.pageLinkClasses(page),
           props: t.linkProps(page.number),
           attrs: {
             role: 'menuitemradio',
-            tabindex: t.isActive(page.number) ? '0' : '-1',
+            tabindex: active ? '0' : '-1',
             'aria-controls': t.ariaControls || null,
             'aria-label': t.labelPage + ' ' + page.number,
-            'aria-checked': t.isActive(page.number) ? 'true' : 'false',
+            'aria-checked': active ? 'true' : 'false',
             'aria-posinset': page.number,
             'aria-setsize': t.numberOfPages
           },
@@ -8166,7 +8195,10 @@ var paginationMixin = {
       return ['page-item', this.disabled ? 'disabled' : '', this.isActive(page.number) ? 'active' : '', page.className];
     },
     pageLinkClasses: function pageLinkClasses(page) {
-      return ['page-link', this.disabled ? 'disabled' : '', this.isActive(page.number) ? 'active' : ''];
+      return ['page-link', this.disabled ? 'disabled' : '',
+      // Interim workaround to get better focus styling of active button
+      // See https://github.com/twbs/bootstrap/issues/24838
+      this.isActive(page.number) ? 'btn-primary' : ''];
     },
     getButtons: function getButtons() {
       // Return only buttons that are visible
@@ -8280,6 +8312,10 @@ var toolpopMixin = {
     show: {
       type: Boolean,
       default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
@@ -8287,8 +8323,13 @@ var toolpopMixin = {
       if (_show === old) {
         return;
       }
-
       _show ? this.onOpen() : this.onClose();
+    },
+    disabled: function disabled(_disabled, old) {
+      if (_disabled === old) {
+        return;
+      }
+      _disabled ? this.onDisable() : this.onEnable();
     }
   },
   created: function created() {
@@ -8300,16 +8341,23 @@ var toolpopMixin = {
   mounted: function mounted() {
     var _this = this;
 
-    // We do this in a $nextTick in hopes that the target element is in the DOM
-    // And that our children have rendered
+    // We do this in a next tick to ensure DOM has rendered first
     this.$nextTick(function () {
       // Instantiate ToolTip/PopOver on target
-      // createToolpop method must exist in main component
+      // The createToolpop method must exist in main component
       if (_this.createToolpop()) {
+        if (_this.disabled) {
+          // Initially disabled
+          _this.onDisable();
+        }
         // Listen to open signals from others
         _this.$on('open', _this.onOpen);
         // Listen to close signals from others
         _this.$on('close', _this.onClose);
+        // Listen to disable signals from others
+        _this.$on('disable', _this.onDisable);
+        // Listen to disable signals from others
+        _this.$on('enable', _this.onEnable);
         // Observe content Child changes so we can notify popper of possible size change
         _this.setObservers(true);
         // Set intially open state
@@ -8337,14 +8385,18 @@ var toolpopMixin = {
     }
   },
   beforeDestroy: function beforeDestroy() {
+    // Shutdown our local event listeners
+    this.$off('open', this.onOpen);
     this.$off('close', this.onClose);
+    this.$off('disable', this.onDisable);
+    this.$off('enable', this.onEnable);
     this.setObservers(false);
+    // bring our content back if needed
+    this.bringItBack();
     if (this._toolpop) {
       this._toolpop.destroy();
       this._toolpop = null;
     }
-    // bring our content back if needed
-    this.bringItBack();
   },
 
   computed: {
@@ -8373,7 +8425,9 @@ var toolpopMixin = {
           show: this.onShow,
           shown: this.onShown,
           hide: this.onHide,
-          hidden: this.onHidden
+          hidden: this.onHidden,
+          enabled: this.onEnabled,
+          disabled: this.onDisabled
         }
       };
     }
@@ -8405,6 +8459,16 @@ var toolpopMixin = {
         this._toolpop.hide(callback);
       } else if (typeof callback === 'function') {
         callback();
+      }
+    },
+    onDisable: function onDisable() {
+      if (this._toolpop) {
+        this._toolpop.disable();
+      }
+    },
+    onEnable: function onEnable() {
+      if (this._toolpop) {
+        this._toolpop.enable();
       }
     },
     updatePosition: function updatePosition() {
@@ -8445,6 +8509,22 @@ var toolpopMixin = {
       this.bringItBack();
       this.$emit('update:show', false);
       this.$emit('hidden', evt);
+    },
+    onEnabled: function onEnabled(evt) {
+      if (!evt || evt.type !== 'enabled') {
+        // Prevent possible endless loop if user mistakienly fires enabled instead of enable
+        return;
+      }
+      this.$emit('update:disabled', false);
+      this.$emit('disabled');
+    },
+    onDisabled: function onDisabled(evt) {
+      if (!evt || evt.type !== 'disabled') {
+        // Prevent possible endless loop if user mistakienly fires disabled instead of disable
+        return;
+      }
+      this.$emit('update:disabled', true);
+      this.$emit('enabled');
     },
     bringItBack: function bringItBack() {
       // bring our content back if needed to keep Vue happy
@@ -9009,8 +9089,10 @@ var bCarousel = {
       if (this.isCycling) {
         clearInterval(this.intervalId);
         this.intervalId = null;
-        // Make current slide focusable for screen readers
-        this.slides[this.index].tabIndex = 0;
+        if (this.slides[this.index]) {
+          // Make current slide focusable for screen readers
+          this.slides[this.index].tabIndex = 0;
+        }
       }
     },
 
@@ -9185,9 +9267,10 @@ var bCarousel = {
       attributeFilter: ['id']
     });
   },
-  destroyed: function destroyed() {
+  beforeDestroy: function beforeDestroy() {
     clearInterval(this.intervalId);
     clearTimeout(this._animationTimeout);
+    this.intervalId = null;
     this._animationTimeout = null;
   }
 };
@@ -10407,181 +10490,184 @@ var VuePlugin$27 = {
 
 vueUse(VuePlugin$27);
 
-var bFormGroup$1 = {
-    mixins: [idMixin, formStateMixin],
-    components: { bFormRow: bFormRow, bFormText: bFormText, bFormInvalidFeedback: bFormInvalidFeedback, bFormValidFeedback: bFormValidFeedback },
-    render: function render(h) {
-        var t = this;
-        var $slots = t.$slots;
-
-        // Label
-        var legend = h(false);
-        if (t.label || $slots.label || t.horizontal) {
-            legend = h('legend', { class: t.labelClasses, attrs: { id: t.labelId } }, [$slots.label || h('span', { domProps: { innerHTML: t.label || '' } })]);
-        }
-
-        // Invalid feeback text
-        var invalidFeedback = h(false);
-        if (t.feedback || $slots['invalid-feedback'] || $slots['feedback']) {
-            invalidFeedback = h('b-form-invalid-feedback', {
-                directives: [{
-                    name: 'show',
-                    rawName: 'v-show',
-                    value: Boolean(t.feedback || $slots['invalid-feedback'] || $slots['feedback']),
-                    expression: "Boolean(t.feedback || $slots['invalid-feedback'] || $slots['feedback'])"
-                }],
-                attrs: {
-                    id: t.feedbackId,
-                    role: 'alert',
-                    'aria-live': 'assertive',
-                    'aria-atomic': 'true'
-                }
-            }, [t.computedState === false ? $slots['invalid-feedback'] || $slots['feedback'] || h('span', { domProps: { innerHTML: t.feedback || '' } }) : h(false)]);
-        }
-
-        // Valid feeback text
-        var validFeedback = h(false);
-        if (t.validFeedback || $slots['valid-feedback']) {
-            validFeedback = h('b-form-valid-feedback', {
-                directives: [{
-                    name: 'show',
-                    rawName: 'v-show',
-                    value: Boolean(t.validFeedback || $slots['valid-feedback']),
-                    expression: "Boolean(t.validFeedback || $slots['valid-feedback'])"
-                }],
-                attrs: {
-                    id: t.validFeedbackId,
-                    role: 'alert',
-                    'aria-live': 'assertive',
-                    'aria-atomic': 'true'
-                }
-            }, [t.computedState === true ? $slots['valid-feedback'] || h('span', { domProps: { innerHTML: t.validFeedback || '' } }) : h(false)]);
-        }
-
-        // Form help text (description)
-        var description = h(false);
-        if (t.description || $slots['description']) {
-            description = h('b-form-text', { attrs: { id: t.descriptionId } }, [$slots['description'] || h('span', { domProps: { innerHTML: t.description || '' } })]);
-        }
-
-        // Build layout
-        var content = h('div', { ref: 'content', class: t.inputLayoutClasses }, [$slots.default, invalidFeedback, validFeedback, description]);
-
-        // Generate fieldset wrapper
-        return h('fieldset', {
-            class: t.groupClasses,
-            attrs: { id: t.safeId(), 'aria-describedby': t.describedByIds }
-        }, [h('b-form-row', {}, [legend, content])]);
-    },
-
-    props: {
-        horizontal: {
-            type: Boolean,
-            default: false
-        },
-        labelCols: {
-            type: Number,
-            default: 3,
-            validator: function validator(value) {
-                if (value >= 1 && value <= 11) {
-                    return true;
-                }
-                warn('b-form-group: label-cols must be a value between 1 and 11');
-                return false;
-            }
-        },
-        breakpoint: {
-            type: String,
-            default: 'sm'
-        },
-        labelTextAlign: {
-            type: String,
-            default: null
-        },
-        label: {
-            type: String,
-            default: null
-        },
-        labelSrOnly: {
-            type: Boolean,
-            default: false
-        },
-        description: {
-            type: String,
-            default: null
-        },
-        feedback: {
-            type: String,
-            default: null
-        },
-        validFeedback: {
-            type: String,
-            default: null
-        },
-        validated: {
-            type: Boolean,
-            value: false
-        }
-    },
-    computed: {
-        inputState: function inputState() {
-            return this.stateClass;
-        },
-        groupClasses: function groupClasses() {
-            return ['b-form-group', 'form-group', this.validated ? 'was-validated' : null, this.inputState];
-        },
-        labelClasses: function labelClasses() {
-            return [this.labelSrOnly ? 'sr-only' : 'col-form-legend', this.labelLayout, this.labelAlignClass];
-        },
-        labelLayout: function labelLayout() {
-            if (this.labelSrOnly) {
-                return null;
-            }
-            return this.horizontal ? 'col-' + this.breakpoint + '-' + this.labelCols : 'col-12';
-        },
-        labelAlignClass: function labelAlignClass() {
-            if (this.labelSrOnly) {
-                return null;
-            }
-            return this.labelTextAlign ? 'text-' + this.labelTextAlign : null;
-        },
-        inputLayoutClasses: function inputLayoutClasses() {
-            return [this.horizontal ? 'col-' + this.breakpoint + '-' + (12 - this.labelCols) : 'col-12'];
-        },
-        labelId: function labelId() {
-            return this.label || this.$slots['label'] ? this.safeId('_BV_label_') : null;
-        },
-        descriptionId: function descriptionId() {
-            if (this.description || this.$slots['description']) {
-                return this.safeId('_BV_description_');
-            }
-            return null;
-        },
-        feedbackId: function feedbackId() {
-            if (this.feedback || this.$slots['invalid-feedback'] || this.$slots['feedback']) {
-                return this.safeId('_BV_feedback_invalid_');
-            }
-            return null;
-        },
-        validFeedbackId: function validFeedbackId() {
-            if (this.validFeedback || this.$slots['valid-feedback']) {
-                return this.safeId('_BV_feedback_valid_');
-            }
-            return null;
-        },
-        describedByIds: function describedByIds() {
-            return [this.labelId, this.descriptionId, this.computedState === false ? this.feedbackId : null, this.computedState === true ? this.validFeedbackId : null].filter(function (i) {
-                return i;
-            }).join(' ') || null;
-        }
+var bFormGroup$2 = {
+  mixins: [idMixin, formStateMixin],
+  components: { bFormRow: bFormRow, bFormText: bFormText, bFormInvalidFeedback: bFormInvalidFeedback, bFormValidFeedback: bFormValidFeedback },
+  render: function render(h) {
+    var t = this;
+    var $slots = t.$slots;
+    // Label
+    var legend = h(false);
+    if (t.label || $slots.label || t.horizontal) {
+      legend = h('legend', { class: t.labelClasses, attrs: { id: t.labelId } }, [$slots.label || h('span', { domProps: { innerHTML: t.label || '' } })]);
     }
+    // Invalid feeback text
+    var invalidFeedback = h(false);
+    if (t.invalidFeedback || t.feedback || $slots['invalid-feedback'] || $slots['feedback']) {
+      invalidFeedback = h('b-form-invalid-feedback', {
+        directives: [{
+          name: 'show',
+          rawName: 'v-show',
+          value: Boolean(t.invalidFeedback || t.feedback || $slots['invalid-feedback'] || $slots['feedback']),
+          expression: "Boolean(t.invalidFeedback || t.feedback || $slots['invalid-feedback'] || $slots['feedback'])"
+        }],
+        attrs: {
+          id: t.invalidFeedbackId,
+          role: 'alert',
+          'aria-live': 'assertive',
+          'aria-atomic': 'true'
+        }
+      }, [t.computedState === false ? $slots['invalid-feedback'] || $slots['feedback'] || h('span', { domProps: { innerHTML: t.invalidFeedback || t.feedback || '' } }) : h(false)]);
+    }
+    // Valid feeback text
+    var validFeedback = h(false);
+    if (t.validFeedback || $slots['valid-feedback']) {
+      validFeedback = h('b-form-valid-feedback', {
+        directives: [{
+          name: 'show',
+          rawName: 'v-show',
+          value: Boolean(t.validFeedback || $slots['valid-feedback']),
+          expression: "Boolean(t.validFeedback || $slots['valid-feedback'])"
+        }],
+        attrs: {
+          id: t.validFeedbackId,
+          role: 'alert',
+          'aria-live': 'assertive',
+          'aria-atomic': 'true'
+        }
+      }, [t.computedState === true ? $slots['valid-feedback'] || h('span', { domProps: { innerHTML: t.validFeedback || '' } }) : h(false)]);
+    }
+    // Form help text (description)
+    var description = h(false);
+    if (t.description || $slots['description']) {
+      description = h('b-form-text', { attrs: { id: t.descriptionId } }, [$slots['description'] || h('span', { domProps: { innerHTML: t.description || '' } })]);
+    }
+    // Build layout
+    var content = h('div', { ref: 'content', class: t.inputLayoutClasses }, [$slots.default, invalidFeedback, validFeedback, description]);
+    // Generate fieldset wrapper
+    return h('fieldset', {
+      class: t.groupClasses,
+      attrs: { id: t.safeId(), 'aria-describedby': t.describedByIds }
+    }, [h('b-form-row', {}, [legend, content])]);
+  },
+
+  props: {
+    horizontal: {
+      type: Boolean,
+      default: false
+    },
+    labelCols: {
+      type: Number,
+      default: 3,
+      validator: function validator(value) {
+        if (value >= 1 && value <= 11) {
+          return true;
+        }
+        warn('b-form-group: label-cols must be a value between 1 and 11');
+        return false;
+      }
+    },
+    breakpoint: {
+      type: String,
+      default: 'sm'
+    },
+    labelTextAlign: {
+      type: String,
+      default: null
+    },
+    label: {
+      type: String,
+      default: null
+    },
+    labelSrOnly: {
+      type: Boolean,
+      default: false
+    },
+    labelClass: {
+      type: [String, Array],
+      default: null
+    },
+    description: {
+      type: String,
+      default: null
+    },
+    invalidFeedback: {
+      type: String,
+      default: null
+    },
+    feedback: {
+      // Deprecated in favor of invalid-feedback
+      type: String,
+      default: null
+    },
+    validFeedback: {
+      type: String,
+      default: null
+    },
+    validated: {
+      type: Boolean,
+      value: false
+    }
+  },
+  computed: {
+    inputState: function inputState() {
+      return this.stateClass;
+    },
+    groupClasses: function groupClasses() {
+      return ['b-form-group', 'form-group', this.validated ? 'was-validated' : null, this.inputState];
+    },
+    labelClasses: function labelClasses() {
+      return [this.labelSrOnly ? 'sr-only' : 'col-form-legend', this.labelLayout, this.labelAlignClass, this.labelClass];
+    },
+    labelLayout: function labelLayout() {
+      if (this.labelSrOnly) {
+        return null;
+      }
+      return this.horizontal ? 'col-' + this.breakpoint + '-' + this.labelCols : 'col-12';
+    },
+    labelAlignClass: function labelAlignClass() {
+      if (this.labelSrOnly) {
+        return null;
+      }
+      return this.labelTextAlign ? 'text-' + this.labelTextAlign : null;
+    },
+    inputLayoutClasses: function inputLayoutClasses() {
+      return [this.horizontal ? 'col-' + this.breakpoint + '-' + (12 - this.labelCols) : 'col-12'];
+    },
+    labelId: function labelId() {
+      return this.label || this.$slots['label'] ? this.safeId('_BV_label_') : null;
+    },
+    descriptionId: function descriptionId() {
+      if (this.description || this.$slots['description']) {
+        return this.safeId('_BV_description_');
+      }
+      return null;
+    },
+    invalidFeedbackId: function invalidFeedbackId() {
+      if (this.invalidFeedback || this.feedback || this.$slots['invalid-feedback'] || this.$slots['feedback']) {
+        return this.safeId('_BV_feedback_invalid_');
+      }
+      return null;
+    },
+    validFeedbackId: function validFeedbackId() {
+      if (this.validFeedback || this.$slots['valid-feedback']) {
+        return this.safeId('_BV_feedback_valid_');
+      }
+      return null;
+    },
+    describedByIds: function describedByIds() {
+      return [this.labelId, this.descriptionId, this.computedState === false ? this.invalidFeedbackId : null, this.computedState === true ? this.validFeedbackId : null].filter(function (i) {
+        return i;
+      }).join(' ') || null;
+    }
+  }
 };
 
 /* eslint-disable no-var, no-undef, guard-for-in, object-shorthand */
 
 var components$15 = {
-  bFormGroup: bFormGroup$1,
-  bFormFieldset: bFormGroup$1
+  bFormGroup: bFormGroup$2,
+  bFormFieldset: bFormGroup$2
 };
 
 var VuePlugin$29 = {
@@ -11055,148 +11141,148 @@ vueUse(VuePlugin$33);
 // Valid supported input types
 var TYPES = ['text', 'password', 'email', 'number', 'url', 'tel', 'search', 'range', 'color', 'date', 'time', 'datetime', 'datetime-local', 'month', 'week'];
 
-var bFormInput$1 = {
-    mixins: [idMixin, formMixin, formSizeMixin, formStateMixin],
-    render: function render(h) {
-        var t = this;
-        return h('input', {
-            ref: 'input',
-            class: t.inputClass,
-            domProps: { value: t.localValue },
-            attrs: {
-                id: t.safeId(),
-                name: t.name,
-                type: t.localType,
-                disabled: t.disabled,
-                required: t.required,
-                readonly: t.readonly || t.plaintext,
-                placeholder: t.placeholder,
-                autocomplete: t.autocomplete || null,
-                'aria-required': t.required ? 'true' : null,
-                'aria-invalid': t.computedAriaInvalid
-            },
-            on: {
-                input: t.onInput,
-                change: t.onChange
-            }
-        });
-    },
-    data: function data() {
-        return {
-            localValue: this.value
-        };
-    },
+var bFormInput$2 = {
+  mixins: [idMixin, formMixin, formSizeMixin, formStateMixin],
+  render: function render(h) {
+    var t = this;
+    return h('input', {
+      ref: 'input',
+      class: t.inputClass,
+      domProps: { value: t.localValue },
+      attrs: {
+        id: t.safeId(),
+        name: t.name,
+        type: t.localType,
+        disabled: t.disabled,
+        required: t.required,
+        readonly: t.readonly || t.plaintext,
+        placeholder: t.placeholder,
+        autocomplete: t.autocomplete || null,
+        'aria-required': t.required ? 'true' : null,
+        'aria-invalid': t.computedAriaInvalid
+      },
+      on: {
+        input: t.onInput,
+        change: t.onChange
+      }
+    });
+  },
+  data: function data() {
+    return {
+      localValue: this.value
+    };
+  },
 
-    props: {
-        value: {
-            default: null
-        },
-        type: {
-            type: String,
-            default: 'text',
-            validator: function validator(type) {
-                return arrayIncludes(TYPES, type);
-            }
-        },
-        ariaInvalid: {
-            type: [Boolean, String],
-            default: false
-        },
-        readonly: {
-            type: Boolean,
-            default: false
-        },
-        plaintext: {
-            type: Boolean,
-            default: false
-        },
-        autocomplete: {
-            type: String,
-            default: null
-        },
-        placeholder: {
-            type: String,
-            default: null
-        },
-        formatter: {
-            type: Function
-        },
-        lazyFormatter: {
-            type: Boolean,
-            default: false
-        }
+  props: {
+    value: {
+      default: null
     },
-    computed: {
-        localType: function localType() {
-            // We only allow certain types
-            return arrayIncludes(TYPES, this.type) ? this.type : 'text';
-        },
-        inputClass: function inputClass() {
-            return [this.plaintext ? 'form-control-plaintext' : 'form-control',
-            // Fix missing width:100% in Bootstrap V4.beta.2
-            this.plaintext ? 'w-100' : '', this.sizeFormClass, this.stateClass];
-        },
-        computedAriaInvalid: function computedAriaInvalid() {
-            if (!Boolean(this.ariaInvalid) || this.ariaInvalid === 'false') {
-                // this.ariaInvalid is null or false or 'false'
-                return this.computedState === false ? 'true' : null;
-            }
-            if (this.ariaInvalid === true) {
-                // User wants explicit aria-invalid=true
-                return 'true';
-            }
-            // Most likely a string value (which could be 'true')
-            return this.ariaInvalid;
-        }
+    type: {
+      type: String,
+      default: 'text',
+      validator: function validator(type) {
+        return arrayIncludes(TYPES, type);
+      }
     },
-    watch: {
-        value: function value(newVal, oldVal) {
-            if (newVal !== oldVal) {
-                this.localValue = newVal;
-            }
-        },
-        localValue: function localValue(newVal, oldVal) {
-            if (newVal !== oldVal) {
-                this.$emit('input', newVal);
-            }
-        }
+    ariaInvalid: {
+      type: [Boolean, String],
+      default: false
     },
-    methods: {
-        format: function format(value, e) {
-            if (this.formatter) {
-                var formattedValue = this.formatter(value, e);
-                if (formattedValue !== value) {
-                    return formattedValue;
-                }
-            }
-            return value;
-        },
-        onInput: function onInput(evt) {
-            var value = evt.target.value;
-            if (this.lazyFormatter) {
-                // Update the model with the current unformated value
-                this.localValue = value;
-            } else {
-                this.localValue = this.format(value, evt);
-            }
-        },
-        onChange: function onChange(evt) {
-            this.localValue = this.format(evt.target.value, evt);
-            this.$emit('change', this.localValue);
-        },
-        focus: function focus() {
-            if (!this.disabled) {
-                this.$el.focus();
-            }
-        }
+    readonly: {
+      type: Boolean,
+      default: false
+    },
+    plaintext: {
+      type: Boolean,
+      default: false
+    },
+    autocomplete: {
+      type: String,
+      default: null
+    },
+    placeholder: {
+      type: String,
+      default: null
+    },
+    formatter: {
+      type: Function
+    },
+    lazyFormatter: {
+      type: Boolean,
+      default: false
     }
+  },
+  computed: {
+    localType: function localType() {
+      // We only allow certain types
+      return arrayIncludes(TYPES, this.type) ? this.type : 'text';
+    },
+    inputClass: function inputClass() {
+      return [this.plaintext ? 'form-control-plaintext' : 'form-control',
+      // Fix missing width:100% in Bootstrap V4.beta.2
+      this.plaintext ? 'w-100' : '', this.sizeFormClass, this.stateClass];
+    },
+    computedAriaInvalid: function computedAriaInvalid() {
+      if (!this.ariaInvalid || this.ariaInvalid === 'false') {
+        // this.ariaInvalid is null or false or 'false'
+        return this.computedState === false ? 'true' : null;
+      }
+      if (this.ariaInvalid === true) {
+        // User wants explicit aria-invalid=true
+        return 'true';
+      }
+      // Most likely a string value (which could be 'true')
+      return this.ariaInvalid;
+    }
+  },
+  watch: {
+    value: function value(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.localValue = newVal;
+      }
+    },
+    localValue: function localValue(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.$emit('input', newVal);
+      }
+    }
+  },
+  methods: {
+    format: function format(value, e) {
+      if (this.formatter) {
+        var formattedValue = this.formatter(value, e);
+        if (formattedValue !== value) {
+          return formattedValue;
+        }
+      }
+      return value;
+    },
+    onInput: function onInput(evt) {
+      var value = evt.target.value;
+      if (this.lazyFormatter) {
+        // Update the model with the current unformated value
+        this.localValue = value;
+      } else {
+        this.localValue = this.format(value, evt);
+      }
+    },
+    onChange: function onChange(evt) {
+      this.localValue = this.format(evt.target.value, evt);
+      this.$emit('change', this.localValue);
+    },
+    focus: function focus() {
+      if (!this.disabled) {
+        this.$el.focus();
+      }
+    }
+  }
 };
 
 /* eslint-disable no-var, no-undef, guard-for-in, object-shorthand */
 
 var components$18 = {
-  bFormInput: bFormInput$1,
-  bInput: bFormInput$1
+  bFormInput: bFormInput$2,
+  bInput: bFormInput$2
 };
 
 var VuePlugin$35 = {
@@ -11360,285 +11446,282 @@ var VuePlugin$37 = {
 
 vueUse(VuePlugin$37);
 
-var bFormFile$1 = {
-    mixins: [idMixin, formMixin, formStateMixin, formCustomMixin],
-    render: function render(h) {
-        var t = this;
-
-        // Form Input
-        var input = h('input', {
-            ref: 'input',
-            class: t.inputClasses,
-            attrs: {
-                type: 'file',
-                id: t.safeId(),
-                name: t.name,
-                disabled: t.disabled,
-                required: t.required,
-                capture: t.capture || null,
-                'aria-required': t.required ? 'true' : null,
-                accept: t.accept || null,
-                multiple: t.multiple,
-                webkitdirectory: t.directory,
-                'aria-describedby': t.plain ? null : t.safeId('_BV_file_control_')
-            },
-            on: {
-                change: t.onFileChange,
-                focusin: t.focusHandler,
-                focusout: t.focusHandler
-            }
-        });
-
-        if (t.plain) {
-            return input;
-        }
-
-        // 'Drop Here' target
-        var droptarget = h(false);
-        if (t.dragging) {
-            droptarget = h('span', {
-                class: ['drop-here'],
-                attrs: { 'data-drop': t.dropLabel },
-                on: {
-                    dragover: t.dragover,
-                    drop: t.drop,
-                    dragleave: t.dragleave
-                }
-            });
-        }
-
-        // Overlay Labels
-        var labels = h('span', {
-            class: ['custom-file-control', t.dragging ? 'dragging' : null],
-            attrs: {
-                id: t.safeId('_BV_file_control_'),
-                'data-choose': t.computedChooseLabel,
-                'data-selected': t.selectedLabel
-            }
-        });
-
-        // Return rendered custom file input
-        return h('label', {
-            class: ['custom-file', 'b-form-file', t.stateClass, 'w-100', 'd-block'],
-            attrs: { id: t.safeId('_BV_file_outer_') },
-            on: { dragover: t.dragover }
-        }, [droptarget, input, labels]);
-    },
-    data: function data() {
-        return {
-            selectedFile: null,
-            dragging: false,
-            hasFocus: false
-        };
-    },
-
-    props: {
-        accept: {
-            type: String,
-            default: ''
-        },
-        capture: {
-            // Instruct input to capture from camera
-            type: Boolean,
-            default: false
-        },
-        placeholder: {
-            type: String,
-            default: null
-        },
-        chooseLabel: {
-            type: String,
-            default: null
-        },
-        multiple: {
-            type: Boolean,
-            default: false
-        },
-        directory: {
-            type: Boolean,
-            default: false
-        },
-        noTraverse: {
-            type: Boolean,
-            default: false
-        },
-        selectedFormat: {
-            type: String,
-            default: ':count Files'
-        },
-        noDrop: {
-            type: Boolean,
-            default: false
-        },
-        dropLabel: {
-            type: String,
-            default: 'Drop files here'
-        }
-    },
-    computed: {
-        inputClasses: function inputClasses() {
-            return [{
-                'form-control-file': this.plain,
-                'custom-file-input': this.custom,
-                'w-100': true, // BS4 beta missing this
-                'focus': this.custom && this.hasFocus
-            }, this.stateClass];
-        },
-        selectedLabel: function selectedLabel() {
-            if (!this.selectedFile || this.selectedFile.length === 0) {
-                return this.placeholder || 'No file chosen';
-            }
-            if (this.multiple) {
-                if (this.selectedFile.length === 1) {
-                    return this.selectedFile[0].name;
-                }
-                return this.selectedFormat.replace(':names', this.selectedFile.map(function (file) {
-                    return file.name;
-                }).join(',')).replace(':count', this.selectedFile.length);
-            }
-            return this.selectedFile.name;
-        },
-        computedChooseLabel: function computedChooseLabel() {
-            return this.chooseLabel || (this.multiple ? 'Choose Files' : 'Choose File');
-        }
-    },
-    watch: {
-        selectedFile: function selectedFile(newVal, oldVal) {
-            if (newVal === oldVal) {
-                return;
-            }
-            if (!newVal && this.multiple) {
-                this.$emit('input', []);
-            } else {
-                this.$emit('input', newVal);
-            }
-        }
-    },
-    methods: {
-        focusHandler: function focusHandler(evt) {
-            // Boostrap v4.beta doesn't have focus styling for custom file input
-            // Firefox has a borked '[type=file]:focus ~ sibling' selector issue,
-            // So we add a 'focus' class to get around these "bugs"
-            if (this.plain || evt.type === 'focusout') {
-                this.hasFocus = false;
-            } else {
-                // Add focus styling for custom file input
-                this.hasFocus = true;
-            }
-        },
-        reset: function reset() {
-            try {
-                // Wrapped in try in case IE < 11 craps out
-                this.$refs.input.value = '';
-            } catch (e) {}
-            // IE < 11 doesn't support setting input.value to '' or null
-            // So we use this little extra hack to reset the value, just in case
-            // This also appears to work on modern browsers as well.
-            this.$refs.input.type = '';
-            this.$refs.input.type = 'file';
-            this.selectedFile = this.multiple ? [] : null;
-        },
-        onFileChange: function onFileChange(evt) {
-            var _this = this;
-
-            // Always emit original event
-            this.$emit('change', evt);
-            // Check if special `items` prop is available on event (drop mode)
-            // Can be disabled by setting no-traverse
-            var items = evt.dataTransfer && evt.dataTransfer.items;
-            if (items && !this.noTraverse) {
-                var queue = [];
-                for (var i = 0; i < items.length; i++) {
-                    var item = items[i].webkitGetAsEntry();
-                    if (item) {
-                        queue.push(this.traverseFileTree(item));
-                    }
-                }
-                Promise.all(queue).then(function (filesArr) {
-                    _this.setFiles(from(filesArr));
-                });
-                return;
-            }
-            // Normal handling
-            this.setFiles(evt.target.files || evt.dataTransfer.files);
-        },
-        setFiles: function setFiles(files) {
-            if (!files) {
-                this.selectedFile = null;
-                return;
-            }
-            if (!this.multiple) {
-                this.selectedFile = files[0];
-                return;
-            }
-            // Convert files to array
-            var filesArray = [];
-            for (var i = 0; i < files.length; i++) {
-                if (files[i].type.match(this.accept)) {
-                    filesArray.push(files[i]);
-                }
-            }
-            this.selectedFile = filesArray;
-        },
-        dragover: function dragover(evt) {
-            evt.preventDefault();
-            evt.stopPropagation();
-            if (this.noDrop || !this.custom) {
-                return;
-            }
-            this.dragging = true;
-            evt.dataTransfer.dropEffect = 'copy';
-        },
-        dragleave: function dragleave(evt) {
-            evt.preventDefault();
-            evt.stopPropagation();
-            this.dragging = false;
-        },
-        drop: function drop(evt) {
-            evt.preventDefault();
-            evt.stopPropagation();
-            if (this.noDrop) {
-                return;
-            }
-            this.dragging = false;
-            if (evt.dataTransfer.files && evt.dataTransfer.files.length > 0) {
-                this.onFileChange(evt);
-            }
-        },
-        traverseFileTree: function traverseFileTree(item, path) {
-            var _this2 = this;
-
-            // Based on http://stackoverflow.com/questions/3590058
-            return new Promise(function (resolve) {
-                path = path || '';
-                if (item.isFile) {
-                    // Get file
-                    item.file(function (file) {
-                        file.$path = path; // Inject $path to file obj
-                        resolve(file);
-                    });
-                } else if (item.isDirectory) {
-                    // Get folder contents
-                    item.createReader().readEntries(function (entries) {
-                        var queue = [];
-                        for (var i = 0; i < entries.length; i++) {
-                            queue.push(_this2.traverseFileTree(entries[i], path + item.name + '/'));
-                        }
-                        Promise.all(queue).then(function (filesArr) {
-                            resolve(from(filesArr));
-                        });
-                    });
-                }
-            });
-        }
+var bFormFile$2 = {
+  mixins: [idMixin, formMixin, formStateMixin, formCustomMixin],
+  render: function render(h) {
+    var t = this;
+    // Form Input
+    var input = h('input', {
+      ref: 'input',
+      class: t.inputClasses,
+      attrs: {
+        type: 'file',
+        id: t.safeId(),
+        name: t.name,
+        disabled: t.disabled,
+        required: t.required,
+        capture: t.capture || null,
+        'aria-required': t.required ? 'true' : null,
+        accept: t.accept || null,
+        multiple: t.multiple,
+        webkitdirectory: t.directory,
+        'aria-describedby': t.plain ? null : t.safeId('_BV_file_control_')
+      },
+      on: {
+        change: t.onFileChange,
+        focusin: t.focusHandler,
+        focusout: t.focusHandler
+      }
+    });
+    if (t.plain) {
+      return input;
     }
+
+    // 'Drop Here' target
+    var droptarget = h(false);
+    if (t.dragging) {
+      droptarget = h('span', {
+        class: ['drop-here'],
+        attrs: { 'data-drop': t.dropLabel },
+        on: {
+          dragover: t.dragover,
+          drop: t.drop,
+          dragleave: t.dragleave
+        }
+      });
+    }
+    // Overlay Labels
+    var labels = h('span', {
+      class: ['custom-file-control', t.dragging ? 'dragging' : null],
+      attrs: {
+        id: t.safeId('_BV_file_control_'),
+        'data-choose': t.computedChooseLabel,
+        'data-selected': t.selectedLabel
+      }
+    });
+
+    // Return rendered custom file input
+    return h('label', {
+      class: ['custom-file', 'b-form-file', t.stateClass, 'w-100', 'd-block'],
+      attrs: { id: t.safeId('_BV_file_outer_') },
+      on: { dragover: t.dragover }
+    }, [droptarget, input, labels]);
+  },
+  data: function data() {
+    return {
+      selectedFile: null,
+      dragging: false,
+      hasFocus: false
+    };
+  },
+
+  props: {
+    accept: {
+      type: String,
+      default: ''
+    },
+    capture: {
+      // Instruct input to capture from camera
+      type: Boolean,
+      default: false
+    },
+    placeholder: {
+      type: String,
+      default: null
+    },
+    chooseLabel: {
+      type: String,
+      default: null
+    },
+    multiple: {
+      type: Boolean,
+      default: false
+    },
+    directory: {
+      type: Boolean,
+      default: false
+    },
+    noTraverse: {
+      type: Boolean,
+      default: false
+    },
+    selectedFormat: {
+      type: String,
+      default: ':count Files'
+    },
+    noDrop: {
+      type: Boolean,
+      default: false
+    },
+    dropLabel: {
+      type: String,
+      default: 'Drop files here'
+    }
+  },
+  computed: {
+    inputClasses: function inputClasses() {
+      return [{
+        'form-control-file': this.plain,
+        'custom-file-input': this.custom,
+        'w-100': true, // BS4 beta missing this
+        'focus': this.custom && this.hasFocus
+      }, this.stateClass];
+    },
+    selectedLabel: function selectedLabel() {
+      if (!this.selectedFile || this.selectedFile.length === 0) {
+        return this.placeholder || 'No file chosen';
+      }
+      if (this.multiple) {
+        if (this.selectedFile.length === 1) {
+          return this.selectedFile[0].name;
+        }
+        return this.selectedFormat.replace(':names', this.selectedFile.map(function (file) {
+          return file.name;
+        }).join(',')).replace(':count', this.selectedFile.length);
+      }
+      return this.selectedFile.name;
+    },
+    computedChooseLabel: function computedChooseLabel() {
+      return this.chooseLabel || (this.multiple ? 'Choose Files' : 'Choose File');
+    }
+  },
+  watch: {
+    selectedFile: function selectedFile(newVal, oldVal) {
+      if (newVal === oldVal) {
+        return;
+      }
+      if (!newVal && this.multiple) {
+        this.$emit('input', []);
+      } else {
+        this.$emit('input', newVal);
+      }
+    }
+  },
+  methods: {
+    focusHandler: function focusHandler(evt) {
+      // Boostrap v4.beta doesn't have focus styling for custom file input
+      // Firefox has a borked '[type=file]:focus ~ sibling' selector issue,
+      // So we add a 'focus' class to get around these "bugs"
+      if (this.plain || evt.type === 'focusout') {
+        this.hasFocus = false;
+      } else {
+        // Add focus styling for custom file input
+        this.hasFocus = true;
+      }
+    },
+    reset: function reset() {
+      try {
+        // Wrapped in try in case IE < 11 craps out
+        this.$refs.input.value = '';
+      } catch (e) {}
+      // IE < 11 doesn't support setting input.value to '' or null
+      // So we use this little extra hack to reset the value, just in case
+      // This also appears to work on modern browsers as well.
+      this.$refs.input.type = '';
+      this.$refs.input.type = 'file';
+      this.selectedFile = this.multiple ? [] : null;
+    },
+    onFileChange: function onFileChange(evt) {
+      var _this = this;
+
+      // Always emit original event
+      this.$emit('change', evt);
+      // Check if special `items` prop is available on event (drop mode)
+      // Can be disabled by setting no-traverse
+      var items = evt.dataTransfer && evt.dataTransfer.items;
+      if (items && !this.noTraverse) {
+        var queue = [];
+        for (var i = 0; i < items.length; i++) {
+          var item = items[i].webkitGetAsEntry();
+          if (item) {
+            queue.push(this.traverseFileTree(item));
+          }
+        }
+        Promise.all(queue).then(function (filesArr) {
+          _this.setFiles(from(filesArr));
+        });
+        return;
+      }
+      // Normal handling
+      this.setFiles(evt.target.files || evt.dataTransfer.files);
+    },
+    setFiles: function setFiles(files) {
+      if (!files) {
+        this.selectedFile = null;
+        return;
+      }
+      if (!this.multiple) {
+        this.selectedFile = files[0];
+        return;
+      }
+      // Convert files to array
+      var filesArray = [];
+      for (var i = 0; i < files.length; i++) {
+        if (files[i].type.match(this.accept)) {
+          filesArray.push(files[i]);
+        }
+      }
+      this.selectedFile = filesArray;
+    },
+    dragover: function dragover(evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
+      if (this.noDrop || !this.custom) {
+        return;
+      }
+      this.dragging = true;
+      evt.dataTransfer.dropEffect = 'copy';
+    },
+    dragleave: function dragleave(evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
+      this.dragging = false;
+    },
+    drop: function drop(evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
+      if (this.noDrop) {
+        return;
+      }
+      this.dragging = false;
+      if (evt.dataTransfer.files && evt.dataTransfer.files.length > 0) {
+        this.onFileChange(evt);
+      }
+    },
+    traverseFileTree: function traverseFileTree(item, path) {
+      var _this2 = this;
+
+      // Based on http://stackoverflow.com/questions/3590058
+      return new Promise(function (resolve) {
+        path = path || '';
+        if (item.isFile) {
+          // Get file
+          item.file(function (file) {
+            file.$path = path; // Inject $path to file obj
+            resolve(file);
+          });
+        } else if (item.isDirectory) {
+          // Get folder contents
+          item.createReader().readEntries(function (entries) {
+            var queue = [];
+            for (var i = 0; i < entries.length; i++) {
+              queue.push(_this2.traverseFileTree(entries[i], path + item.name + '/'));
+            }
+            Promise.all(queue).then(function (filesArr) {
+              resolve(from(filesArr));
+            });
+          });
+        }
+      });
+    }
+  }
 };
 
 /* eslint-disable no-var, no-undef, guard-for-in, object-shorthand */
 
 var components$20 = {
-  bFormFile: bFormFile$1,
-  bFile: bFormFile$1
+  bFormFile: bFormFile$2,
+  bFile: bFormFile$2
 };
 
 var VuePlugin$39 = {
@@ -12321,721 +12404,710 @@ var BvEvent = function () {
 
 // Selectors for padding/margin adjustments
 var Selector = {
-    FIXED_CONTENT: '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top',
-    STICKY_CONTENT: '.sticky-top',
-    NAVBAR_TOGGLER: '.navbar-toggler'
+  FIXED_CONTENT: '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top',
+  STICKY_CONTENT: '.sticky-top',
+  NAVBAR_TOGGLER: '.navbar-toggler'
+
+  // ObserveDom config
+};var OBSERVER_CONFIG$1 = {
+  subtree: true,
+  childList: true,
+  characterData: true,
+  attributes: true,
+  attributeFilter: ['style', 'class']
 };
 
-// ObserveDom config
-var OBSERVER_CONFIG$1 = {
-    subtree: true,
-    childList: true,
-    characterData: true,
-    attributes: true,
-    attributeFilter: ['style', 'class']
-};
-
-var bModal$1 = {
-    mixins: [idMixin, listenOnRootMixin],
-    components: { bBtn: bBtn, bBtnClose: bBtnClose },
-    render: function render(h) {
-        var t = this;
-        var $slots = t.$slots;
-
-        // Modal Header
-        var header = h(false);
-        if (!t.hideHeader) {
-            var modalHeader = $slots['modal-header'];
-            if (!modalHeader) {
-                var closeButton = h(false);
-                if (!t.hideHeaderClose) {
-                    closeButton = h('b-btn-close', {
-                        props: {
-                            disabled: t.is_transitioning,
-                            ariaLabel: t.headerCloseLabel,
-                            textVariant: t.headerTextVariant
-                        },
-                        on: { click: function click(evt) {
-                                t.hide('header-close');
-                            } }
-                    }, [$slots['modal-header-close']]);
-                }
-                modalHeader = [h(t.titleTag, { class: ['modal-title'] }, [$slots['modal-title'] || t.title]), closeButton];
-            }
-            header = h('header', {
-                ref: 'header',
-                class: t.headerClasses,
-                attrs: { id: t.safeId('__BV_modal_header_') }
-            }, [modalHeader]);
-        }
-
-        // Modal Body
-        var body = h('div', {
-            ref: 'body',
-            class: t.bodyClasses,
-            attrs: { id: t.safeId('__BV_modal_body_') }
-        }, [$slots.default]);
-
-        // Modal Footer
-        var footer = h(false);
-        if (!t.hideFooter) {
-            var modalFooter = $slots['modal-footer'];
-            if (!modalFooter) {
-                var okButton = h(false);
-                if (!t.okOnly) {
-                    okButton = h('b-btn', {
-                        props: {
-                            variant: t.cancelVariant,
-                            size: t.buttonSize,
-                            disabled: t.cancelDisabled || t.busy || t.is_transitioning
-                        },
-                        on: { click: function click(evt) {
-                                t.hide('cancel');
-                            } }
-
-                    }, [$slots['modal-cancel'] || t.cancelTitle]);
-                }
-                var cancelButton = h('b-btn', {
-                    props: {
-                        variant: t.okVariant,
-                        size: t.buttonSize,
-                        disabled: t.okDisabled || t.busy || t.is_transitioning
-                    },
-                    on: { click: function click(evt) {
-                            t.hide('ok');
-                        } }
-                }, [$slots['modal-ok'] || t.okTitle]);
-                modalFooter = [cancelButton, okButton];
-            }
-            footer = h('footer', {
-                ref: 'footer',
-                class: t.footerClasses,
-                attrs: { id: t.safeId('__BV_modal_footer_') }
-            }, [modalFooter]);
-        }
-
-        // Assemble Modal Content
-        var modalContent = h('div', {
-            ref: 'content',
-            class: ['modal-content'],
-            attrs: {
-                tabindex: '-1',
-                role: 'document',
-                'aria-labelledby': t.hideHeader ? null : t.safeId('__BV_modal_header_'),
-                'aria-describedby': t.safeId('__BV_modal_body_')
-            },
-            on: {
-                focusout: t.onFocusout,
-                click: function click(evt) {
-                    evt.stopPropagation();
-                }
-            }
-        }, [header, body, footer]);
-
-        // Modal Dialog wrapper
-        var modalDialog = h('div', { class: t.dialogClasses }, [modalContent]);
-
-        // Modal
-        var modal = h('div', {
-            ref: 'modal',
-            class: t.modalClasses,
-            directives: [{ name: 'show', rawName: 'v-show', value: t.is_visible, expression: 'is_visible' }],
-            attrs: {
-                id: t.safeId(),
-                role: 'dialog',
-                'aria-hidden': t.is_visible ? null : 'true'
-            },
-            on: {
-                click: t.onClickOut,
-                keydown: t.onEsc
-            }
-        }, [modalDialog]);
-        // Wrap modal in transition
-        modal = h('transition', {
+var bModal$2 = {
+  mixins: [idMixin, listenOnRootMixin],
+  components: { bBtn: bBtn, bBtnClose: bBtnClose },
+  render: function render(h) {
+    var t = this;
+    var $slots = t.$slots;
+    // Modal Header
+    var header = h(false);
+    if (!t.hideHeader) {
+      var modalHeader = $slots['modal-header'];
+      if (!modalHeader) {
+        var closeButton = h(false);
+        if (!t.hideHeaderClose) {
+          closeButton = h('b-btn-close', {
             props: {
-                enterClass: '',
-                enterToClass: '',
-                enterActiveClass: '',
-                leaveClass: '',
-                leaveActiveClass: '',
-                leaveToClass: ''
+              disabled: t.is_transitioning,
+              ariaLabel: t.headerCloseLabel,
+              textVariant: t.headerTextVariant
             },
-            on: {
-                'before-enter': t.onBeforeEnter,
-                'enter': t.onEnter,
-                'after-enter': t.onAfterEnter,
-                'before-leave': t.onBeforeLeave,
-                'leave': t.onLeave,
-                'after-leave': t.onAfterLeave
-            }
-        }, [modal]);
-
-        // Modal Backdrop
-        var backdrop = h(false);
-        if (!t.hideBackdrop && (t.is_visible || t.is_transitioning)) {
-            backdrop = h('div', { class: t.backdropClasses, attrs: { id: t.safeId('__BV_modal_backdrop_') } });
+            on: { click: function click(evt) {
+                t.hide('header-close');
+              } }
+          }, [$slots['modal-header-close']]);
         }
-
-        // Assemble modal and backdrop
-        var outer = h(false);
-        if (!t.is_hidden) {
-            outer = h('div', { attrs: { id: t.safeId('__BV_modal_outer_') } }, [modal, backdrop]);
-        }
-
-        // Wrap in DIV to maintain thi.$el reference for hide/show method aceess
-        return h('div', {}, [outer]);
-    },
-    data: function data() {
-        return {
-            is_hidden: this.lazy || false,
-            is_visible: false,
-            is_transitioning: false,
-            is_show: false,
-            is_block: false,
-            scrollbarWidth: 0,
-            isBodyOverflowing: false,
-            return_focus: this.returnFocus || null
-        };
-    },
-
-    model: {
-        prop: 'visible',
-        event: 'change'
-    },
-    props: {
-        title: {
-            type: String,
-            default: ''
-        },
-        titleTag: {
-            type: String,
-            default: 'h5'
-        },
-        size: {
-            type: String,
-            default: 'md'
-        },
-        centered: {
-            type: Boolean,
-            default: false
-        },
-        buttonSize: {
-            type: String,
-            default: ''
-        },
-        noFade: {
-            type: Boolean,
-            default: false
-        },
-        noCloseOnBackdrop: {
-            type: Boolean,
-            default: false
-        },
-        noCloseOnEsc: {
-            type: Boolean,
-            default: false
-        },
-        noEnforceFocus: {
-            type: Boolean,
-            default: false
-        },
-        headerBgVariant: {
-            type: String,
-            default: null
-        },
-        headerBorderVariant: {
-            type: String,
-            default: null
-        },
-        headerTextVariant: {
-            type: String,
-            default: null
-        },
-        bodyBgVariant: {
-            type: String,
-            default: null
-        },
-        bodyTextVariant: {
-            type: String,
-            default: null
-        },
-        footerBgVariant: {
-            type: String,
-            default: null
-        },
-        footerBorderVariant: {
-            type: String,
-            default: null
-        },
-        footerTextVariant: {
-            type: String,
-            default: null
-        },
-        hideHeader: {
-            type: Boolean,
-            default: false
-        },
-        hideFooter: {
-            type: Boolean,
-            default: false
-        },
-        hideHeaderClose: {
-            type: Boolean,
-            default: false
-        },
-        hideBackdrop: {
-            type: Boolean,
-            default: false
-        },
-        okOnly: {
-            type: Boolean,
-            default: false
-        },
-        okDisabled: {
-            type: Boolean,
-            default: false
-        },
-        cancelDisabled: {
-            type: Boolean,
-            default: false
-        },
-        visible: {
-            type: Boolean,
-            default: false
-        },
-        returnFocus: {
-            default: null
-        },
-        headerCloseLabel: {
-            type: String,
-            default: 'Close'
-        },
-        cancelTitle: {
-            type: String,
-            default: 'Cancel'
-        },
-        okTitle: {
-            type: String,
-            default: 'OK'
-        },
-        cancelVariant: {
-            type: String,
-            default: 'secondary'
-        },
-        okVariant: {
-            type: String,
-            default: 'primary'
-        },
-        lazy: {
-            type: Boolean,
-            default: false
-        },
-        busy: {
-            type: Boolean,
-            default: false
-        }
-    },
-    computed: {
-        modalClasses: function modalClasses() {
-            return ['modal', {
-                fade: !this.noFade,
-                show: this.is_show,
-                'd-block': this.is_block
-            }];
-        },
-        dialogClasses: function dialogClasses() {
-            var _ref;
-
-            return ['modal-dialog', (_ref = {}, defineProperty$1(_ref, 'modal-' + this.size, Boolean(this.size)), defineProperty$1(_ref, 'modal-dialog-centered', this.centered), _ref)];
-        },
-        backdropClasses: function backdropClasses() {
-            return ['modal-backdrop', {
-                fade: !this.noFade,
-                show: this.is_show || this.noFade
-            }];
-        },
-        headerClasses: function headerClasses() {
-            var _ref2;
-
-            return ['modal-header', (_ref2 = {
-                'rounded-top': Boolean(this.headerBgVariant)
-            }, defineProperty$1(_ref2, 'bg-' + this.headerBgVariant, Boolean(this.headerBgVariant)), defineProperty$1(_ref2, 'text-' + this.headerTextVariant, Boolean(this.headerTextVariant)), defineProperty$1(_ref2, 'border-' + this.headerBorderVariant, Boolean(this.headerBorderVariant)), _ref2)];
-        },
-        bodyClasses: function bodyClasses() {
-            var _ref3;
-
-            return ['modal-body', (_ref3 = {}, defineProperty$1(_ref3, 'bg-' + this.bodyBgVariant, Boolean(this.bodyBgVariant)), defineProperty$1(_ref3, 'text-' + this.bodyTextVariant, Boolean(this.bodyTextVariant)), _ref3)];
-        },
-        footerClasses: function footerClasses() {
-            var _ref4;
-
-            return ['modal-footer', (_ref4 = {
-                'rounded-bottom': Boolean(this.footerBgVariant)
-            }, defineProperty$1(_ref4, 'bg-' + this.footerBgVariant, Boolean(this.footerBgVariant)), defineProperty$1(_ref4, 'text-' + this.footerTextVariant, Boolean(this.footerTextVariant)), defineProperty$1(_ref4, 'border-' + this.footerBorderVariant, Boolean(this.footerBorderVariant)), _ref4)];
-        }
-    },
-    watch: {
-        visible: function visible(newVal, oldVal) {
-            if (newVal === oldVal) {
-                return;
-            }
-            this[newVal ? 'show' : 'hide']();
-        }
-    },
-    methods: {
-        // Public Methods
-        show: function show() {
-            if (this.is_visible) {
-                return;
-            }
-            var showEvt = new BvEvent('show', {
-                cancelable: true,
-                vueTarget: this,
-                target: this.$refs.modal,
-                relatedTarget: null
-            });
-            this.emitEvent(showEvt);
-            if (showEvt.defaultPrevented || this.is_visible) {
-                // Don't show if canceled
-                return;
-            }
-            if (hasClass(document.body, 'modal-open')) {
-                // If another modal is already open, wait for it to close
-                this.$root.$once('bv::modal::hidden', this.doShow);
-            } else {
-                // Show the modal
-                this.doShow();
-            }
-        },
-        hide: function hide(trigger) {
-            if (!this.is_visible) {
-                return;
-            }
-            var hideEvt = new BvEvent('hide', {
-                cancelable: true,
-                vueTarget: this,
-                target: this.$refs.modal,
-                // this could be the trigger element/component reference
-                relatedTarget: null,
-                isOK: trigger || null,
-                trigger: trigger || null,
-                cancel: function cancel() {
-                    // Backwards compatibility
-                    warn('b-modal: evt.cancel() is deprecated. Please use evt.preventDefault().');
-                    this.preventDefault();
-                }
-            });
-            if (trigger === 'ok') {
-                this.$emit('ok', hideEvt);
-            } else if (trigger === 'cancel') {
-                this.$emit('cancel', hideEvt);
-            }
-            this.emitEvent(hideEvt);
-            // Hide if not canceled
-            if (hideEvt.defaultPrevented || !this.is_visible) {
-                return;
-            }
-            // stop observing for content changes
-            if (this._observer) {
-                this._observer.disconnect();
-                this._observer = null;
-            }
-            this.is_visible = false;
-            this.$emit('change', false);
-        },
-
-        // Private method to finish showing modal
-        doShow: function doShow() {
-            var _this = this;
-
-            // Plce modal in DOM if lazy
-            this.is_hidden = false;
-            this.$nextTick(function () {
-                // We do this in nextTick to ensure the modal is in DOM first before we show it
-                _this.is_visible = true;
-                _this.$emit('change', true);
-                // Observe changes in modal content and adjust if necessary
-                _this._observer = observeDOM(_this.$refs.content, _this.adjustDialog.bind(_this), OBSERVER_CONFIG$1);
-            });
-        },
-
-        // Transition Handlers
-        onBeforeEnter: function onBeforeEnter() {
-            this.is_transitioning = true;
-            this.checkScrollbar();
-            this.setScrollbar();
-            this.adjustDialog();
-            addClass(document.body, 'modal-open');
-            this.setResizeEvent(true);
-        },
-        onEnter: function onEnter() {
-            this.is_block = true;
-            this.$refs.modal.scrollTop = 0;
-        },
-        onAfterEnter: function onAfterEnter() {
-            var _this2 = this;
-
-            this.is_show = true;
-            this.is_transitioning = false;
-            this.$nextTick(function () {
-                _this2.focusFirst();
-                var shownEvt = new BvEvent('shown', {
-                    cancelable: false,
-                    vueTarget: _this2,
-                    target: _this2.$refs.modal,
-                    relatedTarget: null
-                });
-                _this2.emitEvent(shownEvt);
-            });
-        },
-        onBeforeLeave: function onBeforeLeave() {
-            this.is_transitioning = true;
-            this.setResizeEvent(false);
-        },
-        onLeave: function onLeave() {
-            // Remove the 'show' class
-            this.is_show = false;
-        },
-        onAfterLeave: function onAfterLeave() {
-            var _this3 = this;
-
-            this.is_block = false;
-            this.resetAdjustments();
-            this.resetScrollbar();
-            this.is_transitioning = false;
-            removeClass(document.body, 'modal-open');
-            this.$nextTick(function () {
-                _this3.is_hidden = _this3.lazy || false;
-                _this3.returnFocusTo();
-                var hiddenEvt = new BvEvent('hidden', {
-                    cancelable: false,
-                    vueTarget: _this3,
-                    target: _this3.lazy ? null : _this3.$refs.modal,
-                    relatedTarget: null
-                });
-                _this3.emitEvent(hiddenEvt);
-            });
-        },
-
-        // Event emitter
-        emitEvent: function emitEvent(bvEvt) {
-            var type = bvEvt.type;
-            this.$emit(type, bvEvt);
-            this.$root.$emit('bv::modal::' + type, bvEvt);
-        },
-
-        // UI Event Handlers
-        onClickOut: function onClickOut(evt) {
-            // If backdrop clicked, hide modal
-            if (this.is_visible && !this.noCloseOnBackdrop) {
-                this.hide('backdrop');
-            }
-        },
-        onEsc: function onEsc(evt) {
-            // If ESC pressed, hide modal
-            if (evt.keyCode === KeyCodes.ESC && this.is_visible && !this.noCloseOnEsc) {
-                this.hide('esc');
-            }
-        },
-        onFocusout: function onFocusout(evt) {
-            // If focus leaves modal, bring it back
-            // 'focusout' Event Listener bound on content
-            var content = this.$refs.content;
-            if (!this.noEnforceFocus && this.is_visible && content && !content.contains(evt.relatedTarget)) {
-                content.focus();
-            }
-        },
-
-        // Resize Listener
-        setResizeEvent: function setResizeEvent(on) {
-            var _this4 = this;
-
-            ['resize', 'orientationchange'].forEach(function (evtName) {
-                if (on) {
-                    eventOn(window, evtName, _this4.adjustDialog);
-                } else {
-                    eventOff(window, evtName, _this4.adjustDialog);
-                }
-            });
-        },
-
-        // Root Listener handlers
-        showHandler: function showHandler(id, triggerEl) {
-            if (id === this.id) {
-                this.return_focus = triggerEl || null;
-                this.show();
-            }
-        },
-        hideHandler: function hideHandler(id) {
-            if (id === this.id) {
-                this.hide();
-            }
-        },
-        modalListener: function modalListener(bvEvt) {
-            // If another modal opens, close this one
-            if (bvEvt.vueTarget !== this) {
-                this.hide();
-            }
-        },
-
-        // Focus control handlers
-        focusFirst: function focusFirst() {
-            // Don't try and focus if we are SSR
-            if (typeof document === 'undefined') {
-                return;
-            }
-            var content = this.$refs.content;
-            var modal = this.$refs.modal;
-            var activeElement = document.activeElement;
-            if (activeElement && content && content.contains(activeElement)) {
-                // If activeElement is child of content, no need to change focus
-            } else if (content) {
-                if (modal) {
-                    modal.scrollTop = 0;
-                }
-                // Focus the modal content wrapper
-                content.focus();
-            }
-        },
-        returnFocusTo: function returnFocusTo() {
-            // Prefer returnFocus prop over event specified return_focus value
-            var el = this.returnFocus || this.return_focus || null;
-            if (typeof el === 'string') {
-                // CSS Selector
-                el = select(el);
-            }
-            if (el) {
-                el = el.$el || el;
-                if (isVisible(el)) {
-                    el.focus();
-                }
-            }
-        },
-
-        // Utility methods
-        getScrollbarWidth: function getScrollbarWidth() {
-            var scrollDiv = document.createElement('div');
-            scrollDiv.className = 'modal-scrollbar-measure';
-            document.body.appendChild(scrollDiv);
-            this.scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth;
-            document.body.removeChild(scrollDiv);
-        },
-        adjustDialog: function adjustDialog() {
-            if (!this.is_visible) {
-                return;
-            }
-            var modal = this.$refs.modal;
-            var isModalOverflowing = modal.scrollHeight > document.documentElement.clientHeight;
-            if (!this.isBodyOverflowing && isModalOverflowing) {
-                modal.style.paddingLeft = this.scrollbarWidth + 'px';
-            }
-            if (this.isBodyOverflowing && !isModalOverflowing) {
-                modal.style.paddingRight = this.scrollbarWidth + 'px';
-            }
-        },
-        resetAdjustments: function resetAdjustments() {
-            var modal = this.$refs.modal;
-            if (modal) {
-                modal.style.paddingLeft = '';
-                modal.style.paddingRight = '';
-            }
-        },
-        checkScrollbar: function checkScrollbar() {
-            var rect = getBCR(document.body);
-            this.isBodyOverflowing = rect.left + rect.right < window.innerWidth;
-        },
-        setScrollbar: function setScrollbar() {
-            if (this.isBodyOverflowing) {
-                // Note: DOMNode.style.paddingRight returns the actual value or '' if not set
-                //   while $(DOMNode).css('padding-right') returns the calculated value or 0 if not set
-                var computedStyle = window.getComputedStyle;
-                var body = document.body;
-                var scrollbarWidth = this.scrollbarWidth;
-                // Adjust fixed content padding
-                selectAll(Selector.FIXED_CONTENT).forEach(function (el) {
-                    var actualPadding = el.style.paddingRight;
-                    var calculatedPadding = computedStyle(el).paddingRight || 0;
-                    setAttr(el, 'data-padding-right', actualPadding);
-                    el.style.paddingRight = parseFloat(calculatedPadding) + scrollbarWidth + 'px';
-                });
-                // Adjust sticky content margin
-                selectAll(Selector.STICKY_CONTENT).forEach(function (el) {
-                    var actualMargin = el.style.marginRight;
-                    var calculatedMargin = computedStyle(el).marginRight || 0;
-                    setAttr(el, 'data-margin-right', actualMargin);
-                    el.style.marginRight = parseFloat(calculatedMargin) - scrollbarWidth + 'px';
-                });
-                // Adjust navbar-toggler margin
-                selectAll(Selector.NAVBAR_TOGGLER).forEach(function (el) {
-                    var actualMargin = el.style.marginRight;
-                    var calculatedMargin = computedStyle(el).marginRight || 0;
-                    setAttr(el, 'data-margin-right', actualMargin);
-                    el.style.marginRight = parseFloat(calculatedMargin) + scrollbarWidth + 'px';
-                });
-                // Adjust body padding
-                var actualPadding = body.style.paddingRight;
-                var calculatedPadding = computedStyle(body).paddingRight;
-                setAttr(body, 'data-padding-right', actualPadding);
-                body.style.paddingRight = parseFloat(calculatedPadding) + scrollbarWidth + 'px';
-            }
-        },
-        resetScrollbar: function resetScrollbar() {
-            // Restore fixed content padding
-            selectAll(Selector.FIXED_CONTENT).forEach(function (el) {
-                if (hasAttr(el, 'data-padding-right')) {
-                    el.style.paddingRight = getAttr(el, 'data-padding-right') || '';
-                    removeAttr(el, 'data-padding-right');
-                }
-            });
-            // Restore sticky content and navbar-toggler margin
-            selectAll(Selector.STICKY_CONTENT + ', ' + Selector.NAVBAR_TOGGLER).forEach(function (el) {
-                if (hasAttr(el, 'data-margin-right')) {
-                    el.style.marginRight = getAttr(el, 'data-margin-right') || '';
-                    removeAttr(el, 'data-margin-right');
-                }
-            });
-            // Restore body padding
-            var body = document.body;
-            if (hasAttr(body, 'data-padding-right')) {
-                body.style.paddingRight = getAttr(body, 'data-padding-right') || '';
-                removeAttr(body, 'data-padding-right');
-            }
-        }
-    },
-    created: function created() {
-        // create non-reactive property
-        this._observer = null;
-    },
-    mounted: function mounted() {
-        // Measure scrollbar
-        this.getScrollbarWidth();
-        // Listen for events from others to either open or close ourselves
-        this.listenOnRoot('bv::show::modal', this.showHandler);
-        this.listenOnRoot('bv::hide::modal', this.hideHandler);
-        // Listen for bv:modal::show events, and close ourselves if the opening modal not us
-        this.listenOnRoot('bv::modal::show', this.modalListener);
-        // Initially show modal?
-        if (this.visible === true) {
-            this.show();
-        }
-    },
-    beforeDestroy: function beforeDestroy() {
-        // Ensure everything is back to normal
-        if (this._observer) {
-            this._observer.disconnect();
-            this._observer = null;
-        }
-        this.setResizeEvent(false);
-        // Re-adjust body/navbar/fixed padding/margins (if needed)
-        removeClass(document.body, 'modal-open');
-        this.resetAdjustments();
-        this.resetScrollbar();
+        modalHeader = [h(t.titleTag, { class: ['modal-title'] }, [$slots['modal-title'] || t.title]), closeButton];
+      }
+      header = h('header', {
+        ref: 'header',
+        class: t.headerClasses,
+        attrs: { id: t.safeId('__BV_modal_header_') }
+      }, [modalHeader]);
     }
+    // Modal Body
+    var body = h('div', {
+      ref: 'body',
+      class: t.bodyClasses,
+      attrs: { id: t.safeId('__BV_modal_body_') }
+    }, [$slots.default]);
+    // Modal Footer
+    var footer = h(false);
+    if (!t.hideFooter) {
+      var modalFooter = $slots['modal-footer'];
+      if (!modalFooter) {
+        var okButton = h(false);
+        if (!t.okOnly) {
+          okButton = h('b-btn', {
+            props: {
+              variant: t.cancelVariant,
+              size: t.buttonSize,
+              disabled: t.cancelDisabled || t.busy || t.is_transitioning
+            },
+            on: { click: function click(evt) {
+                t.hide('cancel');
+              } }
+          }, [$slots['modal-cancel'] || t.cancelTitle]);
+        }
+        var cancelButton = h('b-btn', {
+          props: {
+            variant: t.okVariant,
+            size: t.buttonSize,
+            disabled: t.okDisabled || t.busy || t.is_transitioning
+          },
+          on: { click: function click(evt) {
+              t.hide('ok');
+            } }
+        }, [$slots['modal-ok'] || t.okTitle]);
+        modalFooter = [cancelButton, okButton];
+      }
+      footer = h('footer', {
+        ref: 'footer',
+        class: t.footerClasses,
+        attrs: { id: t.safeId('__BV_modal_footer_') }
+      }, [modalFooter]);
+    }
+    // Assemble Modal Content
+    var modalContent = h('div', {
+      ref: 'content',
+      class: ['modal-content'],
+      attrs: {
+        tabindex: '-1',
+        role: 'document',
+        'aria-labelledby': t.hideHeader ? null : t.safeId('__BV_modal_header_'),
+        'aria-describedby': t.safeId('__BV_modal_body_')
+      },
+      on: {
+        focusout: t.onFocusout,
+        click: function click(evt) {
+          evt.stopPropagation();
+        }
+      }
+    }, [header, body, footer]);
+    // Modal Dialog wrapper
+    var modalDialog = h('div', { class: t.dialogClasses }, [modalContent]);
+    // Modal
+    var modal = h('div', {
+      ref: 'modal',
+      class: t.modalClasses,
+      directives: [{ name: 'show', rawName: 'v-show', value: t.is_visible, expression: 'is_visible' }],
+      attrs: {
+        id: t.safeId(),
+        role: 'dialog',
+        'aria-hidden': t.is_visible ? null : 'true'
+      },
+      on: {
+        click: t.onClickOut,
+        keydown: t.onEsc
+      }
+    }, [modalDialog]);
+    // Wrap modal in transition
+    modal = h('transition', {
+      props: {
+        enterClass: '',
+        enterToClass: '',
+        enterActiveClass: '',
+        leaveClass: '',
+        leaveActiveClass: '',
+        leaveToClass: ''
+      },
+      on: {
+        'before-enter': t.onBeforeEnter,
+        'enter': t.onEnter,
+        'after-enter': t.onAfterEnter,
+        'before-leave': t.onBeforeLeave,
+        'leave': t.onLeave,
+        'after-leave': t.onAfterLeave
+      }
+    }, [modal]);
+    // Modal Backdrop
+    var backdrop = h(false);
+    if (!t.hideBackdrop && (t.is_visible || t.is_transitioning)) {
+      backdrop = h('div', { class: t.backdropClasses, attrs: { id: t.safeId('__BV_modal_backdrop_') } });
+    }
+    // Assemble modal and backdrop
+    var outer = h(false);
+    if (!t.is_hidden) {
+      outer = h('div', { attrs: { id: t.safeId('__BV_modal_outer_') } }, [modal, backdrop]);
+    }
+    // Wrap in DIV to maintain thi.$el reference for hide/show method aceess
+    return h('div', {}, [outer]);
+  },
+  data: function data() {
+    return {
+      is_hidden: this.lazy || false,
+      is_visible: false,
+      is_transitioning: false,
+      is_show: false,
+      is_block: false,
+      scrollbarWidth: 0,
+      isBodyOverflowing: false,
+      return_focus: this.returnFocus || null
+    };
+  },
+
+  model: {
+    prop: 'visible',
+    event: 'change'
+  },
+  props: {
+    title: {
+      type: String,
+      default: ''
+    },
+    titleTag: {
+      type: String,
+      default: 'h5'
+    },
+    size: {
+      type: String,
+      default: 'md'
+    },
+    centered: {
+      type: Boolean,
+      default: false
+    },
+    buttonSize: {
+      type: String,
+      default: ''
+    },
+    noFade: {
+      type: Boolean,
+      default: false
+    },
+    noCloseOnBackdrop: {
+      type: Boolean,
+      default: false
+    },
+    noCloseOnEsc: {
+      type: Boolean,
+      default: false
+    },
+    noEnforceFocus: {
+      type: Boolean,
+      default: false
+    },
+    headerBgVariant: {
+      type: String,
+      default: null
+    },
+    headerBorderVariant: {
+      type: String,
+      default: null
+    },
+    headerTextVariant: {
+      type: String,
+      default: null
+    },
+    bodyBgVariant: {
+      type: String,
+      default: null
+    },
+    bodyTextVariant: {
+      type: String,
+      default: null
+    },
+    footerBgVariant: {
+      type: String,
+      default: null
+    },
+    footerBorderVariant: {
+      type: String,
+      default: null
+    },
+    footerTextVariant: {
+      type: String,
+      default: null
+    },
+    hideHeader: {
+      type: Boolean,
+      default: false
+    },
+    hideFooter: {
+      type: Boolean,
+      default: false
+    },
+    hideHeaderClose: {
+      type: Boolean,
+      default: false
+    },
+    hideBackdrop: {
+      type: Boolean,
+      default: false
+    },
+    okOnly: {
+      type: Boolean,
+      default: false
+    },
+    okDisabled: {
+      type: Boolean,
+      default: false
+    },
+    cancelDisabled: {
+      type: Boolean,
+      default: false
+    },
+    visible: {
+      type: Boolean,
+      default: false
+    },
+    returnFocus: {
+      default: null
+    },
+    headerCloseLabel: {
+      type: String,
+      default: 'Close'
+    },
+    cancelTitle: {
+      type: String,
+      default: 'Cancel'
+    },
+    okTitle: {
+      type: String,
+      default: 'OK'
+    },
+    cancelVariant: {
+      type: String,
+      default: 'secondary'
+    },
+    okVariant: {
+      type: String,
+      default: 'primary'
+    },
+    lazy: {
+      type: Boolean,
+      default: false
+    },
+    busy: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    modalClasses: function modalClasses() {
+      return ['modal', {
+        fade: !this.noFade,
+        show: this.is_show,
+        'd-block': this.is_block
+      }];
+    },
+    dialogClasses: function dialogClasses() {
+      var _ref;
+
+      return ['modal-dialog', (_ref = {}, defineProperty$1(_ref, 'modal-' + this.size, Boolean(this.size)), defineProperty$1(_ref, 'modal-dialog-centered', this.centered), _ref)];
+    },
+    backdropClasses: function backdropClasses() {
+      return ['modal-backdrop', {
+        fade: !this.noFade,
+        show: this.is_show || this.noFade
+      }];
+    },
+    headerClasses: function headerClasses() {
+      var _ref2;
+
+      return ['modal-header', (_ref2 = {
+        'rounded-top': Boolean(this.headerBgVariant)
+      }, defineProperty$1(_ref2, 'bg-' + this.headerBgVariant, Boolean(this.headerBgVariant)), defineProperty$1(_ref2, 'text-' + this.headerTextVariant, Boolean(this.headerTextVariant)), defineProperty$1(_ref2, 'border-' + this.headerBorderVariant, Boolean(this.headerBorderVariant)), _ref2)];
+    },
+    bodyClasses: function bodyClasses() {
+      var _ref3;
+
+      return ['modal-body', (_ref3 = {}, defineProperty$1(_ref3, 'bg-' + this.bodyBgVariant, Boolean(this.bodyBgVariant)), defineProperty$1(_ref3, 'text-' + this.bodyTextVariant, Boolean(this.bodyTextVariant)), _ref3)];
+    },
+    footerClasses: function footerClasses() {
+      var _ref4;
+
+      return ['modal-footer', (_ref4 = {
+        'rounded-bottom': Boolean(this.footerBgVariant)
+      }, defineProperty$1(_ref4, 'bg-' + this.footerBgVariant, Boolean(this.footerBgVariant)), defineProperty$1(_ref4, 'text-' + this.footerTextVariant, Boolean(this.footerTextVariant)), defineProperty$1(_ref4, 'border-' + this.footerBorderVariant, Boolean(this.footerBorderVariant)), _ref4)];
+    }
+  },
+  watch: {
+    visible: function visible(newVal, oldVal) {
+      if (newVal === oldVal) {
+        return;
+      }
+      this[newVal ? 'show' : 'hide']();
+    }
+  },
+  methods: {
+    // Public Methods
+    show: function show() {
+      if (this.is_visible) {
+        return;
+      }
+      var showEvt = new BvEvent('show', {
+        cancelable: true,
+        vueTarget: this,
+        target: this.$refs.modal,
+        relatedTarget: null
+      });
+      this.emitEvent(showEvt);
+      if (showEvt.defaultPrevented || this.is_visible) {
+        // Don't show if canceled
+        return;
+      }
+      if (hasClass(document.body, 'modal-open')) {
+        // If another modal is already open, wait for it to close
+        this.$root.$once('bv::modal::hidden', this.doShow);
+      } else {
+        // Show the modal
+        this.doShow();
+      }
+    },
+    hide: function hide(trigger) {
+      if (!this.is_visible) {
+        return;
+      }
+      var hideEvt = new BvEvent('hide', {
+        cancelable: true,
+        vueTarget: this,
+        target: this.$refs.modal,
+        // this could be the trigger element/component reference
+        relatedTarget: null,
+        isOK: trigger || null,
+        trigger: trigger || null,
+        cancel: function cancel() {
+          // Backwards compatibility
+          warn('b-modal: evt.cancel() is deprecated. Please use evt.preventDefault().');
+          this.preventDefault();
+        }
+      });
+      if (trigger === 'ok') {
+        this.$emit('ok', hideEvt);
+      } else if (trigger === 'cancel') {
+        this.$emit('cancel', hideEvt);
+      }
+      this.emitEvent(hideEvt);
+      // Hide if not canceled
+      if (hideEvt.defaultPrevented || !this.is_visible) {
+        return;
+      }
+      // stop observing for content changes
+      if (this._observer) {
+        this._observer.disconnect();
+        this._observer = null;
+      }
+      this.is_visible = false;
+      this.$emit('change', false);
+    },
+
+    // Private method to finish showing modal
+    doShow: function doShow() {
+      var _this = this;
+
+      // Plce modal in DOM if lazy
+      this.is_hidden = false;
+      this.$nextTick(function () {
+        // We do this in nextTick to ensure the modal is in DOM first before we show it
+        _this.is_visible = true;
+        _this.$emit('change', true);
+        // Observe changes in modal content and adjust if necessary
+        _this._observer = observeDOM(_this.$refs.content, _this.adjustDialog.bind(_this), OBSERVER_CONFIG$1);
+      });
+    },
+
+    // Transition Handlers
+    onBeforeEnter: function onBeforeEnter() {
+      this.is_transitioning = true;
+      this.checkScrollbar();
+      this.setScrollbar();
+      this.adjustDialog();
+      addClass(document.body, 'modal-open');
+      this.setResizeEvent(true);
+    },
+    onEnter: function onEnter() {
+      this.is_block = true;
+      this.$refs.modal.scrollTop = 0;
+    },
+    onAfterEnter: function onAfterEnter() {
+      var _this2 = this;
+
+      this.is_show = true;
+      this.is_transitioning = false;
+      this.$nextTick(function () {
+        _this2.focusFirst();
+        var shownEvt = new BvEvent('shown', {
+          cancelable: false,
+          vueTarget: _this2,
+          target: _this2.$refs.modal,
+          relatedTarget: null
+        });
+        _this2.emitEvent(shownEvt);
+      });
+    },
+    onBeforeLeave: function onBeforeLeave() {
+      this.is_transitioning = true;
+      this.setResizeEvent(false);
+    },
+    onLeave: function onLeave() {
+      // Remove the 'show' class
+      this.is_show = false;
+    },
+    onAfterLeave: function onAfterLeave() {
+      var _this3 = this;
+
+      this.is_block = false;
+      this.resetAdjustments();
+      this.resetScrollbar();
+      this.is_transitioning = false;
+      removeClass(document.body, 'modal-open');
+      this.$nextTick(function () {
+        _this3.is_hidden = _this3.lazy || false;
+        _this3.returnFocusTo();
+        var hiddenEvt = new BvEvent('hidden', {
+          cancelable: false,
+          vueTarget: _this3,
+          target: _this3.lazy ? null : _this3.$refs.modal,
+          relatedTarget: null
+        });
+        _this3.emitEvent(hiddenEvt);
+      });
+    },
+
+    // Event emitter
+    emitEvent: function emitEvent(bvEvt) {
+      var type = bvEvt.type;
+      this.$emit(type, bvEvt);
+      this.$root.$emit('bv::modal::' + type, bvEvt);
+    },
+
+    // UI Event Handlers
+    onClickOut: function onClickOut(evt) {
+      // If backdrop clicked, hide modal
+      if (this.is_visible && !this.noCloseOnBackdrop) {
+        this.hide('backdrop');
+      }
+    },
+    onEsc: function onEsc(evt) {
+      // If ESC pressed, hide modal
+      if (evt.keyCode === KeyCodes.ESC && this.is_visible && !this.noCloseOnEsc) {
+        this.hide('esc');
+      }
+    },
+    onFocusout: function onFocusout(evt) {
+      // If focus leaves modal, bring it back
+      // 'focusout' Event Listener bound on content
+      var content = this.$refs.content;
+      if (!this.noEnforceFocus && this.is_visible && content && !content.contains(evt.relatedTarget)) {
+        content.focus();
+      }
+    },
+
+    // Resize Listener
+    setResizeEvent: function setResizeEvent(on) {
+      var _this4 = this;
+
+      ['resize', 'orientationchange'].forEach(function (evtName) {
+        if (on) {
+          eventOn(window, evtName, _this4.adjustDialog);
+        } else {
+          eventOff(window, evtName, _this4.adjustDialog);
+        }
+      });
+    },
+
+    // Root Listener handlers
+    showHandler: function showHandler(id, triggerEl) {
+      if (id === this.id) {
+        this.return_focus = triggerEl || null;
+        this.show();
+      }
+    },
+    hideHandler: function hideHandler(id) {
+      if (id === this.id) {
+        this.hide();
+      }
+    },
+    modalListener: function modalListener(bvEvt) {
+      // If another modal opens, close this one
+      if (bvEvt.vueTarget !== this) {
+        this.hide();
+      }
+    },
+
+    // Focus control handlers
+    focusFirst: function focusFirst() {
+      // Don't try and focus if we are SSR
+      if (typeof document === 'undefined') {
+        return;
+      }
+      var content = this.$refs.content;
+      var modal = this.$refs.modal;
+      var activeElement = document.activeElement;
+      if (activeElement && content && content.contains(activeElement)) {
+        // If activeElement is child of content, no need to change focus
+      } else if (content) {
+        if (modal) {
+          modal.scrollTop = 0;
+        }
+        // Focus the modal content wrapper
+        content.focus();
+      }
+    },
+    returnFocusTo: function returnFocusTo() {
+      // Prefer returnFocus prop over event specified return_focus value
+      var el = this.returnFocus || this.return_focus || null;
+      if (typeof el === 'string') {
+        // CSS Selector
+        el = select(el);
+      }
+      if (el) {
+        el = el.$el || el;
+        if (isVisible(el)) {
+          el.focus();
+        }
+      }
+    },
+
+    // Utility methods
+    getScrollbarWidth: function getScrollbarWidth() {
+      var scrollDiv = document.createElement('div');
+      scrollDiv.className = 'modal-scrollbar-measure';
+      document.body.appendChild(scrollDiv);
+      this.scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth;
+      document.body.removeChild(scrollDiv);
+    },
+    adjustDialog: function adjustDialog() {
+      if (!this.is_visible) {
+        return;
+      }
+      var modal = this.$refs.modal;
+      var isModalOverflowing = modal.scrollHeight > document.documentElement.clientHeight;
+      if (!this.isBodyOverflowing && isModalOverflowing) {
+        modal.style.paddingLeft = this.scrollbarWidth + 'px';
+      }
+      if (this.isBodyOverflowing && !isModalOverflowing) {
+        modal.style.paddingRight = this.scrollbarWidth + 'px';
+      }
+    },
+    resetAdjustments: function resetAdjustments() {
+      var modal = this.$refs.modal;
+      if (modal) {
+        modal.style.paddingLeft = '';
+        modal.style.paddingRight = '';
+      }
+    },
+    checkScrollbar: function checkScrollbar() {
+      var rect = getBCR(document.body);
+      this.isBodyOverflowing = rect.left + rect.right < window.innerWidth;
+    },
+    setScrollbar: function setScrollbar() {
+      if (this.isBodyOverflowing) {
+        // Note: DOMNode.style.paddingRight returns the actual value or '' if not set
+        //   while $(DOMNode).css('padding-right') returns the calculated value or 0 if not set
+        var computedStyle = window.getComputedStyle;
+        var body = document.body;
+        var scrollbarWidth = this.scrollbarWidth;
+        // Adjust fixed content padding
+        selectAll(Selector.FIXED_CONTENT).forEach(function (el) {
+          var actualPadding = el.style.paddingRight;
+          var calculatedPadding = computedStyle(el).paddingRight || 0;
+          setAttr(el, 'data-padding-right', actualPadding);
+          el.style.paddingRight = parseFloat(calculatedPadding) + scrollbarWidth + 'px';
+        });
+        // Adjust sticky content margin
+        selectAll(Selector.STICKY_CONTENT).forEach(function (el) {
+          var actualMargin = el.style.marginRight;
+          var calculatedMargin = computedStyle(el).marginRight || 0;
+          setAttr(el, 'data-margin-right', actualMargin);
+          el.style.marginRight = parseFloat(calculatedMargin) - scrollbarWidth + 'px';
+        });
+        // Adjust navbar-toggler margin
+        selectAll(Selector.NAVBAR_TOGGLER).forEach(function (el) {
+          var actualMargin = el.style.marginRight;
+          var calculatedMargin = computedStyle(el).marginRight || 0;
+          setAttr(el, 'data-margin-right', actualMargin);
+          el.style.marginRight = parseFloat(calculatedMargin) + scrollbarWidth + 'px';
+        });
+        // Adjust body padding
+        var actualPadding = body.style.paddingRight;
+        var calculatedPadding = computedStyle(body).paddingRight;
+        setAttr(body, 'data-padding-right', actualPadding);
+        body.style.paddingRight = parseFloat(calculatedPadding) + scrollbarWidth + 'px';
+      }
+    },
+    resetScrollbar: function resetScrollbar() {
+      // Restore fixed content padding
+      selectAll(Selector.FIXED_CONTENT).forEach(function (el) {
+        if (hasAttr(el, 'data-padding-right')) {
+          el.style.paddingRight = getAttr(el, 'data-padding-right') || '';
+          removeAttr(el, 'data-padding-right');
+        }
+      });
+      // Restore sticky content and navbar-toggler margin
+      selectAll(Selector.STICKY_CONTENT + ', ' + Selector.NAVBAR_TOGGLER).forEach(function (el) {
+        if (hasAttr(el, 'data-margin-right')) {
+          el.style.marginRight = getAttr(el, 'data-margin-right') || '';
+          removeAttr(el, 'data-margin-right');
+        }
+      });
+      // Restore body padding
+      var body = document.body;
+      if (hasAttr(body, 'data-padding-right')) {
+        body.style.paddingRight = getAttr(body, 'data-padding-right') || '';
+        removeAttr(body, 'data-padding-right');
+      }
+    }
+  },
+  created: function created() {
+    // create non-reactive property
+    this._observer = null;
+  },
+  mounted: function mounted() {
+    // Measure scrollbar
+    this.getScrollbarWidth();
+    // Listen for events from others to either open or close ourselves
+    this.listenOnRoot('bv::show::modal', this.showHandler);
+    this.listenOnRoot('bv::hide::modal', this.hideHandler);
+    // Listen for bv:modal::show events, and close ourselves if the opening modal not us
+    this.listenOnRoot('bv::modal::show', this.modalListener);
+    // Initially show modal?
+    if (this.visible === true) {
+      this.show();
+    }
+  },
+  beforeDestroy: function beforeDestroy() {
+    // Ensure everything is back to normal
+    if (this._observer) {
+      this._observer.disconnect();
+      this._observer = null;
+    }
+    this.setResizeEvent(false);
+    // Re-adjust body/navbar/fixed padding/margins (if needed)
+    removeClass(document.body, 'modal-open');
+    this.resetAdjustments();
+    this.resetScrollbar();
+  }
 };
 
 var listenTypes$1 = { click: true };
 
-var bModal$2 = {
+var bModal$3 = {
   // eslint-disable-next-line no-shadow-restricted-names
   bind: function bind(undefined, binding, vnode) {
     targets(vnode, binding, listenTypes$1, function (_ref) {
@@ -13052,7 +13124,7 @@ var bModal$2 = {
 /* eslint-disable no-var, no-undef, guard-for-in, object-shorthand */
 
 var directives$1 = {
-  bModal: bModal$2
+  bModal: bModal$3
 };
 
 var VuePlugin$55 = {
@@ -13066,7 +13138,7 @@ vueUse(VuePlugin$55);
 /* eslint-disable no-var, no-undef, guard-for-in, object-shorthand */
 
 var components$27 = {
-  bModal: bModal$1
+  bModal: bModal$2
 };
 
 var VuePlugin$53 = {
@@ -13458,7 +13530,7 @@ var props$44 = {
   }
 
   // Our render function is brought in from the pagination mixin
-};var bPagination$1 = {
+};var bPagination = {
   mixins: [paginationMixin],
   props: props$44,
   computed: {
@@ -13502,7 +13574,7 @@ var props$44 = {
 /* eslint-disable no-var, no-undef, guard-for-in, object-shorthand */
 
 var components$30 = {
-  bPagination: bPagination$1
+  bPagination: bPagination
 };
 
 var VuePlugin$59 = {
@@ -13543,9 +13615,8 @@ var props$45 = assign(
 },
 // Router specific props
 routerProps);
-
 // Our render function is brought in via the pagination mixin
-var bPaginationNav$1 = {
+var bPaginationNav = {
   mixins: [paginationMixin],
   props: props$45,
   computed: {
@@ -13597,7 +13668,7 @@ var bPaginationNav$1 = {
 /* eslint-disable no-var, no-undef, guard-for-in, object-shorthand */
 
 var components$31 = {
-  bPaginationNav: bPaginationNav$1
+  bPaginationNav: bPaginationNav
 };
 
 var VuePlugin$61 = {
@@ -13713,6 +13784,7 @@ var ToolTip = function () {
     classCallCheck(this, ToolTip);
 
     // New tooltip object
+    this.$isEnabled = true;
     this.$fadeTimeout = null;
     this.$hoverTimeout = null;
     this.$visibleInterval = null;
@@ -13724,10 +13796,12 @@ var ToolTip = function () {
     this.$id = generateId(this.constructor.NAME);
     this.$root = $root || null;
     this.$routeWatcher = null;
-    // We keep a bound copy of the forceHide, doHide and doShow methods for root/modal listeners
+    // We use a bound version of the following handlers for root/modal listeners to maintain the 'this' context
     this.$forceHide = this.forceHide.bind(this);
     this.$doHide = this.doHide.bind(this);
     this.$doShow = this.doShow.bind(this);
+    this.$doDisable = this.doDisable.bind(this);
+    this.$doEnable = this.doEnable.bind(this);
     // Set the configuration
     this.updateConfig(config);
   }
@@ -13797,6 +13871,7 @@ var ToolTip = function () {
       this.$tip = null;
       // Null out other properties
       this.$id = null;
+      this.$isEnabled = null;
       this.$root = null;
       this.$element = null;
       this.$config = null;
@@ -13805,6 +13880,32 @@ var ToolTip = function () {
       this.$forceHide = null;
       this.$doHide = null;
       this.$doShow = null;
+      this.$doDisable = null;
+      this.$doEnable = null;
+    }
+  }, {
+    key: 'enable',
+    value: function enable() {
+      // Create a non-cancelable BvEvent
+      var enabledEvt = new BvEvent('enabled', {
+        cancelable: false,
+        target: this.$element,
+        relatedTarget: null
+      });
+      this.$isEnabled = true;
+      this.emitEvent(enabledEvt);
+    }
+  }, {
+    key: 'disable',
+    value: function disable() {
+      // Create a non-cancelable BvEvent
+      var disabledEvt = new BvEvent('disabled', {
+        cancelable: false,
+        target: this.$element,
+        relatedTarget: null
+      });
+      this.$isEnabled = false;
+      this.emitEvent(disabledEvt);
     }
 
     // Click toggler
@@ -13812,6 +13913,9 @@ var ToolTip = function () {
   }, {
     key: 'toggle',
     value: function toggle(event) {
+      if (!this.$isEnabled) {
+        return;
+      }
       if (event) {
         this.$activeTrigger.click = !this.$activeTrigger.click;
 
@@ -13840,7 +13944,6 @@ var ToolTip = function () {
         // If trigger element isn't in the DOM or is not visible
         return;
       }
-
       // Build tooltip element (also sets this.$tip)
       var tip = this.getTipElement();
       this.fixTitle();
@@ -14292,8 +14395,8 @@ var ToolTip = function () {
         eventOff(_this7.$element, evt, _this7);
       }, this);
 
-      // Stop listening for global show/hide events
-      this.setRootListener(true);
+      // Stop listening for global show/hide/enable/disable events
+      this.setRootListener(false);
     }
   }, {
     key: 'handleEvent',
@@ -14302,6 +14405,10 @@ var ToolTip = function () {
       if (isDisabled(this.$element)) {
         // If disabled, don't do anything. Note: if tip is shown before element gets
         // disabled, then tip not close until no longer disabled or forcefully closed.
+        return;
+      }
+      if (!this.$isEnabled) {
+        // If not enable
         return;
       }
       var type = e.type;
@@ -14382,14 +14489,16 @@ var ToolTip = function () {
       if (this.$root) {
         this.$root[on ? '$on' : '$off']('bv::hide::' + this.constructor.NAME, this.$doHide);
         this.$root[on ? '$on' : '$off']('bv::show::' + this.constructor.NAME, this.$doShow);
+        this.$root[on ? '$on' : '$off']('bv::disable::' + this.constructor.NAME, this.$doDisable);
+        this.$root[on ? '$on' : '$off']('bv::enable::' + this.constructor.NAME, this.$doEnable);
       }
     }
   }, {
     key: 'doHide',
     value: function doHide(id) {
-      // Programmatically hide this tooltip or popover
+      // Programmatically hide tooltip or popover
       if (!id) {
-        // Close all tooltip or popovers
+        // Close all tooltips or popovers
         this.forceHide();
       } else if (this.$element && this.$element.id && this.$element.id === id) {
         // Close this specific tooltip or popover
@@ -14399,9 +14508,37 @@ var ToolTip = function () {
   }, {
     key: 'doShow',
     value: function doShow(id) {
-      // Programmatically show this tooltip or popover
-      if (id && this.$element && this.$element.id && this.$element.id === id) {
+      // Programmatically show tooltip or popover
+      if (!id) {
+        // Open all tooltips or popovers
         this.show();
+      } else if (id && this.$element && this.$element.id && this.$element.id === id) {
+        // Show this specific tooltip or popover
+        this.show();
+      }
+    }
+  }, {
+    key: 'doDisable',
+    value: function doDisable(id) {
+      // Programmatically disable tooltip or popover
+      if (!id) {
+        // Disable all tooltips or popovers
+        this.disable();
+      } else if (this.$element && this.$element.id && this.$element.id === id) {
+        // Disable this specific tooltip or popover
+        this.disable();
+      }
+    }
+  }, {
+    key: 'doEnable',
+    value: function doEnable(id) {
+      // Programmatically enable tooltip or popover
+      if (!id) {
+        // Enable all tooltips or popovers
+        this.enable();
+      } else if (this.$element && this.$element.id && this.$element.id === id) {
+        // Enable this specific tooltip or popover
+        this.enable();
       }
     }
   }, {
@@ -14906,79 +15043,79 @@ var bProgressBar = {
   }
 };
 
-var bProgress$1 = {
-    components: { bProgressBar: bProgressBar },
-    render: function render(h) {
-        var t = this;
-        var childNodes = t.$slots.default;
-        if (!childNodes) {
-            childNodes = h('b-progress-bar', {
-                props: {
-                    value: t.value,
-                    max: t.max,
-                    precision: t.precision,
-                    variant: t.variant,
-                    animated: t.animated,
-                    striped: t.striped,
-                    showProgress: t.showProgress,
-                    showValue: t.showValue
-                }
-            });
+var bProgress$2 = {
+  components: { bProgressBar: bProgressBar },
+  render: function render(h) {
+    var t = this;
+    var childNodes = t.$slots.default;
+    if (!childNodes) {
+      childNodes = h('b-progress-bar', {
+        props: {
+          value: t.value,
+          max: t.max,
+          precision: t.precision,
+          variant: t.variant,
+          animated: t.animated,
+          striped: t.striped,
+          showProgress: t.showProgress,
+          showValue: t.showValue
         }
-        return h('div', { class: ['progress'], style: t.progressHeight }, [childNodes]);
-    },
-
-    props: {
-        // These props can be inherited via the child b-progress-bar(s)
-        variant: {
-            type: String,
-            default: null
-        },
-        striped: {
-            type: Boolean,
-            default: false
-        },
-        animated: {
-            type: Boolean,
-            default: false
-        },
-        height: {
-            type: String,
-            default: null
-        },
-        precision: {
-            type: Number,
-            default: 0
-        },
-        showProgress: {
-            type: Boolean,
-            default: false
-        },
-        showValue: {
-            type: Boolean,
-            default: false
-        },
-        max: {
-            type: Number,
-            default: 100
-        },
-        // This prop is not inherited by child b-progress-bar(s)
-        value: {
-            type: Number,
-            default: 0
-        }
-    },
-    computed: {
-        progressHeight: function progressHeight() {
-            return { height: this.height || null };
-        }
+      });
     }
+    return h('div', { class: ['progress'], style: t.progressHeight }, [childNodes]);
+  },
+
+  props: {
+    // These props can be inherited via the child b-progress-bar(s)
+    variant: {
+      type: String,
+      default: null
+    },
+    striped: {
+      type: Boolean,
+      default: false
+    },
+    animated: {
+      type: Boolean,
+      default: false
+    },
+    height: {
+      type: String,
+      default: null
+    },
+    precision: {
+      type: Number,
+      default: 0
+    },
+    showProgress: {
+      type: Boolean,
+      default: false
+    },
+    showValue: {
+      type: Boolean,
+      default: false
+    },
+    max: {
+      type: Number,
+      default: 100
+    },
+    // This prop is not inherited by child b-progress-bar(s)
+    value: {
+      type: Number,
+      default: 0
+    }
+  },
+  computed: {
+    progressHeight: function progressHeight() {
+      return { height: this.height || null };
+    }
+  }
 };
 
 /* eslint-disable no-var, no-undef, guard-for-in, object-shorthand */
 
 var components$33 = {
-  bProgress: bProgress$1,
+  bProgress: bProgress$2,
   bProgressBar: bProgressBar
 };
 
@@ -15042,8 +15179,8 @@ function processField(key, value) {
   return field;
 }
 
-var bTable$1 = {
-  mixins: [listenOnRootMixin],
+var bTable$2 = {
+  mixins: [idMixin, listenOnRootMixin],
   render: function render(h) {
     var t = this;
     var $slots = t.$slots;
@@ -15064,53 +15201,20 @@ var bTable$1 = {
     // Build the colgroup
     var colgroup = $slots['table-colgroup'] ? h('colgroup', {}, $slots['table-colgroup']) : h(false);
 
-    // Build the thead
-    var ths = fields.map(function (field) {
-      var data = {
-        key: field.key,
-        class: t.fieldClasses(field),
-        style: field.thStyle || {},
-        attrs: {
-          'tabindex': field.sortable ? '0' : null,
-          'aria-label': field.sortable ? t.localSortDesc && t.localSortBy === field.key ? t.labelSortAsc : t.labelSortDesc : null,
-          'aria-sort': field.sortable && t.localSortBy === field.key ? t.localSortDesc ? 'descending' : 'ascending' : null
-        },
-        on: {
-          click: function click(evt) {
-            evt.stopPropagation();
-            evt.preventDefault();
-            t.headClicked(evt, field);
-          },
-          keydown: function keydown(evt) {
-            var keyCode = evt.keyCode;
-            if (keyCode === KeyCodes.ENTER || keyCode === KeyCodes.SPACE) {
-              evt.stopPropagation();
-              evt.preventDefault();
-              t.headClicked(evt, field);
-            }
-          }
-        }
-      };
-      var slot = $scoped['HEAD_' + field.key];
-      if (slot) {
-        slot = slot({ label: field.label, column: field.key, field: field });
-      } else {
-        data.domProps = { innerHTML: field.label };
-      }
-      return h('th', data, slot);
-    });
-    var thead = h('thead', { class: t.headClasses }, [h('tr', {}, ths)]);
+    // factory function for thead and tfoot cells (th's)
+    var makeHeadCells = function makeHeadCells() {
+      var isFoot = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
-    // Build the tfoot
-    var tfoot = h(false);
-    if (t.footClone) {
-      var _ths = fields.map(function (field) {
+      return fields.map(function (field, colIndex) {
         var data = {
           key: field.key,
           class: t.fieldClasses(field),
           style: field.thStyle || {},
           attrs: {
             'tabindex': field.sortable ? '0' : null,
+            'abbr': field.headerAbbr || null,
+            'title': field.headerTitle || null,
+            'aria-colindex': String(colIndex + 1),
             'aria-label': field.sortable ? t.localSortDesc && t.localSortBy === field.key ? t.labelSortAsc : t.labelSortDesc : null,
             'aria-sort': field.sortable && t.localSortBy === field.key ? t.localSortDesc ? 'descending' : 'ascending' : null
           },
@@ -15130,7 +15234,7 @@ var bTable$1 = {
             }
           }
         };
-        var slot = $scoped['FOOT_' + field.key] ? $scoped['FOOT_' + field.key] : $scoped['HEAD_' + field.key];
+        var slot = isFoot && $scoped['FOOT_' + field.key] ? $scoped['FOOT_' + field.key] : $scoped['HEAD_' + field.key];
         if (slot) {
           slot = [slot({ label: field.label, column: field.key, field: field })];
         } else {
@@ -15138,96 +15242,170 @@ var bTable$1 = {
         }
         return h('th', data, slot);
       });
-      tfoot = h('tfoot', { class: t.footClasses }, [h('tr', {}, _ths)]);
+    };
+
+    // Build the thead
+    var thead = h(false);
+    if (t.isStacked !== true) {
+      // If in always stacked mode (t.isStacked === true), then we don't bother rendering the thead
+      thead = h('thead', { class: t.headClasses }, [h('tr', { class: t.theadTrClass }, makeHeadCells(false))]);
     }
 
+    // Build the tfoot
+    var tfoot = h(false);
+    if (t.footClone && t.isStacked !== true) {
+      // If in always stacked mode (t.isStacked === true), then we don't bother rendering the tfoot
+      tfoot = h('tfoot', { class: t.footClasses }, [h('tr', { class: t.tfootTrClass }, makeHeadCells(true))]);
+    }
+
+    // Prepare the tbody rows
     var rows = [];
 
-    // Add static Top Row slot
-    if ($scoped['top-row']) {
-      rows.push(h('tr', {}, [$scoped['top-row']({ coloumns: fields.length, fields: fields })]));
+    // Add static Top Row slot (hidden in visibly stacked mode as we can't control the data-label)
+    // If in always stacked mode, we don't bother rendering the row
+    if ($scoped['top-row'] && t.isStacked !== true) {
+      rows.push(h('tr', { key: 'top-row', class: ['b-table-top-row', t.tbodyTrClass] }, [$scoped['top-row']({ columns: fields.length, fields: fields })]));
     } else {
       rows.push(h(false));
     }
 
-    // Add the body rows
-    items.forEach(function (item, index) {
+    // Add the item data rows
+    items.forEach(function (item, rowIndex) {
       var detailsSlot = $scoped['row-details'];
-      // For Each Row
-      var tds = fields.map(function (field) {
-        // Foe Each field in the row
+      var rowShowDetails = Boolean(item._showDetails && detailsSlot);
+      var detailsId = rowShowDetails ? t.safeId('_details_' + rowIndex + '_') : null;
+      var toggleDetailsFn = function toggleDetailsFn() {
+        if (detailsSlot) {
+          t.$set(item, '_showDetails', !item._showDetails);
+        }
+      };
+      // For each item data field in row
+      var tds = fields.map(function (field, colIndex) {
         var data = {
-          key: field.key,
+          key: 'row-' + rowIndex + '-cell-' + colIndex,
           class: t.tdClasses(field, item),
-          attrs: field.tdAttr || {}
+          attrs: field.tdAttr || {},
+          domProps: {}
         };
+        data.attrs['aria-colindex'] = String(colIndex + 1);
         var childNodes = void 0;
         if ($scoped[field.key]) {
           childNodes = [$scoped[field.key]({
             item: item,
-            index: index,
+            index: rowIndex,
             unformatted: item[field.key],
-            value: t.getFormattedValue(item, field)
+            value: t.getFormattedValue(item, field),
+            toggleDetails: toggleDetailsFn,
+            detailsShowing: Boolean(item._showDetails)
           })];
+          if (t.isStacked) {
+            // We wrap in a DIV to ensure rendered as a single cell when visually stacked!
+            childNodes = [h('div', {}, [childNodes])];
+          }
         } else {
-          data.domProps = { innerHTML: t.getFormattedValue(item, field) };
+          var formatted = t.getFormattedValue(item, field);
+          if (t.isStacked) {
+            // We innerHTML a DIV to ensure rendered as a single cell when visually stacked!
+            childNodes = [h('div', { domProps: { innerHTML: formatted } })];
+          } else {
+            // Non stcaked, so we just innerHTML the td
+            data.domProps['innerHTML'] = formatted;
+          }
         }
-        return h('td', data, childNodes);
+        if (t.isStacked) {
+          // Generate the "header cell" label content in stacked mode
+          data.attrs['data-label'] = field.label;
+          if (field.isRowHeader) {
+            data.attrs['role'] = 'rowheader';
+          } else {
+            data.attrs['role'] = 'cell';
+          }
+        }
+        // Render either a td or th cell
+        return h(field.isRowHeader ? 'th' : 'td', data, childNodes);
       });
+      // Calculate the row number in the dataset (indexed from 1)
+      var ariaRowIndex = null;
+      if (t.currentPage && t.perPage && t.perPage > 0) {
+        ariaRowIndex = (t.currentPage - 1) * t.perPage + rowIndex + 1;
+      }
       // Assemble and add the row
       rows.push(h('tr', {
-        key: index,
-        class: [t.rowClasses(item), item._showDetails && detailsSlot ? 'b-table-has-details' : ''],
+        key: 'row-' + rowIndex,
+        class: [t.rowClasses(item), { 'b-table-has-details': rowShowDetails }],
+        attrs: {
+          'aria-describedby': detailsId,
+          'aria-rowindex': ariaRowIndex,
+          role: t.isStacked ? 'row' : null
+        },
         on: {
           click: function click(evt) {
-            t.rowClicked(evt, item, index);
+            t.rowClicked(evt, item, rowIndex);
           },
           dblclick: function dblclick(evt) {
-            t.rowDblClicked(evt, item, index);
+            t.rowDblClicked(evt, item, rowIndex);
           },
           mouseenter: function mouseenter(evt) {
-            t.rowHovered(evt, item, index);
+            t.rowHovered(evt, item, rowIndex);
           }
         }
       }, tds));
       // Row Details slot
-      if (item._showDetails && detailsSlot) {
-        var details = h('td', { attrs: { colspan: String(fields.length) } }, [detailsSlot({ item: item, index: index, fields: fields })]);
-        rows.push(h('tr', { key: index + '-details', class: ['b-table-details'] }, [details]));
-      } else {
+      if (rowShowDetails) {
+        var tdAttrs = { colspan: String(fields.length) };
+        var trAttrs = { id: detailsId };
+        if (t.isStacked) {
+          tdAttrs['role'] = 'cell';
+          trAttrs['role'] = 'row';
+        }
+        var details = h('td', { attrs: tdAttrs }, [detailsSlot({ item: item, index: rowIndex, fields: fields, toggleDetails: toggleDetailsFn })]);
+        rows.push(h('tr', { key: 'details-' + rowIndex, class: ['b-table-details', t.tbodyTrClass], attrs: trAttrs }, [details]));
+      } else if (detailsSlot) {
+        // Only add the placeholder if a the table has a row-details slot defined (but not shown)
         rows.push(h(false));
       }
     });
 
     // Empty Items / Empty Filtered Row slot
     if (t.showEmpty && (!items || items.length === 0)) {
-      var inner = t.filter ? $slots['emptyfiltered'] : $slots['empty'];
-      if (!inner) {
-        inner = h('div', {
+      var empty = t.filter ? $slots['emptyfiltered'] : $slots['empty'];
+      if (!empty) {
+        empty = h('div', {
           class: ['text-center', 'my-2'],
           domProps: { innerHTML: t.filter ? t.emptyFilteredText : t.emptyText }
         });
       }
-      var content = h('div', { attrs: { role: 'alert', 'aria-live': 'polite' } }, [inner]);
-      rows.push(h('tr', [h('td', { attrs: { colspan: String(fields.length) } }, [content])]));
+      empty = h('td', { attrs: { colspan: String(fields.length), role: t.isStacked ? 'cell' : null } }, [h('div', { attrs: { role: 'alert', 'aria-live': 'polite' } }, [empty])]);
+      rows.push(h('tr', {
+        key: 'empty-row',
+        class: ['b-table-empty-row', t.tbodyTrClass],
+        attrs: t.isStacked ? { role: 'row' } : {}
+      }, [empty]));
     } else {
       rows.push(h(false));
     }
 
-    // Static bottom row slot
-    if ($scoped['bottom-row']) {
-      rows.push(h('tr', {}, [$scoped['bottom-row']({ columns: fields.length, fields: fields })]));
+    // Static bottom row slot (hidden in visibly stacked mode as we can't control the data-label)
+    // If in always stacked mode, we don't bother rendering the row
+    if ($scoped['bottom-row'] && t.isStacked !== true) {
+      rows.push(h('tr', { key: 'bottom-row', class: ['b-table-bottom-row', t.tbodyTrClass] }, [$scoped['bottom-row']({ columns: fields.length, fields: fields })]));
     } else {
       rows.push(h(false));
     }
 
     // Assemble the rows into the tbody
-    var tbody = h('tbody', {}, rows);
+    var tbody = h('tbody', { class: t.bodyClasses, attrs: t.isStacked ? { role: 'rowgroup' } : {} }, rows);
 
     // Return the assembled table
     return h('table', {
       class: t.tableClasses,
-      attrs: { id: t.id || null, 'aria-busy': t.computedBusy ? 'true' : 'false' }
+      attrs: {
+        id: t.safeId(),
+        role: t.isStacked ? 'table' : null,
+        'aria-busy': t.computedBusy ? 'true' : 'false',
+        'aria-colcount': String(fields.length),
+        'aria-rowcount': t.$attrs['aria-rowcount'] || t.perPage && t.perPage > 0 ? '-1' : null
+      }
     }, [caption, colgroup, thead, tfoot, tbody]);
   },
   data: function data() {
@@ -15237,28 +15415,20 @@ var bTable$1 = {
       localItems: [],
       // Note: filteredItems only used to determine if # of items changed
       filteredItems: [],
-      localBusy: this.busy
+      localBusy: false
     };
   },
 
   props: {
-    id: {
-      type: String,
-      default: ''
-    },
-    caption: {
-      type: String,
-      default: null
-    },
-    captionTop: {
-      type: Boolean,
-      default: false
-    },
     items: {
       type: [Array, Function],
       default: function _default() {
         return [];
       }
+    },
+    fields: {
+      type: [Object, Array],
+      default: null
     },
     sortBy: {
       type: String,
@@ -15268,13 +15438,13 @@ var bTable$1 = {
       type: Boolean,
       default: false
     },
-    apiUrl: {
+    caption: {
       type: String,
-      default: ''
-    },
-    fields: {
-      type: [Object, Array],
       default: null
+    },
+    captionTop: {
+      type: Boolean,
+      default: false
     },
     striped: {
       type: Boolean,
@@ -15300,7 +15470,7 @@ var bTable$1 = {
       }
     },
     inverse: {
-      // Deprecated in v1.0.0.beta.10 in favor of `dark`
+      // Deprecated in v1.0.0 in favor of `dark`
       type: Boolean,
       default: null
     },
@@ -15312,12 +15482,20 @@ var bTable$1 = {
       type: Boolean,
       default: false
     },
+    fixed: {
+      type: Boolean,
+      default: false
+    },
+    footClone: {
+      type: Boolean,
+      default: false
+    },
     responsive: {
       type: [Boolean, String],
       default: false
     },
-    fixed: {
-      type: Boolean,
+    stacked: {
+      type: [Boolean, String],
       default: false
     },
     headVariant: {
@@ -15328,9 +15506,33 @@ var bTable$1 = {
       type: String,
       default: ''
     },
+    theadClass: {
+      type: [String, Array],
+      default: null
+    },
+    theadTrClass: {
+      type: [String, Array],
+      default: null
+    },
+    tbodyClass: {
+      type: [String, Array],
+      default: null
+    },
+    tbodyTrClass: {
+      type: [String, Array],
+      default: null
+    },
+    tfootClass: {
+      type: [String, Array],
+      default: null
+    },
+    tfootTrClass: {
+      type: [String, Array],
+      default: null
+    },
     perPage: {
       type: Number,
-      default: null
+      default: 0
     },
     currentPage: {
       type: Number,
@@ -15370,10 +15572,6 @@ var bTable$1 = {
         return [];
       }
     },
-    footClone: {
-      type: Boolean,
-      default: false
-    },
     labelSortAsc: {
       type: String,
       default: 'Click to sort Ascending'
@@ -15393,6 +15591,11 @@ var bTable$1 = {
     emptyFilteredText: {
       type: String,
       default: 'There are no records matching your request'
+    },
+    apiUrl: {
+      // Passthrough prop. Passed to the context object. Not used by b-table directly
+      type: String,
+      default: ''
     }
   },
   watch: {
@@ -15467,7 +15670,6 @@ var bTable$1 = {
 
     this.localSortBy = this.sortBy;
     this.localSortDesc = this.sortDesc;
-    this.localBusy = this.busy;
     if (this.hasProvider) {
       this._providerUpdate();
     }
@@ -15479,16 +15681,25 @@ var bTable$1 = {
   },
 
   computed: {
-    tableClasses: function tableClasses() {
+    isStacked: function isStacked() {
+      return this.stacked === '' ? true : this.stacked;
+    },
+    isResponsive: function isResponsive() {
       var responsive = this.responsive === '' ? true : this.responsive;
-      return ['table', 'b-table', this.striped ? 'table-striped' : '', this.hover ? 'table-hover' : '', this.dark ? 'table-dark' : '', this.bordered ? 'table-bordered' : '', this.outlined ? 'border' : '', responsive === true ? 'table-responsive' : Boolean(responsive) ? 'table-responsive-' + responsive : '', this.fixed ? 'table-fixed' : '', this.small ? 'table-sm' : ''];
+      return this.isStacked ? false : responsive;
+    },
+    tableClasses: function tableClasses() {
+      return ['table', 'b-table', this.striped ? 'table-striped' : '', this.hover ? 'table-hover' : '', this.dark ? 'table-dark' : '', this.bordered ? 'table-bordered' : '', this.small ? 'table-sm' : '', this.outlined ? 'border' : '', this.fixed ? 'b-table-fixed' : '', this.isResponsive === true ? 'table-responsive' : this.isResponsive ? 'table-responsive-' + this.responsive : '', this.isStacked === true ? 'b-table-stacked' : this.isStacked ? 'b-table-stacked-' + this.stacked : ''];
     },
     headClasses: function headClasses() {
-      return this.headVariant ? 'thead-' + this.headVariant : '';
+      return [this.headVariant ? 'thead-' + this.headVariant : '', this.theadClass];
+    },
+    bodyClasses: function bodyClasses() {
+      return [this.tbodyClass];
     },
     footClasses: function footClasses() {
       var variant = this.footVariant || this.headVariant || null;
-      return variant ? 'thead-' + variant : '';
+      return [variant ? 'thead-' + variant : '', this.tfootClass];
     },
     captionStyles: function captionStyles() {
       // Move caption to top
@@ -15511,9 +15722,9 @@ var bTable$1 = {
         perPage: this.perPage,
         currentPage: this.currentPage,
         filter: this.filter,
-        apiUrl: this.apiUrl,
         sortBy: this.localSortBy,
-        sortDesc: this.localSortDesc
+        sortDesc: this.localSortDesc,
+        apiUrl: this.apiUrl
       };
     },
     computedFields: function computedFields() {
@@ -15610,7 +15821,7 @@ var bTable$1 = {
       }
       // Apply local Sort
       if (sortBy && localSorting) {
-        items = items.sort(function sortItemsFn(a, b) {
+        items = stableSort(items, function sortItemsFn(a, b) {
           var ret = null;
           if (typeof sortCompare === 'function') {
             // Call user provided sortCompare routine
@@ -15650,7 +15861,7 @@ var bTable$1 = {
       return [field.variant && !cellVariant ? (this.dark ? 'bg' : 'table') + '-' + field.variant : '', cellVariant, field.class ? field.class : '', field.tdClass ? field.tdClass : ''];
     },
     rowClasses: function rowClasses(item) {
-      return [item._rowVariant ? (this.dark ? 'bg' : 'table') + '-' + item._rowVariant : ''];
+      return [item._rowVariant ? (this.dark ? 'bg' : 'table') + '-' + item._rowVariant : '', this.tbodyTrClass];
     },
     rowClicked: function rowClicked(e, item, index) {
       if (this.stopIfBusy(e)) {
@@ -15719,7 +15930,12 @@ var bTable$1 = {
       this.localItems = items && items.length > 0 ? items.slice() : [];
       this.localBusy = false;
       this.$emit('refreshed');
+      // Deprecated root emit
       this.emitOnRoot('table::refreshed', this.id);
+      // New root emit
+      if (this.id) {
+        this.emitOnRoot('bv::table::refreshed', this.id);
+      }
     },
     _providerUpdate: function _providerUpdate() {
       var _this3 = this;
@@ -15733,7 +15949,7 @@ var bTable$1 = {
       this.localBusy = true;
       // Call provider function with context and optional callback
       var data = this.items(this.context, this._providerSetLocal);
-      if (data) if (data.then && typeof data.then === 'function') {
+      if (data && data.then && typeof data.then === 'function') {
         // Provider returned Promise
         data.then(function (items) {
           _this3._providerSetLocal(items);
@@ -15763,7 +15979,7 @@ var bTable$1 = {
 /* eslint-disable no-var, no-undef, guard-for-in, object-shorthand */
 
 var components$34 = {
-  bTable: bTable$1
+  bTable: bTable$2
 };
 
 var VuePlugin$67 = {
@@ -15776,6 +15992,7 @@ vueUse(VuePlugin$67);
 
 // Helper component
 var bTabButtonHelper = {
+  name: 'bTabButtonHelper',
   props: {
     content: { type: String, default: '' },
     href: { type: String, default: '#' },
@@ -16177,7 +16394,7 @@ var bTab = {
 
   computed: {
     tabClasses: function tabClasses() {
-      return ['tab-pane', this.$parent && this.$parent.card ? 'card-body' : '', this.show ? 'show' : '', this.computedFade ? 'fade' : '', this.disabled ? 'disabled' : '', this.localActive ? 'active' : ''];
+      return ['tab-pane', this.$parent && this.$parent.card && !this.noBody ? 'card-body' : '', this.show ? 'show' : '', this.computedFade ? 'fade' : '', this.disabled ? 'disabled' : '', this.localActive ? 'active' : ''];
     },
     controlledBy: function controlledBy() {
       return this.buttonId || this.safeId('__BV_tab_button__');
@@ -16226,6 +16443,10 @@ var bTab = {
       default: null
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    noBody: {
       type: Boolean,
       default: false
     },
@@ -27798,9 +28019,9 @@ jQuery.nodeName = nodeName;
 // https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#wiki-anon
 
 if ( true ) {
-	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function() {
 		return jQuery;
-	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+	}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 }
 
@@ -46289,9 +46510,9 @@ module.exports = startCase;
 
     // Define as an anonymous module so, through path mapping, it can be
     // referenced as the "underscore" module.
-    !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
+    !(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {
       return _;
-    }.call(exports, __webpack_require__, exports, module),
+    }).call(exports, __webpack_require__, exports, module),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
   }
   // Check for `exports` after `define` in case a build optimizer adds it.
@@ -49726,7 +49947,7 @@ return esDo;
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
-//! locale : Spanish(United State) [es-us]
+//! locale : Spanish (United States) [es-us]
 //! author : bustta : https://github.com/bustta
 
 ;(function (global, factory) {
@@ -51518,8 +51739,7 @@ return hr;
 
 var weekEndings = 'vasárnap hétfőn kedden szerdán csütörtökön pénteken szombaton'.split(' ');
 function translate(number, withoutSuffix, key, isFuture) {
-    var num = number,
-        suffix;
+    var num = number;
     switch (key) {
         case 's':
             return (isFuture || withoutSuffix) ? 'néhány másodperc' : 'néhány másodperce';
@@ -58103,7 +58323,7 @@ return zhTw;
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var require;//! moment.js
-//! version : 2.19.2
+//! version : 2.19.3
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -58763,7 +58983,7 @@ var matchTimestamp = /[+-]?\d+(\.\d{1,3})?/; // 123456789 123456789.123
 
 // any word (or two) characters or numbers including two/three word month in arabic.
 // includes scottish gaelic two word and hyphenated months
-var matchWord = /[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|[\u0600-\u06FF\/]+(\s*?[\u0600-\u06FF]+){1,2}/i;
+var matchWord = /[0-9]{0,256}['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]{1,256}|[\u0600-\u06FF\/]{1,256}(\s*?[\u0600-\u06FF]{1,256}){1,2}/i;
 
 
 var regexes = {};
@@ -62582,7 +62802,7 @@ addParseToken('x', function (input, array, config) {
 // Side effect imports
 
 
-hooks.version = '2.19.2';
+hooks.version = '2.19.3';
 
 setHookCallback(createLocal);
 
@@ -77595,7 +77815,7 @@ module.exports = function (css) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
- * sweetalert2 v7.0.3
+ * sweetalert2 v7.0.6
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -77604,7 +77824,7 @@ module.exports = function (css) {
 	(global.Sweetalert2 = factory());
 }(this, (function () { 'use strict';
 
-var styles = "body.swal2-shown:not(.swal2-no-backdrop) {\n  overflow-y: hidden; }\n\nbody.swal2-toast-shown {\n  overflow-y: auto; }\n  body.swal2-toast-shown.swal2-has-input > .swal2-container > .swal2-toast {\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column; }\n    body.swal2-toast-shown.swal2-has-input > .swal2-container > .swal2-toast .swal2-icon {\n      margin: 0 0 15px; }\n    body.swal2-toast-shown.swal2-has-input > .swal2-container > .swal2-toast .swal2-buttonswrapper {\n      -webkit-box-flex: 1;\n          -ms-flex: 1;\n              flex: 1;\n      -ms-flex-item-align: stretch;\n          align-self: stretch;\n      -webkit-box-pack: end;\n          -ms-flex-pack: end;\n              justify-content: flex-end; }\n    body.swal2-toast-shown.swal2-has-input > .swal2-container > .swal2-toast .swal2-loading {\n      -webkit-box-pack: center;\n          -ms-flex-pack: center;\n              justify-content: center; }\n    body.swal2-toast-shown.swal2-has-input > .swal2-container > .swal2-toast .swal2-input {\n      height: 32px;\n      font-size: 14px;\n      margin: 5px auto; }\n  body.swal2-toast-shown > .swal2-container {\n    position: fixed;\n    background-color: transparent; }\n    body.swal2-toast-shown > .swal2-container.swal2-shown {\n      background-color: transparent; }\n    body.swal2-toast-shown > .swal2-container.swal2-top {\n      top: 0;\n      left: 50%;\n      bottom: auto;\n      right: auto;\n      -webkit-transform: translateX(-50%);\n              transform: translateX(-50%); }\n    body.swal2-toast-shown > .swal2-container.swal2-top-right {\n      top: 0;\n      left: auto;\n      bottom: auto;\n      right: 0; }\n    body.swal2-toast-shown > .swal2-container.swal2-top-left {\n      top: 0;\n      left: 0;\n      bottom: auto;\n      right: auto; }\n    body.swal2-toast-shown > .swal2-container.swal2-center-left {\n      top: 50%;\n      left: 0;\n      bottom: auto;\n      right: auto;\n      -webkit-transform: translateY(-50%);\n              transform: translateY(-50%); }\n    body.swal2-toast-shown > .swal2-container.swal2-center {\n      top: 50%;\n      left: 50%;\n      bottom: auto;\n      right: auto;\n      -webkit-transform: translate(-50%, -50%);\n              transform: translate(-50%, -50%); }\n    body.swal2-toast-shown > .swal2-container.swal2-center-right {\n      top: 50%;\n      left: auto;\n      bottom: auto;\n      right: 0;\n      -webkit-transform: translateY(-50%);\n              transform: translateY(-50%); }\n    body.swal2-toast-shown > .swal2-container.swal2-bottom-left {\n      top: auto;\n      left: 0;\n      bottom: 0;\n      right: auto; }\n    body.swal2-toast-shown > .swal2-container.swal2-bottom {\n      top: auto;\n      left: 50%;\n      bottom: 0;\n      right: auto;\n      -webkit-transform: translateX(-50%);\n              transform: translateX(-50%); }\n    body.swal2-toast-shown > .swal2-container.swal2-bottom-right {\n      top: auto;\n      left: auto;\n      bottom: 0;\n      right: 0; }\n\nbody.swal2-iosfix {\n  position: fixed;\n  left: 0;\n  right: 0; }\n\nbody.swal2-no-backdrop > .swal2-shown {\n  top: auto;\n  bottom: auto;\n  left: auto;\n  right: auto;\n  background-color: transparent; }\n  body.swal2-no-backdrop > .swal2-shown > .swal2-modal {\n    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);\n            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); }\n  body.swal2-no-backdrop > .swal2-shown.swal2-top {\n    top: 0;\n    left: 50%;\n    -webkit-transform: translateX(-50%);\n            transform: translateX(-50%); }\n  body.swal2-no-backdrop > .swal2-shown.swal2-top-left {\n    top: 0;\n    left: 0; }\n  body.swal2-no-backdrop > .swal2-shown.swal2-top-right {\n    top: 0;\n    right: 0; }\n  body.swal2-no-backdrop > .swal2-shown.swal2-center {\n    top: 50%;\n    left: 50%;\n    -webkit-transform: translate(-50%, -50%);\n            transform: translate(-50%, -50%); }\n  body.swal2-no-backdrop > .swal2-shown.swal2-center-left {\n    top: 50%;\n    left: 0;\n    -webkit-transform: translateY(-50%);\n            transform: translateY(-50%); }\n  body.swal2-no-backdrop > .swal2-shown.swal2-center-right {\n    top: 50%;\n    right: 0;\n    -webkit-transform: translateY(-50%);\n            transform: translateY(-50%); }\n  body.swal2-no-backdrop > .swal2-shown.swal2-bottom {\n    bottom: 0;\n    left: 50%;\n    -webkit-transform: translateX(-50%);\n            transform: translateX(-50%); }\n  body.swal2-no-backdrop > .swal2-shown.swal2-bottom-left {\n    bottom: 0;\n    left: 0; }\n  body.swal2-no-backdrop > .swal2-shown.swal2-bottom-right {\n    bottom: 0;\n    right: 0; }\n\n.swal2-container {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: row;\n          flex-direction: row;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  position: fixed;\n  padding: 10px;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: transparent;\n  z-index: 1060; }\n  .swal2-container.swal2-top {\n    -webkit-box-align: start;\n        -ms-flex-align: start;\n            align-items: flex-start; }\n  .swal2-container.swal2-top-left {\n    -webkit-box-align: start;\n        -ms-flex-align: start;\n            align-items: flex-start;\n    -webkit-box-pack: start;\n        -ms-flex-pack: start;\n            justify-content: flex-start; }\n  .swal2-container.swal2-top-right {\n    -webkit-box-align: start;\n        -ms-flex-align: start;\n            align-items: flex-start;\n    -webkit-box-pack: end;\n        -ms-flex-pack: end;\n            justify-content: flex-end; }\n  .swal2-container.swal2-center {\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center; }\n  .swal2-container.swal2-center-left {\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: start;\n        -ms-flex-pack: start;\n            justify-content: flex-start; }\n  .swal2-container.swal2-center-right {\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: end;\n        -ms-flex-pack: end;\n            justify-content: flex-end; }\n  .swal2-container.swal2-bottom {\n    -webkit-box-align: end;\n        -ms-flex-align: end;\n            align-items: flex-end; }\n  .swal2-container.swal2-bottom-left {\n    -webkit-box-align: end;\n        -ms-flex-align: end;\n            align-items: flex-end;\n    -webkit-box-pack: start;\n        -ms-flex-pack: start;\n            justify-content: flex-start; }\n  .swal2-container.swal2-bottom-right {\n    -webkit-box-align: end;\n        -ms-flex-align: end;\n            align-items: flex-end;\n    -webkit-box-pack: end;\n        -ms-flex-pack: end;\n            justify-content: flex-end; }\n  .swal2-container.swal2-grow-fullscreen > .swal2-modal {\n    display: -webkit-box !important;\n    display: -ms-flexbox !important;\n    display: flex !important;\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    -ms-flex-item-align: stretch;\n        align-self: stretch;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center; }\n  .swal2-container.swal2-grow-row > .swal2-modal {\n    display: -webkit-box !important;\n    display: -ms-flexbox !important;\n    display: flex !important;\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    -ms-flex-line-pack: center;\n        align-content: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center; }\n  .swal2-container.swal2-grow-column {\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column; }\n    .swal2-container.swal2-grow-column.swal2-top, .swal2-container.swal2-grow-column.swal2-center, .swal2-container.swal2-grow-column.swal2-bottom {\n      -webkit-box-align: center;\n          -ms-flex-align: center;\n              align-items: center; }\n    .swal2-container.swal2-grow-column.swal2-top-left, .swal2-container.swal2-grow-column.swal2-center-left, .swal2-container.swal2-grow-column.swal2-bottom-left {\n      -webkit-box-align: start;\n          -ms-flex-align: start;\n              align-items: flex-start; }\n    .swal2-container.swal2-grow-column.swal2-top-right, .swal2-container.swal2-grow-column.swal2-center-right, .swal2-container.swal2-grow-column.swal2-bottom-right {\n      -webkit-box-align: end;\n          -ms-flex-align: end;\n              align-items: flex-end; }\n    .swal2-container.swal2-grow-column > .swal2-modal {\n      display: -webkit-box !important;\n      display: -ms-flexbox !important;\n      display: flex !important;\n      -webkit-box-flex: 1;\n          -ms-flex: 1;\n              flex: 1;\n      -ms-flex-line-pack: center;\n          align-content: center;\n      -webkit-box-pack: center;\n          -ms-flex-pack: center;\n              justify-content: center; }\n  .swal2-container:not(.swal2-top):not(.swal2-top-left):not(.swal2-top-right):not(.swal2-center-left):not(.swal2-center-right):not(.swal2-bottom):not(.swal2-bottom-left):not(.swal2-bottom-right) > .swal2-modal {\n    margin: auto; }\n  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {\n    .swal2-container .swal2-modal {\n      margin: 0 !important; } }\n  .swal2-container.swal2-fade {\n    -webkit-transition: background-color .1s;\n    transition: background-color .1s; }\n  .swal2-container.swal2-shown {\n    background-color: rgba(0, 0, 0, 0.4); }\n\n.swal2-popup {\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  background-color: #fff;\n  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  border-radius: 5px;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  text-align: center;\n  overflow-x: hidden;\n  overflow-y: auto;\n  display: none;\n  position: relative;\n  max-width: 100%; }\n  .swal2-popup.swal2-toast {\n    width: 300px;\n    padding: 0 15px;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    overflow-y: hidden;\n    -webkit-box-shadow: 0 0 10px #d9d9d9;\n            box-shadow: 0 0 10px #d9d9d9; }\n    .swal2-popup.swal2-toast .swal2-title {\n      max-width: 300px;\n      font-size: 16px;\n      text-align: left; }\n    .swal2-popup.swal2-toast .swal2-content {\n      font-size: 14px;\n      text-align: left; }\n    .swal2-popup.swal2-toast .swal2-icon {\n      width: 32px;\n      height: 32px;\n      margin: 0 15px 0 0; }\n      .swal2-popup.swal2-toast .swal2-icon.swal2-success .swal2-success-ring {\n        width: 32px;\n        height: 32px; }\n      .swal2-popup.swal2-toast .swal2-icon.swal2-info, .swal2-popup.swal2-toast .swal2-icon.swal2-warning, .swal2-popup.swal2-toast .swal2-icon.swal2-question {\n        font-size: 26px;\n        line-height: 32px; }\n      .swal2-popup.swal2-toast .swal2-icon.swal2-error [class^='swal2-x-mark-line'] {\n        top: 14px;\n        width: 22px; }\n        .swal2-popup.swal2-toast .swal2-icon.swal2-error [class^='swal2-x-mark-line'][class$='left'] {\n          left: 5px; }\n        .swal2-popup.swal2-toast .swal2-icon.swal2-error [class^='swal2-x-mark-line'][class$='right'] {\n          right: 5px; }\n    .swal2-popup.swal2-toast .swal2-buttonswrapper {\n      margin: 0 0 0 5px; }\n    .swal2-popup.swal2-toast .swal2-styled {\n      margin: 0 0 0 5px;\n      padding: 5px 10px; }\n      .swal2-popup.swal2-toast .swal2-styled:focus {\n        -webkit-box-shadow: 0 0 0 1px #fff, 0 0 0 2px rgba(50, 100, 150, 0.4);\n                box-shadow: 0 0 0 1px #fff, 0 0 0 2px rgba(50, 100, 150, 0.4); }\n    .swal2-popup.swal2-toast .swal2-validationerror {\n      width: 100%;\n      margin: 5px -20px; }\n    .swal2-popup.swal2-toast .swal2-success {\n      border-color: #a5dc86; }\n      .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-circular-line'] {\n        border-radius: 50%;\n        position: absolute;\n        width: 32px;\n        height: 64px;\n        -webkit-transform: rotate(45deg);\n                transform: rotate(45deg); }\n        .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-circular-line'][class$='left'] {\n          border-radius: 64px 0 0 64px;\n          top: -4px;\n          left: -15px;\n          -webkit-transform: rotate(-45deg);\n                  transform: rotate(-45deg);\n          -webkit-transform-origin: 32px 32px;\n                  transform-origin: 32px 32px; }\n        .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-circular-line'][class$='right'] {\n          border-radius: 0 64px 64px 0;\n          top: -5px;\n          left: 14px;\n          -webkit-transform-origin: 0 32px;\n                  transform-origin: 0 32px; }\n      .swal2-popup.swal2-toast .swal2-success .swal2-success-ring {\n        width: 32px;\n        height: 32px; }\n      .swal2-popup.swal2-toast .swal2-success .swal2-success-fix {\n        width: 7px;\n        height: 90px;\n        left: 28px;\n        top: 8px; }\n      .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-line'] {\n        height: 5px; }\n        .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-line'][class$='tip'] {\n          width: 12px;\n          left: 3px;\n          top: 18px; }\n        .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-line'][class$='long'] {\n          width: 22px;\n          right: 3px;\n          top: 15px; }\n    .swal2-popup.swal2-toast .swal2-animate-success-line-tip {\n      -webkit-animation: animate-toast-success-tip .75s;\n              animation: animate-toast-success-tip .75s; }\n    .swal2-popup.swal2-toast .swal2-animate-success-line-long {\n      -webkit-animation: animate-toast-success-long .75s;\n              animation: animate-toast-success-long .75s; }\n  .swal2-popup:focus {\n    outline: none; }\n  .swal2-popup.swal2-loading {\n    overflow-y: hidden; }\n  .swal2-popup .swal2-title {\n    color: #595959;\n    font-size: 30px;\n    text-align: center;\n    font-weight: 600;\n    text-transform: none;\n    position: relative;\n    margin: 0 0 .4em;\n    padding: 0;\n    display: block;\n    word-wrap: break-word; }\n  .swal2-popup .swal2-buttonswrapper {\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    margin-top: 15px; }\n    .swal2-popup .swal2-buttonswrapper:not(.swal2-loading) .swal2-styled[disabled] {\n      opacity: .4;\n      cursor: no-drop; }\n    .swal2-popup .swal2-buttonswrapper.swal2-loading .swal2-styled.swal2-confirm {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      border: 4px solid transparent;\n      border-color: transparent;\n      width: 40px;\n      height: 40px;\n      padding: 0;\n      margin: 7.5px;\n      vertical-align: top;\n      background-color: transparent !important;\n      color: transparent;\n      cursor: default;\n      border-radius: 100%;\n      -webkit-animation: rotate-loading 1.5s linear 0s infinite normal;\n              animation: rotate-loading 1.5s linear 0s infinite normal;\n      -webkit-user-select: none;\n         -moz-user-select: none;\n          -ms-user-select: none;\n              user-select: none; }\n    .swal2-popup .swal2-buttonswrapper.swal2-loading .swal2-styled.swal2-cancel {\n      margin-left: 30px;\n      margin-right: 30px; }\n    .swal2-popup .swal2-buttonswrapper.swal2-loading :not(.swal2-styled).swal2-confirm::after {\n      display: inline-block;\n      content: '';\n      margin-left: 5px;\n      vertical-align: -1px;\n      height: 15px;\n      width: 15px;\n      border: 3px solid #999999;\n      -webkit-box-shadow: 1px 1px 1px #fff;\n              box-shadow: 1px 1px 1px #fff;\n      border-right-color: transparent;\n      border-radius: 50%;\n      -webkit-animation: rotate-loading 1.5s linear 0s infinite normal;\n              animation: rotate-loading 1.5s linear 0s infinite normal; }\n  .swal2-popup .swal2-styled {\n    border: 0;\n    border-radius: 3px;\n    -webkit-box-shadow: none;\n            box-shadow: none;\n    color: #fff;\n    cursor: pointer;\n    font-size: 17px;\n    font-weight: 500;\n    margin: 15px 5px 0;\n    padding: 10px 32px; }\n    .swal2-popup .swal2-styled:focus {\n      outline: none;\n      -webkit-box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(50, 100, 150, 0.4);\n              box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(50, 100, 150, 0.4); }\n  .swal2-popup .swal2-image {\n    margin: 20px auto;\n    max-width: 100%; }\n  .swal2-popup .swal2-close {\n    background: transparent;\n    border: 0;\n    margin: 0;\n    padding: 0;\n    width: 38px;\n    height: 40px;\n    font-size: 36px;\n    line-height: 40px;\n    font-family: serif;\n    position: absolute;\n    top: 5px;\n    right: 8px;\n    cursor: pointer;\n    color: #cccccc;\n    -webkit-transition: color .1s ease;\n    transition: color .1s ease; }\n    .swal2-popup .swal2-close:hover {\n      color: #d55; }\n  .swal2-popup > .swal2-input,\n  .swal2-popup > .swal2-file,\n  .swal2-popup > .swal2-textarea,\n  .swal2-popup > .swal2-select,\n  .swal2-popup > .swal2-radio,\n  .swal2-popup > .swal2-checkbox {\n    display: none; }\n  .swal2-popup .swal2-content {\n    font-size: 18px;\n    text-align: center;\n    font-weight: 300;\n    position: relative;\n    float: none;\n    margin: 0;\n    padding: 0;\n    line-height: normal;\n    color: #545454;\n    word-wrap: break-word; }\n  .swal2-popup .swal2-input,\n  .swal2-popup .swal2-file,\n  .swal2-popup .swal2-textarea,\n  .swal2-popup .swal2-select,\n  .swal2-popup .swal2-radio,\n  .swal2-popup .swal2-checkbox {\n    margin: 20px auto; }\n  .swal2-popup .swal2-input,\n  .swal2-popup .swal2-file,\n  .swal2-popup .swal2-textarea {\n    width: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    font-size: 18px;\n    border-radius: 3px;\n    border: 1px solid #d9d9d9;\n    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06);\n            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06);\n    -webkit-transition: border-color .3s, -webkit-box-shadow .3s;\n    transition: border-color .3s, -webkit-box-shadow .3s;\n    transition: border-color .3s, box-shadow .3s;\n    transition: border-color .3s, box-shadow .3s, -webkit-box-shadow .3s; }\n    .swal2-popup .swal2-input.swal2-inputerror,\n    .swal2-popup .swal2-file.swal2-inputerror,\n    .swal2-popup .swal2-textarea.swal2-inputerror {\n      border-color: #f27474 !important;\n      -webkit-box-shadow: 0 0 2px #f27474 !important;\n              box-shadow: 0 0 2px #f27474 !important; }\n    .swal2-popup .swal2-input:focus,\n    .swal2-popup .swal2-file:focus,\n    .swal2-popup .swal2-textarea:focus {\n      outline: none;\n      border: 1px solid #b4dbed;\n      -webkit-box-shadow: 0 0 3px #c4e6f5;\n              box-shadow: 0 0 3px #c4e6f5; }\n    .swal2-popup .swal2-input::-webkit-input-placeholder,\n    .swal2-popup .swal2-file::-webkit-input-placeholder,\n    .swal2-popup .swal2-textarea::-webkit-input-placeholder {\n      color: #cccccc; }\n    .swal2-popup .swal2-input:-ms-input-placeholder,\n    .swal2-popup .swal2-file:-ms-input-placeholder,\n    .swal2-popup .swal2-textarea:-ms-input-placeholder {\n      color: #cccccc; }\n    .swal2-popup .swal2-input::-ms-input-placeholder,\n    .swal2-popup .swal2-file::-ms-input-placeholder,\n    .swal2-popup .swal2-textarea::-ms-input-placeholder {\n      color: #cccccc; }\n    .swal2-popup .swal2-input::placeholder,\n    .swal2-popup .swal2-file::placeholder,\n    .swal2-popup .swal2-textarea::placeholder {\n      color: #cccccc; }\n  .swal2-popup .swal2-range input {\n    float: left;\n    width: 80%; }\n  .swal2-popup .swal2-range output {\n    float: right;\n    width: 20%;\n    font-size: 20px;\n    font-weight: 600;\n    text-align: center; }\n  .swal2-popup .swal2-range input,\n  .swal2-popup .swal2-range output {\n    height: 43px;\n    line-height: 43px;\n    vertical-align: middle;\n    margin: 20px auto;\n    padding: 0; }\n  .swal2-popup .swal2-input {\n    height: 43px;\n    padding: 0 12px; }\n    .swal2-popup .swal2-input[type='number'] {\n      max-width: 150px; }\n  .swal2-popup .swal2-file {\n    font-size: 20px; }\n  .swal2-popup .swal2-textarea {\n    height: 108px;\n    padding: 12px; }\n  .swal2-popup .swal2-select {\n    color: #545454;\n    font-size: inherit;\n    padding: 5px 10px;\n    min-width: 40%;\n    max-width: 100%; }\n  .swal2-popup .swal2-radio {\n    border: 0; }\n    .swal2-popup .swal2-radio label:not(:first-child) {\n      margin-left: 20px; }\n    .swal2-popup .swal2-radio input,\n    .swal2-popup .swal2-radio span {\n      vertical-align: middle; }\n    .swal2-popup .swal2-radio input {\n      margin: 0 3px 0 0; }\n  .swal2-popup .swal2-checkbox {\n    color: #545454; }\n    .swal2-popup .swal2-checkbox input,\n    .swal2-popup .swal2-checkbox span {\n      vertical-align: middle; }\n  .swal2-popup .swal2-validationerror {\n    background-color: #f0f0f0;\n    margin: 0 -20px;\n    overflow: hidden;\n    padding: 10px;\n    color: gray;\n    font-size: 16px;\n    font-weight: 300;\n    display: none; }\n    .swal2-popup .swal2-validationerror::before {\n      content: '!';\n      display: inline-block;\n      width: 24px;\n      height: 24px;\n      border-radius: 50%;\n      background-color: #ea7d7d;\n      color: #fff;\n      line-height: 24px;\n      text-align: center;\n      margin-right: 10px; }\n\n@supports (-ms-accelerator: true) {\n  .swal2-range input {\n    width: 100% !important; }\n  .swal2-range output {\n    display: none; } }\n\n@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {\n  .swal2-range input {\n    width: 100% !important; }\n  .swal2-range output {\n    display: none; } }\n\n.swal2-icon {\n  width: 80px;\n  height: 80px;\n  border: 4px solid transparent;\n  border-radius: 50%;\n  margin: 20px auto 30px;\n  padding: 0;\n  position: relative;\n  -webkit-box-sizing: content-box;\n          box-sizing: content-box;\n  cursor: default;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none; }\n  .swal2-icon.swal2-error {\n    border-color: #f27474; }\n    .swal2-icon.swal2-error .swal2-x-mark {\n      position: relative;\n      display: block; }\n    .swal2-icon.swal2-error [class^='swal2-x-mark-line'] {\n      position: absolute;\n      height: 5px;\n      width: 47px;\n      background-color: #f27474;\n      display: block;\n      top: 37px;\n      border-radius: 2px; }\n      .swal2-icon.swal2-error [class^='swal2-x-mark-line'][class$='left'] {\n        -webkit-transform: rotate(45deg);\n                transform: rotate(45deg);\n        left: 17px; }\n      .swal2-icon.swal2-error [class^='swal2-x-mark-line'][class$='right'] {\n        -webkit-transform: rotate(-45deg);\n                transform: rotate(-45deg);\n        right: 16px; }\n  .swal2-icon.swal2-warning {\n    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;\n    color: #f8bb86;\n    border-color: #facea8;\n    font-size: 60px;\n    line-height: 80px;\n    text-align: center; }\n  .swal2-icon.swal2-info {\n    font-family: 'Open Sans', sans-serif;\n    color: #3fc3ee;\n    border-color: #9de0f6;\n    font-size: 60px;\n    line-height: 80px;\n    text-align: center; }\n  .swal2-icon.swal2-question {\n    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;\n    color: #87adbd;\n    border-color: #c9dae1;\n    font-size: 60px;\n    line-height: 80px;\n    text-align: center; }\n  .swal2-icon.swal2-success {\n    border-color: #a5dc86; }\n    .swal2-icon.swal2-success [class^='swal2-success-circular-line'] {\n      border-radius: 50%;\n      position: absolute;\n      width: 60px;\n      height: 120px;\n      -webkit-transform: rotate(45deg);\n              transform: rotate(45deg); }\n      .swal2-icon.swal2-success [class^='swal2-success-circular-line'][class$='left'] {\n        border-radius: 120px 0 0 120px;\n        top: -7px;\n        left: -33px;\n        -webkit-transform: rotate(-45deg);\n                transform: rotate(-45deg);\n        -webkit-transform-origin: 60px 60px;\n                transform-origin: 60px 60px; }\n      .swal2-icon.swal2-success [class^='swal2-success-circular-line'][class$='right'] {\n        border-radius: 0 120px 120px 0;\n        top: -11px;\n        left: 30px;\n        -webkit-transform: rotate(-45deg);\n                transform: rotate(-45deg);\n        -webkit-transform-origin: 0 60px;\n                transform-origin: 0 60px; }\n    .swal2-icon.swal2-success .swal2-success-ring {\n      width: 80px;\n      height: 80px;\n      border: 4px solid rgba(165, 220, 134, 0.2);\n      border-radius: 50%;\n      -webkit-box-sizing: content-box;\n              box-sizing: content-box;\n      position: absolute;\n      left: -4px;\n      top: -4px;\n      z-index: 2; }\n    .swal2-icon.swal2-success .swal2-success-fix {\n      width: 7px;\n      height: 90px;\n      position: absolute;\n      left: 28px;\n      top: 8px;\n      z-index: 1;\n      -webkit-transform: rotate(-45deg);\n              transform: rotate(-45deg); }\n    .swal2-icon.swal2-success [class^='swal2-success-line'] {\n      height: 5px;\n      background-color: #a5dc86;\n      display: block;\n      border-radius: 2px;\n      position: absolute;\n      z-index: 2; }\n      .swal2-icon.swal2-success [class^='swal2-success-line'][class$='tip'] {\n        width: 25px;\n        left: 14px;\n        top: 46px;\n        -webkit-transform: rotate(45deg);\n                transform: rotate(45deg); }\n      .swal2-icon.swal2-success [class^='swal2-success-line'][class$='long'] {\n        width: 47px;\n        right: 8px;\n        top: 38px;\n        -webkit-transform: rotate(-45deg);\n                transform: rotate(-45deg); }\n\n.swal2-progresssteps {\n  font-weight: 600;\n  margin: 0 0 20px;\n  padding: 0; }\n  .swal2-progresssteps li {\n    display: inline-block;\n    position: relative; }\n  .swal2-progresssteps .swal2-progresscircle {\n    background: #3085d6;\n    border-radius: 2em;\n    color: #fff;\n    height: 2em;\n    line-height: 2em;\n    text-align: center;\n    width: 2em;\n    z-index: 20; }\n    .swal2-progresssteps .swal2-progresscircle:first-child {\n      margin-left: 0; }\n    .swal2-progresssteps .swal2-progresscircle:last-child {\n      margin-right: 0; }\n    .swal2-progresssteps .swal2-progresscircle.swal2-activeprogressstep {\n      background: #3085d6; }\n      .swal2-progresssteps .swal2-progresscircle.swal2-activeprogressstep ~ .swal2-progresscircle {\n        background: #add8e6; }\n      .swal2-progresssteps .swal2-progresscircle.swal2-activeprogressstep ~ .swal2-progressline {\n        background: #add8e6; }\n  .swal2-progresssteps .swal2-progressline {\n    background: #3085d6;\n    height: .4em;\n    margin: 0 -1px;\n    z-index: 10; }\n\n[class^='swal2'] {\n  -webkit-tap-highlight-color: transparent; }\n\n@-webkit-keyframes showSweetToast {\n  0% {\n    -webkit-transform: translateY(-10px) rotateZ(2deg);\n            transform: translateY(-10px) rotateZ(2deg);\n    opacity: 0; }\n  33% {\n    -webkit-transform: translateY(0) rotateZ(-2deg);\n            transform: translateY(0) rotateZ(-2deg);\n    opacity: .5; }\n  66% {\n    -webkit-transform: translateY(5px) rotateZ(2deg);\n            transform: translateY(5px) rotateZ(2deg);\n    opacity: .7; }\n  100% {\n    -webkit-transform: translateY(0) rotateZ(0);\n            transform: translateY(0) rotateZ(0);\n    opacity: 1; } }\n\n@keyframes showSweetToast {\n  0% {\n    -webkit-transform: translateY(-10px) rotateZ(2deg);\n            transform: translateY(-10px) rotateZ(2deg);\n    opacity: 0; }\n  33% {\n    -webkit-transform: translateY(0) rotateZ(-2deg);\n            transform: translateY(0) rotateZ(-2deg);\n    opacity: .5; }\n  66% {\n    -webkit-transform: translateY(5px) rotateZ(2deg);\n            transform: translateY(5px) rotateZ(2deg);\n    opacity: .7; }\n  100% {\n    -webkit-transform: translateY(0) rotateZ(0);\n            transform: translateY(0) rotateZ(0);\n    opacity: 1; } }\n\n@-webkit-keyframes hideSweetToast {\n  0% {\n    opacity: 1; }\n  33% {\n    opacity: .5; }\n  100% {\n    -webkit-transform: rotateZ(1deg);\n            transform: rotateZ(1deg);\n    opacity: 0; } }\n\n@keyframes hideSweetToast {\n  0% {\n    opacity: 1; }\n  33% {\n    opacity: .5; }\n  100% {\n    -webkit-transform: rotateZ(1deg);\n            transform: rotateZ(1deg);\n    opacity: 0; } }\n\n@-webkit-keyframes showSweetAlert {\n  0% {\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7); }\n  45% {\n    -webkit-transform: scale(1.05);\n            transform: scale(1.05); }\n  80% {\n    -webkit-transform: scale(0.95);\n            transform: scale(0.95); }\n  100% {\n    -webkit-transform: scale(1);\n            transform: scale(1); } }\n\n@keyframes showSweetAlert {\n  0% {\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7); }\n  45% {\n    -webkit-transform: scale(1.05);\n            transform: scale(1.05); }\n  80% {\n    -webkit-transform: scale(0.95);\n            transform: scale(0.95); }\n  100% {\n    -webkit-transform: scale(1);\n            transform: scale(1); } }\n\n@-webkit-keyframes hideSweetAlert {\n  0% {\n    -webkit-transform: scale(1);\n            transform: scale(1);\n    opacity: 1; }\n  100% {\n    -webkit-transform: scale(0.5);\n            transform: scale(0.5);\n    opacity: 0; } }\n\n@keyframes hideSweetAlert {\n  0% {\n    -webkit-transform: scale(1);\n            transform: scale(1);\n    opacity: 1; }\n  100% {\n    -webkit-transform: scale(0.5);\n            transform: scale(0.5);\n    opacity: 0; } }\n\n.swal2-show {\n  -webkit-animation: showSweetAlert .3s;\n          animation: showSweetAlert .3s; }\n  .swal2-show.swal2-toast {\n    -webkit-animation: showSweetToast .5s;\n            animation: showSweetToast .5s; }\n  .swal2-show.swal2-noanimation {\n    -webkit-animation: none;\n            animation: none; }\n\n.swal2-hide {\n  -webkit-animation: hideSweetAlert .15s forwards;\n          animation: hideSweetAlert .15s forwards; }\n  .swal2-hide.swal2-toast {\n    -webkit-animation: hideSweetToast .2s forwards;\n            animation: hideSweetToast .2s forwards; }\n  .swal2-hide.swal2-noanimation {\n    -webkit-animation: none;\n            animation: none; }\n\n@-webkit-keyframes animate-success-tip {\n  0% {\n    width: 0;\n    left: 1px;\n    top: 19px; }\n  54% {\n    width: 0;\n    left: 1px;\n    top: 19px; }\n  70% {\n    width: 50px;\n    left: -8px;\n    top: 37px; }\n  84% {\n    width: 17px;\n    left: 21px;\n    top: 48px; }\n  100% {\n    width: 25px;\n    left: 14px;\n    top: 45px; } }\n\n@keyframes animate-success-tip {\n  0% {\n    width: 0;\n    left: 1px;\n    top: 19px; }\n  54% {\n    width: 0;\n    left: 1px;\n    top: 19px; }\n  70% {\n    width: 50px;\n    left: -8px;\n    top: 37px; }\n  84% {\n    width: 17px;\n    left: 21px;\n    top: 48px; }\n  100% {\n    width: 25px;\n    left: 14px;\n    top: 45px; } }\n\n@-webkit-keyframes animate-success-long {\n  0% {\n    width: 0;\n    right: 46px;\n    top: 54px; }\n  65% {\n    width: 0;\n    right: 46px;\n    top: 54px; }\n  84% {\n    width: 55px;\n    right: 0;\n    top: 35px; }\n  100% {\n    width: 47px;\n    right: 8px;\n    top: 38px; } }\n\n@keyframes animate-success-long {\n  0% {\n    width: 0;\n    right: 46px;\n    top: 54px; }\n  65% {\n    width: 0;\n    right: 46px;\n    top: 54px; }\n  84% {\n    width: 55px;\n    right: 0;\n    top: 35px; }\n  100% {\n    width: 47px;\n    right: 8px;\n    top: 38px; } }\n\n@-webkit-keyframes animate-toast-success-tip {\n  0% {\n    width: 0;\n    left: 1px;\n    top: 9px; }\n  54% {\n    width: 0;\n    left: 1px;\n    top: 9px; }\n  70% {\n    width: 24px;\n    left: -4px;\n    top: 17px; }\n  84% {\n    width: 8px;\n    left: 10px;\n    top: 20px; }\n  100% {\n    width: 12px;\n    left: 3px;\n    top: 18px; } }\n\n@keyframes animate-toast-success-tip {\n  0% {\n    width: 0;\n    left: 1px;\n    top: 9px; }\n  54% {\n    width: 0;\n    left: 1px;\n    top: 9px; }\n  70% {\n    width: 24px;\n    left: -4px;\n    top: 17px; }\n  84% {\n    width: 8px;\n    left: 10px;\n    top: 20px; }\n  100% {\n    width: 12px;\n    left: 3px;\n    top: 18px; } }\n\n@-webkit-keyframes animate-toast-success-long {\n  0% {\n    width: 0;\n    right: 22px;\n    top: 26px; }\n  65% {\n    width: 0;\n    right: 22px;\n    top: 26px; }\n  84% {\n    width: 26px;\n    right: 0;\n    top: 15px; }\n  100% {\n    width: 22px;\n    right: 3px;\n    top: 15px; } }\n\n@keyframes animate-toast-success-long {\n  0% {\n    width: 0;\n    right: 22px;\n    top: 26px; }\n  65% {\n    width: 0;\n    right: 22px;\n    top: 26px; }\n  84% {\n    width: 26px;\n    right: 0;\n    top: 15px; }\n  100% {\n    width: 22px;\n    right: 3px;\n    top: 15px; } }\n\n@-webkit-keyframes rotatePlaceholder {\n  0% {\n    -webkit-transform: rotate(-45deg);\n            transform: rotate(-45deg); }\n  5% {\n    -webkit-transform: rotate(-45deg);\n            transform: rotate(-45deg); }\n  12% {\n    -webkit-transform: rotate(-405deg);\n            transform: rotate(-405deg); }\n  100% {\n    -webkit-transform: rotate(-405deg);\n            transform: rotate(-405deg); } }\n\n@keyframes rotatePlaceholder {\n  0% {\n    -webkit-transform: rotate(-45deg);\n            transform: rotate(-45deg); }\n  5% {\n    -webkit-transform: rotate(-45deg);\n            transform: rotate(-45deg); }\n  12% {\n    -webkit-transform: rotate(-405deg);\n            transform: rotate(-405deg); }\n  100% {\n    -webkit-transform: rotate(-405deg);\n            transform: rotate(-405deg); } }\n\n.swal2-animate-success-line-tip {\n  -webkit-animation: animate-success-tip .75s;\n          animation: animate-success-tip .75s; }\n\n.swal2-animate-success-line-long {\n  -webkit-animation: animate-success-long .75s;\n          animation: animate-success-long .75s; }\n\n.swal2-success.swal2-animate-success-icon .swal2-success-circular-line-right {\n  -webkit-animation: rotatePlaceholder 4.25s ease-in;\n          animation: rotatePlaceholder 4.25s ease-in; }\n\n@-webkit-keyframes animate-error-icon {\n  0% {\n    -webkit-transform: rotateX(100deg);\n            transform: rotateX(100deg);\n    opacity: 0; }\n  100% {\n    -webkit-transform: rotateX(0deg);\n            transform: rotateX(0deg);\n    opacity: 1; } }\n\n@keyframes animate-error-icon {\n  0% {\n    -webkit-transform: rotateX(100deg);\n            transform: rotateX(100deg);\n    opacity: 0; }\n  100% {\n    -webkit-transform: rotateX(0deg);\n            transform: rotateX(0deg);\n    opacity: 1; } }\n\n.swal2-animate-error-icon {\n  -webkit-animation: animate-error-icon .5s;\n          animation: animate-error-icon .5s; }\n\n@-webkit-keyframes animate-x-mark {\n  0% {\n    -webkit-transform: scale(0.4);\n            transform: scale(0.4);\n    margin-top: 26px;\n    opacity: 0; }\n  50% {\n    -webkit-transform: scale(0.4);\n            transform: scale(0.4);\n    margin-top: 26px;\n    opacity: 0; }\n  80% {\n    -webkit-transform: scale(1.15);\n            transform: scale(1.15);\n    margin-top: -6px; }\n  100% {\n    -webkit-transform: scale(1);\n            transform: scale(1);\n    margin-top: 0;\n    opacity: 1; } }\n\n@keyframes animate-x-mark {\n  0% {\n    -webkit-transform: scale(0.4);\n            transform: scale(0.4);\n    margin-top: 26px;\n    opacity: 0; }\n  50% {\n    -webkit-transform: scale(0.4);\n            transform: scale(0.4);\n    margin-top: 26px;\n    opacity: 0; }\n  80% {\n    -webkit-transform: scale(1.15);\n            transform: scale(1.15);\n    margin-top: -6px; }\n  100% {\n    -webkit-transform: scale(1);\n            transform: scale(1);\n    margin-top: 0;\n    opacity: 1; } }\n\n.swal2-animate-x-mark {\n  -webkit-animation: animate-x-mark .5s;\n          animation: animate-x-mark .5s; }\n\n@-webkit-keyframes rotate-loading {\n  0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg); }\n  100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg); } }\n\n@keyframes rotate-loading {\n  0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg); }\n  100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg); } }\n";
+var styles = "body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {\n  overflow-y: hidden; }\n\nbody.swal2-toast-shown {\n  overflow-y: auto; }\n  body.swal2-toast-shown.swal2-has-input > .swal2-container > .swal2-toast {\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column; }\n    body.swal2-toast-shown.swal2-has-input > .swal2-container > .swal2-toast .swal2-icon {\n      margin: 0 0 15px; }\n    body.swal2-toast-shown.swal2-has-input > .swal2-container > .swal2-toast .swal2-buttonswrapper {\n      -webkit-box-flex: 1;\n          -ms-flex: 1;\n              flex: 1;\n      -ms-flex-item-align: stretch;\n          align-self: stretch;\n      -webkit-box-pack: end;\n          -ms-flex-pack: end;\n              justify-content: flex-end; }\n    body.swal2-toast-shown.swal2-has-input > .swal2-container > .swal2-toast .swal2-loading {\n      -webkit-box-pack: center;\n          -ms-flex-pack: center;\n              justify-content: center; }\n    body.swal2-toast-shown.swal2-has-input > .swal2-container > .swal2-toast .swal2-input {\n      height: 32px;\n      font-size: 14px;\n      margin: 5px auto; }\n  body.swal2-toast-shown > .swal2-container {\n    position: fixed;\n    background-color: transparent; }\n    body.swal2-toast-shown > .swal2-container.swal2-shown {\n      background-color: transparent; }\n    body.swal2-toast-shown > .swal2-container.swal2-top {\n      top: 0;\n      left: 50%;\n      bottom: auto;\n      right: auto;\n      -webkit-transform: translateX(-50%);\n              transform: translateX(-50%); }\n    body.swal2-toast-shown > .swal2-container.swal2-top-right {\n      top: 0;\n      left: auto;\n      bottom: auto;\n      right: 0; }\n    body.swal2-toast-shown > .swal2-container.swal2-top-left {\n      top: 0;\n      left: 0;\n      bottom: auto;\n      right: auto; }\n    body.swal2-toast-shown > .swal2-container.swal2-center-left {\n      top: 50%;\n      left: 0;\n      bottom: auto;\n      right: auto;\n      -webkit-transform: translateY(-50%);\n              transform: translateY(-50%); }\n    body.swal2-toast-shown > .swal2-container.swal2-center {\n      top: 50%;\n      left: 50%;\n      bottom: auto;\n      right: auto;\n      -webkit-transform: translate(-50%, -50%);\n              transform: translate(-50%, -50%); }\n    body.swal2-toast-shown > .swal2-container.swal2-center-right {\n      top: 50%;\n      left: auto;\n      bottom: auto;\n      right: 0;\n      -webkit-transform: translateY(-50%);\n              transform: translateY(-50%); }\n    body.swal2-toast-shown > .swal2-container.swal2-bottom-left {\n      top: auto;\n      left: 0;\n      bottom: 0;\n      right: auto; }\n    body.swal2-toast-shown > .swal2-container.swal2-bottom {\n      top: auto;\n      left: 50%;\n      bottom: 0;\n      right: auto;\n      -webkit-transform: translateX(-50%);\n              transform: translateX(-50%); }\n    body.swal2-toast-shown > .swal2-container.swal2-bottom-right {\n      top: auto;\n      left: auto;\n      bottom: 0;\n      right: 0; }\n\nbody.swal2-iosfix {\n  position: fixed;\n  left: 0;\n  right: 0; }\n\nbody.swal2-no-backdrop > .swal2-shown {\n  top: auto;\n  bottom: auto;\n  left: auto;\n  right: auto;\n  background-color: transparent; }\n  body.swal2-no-backdrop > .swal2-shown > .swal2-modal {\n    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);\n            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); }\n  body.swal2-no-backdrop > .swal2-shown.swal2-top {\n    top: 0;\n    left: 50%;\n    -webkit-transform: translateX(-50%);\n            transform: translateX(-50%); }\n  body.swal2-no-backdrop > .swal2-shown.swal2-top-left {\n    top: 0;\n    left: 0; }\n  body.swal2-no-backdrop > .swal2-shown.swal2-top-right {\n    top: 0;\n    right: 0; }\n  body.swal2-no-backdrop > .swal2-shown.swal2-center {\n    top: 50%;\n    left: 50%;\n    -webkit-transform: translate(-50%, -50%);\n            transform: translate(-50%, -50%); }\n  body.swal2-no-backdrop > .swal2-shown.swal2-center-left {\n    top: 50%;\n    left: 0;\n    -webkit-transform: translateY(-50%);\n            transform: translateY(-50%); }\n  body.swal2-no-backdrop > .swal2-shown.swal2-center-right {\n    top: 50%;\n    right: 0;\n    -webkit-transform: translateY(-50%);\n            transform: translateY(-50%); }\n  body.swal2-no-backdrop > .swal2-shown.swal2-bottom {\n    bottom: 0;\n    left: 50%;\n    -webkit-transform: translateX(-50%);\n            transform: translateX(-50%); }\n  body.swal2-no-backdrop > .swal2-shown.swal2-bottom-left {\n    bottom: 0;\n    left: 0; }\n  body.swal2-no-backdrop > .swal2-shown.swal2-bottom-right {\n    bottom: 0;\n    right: 0; }\n\n.swal2-container {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: row;\n          flex-direction: row;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  position: fixed;\n  padding: 10px;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: transparent;\n  z-index: 1060; }\n  .swal2-container.swal2-top {\n    -webkit-box-align: start;\n        -ms-flex-align: start;\n            align-items: flex-start; }\n  .swal2-container.swal2-top-left {\n    -webkit-box-align: start;\n        -ms-flex-align: start;\n            align-items: flex-start;\n    -webkit-box-pack: start;\n        -ms-flex-pack: start;\n            justify-content: flex-start; }\n  .swal2-container.swal2-top-right {\n    -webkit-box-align: start;\n        -ms-flex-align: start;\n            align-items: flex-start;\n    -webkit-box-pack: end;\n        -ms-flex-pack: end;\n            justify-content: flex-end; }\n  .swal2-container.swal2-center {\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center; }\n  .swal2-container.swal2-center-left {\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: start;\n        -ms-flex-pack: start;\n            justify-content: flex-start; }\n  .swal2-container.swal2-center-right {\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: end;\n        -ms-flex-pack: end;\n            justify-content: flex-end; }\n  .swal2-container.swal2-bottom {\n    -webkit-box-align: end;\n        -ms-flex-align: end;\n            align-items: flex-end; }\n  .swal2-container.swal2-bottom-left {\n    -webkit-box-align: end;\n        -ms-flex-align: end;\n            align-items: flex-end;\n    -webkit-box-pack: start;\n        -ms-flex-pack: start;\n            justify-content: flex-start; }\n  .swal2-container.swal2-bottom-right {\n    -webkit-box-align: end;\n        -ms-flex-align: end;\n            align-items: flex-end;\n    -webkit-box-pack: end;\n        -ms-flex-pack: end;\n            justify-content: flex-end; }\n  .swal2-container.swal2-grow-fullscreen > .swal2-modal {\n    display: -webkit-box !important;\n    display: -ms-flexbox !important;\n    display: flex !important;\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    -ms-flex-item-align: stretch;\n        align-self: stretch;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center; }\n  .swal2-container.swal2-grow-row > .swal2-modal {\n    display: -webkit-box !important;\n    display: -ms-flexbox !important;\n    display: flex !important;\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    -ms-flex-line-pack: center;\n        align-content: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center; }\n  .swal2-container.swal2-grow-column {\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column; }\n    .swal2-container.swal2-grow-column.swal2-top, .swal2-container.swal2-grow-column.swal2-center, .swal2-container.swal2-grow-column.swal2-bottom {\n      -webkit-box-align: center;\n          -ms-flex-align: center;\n              align-items: center; }\n    .swal2-container.swal2-grow-column.swal2-top-left, .swal2-container.swal2-grow-column.swal2-center-left, .swal2-container.swal2-grow-column.swal2-bottom-left {\n      -webkit-box-align: start;\n          -ms-flex-align: start;\n              align-items: flex-start; }\n    .swal2-container.swal2-grow-column.swal2-top-right, .swal2-container.swal2-grow-column.swal2-center-right, .swal2-container.swal2-grow-column.swal2-bottom-right {\n      -webkit-box-align: end;\n          -ms-flex-align: end;\n              align-items: flex-end; }\n    .swal2-container.swal2-grow-column > .swal2-modal {\n      display: -webkit-box !important;\n      display: -ms-flexbox !important;\n      display: flex !important;\n      -webkit-box-flex: 1;\n          -ms-flex: 1;\n              flex: 1;\n      -ms-flex-line-pack: center;\n          align-content: center;\n      -webkit-box-pack: center;\n          -ms-flex-pack: center;\n              justify-content: center; }\n  .swal2-container:not(.swal2-top):not(.swal2-top-left):not(.swal2-top-right):not(.swal2-center-left):not(.swal2-center-right):not(.swal2-bottom):not(.swal2-bottom-left):not(.swal2-bottom-right) > .swal2-modal {\n    margin: auto; }\n  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {\n    .swal2-container .swal2-modal {\n      margin: 0 !important; } }\n  .swal2-container.swal2-fade {\n    -webkit-transition: background-color .1s;\n    transition: background-color .1s; }\n  .swal2-container.swal2-shown {\n    background-color: rgba(0, 0, 0, 0.4); }\n\n.swal2-popup {\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  background-color: #fff;\n  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  border-radius: 5px;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  text-align: center;\n  overflow-x: hidden;\n  overflow-y: auto;\n  display: none;\n  position: relative;\n  max-width: 100%; }\n  .swal2-popup.swal2-toast {\n    width: 300px;\n    padding: 0 15px;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    overflow-y: hidden;\n    -webkit-box-shadow: 0 0 10px #d9d9d9;\n            box-shadow: 0 0 10px #d9d9d9; }\n    .swal2-popup.swal2-toast .swal2-title {\n      max-width: 300px;\n      font-size: 16px;\n      text-align: left; }\n    .swal2-popup.swal2-toast .swal2-content {\n      font-size: 14px;\n      text-align: left; }\n    .swal2-popup.swal2-toast .swal2-icon {\n      width: 32px;\n      height: 32px;\n      margin: 0 15px 0 0; }\n      .swal2-popup.swal2-toast .swal2-icon.swal2-success .swal2-success-ring {\n        width: 32px;\n        height: 32px; }\n      .swal2-popup.swal2-toast .swal2-icon.swal2-info, .swal2-popup.swal2-toast .swal2-icon.swal2-warning, .swal2-popup.swal2-toast .swal2-icon.swal2-question {\n        font-size: 26px;\n        line-height: 32px; }\n      .swal2-popup.swal2-toast .swal2-icon.swal2-error [class^='swal2-x-mark-line'] {\n        top: 14px;\n        width: 22px; }\n        .swal2-popup.swal2-toast .swal2-icon.swal2-error [class^='swal2-x-mark-line'][class$='left'] {\n          left: 5px; }\n        .swal2-popup.swal2-toast .swal2-icon.swal2-error [class^='swal2-x-mark-line'][class$='right'] {\n          right: 5px; }\n    .swal2-popup.swal2-toast .swal2-buttonswrapper {\n      margin: 0 0 0 5px; }\n    .swal2-popup.swal2-toast .swal2-styled {\n      margin: 0 0 0 5px;\n      padding: 5px 10px; }\n      .swal2-popup.swal2-toast .swal2-styled:focus {\n        -webkit-box-shadow: 0 0 0 1px #fff, 0 0 0 2px rgba(50, 100, 150, 0.4);\n                box-shadow: 0 0 0 1px #fff, 0 0 0 2px rgba(50, 100, 150, 0.4); }\n    .swal2-popup.swal2-toast .swal2-validationerror {\n      width: 100%;\n      margin: 5px -20px; }\n    .swal2-popup.swal2-toast .swal2-success {\n      border-color: #a5dc86; }\n      .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-circular-line'] {\n        border-radius: 50%;\n        position: absolute;\n        width: 32px;\n        height: 64px;\n        -webkit-transform: rotate(45deg);\n                transform: rotate(45deg); }\n        .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-circular-line'][class$='left'] {\n          border-radius: 64px 0 0 64px;\n          top: -4px;\n          left: -15px;\n          -webkit-transform: rotate(-45deg);\n                  transform: rotate(-45deg);\n          -webkit-transform-origin: 32px 32px;\n                  transform-origin: 32px 32px; }\n        .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-circular-line'][class$='right'] {\n          border-radius: 0 64px 64px 0;\n          top: -5px;\n          left: 14px;\n          -webkit-transform-origin: 0 32px;\n                  transform-origin: 0 32px; }\n      .swal2-popup.swal2-toast .swal2-success .swal2-success-ring {\n        width: 32px;\n        height: 32px; }\n      .swal2-popup.swal2-toast .swal2-success .swal2-success-fix {\n        width: 7px;\n        height: 90px;\n        left: 28px;\n        top: 8px; }\n      .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-line'] {\n        height: 5px; }\n        .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-line'][class$='tip'] {\n          width: 12px;\n          left: 3px;\n          top: 18px; }\n        .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-line'][class$='long'] {\n          width: 22px;\n          right: 3px;\n          top: 15px; }\n    .swal2-popup.swal2-toast .swal2-animate-success-line-tip {\n      -webkit-animation: animate-toast-success-tip .75s;\n              animation: animate-toast-success-tip .75s; }\n    .swal2-popup.swal2-toast .swal2-animate-success-line-long {\n      -webkit-animation: animate-toast-success-long .75s;\n              animation: animate-toast-success-long .75s; }\n  .swal2-popup:focus {\n    outline: none; }\n  .swal2-popup.swal2-loading {\n    overflow-y: hidden; }\n  .swal2-popup .swal2-title {\n    color: #595959;\n    font-size: 30px;\n    text-align: center;\n    font-weight: 600;\n    text-transform: none;\n    position: relative;\n    margin: 0 0 .4em;\n    padding: 0;\n    display: block;\n    word-wrap: break-word; }\n  .swal2-popup .swal2-buttonswrapper {\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    margin-top: 15px; }\n    .swal2-popup .swal2-buttonswrapper:not(.swal2-loading) .swal2-styled[disabled] {\n      opacity: .4;\n      cursor: no-drop; }\n    .swal2-popup .swal2-buttonswrapper.swal2-loading .swal2-styled.swal2-confirm {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      border: 4px solid transparent;\n      border-color: transparent;\n      width: 40px;\n      height: 40px;\n      padding: 0;\n      margin: 7.5px;\n      vertical-align: top;\n      background-color: transparent !important;\n      color: transparent;\n      cursor: default;\n      border-radius: 100%;\n      -webkit-animation: rotate-loading 1.5s linear 0s infinite normal;\n              animation: rotate-loading 1.5s linear 0s infinite normal;\n      -webkit-user-select: none;\n         -moz-user-select: none;\n          -ms-user-select: none;\n              user-select: none; }\n    .swal2-popup .swal2-buttonswrapper.swal2-loading .swal2-styled.swal2-cancel {\n      margin-left: 30px;\n      margin-right: 30px; }\n    .swal2-popup .swal2-buttonswrapper.swal2-loading :not(.swal2-styled).swal2-confirm::after {\n      display: inline-block;\n      content: '';\n      margin-left: 5px;\n      vertical-align: -1px;\n      height: 15px;\n      width: 15px;\n      border: 3px solid #999999;\n      -webkit-box-shadow: 1px 1px 1px #fff;\n              box-shadow: 1px 1px 1px #fff;\n      border-right-color: transparent;\n      border-radius: 50%;\n      -webkit-animation: rotate-loading 1.5s linear 0s infinite normal;\n              animation: rotate-loading 1.5s linear 0s infinite normal; }\n  .swal2-popup .swal2-styled {\n    border: 0;\n    border-radius: 3px;\n    -webkit-box-shadow: none;\n            box-shadow: none;\n    color: #fff;\n    cursor: pointer;\n    font-size: 17px;\n    font-weight: 500;\n    margin: 15px 5px 0;\n    padding: 10px 32px; }\n    .swal2-popup .swal2-styled:focus {\n      outline: none;\n      -webkit-box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(50, 100, 150, 0.4);\n              box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(50, 100, 150, 0.4); }\n  .swal2-popup .swal2-image {\n    margin: 20px auto;\n    max-width: 100%; }\n  .swal2-popup .swal2-close {\n    background: transparent;\n    border: 0;\n    margin: 0;\n    padding: 0;\n    width: 38px;\n    height: 40px;\n    font-size: 36px;\n    line-height: 40px;\n    font-family: serif;\n    position: absolute;\n    top: 5px;\n    right: 8px;\n    cursor: pointer;\n    color: #cccccc;\n    -webkit-transition: color .1s ease;\n    transition: color .1s ease; }\n    .swal2-popup .swal2-close:hover {\n      color: #d55; }\n  .swal2-popup > .swal2-input,\n  .swal2-popup > .swal2-file,\n  .swal2-popup > .swal2-textarea,\n  .swal2-popup > .swal2-select,\n  .swal2-popup > .swal2-radio,\n  .swal2-popup > .swal2-checkbox {\n    display: none; }\n  .swal2-popup .swal2-content {\n    font-size: 18px;\n    text-align: center;\n    font-weight: 300;\n    position: relative;\n    float: none;\n    margin: 0;\n    padding: 0;\n    line-height: normal;\n    color: #545454;\n    word-wrap: break-word; }\n  .swal2-popup .swal2-input,\n  .swal2-popup .swal2-file,\n  .swal2-popup .swal2-textarea,\n  .swal2-popup .swal2-select,\n  .swal2-popup .swal2-radio,\n  .swal2-popup .swal2-checkbox {\n    margin: 20px auto; }\n  .swal2-popup .swal2-input,\n  .swal2-popup .swal2-file,\n  .swal2-popup .swal2-textarea {\n    width: 100%;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n    font-size: 18px;\n    border-radius: 3px;\n    border: 1px solid #d9d9d9;\n    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06);\n            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06);\n    -webkit-transition: border-color .3s, -webkit-box-shadow .3s;\n    transition: border-color .3s, -webkit-box-shadow .3s;\n    transition: border-color .3s, box-shadow .3s;\n    transition: border-color .3s, box-shadow .3s, -webkit-box-shadow .3s; }\n    .swal2-popup .swal2-input.swal2-inputerror,\n    .swal2-popup .swal2-file.swal2-inputerror,\n    .swal2-popup .swal2-textarea.swal2-inputerror {\n      border-color: #f27474 !important;\n      -webkit-box-shadow: 0 0 2px #f27474 !important;\n              box-shadow: 0 0 2px #f27474 !important; }\n    .swal2-popup .swal2-input:focus,\n    .swal2-popup .swal2-file:focus,\n    .swal2-popup .swal2-textarea:focus {\n      outline: none;\n      border: 1px solid #b4dbed;\n      -webkit-box-shadow: 0 0 3px #c4e6f5;\n              box-shadow: 0 0 3px #c4e6f5; }\n    .swal2-popup .swal2-input::-webkit-input-placeholder,\n    .swal2-popup .swal2-file::-webkit-input-placeholder,\n    .swal2-popup .swal2-textarea::-webkit-input-placeholder {\n      color: #cccccc; }\n    .swal2-popup .swal2-input:-ms-input-placeholder,\n    .swal2-popup .swal2-file:-ms-input-placeholder,\n    .swal2-popup .swal2-textarea:-ms-input-placeholder {\n      color: #cccccc; }\n    .swal2-popup .swal2-input::-ms-input-placeholder,\n    .swal2-popup .swal2-file::-ms-input-placeholder,\n    .swal2-popup .swal2-textarea::-ms-input-placeholder {\n      color: #cccccc; }\n    .swal2-popup .swal2-input::placeholder,\n    .swal2-popup .swal2-file::placeholder,\n    .swal2-popup .swal2-textarea::placeholder {\n      color: #cccccc; }\n  .swal2-popup .swal2-range input {\n    float: left;\n    width: 80%; }\n  .swal2-popup .swal2-range output {\n    float: right;\n    width: 20%;\n    font-size: 20px;\n    font-weight: 600;\n    text-align: center; }\n  .swal2-popup .swal2-range input,\n  .swal2-popup .swal2-range output {\n    height: 43px;\n    line-height: 43px;\n    vertical-align: middle;\n    margin: 20px auto;\n    padding: 0; }\n  .swal2-popup .swal2-input {\n    height: 43px;\n    padding: 0 12px; }\n    .swal2-popup .swal2-input[type='number'] {\n      max-width: 150px; }\n  .swal2-popup .swal2-file {\n    font-size: 20px; }\n  .swal2-popup .swal2-textarea {\n    height: 108px;\n    padding: 12px; }\n  .swal2-popup .swal2-select {\n    color: #545454;\n    font-size: inherit;\n    padding: 5px 10px;\n    min-width: 40%;\n    max-width: 100%; }\n  .swal2-popup .swal2-radio {\n    border: 0; }\n    .swal2-popup .swal2-radio label:not(:first-child) {\n      margin-left: 20px; }\n    .swal2-popup .swal2-radio input,\n    .swal2-popup .swal2-radio span {\n      vertical-align: middle; }\n    .swal2-popup .swal2-radio input {\n      margin: 0 3px 0 0; }\n  .swal2-popup .swal2-checkbox {\n    color: #545454; }\n    .swal2-popup .swal2-checkbox input,\n    .swal2-popup .swal2-checkbox span {\n      vertical-align: middle; }\n  .swal2-popup .swal2-validationerror {\n    background-color: #f0f0f0;\n    margin: 0 -20px;\n    overflow: hidden;\n    padding: 10px;\n    color: gray;\n    font-size: 16px;\n    font-weight: 300;\n    display: none; }\n    .swal2-popup .swal2-validationerror::before {\n      content: '!';\n      display: inline-block;\n      width: 24px;\n      height: 24px;\n      border-radius: 50%;\n      background-color: #ea7d7d;\n      color: #fff;\n      line-height: 24px;\n      text-align: center;\n      margin-right: 10px; }\n\n@supports (-ms-accelerator: true) {\n  .swal2-range input {\n    width: 100% !important; }\n  .swal2-range output {\n    display: none; } }\n\n@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {\n  .swal2-range input {\n    width: 100% !important; }\n  .swal2-range output {\n    display: none; } }\n\n.swal2-icon {\n  width: 80px;\n  height: 80px;\n  border: 4px solid transparent;\n  border-radius: 50%;\n  margin: 20px auto 30px;\n  padding: 0;\n  position: relative;\n  -webkit-box-sizing: content-box;\n          box-sizing: content-box;\n  cursor: default;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none; }\n  .swal2-icon.swal2-error {\n    border-color: #f27474; }\n    .swal2-icon.swal2-error .swal2-x-mark {\n      position: relative;\n      display: block; }\n    .swal2-icon.swal2-error [class^='swal2-x-mark-line'] {\n      position: absolute;\n      height: 5px;\n      width: 47px;\n      background-color: #f27474;\n      display: block;\n      top: 37px;\n      border-radius: 2px; }\n      .swal2-icon.swal2-error [class^='swal2-x-mark-line'][class$='left'] {\n        -webkit-transform: rotate(45deg);\n                transform: rotate(45deg);\n        left: 17px; }\n      .swal2-icon.swal2-error [class^='swal2-x-mark-line'][class$='right'] {\n        -webkit-transform: rotate(-45deg);\n                transform: rotate(-45deg);\n        right: 16px; }\n  .swal2-icon.swal2-warning {\n    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;\n    color: #f8bb86;\n    border-color: #facea8;\n    font-size: 60px;\n    line-height: 80px;\n    text-align: center; }\n  .swal2-icon.swal2-info {\n    font-family: 'Open Sans', sans-serif;\n    color: #3fc3ee;\n    border-color: #9de0f6;\n    font-size: 60px;\n    line-height: 80px;\n    text-align: center; }\n  .swal2-icon.swal2-question {\n    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;\n    color: #87adbd;\n    border-color: #c9dae1;\n    font-size: 60px;\n    line-height: 80px;\n    text-align: center; }\n  .swal2-icon.swal2-success {\n    border-color: #a5dc86; }\n    .swal2-icon.swal2-success [class^='swal2-success-circular-line'] {\n      border-radius: 50%;\n      position: absolute;\n      width: 60px;\n      height: 120px;\n      -webkit-transform: rotate(45deg);\n              transform: rotate(45deg); }\n      .swal2-icon.swal2-success [class^='swal2-success-circular-line'][class$='left'] {\n        border-radius: 120px 0 0 120px;\n        top: -7px;\n        left: -33px;\n        -webkit-transform: rotate(-45deg);\n                transform: rotate(-45deg);\n        -webkit-transform-origin: 60px 60px;\n                transform-origin: 60px 60px; }\n      .swal2-icon.swal2-success [class^='swal2-success-circular-line'][class$='right'] {\n        border-radius: 0 120px 120px 0;\n        top: -11px;\n        left: 30px;\n        -webkit-transform: rotate(-45deg);\n                transform: rotate(-45deg);\n        -webkit-transform-origin: 0 60px;\n                transform-origin: 0 60px; }\n    .swal2-icon.swal2-success .swal2-success-ring {\n      width: 80px;\n      height: 80px;\n      border: 4px solid rgba(165, 220, 134, 0.2);\n      border-radius: 50%;\n      -webkit-box-sizing: content-box;\n              box-sizing: content-box;\n      position: absolute;\n      left: -4px;\n      top: -4px;\n      z-index: 2; }\n    .swal2-icon.swal2-success .swal2-success-fix {\n      width: 7px;\n      height: 90px;\n      position: absolute;\n      left: 28px;\n      top: 8px;\n      z-index: 1;\n      -webkit-transform: rotate(-45deg);\n              transform: rotate(-45deg); }\n    .swal2-icon.swal2-success [class^='swal2-success-line'] {\n      height: 5px;\n      background-color: #a5dc86;\n      display: block;\n      border-radius: 2px;\n      position: absolute;\n      z-index: 2; }\n      .swal2-icon.swal2-success [class^='swal2-success-line'][class$='tip'] {\n        width: 25px;\n        left: 14px;\n        top: 46px;\n        -webkit-transform: rotate(45deg);\n                transform: rotate(45deg); }\n      .swal2-icon.swal2-success [class^='swal2-success-line'][class$='long'] {\n        width: 47px;\n        right: 8px;\n        top: 38px;\n        -webkit-transform: rotate(-45deg);\n                transform: rotate(-45deg); }\n\n.swal2-progresssteps {\n  font-weight: 600;\n  margin: 0 0 20px;\n  padding: 0; }\n  .swal2-progresssteps li {\n    display: inline-block;\n    position: relative; }\n  .swal2-progresssteps .swal2-progresscircle {\n    background: #3085d6;\n    border-radius: 2em;\n    color: #fff;\n    height: 2em;\n    line-height: 2em;\n    text-align: center;\n    width: 2em;\n    z-index: 20; }\n    .swal2-progresssteps .swal2-progresscircle:first-child {\n      margin-left: 0; }\n    .swal2-progresssteps .swal2-progresscircle:last-child {\n      margin-right: 0; }\n    .swal2-progresssteps .swal2-progresscircle.swal2-activeprogressstep {\n      background: #3085d6; }\n      .swal2-progresssteps .swal2-progresscircle.swal2-activeprogressstep ~ .swal2-progresscircle {\n        background: #add8e6; }\n      .swal2-progresssteps .swal2-progresscircle.swal2-activeprogressstep ~ .swal2-progressline {\n        background: #add8e6; }\n  .swal2-progresssteps .swal2-progressline {\n    background: #3085d6;\n    height: .4em;\n    margin: 0 -1px;\n    z-index: 10; }\n\n[class^='swal2'] {\n  -webkit-tap-highlight-color: transparent; }\n\n@-webkit-keyframes showSweetToast {\n  0% {\n    -webkit-transform: translateY(-10px) rotateZ(2deg);\n            transform: translateY(-10px) rotateZ(2deg);\n    opacity: 0; }\n  33% {\n    -webkit-transform: translateY(0) rotateZ(-2deg);\n            transform: translateY(0) rotateZ(-2deg);\n    opacity: .5; }\n  66% {\n    -webkit-transform: translateY(5px) rotateZ(2deg);\n            transform: translateY(5px) rotateZ(2deg);\n    opacity: .7; }\n  100% {\n    -webkit-transform: translateY(0) rotateZ(0);\n            transform: translateY(0) rotateZ(0);\n    opacity: 1; } }\n\n@keyframes showSweetToast {\n  0% {\n    -webkit-transform: translateY(-10px) rotateZ(2deg);\n            transform: translateY(-10px) rotateZ(2deg);\n    opacity: 0; }\n  33% {\n    -webkit-transform: translateY(0) rotateZ(-2deg);\n            transform: translateY(0) rotateZ(-2deg);\n    opacity: .5; }\n  66% {\n    -webkit-transform: translateY(5px) rotateZ(2deg);\n            transform: translateY(5px) rotateZ(2deg);\n    opacity: .7; }\n  100% {\n    -webkit-transform: translateY(0) rotateZ(0);\n            transform: translateY(0) rotateZ(0);\n    opacity: 1; } }\n\n@-webkit-keyframes hideSweetToast {\n  0% {\n    opacity: 1; }\n  33% {\n    opacity: .5; }\n  100% {\n    -webkit-transform: rotateZ(1deg);\n            transform: rotateZ(1deg);\n    opacity: 0; } }\n\n@keyframes hideSweetToast {\n  0% {\n    opacity: 1; }\n  33% {\n    opacity: .5; }\n  100% {\n    -webkit-transform: rotateZ(1deg);\n            transform: rotateZ(1deg);\n    opacity: 0; } }\n\n@-webkit-keyframes showSweetAlert {\n  0% {\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7); }\n  45% {\n    -webkit-transform: scale(1.05);\n            transform: scale(1.05); }\n  80% {\n    -webkit-transform: scale(0.95);\n            transform: scale(0.95); }\n  100% {\n    -webkit-transform: scale(1);\n            transform: scale(1); } }\n\n@keyframes showSweetAlert {\n  0% {\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7); }\n  45% {\n    -webkit-transform: scale(1.05);\n            transform: scale(1.05); }\n  80% {\n    -webkit-transform: scale(0.95);\n            transform: scale(0.95); }\n  100% {\n    -webkit-transform: scale(1);\n            transform: scale(1); } }\n\n@-webkit-keyframes hideSweetAlert {\n  0% {\n    -webkit-transform: scale(1);\n            transform: scale(1);\n    opacity: 1; }\n  100% {\n    -webkit-transform: scale(0.5);\n            transform: scale(0.5);\n    opacity: 0; } }\n\n@keyframes hideSweetAlert {\n  0% {\n    -webkit-transform: scale(1);\n            transform: scale(1);\n    opacity: 1; }\n  100% {\n    -webkit-transform: scale(0.5);\n            transform: scale(0.5);\n    opacity: 0; } }\n\n.swal2-show {\n  -webkit-animation: showSweetAlert .3s;\n          animation: showSweetAlert .3s; }\n  .swal2-show.swal2-toast {\n    -webkit-animation: showSweetToast .5s;\n            animation: showSweetToast .5s; }\n  .swal2-show.swal2-noanimation {\n    -webkit-animation: none;\n            animation: none; }\n\n.swal2-hide {\n  -webkit-animation: hideSweetAlert .15s forwards;\n          animation: hideSweetAlert .15s forwards; }\n  .swal2-hide.swal2-toast {\n    -webkit-animation: hideSweetToast .2s forwards;\n            animation: hideSweetToast .2s forwards; }\n  .swal2-hide.swal2-noanimation {\n    -webkit-animation: none;\n            animation: none; }\n\n@-webkit-keyframes animate-success-tip {\n  0% {\n    width: 0;\n    left: 1px;\n    top: 19px; }\n  54% {\n    width: 0;\n    left: 1px;\n    top: 19px; }\n  70% {\n    width: 50px;\n    left: -8px;\n    top: 37px; }\n  84% {\n    width: 17px;\n    left: 21px;\n    top: 48px; }\n  100% {\n    width: 25px;\n    left: 14px;\n    top: 45px; } }\n\n@keyframes animate-success-tip {\n  0% {\n    width: 0;\n    left: 1px;\n    top: 19px; }\n  54% {\n    width: 0;\n    left: 1px;\n    top: 19px; }\n  70% {\n    width: 50px;\n    left: -8px;\n    top: 37px; }\n  84% {\n    width: 17px;\n    left: 21px;\n    top: 48px; }\n  100% {\n    width: 25px;\n    left: 14px;\n    top: 45px; } }\n\n@-webkit-keyframes animate-success-long {\n  0% {\n    width: 0;\n    right: 46px;\n    top: 54px; }\n  65% {\n    width: 0;\n    right: 46px;\n    top: 54px; }\n  84% {\n    width: 55px;\n    right: 0;\n    top: 35px; }\n  100% {\n    width: 47px;\n    right: 8px;\n    top: 38px; } }\n\n@keyframes animate-success-long {\n  0% {\n    width: 0;\n    right: 46px;\n    top: 54px; }\n  65% {\n    width: 0;\n    right: 46px;\n    top: 54px; }\n  84% {\n    width: 55px;\n    right: 0;\n    top: 35px; }\n  100% {\n    width: 47px;\n    right: 8px;\n    top: 38px; } }\n\n@-webkit-keyframes animate-toast-success-tip {\n  0% {\n    width: 0;\n    left: 1px;\n    top: 9px; }\n  54% {\n    width: 0;\n    left: 1px;\n    top: 9px; }\n  70% {\n    width: 24px;\n    left: -4px;\n    top: 17px; }\n  84% {\n    width: 8px;\n    left: 10px;\n    top: 20px; }\n  100% {\n    width: 12px;\n    left: 3px;\n    top: 18px; } }\n\n@keyframes animate-toast-success-tip {\n  0% {\n    width: 0;\n    left: 1px;\n    top: 9px; }\n  54% {\n    width: 0;\n    left: 1px;\n    top: 9px; }\n  70% {\n    width: 24px;\n    left: -4px;\n    top: 17px; }\n  84% {\n    width: 8px;\n    left: 10px;\n    top: 20px; }\n  100% {\n    width: 12px;\n    left: 3px;\n    top: 18px; } }\n\n@-webkit-keyframes animate-toast-success-long {\n  0% {\n    width: 0;\n    right: 22px;\n    top: 26px; }\n  65% {\n    width: 0;\n    right: 22px;\n    top: 26px; }\n  84% {\n    width: 26px;\n    right: 0;\n    top: 15px; }\n  100% {\n    width: 22px;\n    right: 3px;\n    top: 15px; } }\n\n@keyframes animate-toast-success-long {\n  0% {\n    width: 0;\n    right: 22px;\n    top: 26px; }\n  65% {\n    width: 0;\n    right: 22px;\n    top: 26px; }\n  84% {\n    width: 26px;\n    right: 0;\n    top: 15px; }\n  100% {\n    width: 22px;\n    right: 3px;\n    top: 15px; } }\n\n@-webkit-keyframes rotatePlaceholder {\n  0% {\n    -webkit-transform: rotate(-45deg);\n            transform: rotate(-45deg); }\n  5% {\n    -webkit-transform: rotate(-45deg);\n            transform: rotate(-45deg); }\n  12% {\n    -webkit-transform: rotate(-405deg);\n            transform: rotate(-405deg); }\n  100% {\n    -webkit-transform: rotate(-405deg);\n            transform: rotate(-405deg); } }\n\n@keyframes rotatePlaceholder {\n  0% {\n    -webkit-transform: rotate(-45deg);\n            transform: rotate(-45deg); }\n  5% {\n    -webkit-transform: rotate(-45deg);\n            transform: rotate(-45deg); }\n  12% {\n    -webkit-transform: rotate(-405deg);\n            transform: rotate(-405deg); }\n  100% {\n    -webkit-transform: rotate(-405deg);\n            transform: rotate(-405deg); } }\n\n.swal2-animate-success-line-tip {\n  -webkit-animation: animate-success-tip .75s;\n          animation: animate-success-tip .75s; }\n\n.swal2-animate-success-line-long {\n  -webkit-animation: animate-success-long .75s;\n          animation: animate-success-long .75s; }\n\n.swal2-success.swal2-animate-success-icon .swal2-success-circular-line-right {\n  -webkit-animation: rotatePlaceholder 4.25s ease-in;\n          animation: rotatePlaceholder 4.25s ease-in; }\n\n@-webkit-keyframes animate-error-icon {\n  0% {\n    -webkit-transform: rotateX(100deg);\n            transform: rotateX(100deg);\n    opacity: 0; }\n  100% {\n    -webkit-transform: rotateX(0deg);\n            transform: rotateX(0deg);\n    opacity: 1; } }\n\n@keyframes animate-error-icon {\n  0% {\n    -webkit-transform: rotateX(100deg);\n            transform: rotateX(100deg);\n    opacity: 0; }\n  100% {\n    -webkit-transform: rotateX(0deg);\n            transform: rotateX(0deg);\n    opacity: 1; } }\n\n.swal2-animate-error-icon {\n  -webkit-animation: animate-error-icon .5s;\n          animation: animate-error-icon .5s; }\n\n@-webkit-keyframes animate-x-mark {\n  0% {\n    -webkit-transform: scale(0.4);\n            transform: scale(0.4);\n    margin-top: 26px;\n    opacity: 0; }\n  50% {\n    -webkit-transform: scale(0.4);\n            transform: scale(0.4);\n    margin-top: 26px;\n    opacity: 0; }\n  80% {\n    -webkit-transform: scale(1.15);\n            transform: scale(1.15);\n    margin-top: -6px; }\n  100% {\n    -webkit-transform: scale(1);\n            transform: scale(1);\n    margin-top: 0;\n    opacity: 1; } }\n\n@keyframes animate-x-mark {\n  0% {\n    -webkit-transform: scale(0.4);\n            transform: scale(0.4);\n    margin-top: 26px;\n    opacity: 0; }\n  50% {\n    -webkit-transform: scale(0.4);\n            transform: scale(0.4);\n    margin-top: 26px;\n    opacity: 0; }\n  80% {\n    -webkit-transform: scale(1.15);\n            transform: scale(1.15);\n    margin-top: -6px; }\n  100% {\n    -webkit-transform: scale(1);\n            transform: scale(1);\n    margin-top: 0;\n    opacity: 1; } }\n\n.swal2-animate-x-mark {\n  -webkit-animation: animate-x-mark .5s;\n          animation: animate-x-mark .5s; }\n\n@-webkit-keyframes rotate-loading {\n  0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg); }\n  100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg); } }\n\n@keyframes rotate-loading {\n  0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg); }\n  100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg); } }\n";
 
 var defaultParams = {
   title: '',
@@ -77707,6 +77927,18 @@ var colorLuminance = function colorLuminance(hex, lum) {
   return rgb;
 };
 
+/**
+ * Check if variable exists
+ * @param variable
+ */
+var isDefined = function isDefined(variable) {
+  return typeof variable !== 'undefined';
+};
+
+/**
+ * Filter the unique values into a new array
+ * @param arr
+ */
 var uniqueArray = function uniqueArray(arr) {
   var result = [];
   for (var i in arr) {
@@ -77801,7 +78033,7 @@ var windowOnkeydownOverridden = void 0;
  * Check for the existence of Promise
  * Hopefully to avoid many github issues
  */
-if (typeof Promise === 'undefined') {
+if (!isDefined(Promise)) {
   error('This package requires a Promise library, please include a shim to enable it in this browser (See: https://github.com/limonte/sweetalert2/wiki/Migration-from-SweetAlert-to-SweetAlert2#1-ie-support)');
 }
 
@@ -78185,7 +78417,12 @@ var sweetAlert$1 = function sweetAlert() {
     args[_key] = arguments[_key];
   }
 
-  if (args[0] === undefined) {
+  // Prevent run in Node env
+  if (!isDefined(window)) {
+    return;
+  }
+
+  if (!isDefined(args[0])) {
     error('SweetAlert2 expects at least 1 attribute!');
     return false;
   }
@@ -78930,7 +79167,7 @@ sweetAlert$1.queue = function (steps) {
         document.body.setAttribute('data-swal2-queue-step', i);
 
         sweetAlert$1(queue[i]).then(function (result) {
-          if (result.value !== undefined) {
+          if (isDefined(result.value)) {
             queueResult.push(result.value);
             step(i + 1, callback);
           } else {
@@ -78967,7 +79204,7 @@ sweetAlert$1.insertQueueStep = function (step, index) {
  * Global function for deleting a popup from the queue
  */
 sweetAlert$1.deleteQueueStep = function (index) {
-  if (typeof queue[index] !== 'undefined') {
+  if (isDefined(queue[index])) {
     queue.splice(index, 1);
   }
 };
@@ -79121,7 +79358,7 @@ sweetAlert$1.adaptInputValidator = function (legacyValidator) {
 
 sweetAlert$1.noop = function () {};
 
-sweetAlert$1.version = '7.0.3';
+sweetAlert$1.version = '7.0.6';
 
 sweetAlert$1.default = sweetAlert$1;
 
@@ -79143,7 +79380,7 @@ var states = {
     removeClass(document.body, swalClasses['toast-shown']);
   }
 
-  if (typeof document === 'undefined') {
+  if (!isDefined(document)) {
     error('SweetAlert2 requires document to initialize');
     return;
   }
@@ -79163,6 +79400,9 @@ var states = {
   var select = getChildByClass(popup, swalClasses.select);
   var checkbox = popup.querySelector('.' + swalClasses.checkbox + ' input');
   var textarea = getChildByClass(popup, swalClasses.textarea);
+
+  // a11y
+  popup.setAttribute('aria-live', params.toast ? 'polite' : 'assertive');
 
   var resetValidationError = function resetValidationError() {
     sweetAlert$1.isVisible() && sweetAlert$1.resetValidationError();
@@ -79353,6 +79593,11 @@ var removeStyleProperty = function removeStyleProperty(elem, property) {
 };
 
 var animationEndEvent = function () {
+  // Prevent run in Node env
+  if (!isDefined(document)) {
+    return false;
+  }
+
   var testEl = document.createElement('div');
   var transEndEventNames = {
     'WebkitAnimation': 'webkitAnimationEnd',
@@ -79360,7 +79605,7 @@ var animationEndEvent = function () {
     'animation': 'animationend'
   };
   for (var i in transEndEventNames) {
-    if (transEndEventNames.hasOwnProperty(i) && testEl.style[i] !== undefined) {
+    if (transEndEventNames.hasOwnProperty(i) && isDefined(testEl.style[i])) {
       return transEndEventNames[i];
     }
   }
@@ -79374,8 +79619,8 @@ var resetPrevState = function resetPrevState() {
     var x = window.scrollX;
     var y = window.scrollY;
     states.previousActiveElement.focus();
-    if (x && y) {
-      // IE has no scrollX/scrollY support
+    if (isDefined(x) && isDefined(y)) {
+      // IE doesn't have scrollX/scrollY support
       window.scrollTo(x, y);
     }
   }
@@ -79406,6 +79651,11 @@ var measureScrollbar = function measureScrollbar() {
 var injectCSS = function injectCSS() {
   var css = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
+  // Prevent run in Node env
+  if (!isDefined(document)) {
+    return false;
+  }
+
   var head = document.head || document.getElementsByTagName('head')[0];
   var style = document.createElement('style');
   style.type = 'text/css';
@@ -79423,7 +79673,7 @@ injectCSS(styles);
 return sweetAlert$1;
 
 })));
-if (window.Sweetalert2) window.sweetAlert = window.swal = window.Sweetalert2;
+if (typeof window !== 'undefined' && window.Sweetalert2) window.sweetAlert = window.swal = window.Sweetalert2;
 
 
 /***/ }),
@@ -92250,7 +92500,7 @@ module.exports = function listToStyles (parentId, list) {
 
 /*!
  * Name: vue-upload-component
- * Version: 2.7.0
+ * Version: 2.7.2
  * Author: LianYue
  */
 (function (global, factory) {
@@ -93231,6 +93481,7 @@ var FileUpload = { render: function render() {
           input = document.createElement('input');
           input.type = 'hidden';
           input.name = key;
+          input.value = value;
           form.appendChild(input);
         }
       }
@@ -93490,7 +93741,7 @@ return src;
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
- * Vue.js v2.5.8
+ * Vue.js v2.5.9
  * (c) 2014-2017 Evan You
  * Released under the MIT License.
  */
@@ -94208,9 +94459,9 @@ var VNode = function VNode (
   this.elm = elm;
   this.ns = undefined;
   this.context = context;
-  this.functionalContext = undefined;
-  this.functionalOptions = undefined;
-  this.functionalScopeId = undefined;
+  this.fnContext = undefined;
+  this.fnOptions = undefined;
+  this.fnScopeId = undefined;
   this.key = data && data.key;
   this.componentOptions = componentOptions;
   this.componentInstance = undefined;
@@ -94269,6 +94520,9 @@ function cloneVNode (vnode, deep) {
   cloned.isStatic = vnode.isStatic;
   cloned.key = vnode.key;
   cloned.isComment = vnode.isComment;
+  cloned.fnContext = vnode.fnContext;
+  cloned.fnOptions = vnode.fnOptions;
+  cloned.fnScopeId = vnode.fnScopeId;
   cloned.isCloned = true;
   if (deep) {
     if (vnode.children) {
@@ -96015,7 +96269,7 @@ function resolveSlots (
     }
     // named slots should only be respected if the vnode was rendered in the
     // same context.
-    if ((child.context === context || child.functionalContext === context) &&
+    if ((child.context === context || child.fnContext === context) &&
       data && data.slot != null
     ) {
       var name = child.data.slot;
@@ -96235,7 +96489,10 @@ function mountComponent (
     };
   }
 
-  vm._watcher = new Watcher(vm, updateComponent, noop);
+  // we set this to vm._watcher inside the watcher's constructor
+  // since the watcher's initial patch may call $forceUpdate (e.g. inside child
+  // component's mounted hook), which relies on vm._watcher being already defined
+  new Watcher(vm, updateComponent, noop, null, true /* isRenderWatcher */);
   hydrating = false;
 
   // manually mounted instance, call mounted on self
@@ -96522,9 +96779,13 @@ var Watcher = function Watcher (
   vm,
   expOrFn,
   cb,
-  options
+  options,
+  isRenderWatcher
 ) {
   this.vm = vm;
+  if (isRenderWatcher) {
+    vm._watcher = this;
+  }
   vm._watchers.push(this);
   // options
   if (options) {
@@ -97435,8 +97696,8 @@ function FunctionalRenderContext (
     this._c = function (a, b, c, d) {
       var vnode = createElement(contextVm, a, b, c, d, needNormalization);
       if (vnode) {
-        vnode.functionalScopeId = options._scopeId;
-        vnode.functionalContext = parent;
+        vnode.fnScopeId = options._scopeId;
+        vnode.fnContext = parent;
       }
       return vnode
     };
@@ -97477,8 +97738,8 @@ function createFunctionalComponent (
   var vnode = options.render.call(null, renderContext._c, renderContext);
 
   if (vnode instanceof VNode) {
-    vnode.functionalContext = contextVm;
-    vnode.functionalOptions = options;
+    vnode.fnContext = contextVm;
+    vnode.fnOptions = options;
     if (data.slot) {
       (vnode.data || (vnode.data = {})).slot = data.slot;
     }
@@ -98313,7 +98574,7 @@ function pruneCacheEntry (
   current
 ) {
   var cached$$1 = cache[key];
-  if (cached$$1 && cached$$1 !== current) {
+  if (cached$$1 && (!current || cached$$1.tag !== current.tag)) {
     cached$$1.componentInstance.$destroy();
   }
   cache[key] = null;
@@ -98464,7 +98725,7 @@ Object.defineProperty(Vue$3.prototype, '$ssrContext', {
   }
 });
 
-Vue$3.version = '2.5.8';
+Vue$3.version = '2.5.9';
 
 /*  */
 
@@ -99063,7 +99324,7 @@ function createPatchFunction (backend) {
   // of going through the normal attribute patching process.
   function setScope (vnode) {
     var i;
-    if (isDef(i = vnode.functionalScopeId)) {
+    if (isDef(i = vnode.fnScopeId)) {
       nodeOps.setAttribute(vnode.elm, i, '');
     } else {
       var ancestor = vnode;
@@ -99077,7 +99338,7 @@ function createPatchFunction (backend) {
     // for slot content they should also get the scopeId from the host instance.
     if (isDef(i = activeInstance) &&
       i !== vnode.context &&
-      i !== vnode.functionalContext &&
+      i !== vnode.fnContext &&
       isDef(i = i.$options._scopeId)
     ) {
       nodeOps.setAttribute(vnode.elm, i, '');
@@ -99667,7 +99928,7 @@ function updateAttrs (oldVnode, vnode) {
   // #4391: in IE9, setting type can reset value for input[type=radio]
   // #6666: IE/Edge forces progress value down to 1 before setting a max
   /* istanbul ignore if */
-  if ((isIE9 || isEdge) && attrs.value !== oldAttrs.value) {
+  if ((isIE || isEdge) && attrs.value !== oldAttrs.value) {
     setAttr(elm, 'value', attrs.value);
   }
   for (key in oldAttrs) {
@@ -99707,6 +99968,23 @@ function setAttr (el, key, value) {
     if (isFalsyAttrValue(value)) {
       el.removeAttribute(key);
     } else {
+      // #7138: IE10 & 11 fires input event when setting placeholder on
+      // <textarea>... block the first input event and remove the blocker
+      // immediately.
+      /* istanbul ignore if */
+      if (
+        isIE && !isIE9 &&
+        el.tagName === 'TEXTAREA' &&
+        key === 'placeholder' && !el.__ieph
+      ) {
+        var blocker = function (e) {
+          e.stopImmediatePropagation();
+          el.removeEventListener('input', blocker);
+        };
+        el.addEventListener('input', blocker);
+        // $flow-disable-line
+        el.__ieph = true; /* IE placeholder patched */
+      }
       el.setAttribute(key, value);
     }
   }
@@ -102321,7 +102599,8 @@ function parseHTML (html, options) {
 var onRE = /^@|^v-on:/;
 var dirRE = /^v-|^@|^:/;
 var forAliasRE = /(.*?)\s+(?:in|of)\s+(.*)/;
-var forIteratorRE = /\((\{[^}]*\}|[^,]*),([^,]*)(?:,([^,]*))?\)/;
+var forIteratorRE = /\((\{[^}]*\}|[^,{]*),([^,]*)(?:,([^,]*))?\)/;
+var stripParensRE = /^\(|\)$/g;
 
 var argRE = /:(.*)$/;
 var bindRE = /^:|^v-bind:/;
@@ -102662,7 +102941,7 @@ function processFor (el) {
         el.iterator2 = iteratorMatch[3].trim();
       }
     } else {
-      el.alias = alias;
+      el.alias = alias.replace(stripParensRE, '');
     }
   }
 }

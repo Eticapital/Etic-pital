@@ -20,7 +20,7 @@ class CreateProjectsTable extends Migration
             $table->string('holder');
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
-            $table->json('holder_links')->nullable();
+            $table->json('holder_links')->default('[]');
             $table->string('video')->nullable();
             $table->mediumText('address')->nullable();
             $table->string('latitude')->nullable();

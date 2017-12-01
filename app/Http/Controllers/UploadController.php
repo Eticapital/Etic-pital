@@ -25,4 +25,24 @@ class UploadController extends Controller
             'name' => basename($relative_url)
         ];
     }
+
+    /**
+     * Carga la imagen en una carpeta temporal
+     *
+     * @return Response
+     */
+    public function uploadImageToTempFolder(Request $request)
+    {
+        $this->validate($request, [
+            'file' => 'required|mimes:jpeg,png'
+        ]);
+
+        $relative_url = request()->file->store('tmp', 'public');
+
+        return [
+            'type' => 'success',
+            'name' => basename($relative_url),
+            'url' => url($relative_url),
+        ];
+    }
 }

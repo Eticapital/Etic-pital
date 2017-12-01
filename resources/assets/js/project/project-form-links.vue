@@ -38,7 +38,8 @@ export default {
 
   computed: {
     linksWithUniqueId () {
-      return this.value.map(link => {
+      let value = this.value ? this.value : ['']
+      return value.map(link => {
         return {
           id: uniqid(),
           link: link

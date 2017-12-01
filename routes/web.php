@@ -10,9 +10,11 @@ Route::view('/proyecto', 'proyecto')->name('proyecto');
 Route::view('/proyecto-dummy', 'proyecto-dummy')->name('proyecto-dummy');
 
 Route::post('/upload', 'UploadController@uploadToTempFolder');
+Route::post('/upload/image', 'UploadController@uploadImageToTempFolder');
 
 Route::get('/sectors', 'SectorController@index');
 Route::get('/stages', 'ProjectStageController@index');
+Route::get('/rewards', 'RewardController@index');
 
 Route::post('/projects', 'ProjectController@store');
 

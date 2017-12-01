@@ -42,7 +42,7 @@ export default {
   },
 
   created () {
-    this.kpis = this.value
+    this.kpis = this.value ? this.value : [{ id: uniqid(), time: '', description: '' }]
   },
 
   methods: {

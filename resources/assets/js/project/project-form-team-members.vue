@@ -42,7 +42,7 @@ export default {
   },
 
   created () {
-    this.members = this.value
+    this.members = this.value ? this.value : [{ id: uniqid(), links: null, name: '' }]
   },
 
   methods: {

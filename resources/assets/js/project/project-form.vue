@@ -12,6 +12,7 @@
                 <form-text :form="form" name="phone" label="Teléfono de contacto:" />
                 <form-text :form="form" name="email" label="Correo de contacto:" />
                 <project-form-links v-model="form.holder_links" label="Redes sociales del titular" />
+                <project-form-photo :form="form" />
                 <form-text :form="form" name="video" placeholder="https://" label="Video de la iniciativa:" />
                 <form-map
                   v-model="form.address"
@@ -83,8 +84,8 @@
           <div class="row justify-content-center">
             <div class="col-lg-8">
               <fieldset>
-                <p><legend><span class="h2 text-primary">5.</span> <span class="h3">Presentación y videos adicionales de la empresa</span></legend></p>
-                <form-files v-model="form.company_files" btn-text="Subir presentación, foto(s) o video(s)" />
+                <p><legend><span class="h2 text-primary">5.</span> <span class="h3">Presentación, fotos y videos adicionales de la empresa</span></legend></p>
+                <form-files v-model="form.company_documents" btn-text="Subir presentación, foto(s) o video(s)" />
               </fieldset>
             </div> <!-- / .col-lg-8 -->
           </div> <!-- / .row -->
@@ -222,10 +223,13 @@
             </fieldset>
             <fieldset>
               <legend class="col-form-legend">¿Qué das a cambio de la inversión?</legend>
-              <b-form-checkbox-group class="form-row" v-model="form.rewards">
+              <p v-if="rewards === null">
+                <i class="icon-spinner spinner"></i> Cargando recompensas...
+              </p>
+              <b-form-checkbox-group v-else class="form-row" v-model="form.rewards">
                 <div v-for="(chunk, index) in rewardsColumns" class="col" :key="index">
-                  <div class="form-check" v-for="reward in chunk" :key="reward">
-                    <b-form-checkbox :value="reward">{{ reward }}</b-form-checkbox>
+                  <div class="form-check" v-for="reward in chunk" :key="reward.id">
+                    <b-form-checkbox :value="reward.id">{{ reward.label }}</b-form-checkbox>
                   </div><!-- /.form-check -->
                 </div>
               </b-form-checkbox-group>
@@ -270,7 +274,7 @@
             <div class="col-lg-8">
               <fieldset>
                 <p><legend><span class="h2 text-primary">13.</span> <span class="h3">Documentos  Clave</span></legend></p>
-                <form-files v-model="form.key_files" />
+                <form-files v-model="form.key_documents" />
               </fieldset>
             </div> <!-- / .col-lg-8 -->
           </div> <!-- / .row -->
@@ -284,7 +288,7 @@
           <div class="col-lg-8">
             <fieldset>
               <p><legend><span class="h2 text-primary">14.</span> <span class="h3">Material extra</span></legend></p>
-              <form-files v-model="form.extra_files" />
+              <form-files v-model="form.extra_documents" />
             </fieldset>
           </div> <!-- / .col-lg-8 -->
         </div> <!-- / .row -->
@@ -315,9 +319,11 @@
 import ProjectFormLinks from './project-form-links'
 import ProjectFormTeamMembers from './project-form-team-members'
 import ProjectFormKpis from './project-form-kpis'
+import ProjectFormPhoto from './project-form-photo'
 
 export default {
   components: {
+    ProjectFormPhoto,
     ProjectFormLinks,
     ProjectFormTeamMembers,
     ProjectFormKpis
@@ -334,15 +340,17 @@ export default {
     return {
       form: new Form({
         // 1.
-        name: '',
-        holder: '',
-        phone: '',
-        email: '',
-        video: '',
-        address: '',
+        name: null,
+        holder: null,
+        phone: null,
+        email: null,
+        holder_links: null,
+        image: null,
+        video: null,
+        address: null,
         latitude: 19.4336626,
         longitude: -99.1410542,
-        holder_links: [''],
+
         // 2.
         description: '',
         // 3.
@@ -350,11 +358,11 @@ export default {
         // 4.
         competition: '',
         // 5.
-        company_files: [],
+        company_documents: null,
         // 6.
-        links: [''],
+        links: null,
         // 7.
-        sectors: [],
+        sectors: null,
         // 8.
         stage_id: null,
         // 9.
@@ -369,25 +377,19 @@ export default {
         expected_sales_year_1: null,
         expected_sales_year_2: null,
         expected_sales_year_3: null,
-        rewards: [],
+        rewards: null,
         // 11.
-        team: [{ id: uniqid(), links: [''], name: '' }],
+        team: null,
         // 12.
-        kpis: [{ id: uniqid(), time: '', description: '' }],
+        kpis: null,
         // 13.
-        key_files: [],
+        key_documents: null,
         // 14.
-        extra_files: []
+        extra_documents: null
       }),
       sectors: null,
       stages: null,
-      rewards: [
-        'Deuda simple',
-        'Deuda convertible',
-        'Participación',
-        'Revenue share',
-        'Mixto'
-      ],
+      rewards: null,
 
       // TEMPORAL
       results: null
@@ -414,6 +416,7 @@ export default {
   created () {
     this.loadSectors()
     this.loadStages()
+    this.loadRewards()
   },
 
   methods: {
@@ -438,6 +441,13 @@ export default {
       axios.get('/sectors')
         .then(response => {
           this.sectors = response.data
+        })
+    },
+
+    loadRewards () {
+      axios.get('/rewards')
+        .then(response => {
+          this.rewards = response.data
         })
     },
 

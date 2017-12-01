@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700|Open+Sans);@font-face {
   font-family: 'icomoon';
-  src: url("fonts/icomoon.eot?xj1448");
-  src: url("fonts/icomoon.eot?xj1448#iefix") format("embedded-opentype"), url("fonts/icomoon.woff2?xj1448") format("woff2"), url("fonts/icomoon.ttf?xj1448") format("truetype"), url("fonts/icomoon.woff?xj1448") format("woff"), url("fonts/icomoon.svg?xj1448#icomoon") format("svg");
+  src: url("fonts/icomoon.eot?c7s8ik");
+  src: url("fonts/icomoon.eot?c7s8ik#iefix") format("embedded-opentype"), url("fonts/icomoon.woff2?c7s8ik") format("woff2"), url("fonts/icomoon.ttf?c7s8ik") format("truetype"), url("fonts/icomoon.woff?c7s8ik") format("woff"), url("fonts/icomoon.svg?c7s8ik#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -22,6 +22,114 @@
 
 .icon-spinner:before {
   content: "\E90C";
+}
+
+.icon-floppy-disk:before {
+  content: "\E919";
+}
+
+.icon-arrow-right:before {
+  content: "\E912";
+}
+
+.icon-right:before {
+  content: "\E912";
+}
+
+.icon-next:before {
+  content: "\E912";
+}
+
+.icon-arrow-up:before {
+  content: "\E913";
+}
+
+.icon-up:before {
+  content: "\E913";
+}
+
+.icon-upload:before {
+  content: "\E913";
+}
+
+.icon-top:before {
+  content: "\E913";
+}
+
+.icon-arrow-down:before {
+  content: "\E914";
+}
+
+.icon-down:before {
+  content: "\E914";
+}
+
+.icon-download:before {
+  content: "\E914";
+}
+
+.icon-bottom:before {
+  content: "\E914";
+}
+
+.icon-arrow-left:before {
+  content: "\E915";
+}
+
+.icon-left:before {
+  content: "\E915";
+}
+
+.icon-previous:before {
+  content: "\E915";
+}
+
+.icon-zoom-in:before {
+  content: "\E916";
+}
+
+.icon-magnifier:before {
+  content: "\E916";
+}
+
+.icon-magnifier-plus:before {
+  content: "\E916";
+}
+
+.icon-enlarge:before {
+  content: "\E916";
+}
+
+.icon-zoom-out:before {
+  content: "\E917";
+}
+
+.icon-magnifier2:before {
+  content: "\E917";
+}
+
+.icon-magnifier-minus:before {
+  content: "\E917";
+}
+
+.icon-reduce:before {
+  content: "\E917";
+}
+
+.icon-camera:before {
+  content: "\E918";
+}
+
+.icon-photo:before {
+  content: "\E918";
+}
+
+.icon-picture:before {
+  content: "\E918";
+}
+
+.icon-image:before {
+  content: "\E918";
 }
 
 .icon-pinterest:before {
@@ -9594,4 +9702,8 @@ a.project-card:hover {
   left: calc(50% - (1em / 2));
   top: calc(50% - (1em / 2));
   position: absolute !important;
+}
+
+.is-invalid .invalid-feedback {
+  display: block;
 }

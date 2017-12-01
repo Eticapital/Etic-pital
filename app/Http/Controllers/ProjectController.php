@@ -9,7 +9,6 @@ class ProjectController extends Controller
 {
     public function store(ProjectRequest $request)
     {
-        sleep(1);
         return $request->all();
     }
 }

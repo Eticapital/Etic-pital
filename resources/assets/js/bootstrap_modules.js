@@ -22,7 +22,6 @@ Vue.use(Vue2Filters)
 import VueMoment from 'vue-moment'
 Vue.use(VueMoment)
 
-
 // Data tables para
 import { Vuetable } from 'vuetable-2';
 

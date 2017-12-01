@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?xj1448');
-  src:  url('fonts/icomoon.eot?xj1448#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.woff2?xj1448') format('woff2'),
-    url('fonts/icomoon.ttf?xj1448') format('truetype'),
-    url('fonts/icomoon.woff?xj1448') format('woff'),
-    url('fonts/icomoon.svg?xj1448#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?c7s8ik');
+  src:  url('fonts/icomoon.eot?c7s8ik#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.woff2?c7s8ik') format('woff2'),
+    url('fonts/icomoon.ttf?c7s8ik') format('truetype'),
+    url('fonts/icomoon.woff?c7s8ik') format('woff'),
+    url('fonts/icomoon.svg?c7s8ik#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -27,6 +27,87 @@
 
 .icon-spinner:before {
   content: "\e90c";
+}
+.icon-floppy-disk:before {
+  content: "\e919";
+}
+.icon-arrow-right:before {
+  content: "\e912";
+}
+.icon-right:before {
+  content: "\e912";
+}
+.icon-next:before {
+  content: "\e912";
+}
+.icon-arrow-up:before {
+  content: "\e913";
+}
+.icon-up:before {
+  content: "\e913";
+}
+.icon-upload:before {
+  content: "\e913";
+}
+.icon-top:before {
+  content: "\e913";
+}
+.icon-arrow-down:before {
+  content: "\e914";
+}
+.icon-down:before {
+  content: "\e914";
+}
+.icon-download:before {
+  content: "\e914";
+}
+.icon-bottom:before {
+  content: "\e914";
+}
+.icon-arrow-left:before {
+  content: "\e915";
+}
+.icon-left:before {
+  content: "\e915";
+}
+.icon-previous:before {
+  content: "\e915";
+}
+.icon-zoom-in:before {
+  content: "\e916";
+}
+.icon-magnifier:before {
+  content: "\e916";
+}
+.icon-magnifier-plus:before {
+  content: "\e916";
+}
+.icon-enlarge:before {
+  content: "\e916";
+}
+.icon-zoom-out:before {
+  content: "\e917";
+}
+.icon-magnifier2:before {
+  content: "\e917";
+}
+.icon-magnifier-minus:before {
+  content: "\e917";
+}
+.icon-reduce:before {
+  content: "\e917";
+}
+.icon-camera:before {
+  content: "\e918";
+}
+.icon-photo:before {
+  content: "\e918";
+}
+.icon-picture:before {
+  content: "\e918";
+}
+.icon-image:before {
+  content: "\e918";
 }
 .icon-pinterest:before {
   content: "\e910";

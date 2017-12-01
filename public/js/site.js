@@ -72,6 +72,1566 @@
 
 /***/ }),
 
+/***/ "./node_modules/axios-fileupload/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+const axios = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/index.js")
+module.exports = (url, file,name='file') => {
+	if (typeof url !== 'string') {
+		throw new TypeError(`Expected a string, got ${typeof url}`);
+	}
+    const formData = new FormData();
+    formData.append(name,file)
+    const config = {
+        headers: {
+            'content-type': 'multipart/form-data'
+        }
+    }
+    return  axios.post(url, formData,config)
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/axios.js");
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/adapters/xhr.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/utils.js");
+var settle = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/core/settle.js");
+var buildURL = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/helpers/buildURL.js");
+var parseHeaders = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/helpers/parseHeaders.js");
+var isURLSameOrigin = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/helpers/isURLSameOrigin.js");
+var createError = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/core/createError.js");
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/helpers/btoa.js");
+
+module.exports = function xhrAdapter(config) {
+  return new Promise(function dispatchXhrRequest(resolve, reject) {
+    var requestData = config.data;
+    var requestHeaders = config.headers;
+
+    if (utils.isFormData(requestData)) {
+      delete requestHeaders['Content-Type']; // Let the browser set it
+    }
+
+    var request = new XMLHttpRequest();
+    var loadEvent = 'onreadystatechange';
+    var xDomain = false;
+
+    // For IE 8/9 CORS support
+    // Only supports POST and GET calls and doesn't returns the response headers.
+    // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
+    if ("development" !== 'test' &&
+        typeof window !== 'undefined' &&
+        window.XDomainRequest && !('withCredentials' in request) &&
+        !isURLSameOrigin(config.url)) {
+      request = new window.XDomainRequest();
+      loadEvent = 'onload';
+      xDomain = true;
+      request.onprogress = function handleProgress() {};
+      request.ontimeout = function handleTimeout() {};
+    }
+
+    // HTTP basic authentication
+    if (config.auth) {
+      var username = config.auth.username || '';
+      var password = config.auth.password || '';
+      requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
+    }
+
+    request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), true);
+
+    // Set the request timeout in MS
+    request.timeout = config.timeout;
+
+    // Listen for ready state
+    request[loadEvent] = function handleLoad() {
+      if (!request || (request.readyState !== 4 && !xDomain)) {
+        return;
+      }
+
+      // The request errored out and we didn't get a response, this will be
+      // handled by onerror instead
+      // With one exception: request that using file: protocol, most browsers
+      // will return status as 0 even though it's a successful request
+      if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
+        return;
+      }
+
+      // Prepare the response
+      var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
+      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
+      var response = {
+        data: responseData,
+        // IE sends 1223 instead of 204 (https://github.com/mzabriskie/axios/issues/201)
+        status: request.status === 1223 ? 204 : request.status,
+        statusText: request.status === 1223 ? 'No Content' : request.statusText,
+        headers: responseHeaders,
+        config: config,
+        request: request
+      };
+
+      settle(resolve, reject, response);
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle low level network errors
+    request.onerror = function handleError() {
+      // Real errors are hidden from us by the browser
+      // onerror should only fire if it's a network error
+      reject(createError('Network Error', config));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle timeout
+    request.ontimeout = function handleTimeout() {
+      reject(createError('timeout of ' + config.timeout + 'ms exceeded', config, 'ECONNABORTED'));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Add xsrf header
+    // This is only done if running in a standard browser environment.
+    // Specifically not if we're in a web worker, or react-native.
+    if (utils.isStandardBrowserEnv()) {
+      var cookies = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/helpers/cookies.js");
+
+      // Add xsrf header
+      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
+          cookies.read(config.xsrfCookieName) :
+          undefined;
+
+      if (xsrfValue) {
+        requestHeaders[config.xsrfHeaderName] = xsrfValue;
+      }
+    }
+
+    // Add headers to the request
+    if ('setRequestHeader' in request) {
+      utils.forEach(requestHeaders, function setRequestHeader(val, key) {
+        if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
+          // Remove Content-Type if data is undefined
+          delete requestHeaders[key];
+        } else {
+          // Otherwise add header to the request
+          request.setRequestHeader(key, val);
+        }
+      });
+    }
+
+    // Add withCredentials to request if needed
+    if (config.withCredentials) {
+      request.withCredentials = true;
+    }
+
+    // Add responseType to request if needed
+    if (config.responseType) {
+      try {
+        request.responseType = config.responseType;
+      } catch (e) {
+        if (request.responseType !== 'json') {
+          throw e;
+        }
+      }
+    }
+
+    // Handle progress if needed
+    if (typeof config.onDownloadProgress === 'function') {
+      request.addEventListener('progress', config.onDownloadProgress);
+    }
+
+    // Not all browsers support upload events
+    if (typeof config.onUploadProgress === 'function' && request.upload) {
+      request.upload.addEventListener('progress', config.onUploadProgress);
+    }
+
+    if (config.cancelToken) {
+      // Handle cancellation
+      config.cancelToken.promise.then(function onCanceled(cancel) {
+        if (!request) {
+          return;
+        }
+
+        request.abort();
+        reject(cancel);
+        // Clean up request
+        request = null;
+      });
+    }
+
+    if (requestData === undefined) {
+      requestData = null;
+    }
+
+    // Send the request
+    request.send(requestData);
+  });
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/axios.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/utils.js");
+var bind = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/helpers/bind.js");
+var Axios = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/core/Axios.js");
+var defaults = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/defaults.js");
+
+/**
+ * Create an instance of Axios
+ *
+ * @param {Object} defaultConfig The default config for the instance
+ * @return {Axios} A new instance of Axios
+ */
+function createInstance(defaultConfig) {
+  var context = new Axios(defaultConfig);
+  var instance = bind(Axios.prototype.request, context);
+
+  // Copy axios.prototype to instance
+  utils.extend(instance, Axios.prototype, context);
+
+  // Copy context to instance
+  utils.extend(instance, context);
+
+  return instance;
+}
+
+// Create the default instance to be exported
+var axios = createInstance(defaults);
+
+// Expose Axios class to allow class inheritance
+axios.Axios = Axios;
+
+// Factory for creating new instances
+axios.create = function create(instanceConfig) {
+  return createInstance(utils.merge(defaults, instanceConfig));
+};
+
+// Expose Cancel & CancelToken
+axios.Cancel = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/cancel/Cancel.js");
+axios.CancelToken = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/cancel/CancelToken.js");
+axios.isCancel = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/cancel/isCancel.js");
+
+// Expose all/spread
+axios.all = function all(promises) {
+  return Promise.all(promises);
+};
+axios.spread = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/helpers/spread.js");
+
+module.exports = axios;
+
+// Allow use of default import syntax in TypeScript
+module.exports.default = axios;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/cancel/Cancel.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * A `Cancel` is an object that is thrown when an operation is canceled.
+ *
+ * @class
+ * @param {string=} message The message.
+ */
+function Cancel(message) {
+  this.message = message;
+}
+
+Cancel.prototype.toString = function toString() {
+  return 'Cancel' + (this.message ? ': ' + this.message : '');
+};
+
+Cancel.prototype.__CANCEL__ = true;
+
+module.exports = Cancel;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/cancel/CancelToken.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Cancel = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/cancel/Cancel.js");
+
+/**
+ * A `CancelToken` is an object that can be used to request cancellation of an operation.
+ *
+ * @class
+ * @param {Function} executor The executor function.
+ */
+function CancelToken(executor) {
+  if (typeof executor !== 'function') {
+    throw new TypeError('executor must be a function.');
+  }
+
+  var resolvePromise;
+  this.promise = new Promise(function promiseExecutor(resolve) {
+    resolvePromise = resolve;
+  });
+
+  var token = this;
+  executor(function cancel(message) {
+    if (token.reason) {
+      // Cancellation has already been requested
+      return;
+    }
+
+    token.reason = new Cancel(message);
+    resolvePromise(token.reason);
+  });
+}
+
+/**
+ * Throws a `Cancel` if cancellation has been requested.
+ */
+CancelToken.prototype.throwIfRequested = function throwIfRequested() {
+  if (this.reason) {
+    throw this.reason;
+  }
+};
+
+/**
+ * Returns an object that contains a new `CancelToken` and a function that, when called,
+ * cancels the `CancelToken`.
+ */
+CancelToken.source = function source() {
+  var cancel;
+  var token = new CancelToken(function executor(c) {
+    cancel = c;
+  });
+  return {
+    token: token,
+    cancel: cancel
+  };
+};
+
+module.exports = CancelToken;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/cancel/isCancel.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function isCancel(value) {
+  return !!(value && value.__CANCEL__);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/core/Axios.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var defaults = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/defaults.js");
+var utils = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/utils.js");
+var InterceptorManager = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/core/InterceptorManager.js");
+var dispatchRequest = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/core/dispatchRequest.js");
+var isAbsoluteURL = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/helpers/isAbsoluteURL.js");
+var combineURLs = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/helpers/combineURLs.js");
+
+/**
+ * Create a new instance of Axios
+ *
+ * @param {Object} instanceConfig The default config for the instance
+ */
+function Axios(instanceConfig) {
+  this.defaults = instanceConfig;
+  this.interceptors = {
+    request: new InterceptorManager(),
+    response: new InterceptorManager()
+  };
+}
+
+/**
+ * Dispatch a request
+ *
+ * @param {Object} config The config specific for this request (merged with this.defaults)
+ */
+Axios.prototype.request = function request(config) {
+  /*eslint no-param-reassign:0*/
+  // Allow for axios('example/url'[, config]) a la fetch API
+  if (typeof config === 'string') {
+    config = utils.merge({
+      url: arguments[0]
+    }, arguments[1]);
+  }
+
+  config = utils.merge(defaults, this.defaults, { method: 'get' }, config);
+
+  // Support baseURL config
+  if (config.baseURL && !isAbsoluteURL(config.url)) {
+    config.url = combineURLs(config.baseURL, config.url);
+  }
+
+  // Hook up interceptors middleware
+  var chain = [dispatchRequest, undefined];
+  var promise = Promise.resolve(config);
+
+  this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
+    chain.unshift(interceptor.fulfilled, interceptor.rejected);
+  });
+
+  this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
+    chain.push(interceptor.fulfilled, interceptor.rejected);
+  });
+
+  while (chain.length) {
+    promise = promise.then(chain.shift(), chain.shift());
+  }
+
+  return promise;
+};
+
+// Provide aliases for supported request methods
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  /*eslint func-names:0*/
+  Axios.prototype[method] = function(url, config) {
+    return this.request(utils.merge(config || {}, {
+      method: method,
+      url: url
+    }));
+  };
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  /*eslint func-names:0*/
+  Axios.prototype[method] = function(url, data, config) {
+    return this.request(utils.merge(config || {}, {
+      method: method,
+      url: url,
+      data: data
+    }));
+  };
+});
+
+module.exports = Axios;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/core/InterceptorManager.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/utils.js");
+
+function InterceptorManager() {
+  this.handlers = [];
+}
+
+/**
+ * Add a new interceptor to the stack
+ *
+ * @param {Function} fulfilled The function to handle `then` for a `Promise`
+ * @param {Function} rejected The function to handle `reject` for a `Promise`
+ *
+ * @return {Number} An ID used to remove interceptor later
+ */
+InterceptorManager.prototype.use = function use(fulfilled, rejected) {
+  this.handlers.push({
+    fulfilled: fulfilled,
+    rejected: rejected
+  });
+  return this.handlers.length - 1;
+};
+
+/**
+ * Remove an interceptor from the stack
+ *
+ * @param {Number} id The ID that was returned by `use`
+ */
+InterceptorManager.prototype.eject = function eject(id) {
+  if (this.handlers[id]) {
+    this.handlers[id] = null;
+  }
+};
+
+/**
+ * Iterate over all the registered interceptors
+ *
+ * This method is particularly useful for skipping over any
+ * interceptors that may have become `null` calling `eject`.
+ *
+ * @param {Function} fn The function to call for each interceptor
+ */
+InterceptorManager.prototype.forEach = function forEach(fn) {
+  utils.forEach(this.handlers, function forEachHandler(h) {
+    if (h !== null) {
+      fn(h);
+    }
+  });
+};
+
+module.exports = InterceptorManager;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/core/createError.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var enhanceError = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/core/enhanceError.js");
+
+/**
+ * Create an Error with the specified message, config, error code, and response.
+ *
+ * @param {string} message The error message.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ @ @param {Object} [response] The response.
+ * @returns {Error} The created error.
+ */
+module.exports = function createError(message, config, code, response) {
+  var error = new Error(message);
+  return enhanceError(error, config, code, response);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/core/dispatchRequest.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/utils.js");
+var transformData = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/core/transformData.js");
+var isCancel = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/cancel/isCancel.js");
+var defaults = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/defaults.js");
+
+/**
+ * Throws a `Cancel` if cancellation has been requested.
+ */
+function throwIfCancellationRequested(config) {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested();
+  }
+}
+
+/**
+ * Dispatch a request to the server using the configured adapter.
+ *
+ * @param {object} config The config that is to be used for the request
+ * @returns {Promise} The Promise to be fulfilled
+ */
+module.exports = function dispatchRequest(config) {
+  throwIfCancellationRequested(config);
+
+  // Ensure headers exist
+  config.headers = config.headers || {};
+
+  // Transform request data
+  config.data = transformData(
+    config.data,
+    config.headers,
+    config.transformRequest
+  );
+
+  // Flatten headers
+  config.headers = utils.merge(
+    config.headers.common || {},
+    config.headers[config.method] || {},
+    config.headers || {}
+  );
+
+  utils.forEach(
+    ['delete', 'get', 'head', 'post', 'put', 'patch', 'common'],
+    function cleanHeaderConfig(method) {
+      delete config.headers[method];
+    }
+  );
+
+  var adapter = config.adapter || defaults.adapter;
+
+  return adapter(config).then(function onAdapterResolution(response) {
+    throwIfCancellationRequested(config);
+
+    // Transform response data
+    response.data = transformData(
+      response.data,
+      response.headers,
+      config.transformResponse
+    );
+
+    return response;
+  }, function onAdapterRejection(reason) {
+    if (!isCancel(reason)) {
+      throwIfCancellationRequested(config);
+
+      // Transform response data
+      if (reason && reason.response) {
+        reason.response.data = transformData(
+          reason.response.data,
+          reason.response.headers,
+          config.transformResponse
+        );
+      }
+    }
+
+    return Promise.reject(reason);
+  });
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/core/enhanceError.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Update an Error with the specified config, error code, and response.
+ *
+ * @param {Error} error The error to update.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ @ @param {Object} [response] The response.
+ * @returns {Error} The error.
+ */
+module.exports = function enhanceError(error, config, code, response) {
+  error.config = config;
+  if (code) {
+    error.code = code;
+  }
+  error.response = response;
+  return error;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/core/settle.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var createError = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/core/createError.js");
+
+/**
+ * Resolve or reject a Promise based on response status.
+ *
+ * @param {Function} resolve A function that resolves the promise.
+ * @param {Function} reject A function that rejects the promise.
+ * @param {object} response The response.
+ */
+module.exports = function settle(resolve, reject, response) {
+  var validateStatus = response.config.validateStatus;
+  // Note: status is not exposed by XDomainRequest
+  if (!response.status || !validateStatus || validateStatus(response.status)) {
+    resolve(response);
+  } else {
+    reject(createError(
+      'Request failed with status code ' + response.status,
+      response.config,
+      null,
+      response
+    ));
+  }
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/core/transformData.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/utils.js");
+
+/**
+ * Transform the data for a request or a response
+ *
+ * @param {Object|String} data The data to be transformed
+ * @param {Array} headers The headers for the request or response
+ * @param {Array|Function} fns A single function or Array of functions
+ * @returns {*} The resulting transformed data
+ */
+module.exports = function transformData(data, headers, fns) {
+  /*eslint no-param-reassign:0*/
+  utils.forEach(fns, function transform(fn) {
+    data = fn(data, headers);
+  });
+
+  return data;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/defaults.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/utils.js");
+var normalizeHeaderName = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/helpers/normalizeHeaderName.js");
+
+var PROTECTION_PREFIX = /^\)\]\}',?\n/;
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/adapters/xhr.js");
+  } else if (typeof process !== 'undefined') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/adapters/xhr.js");
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      data = data.replace(PROTECTION_PREFIX, '');
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMehtodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/helpers/bind.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function bind(fn, thisArg) {
+  return function wrap() {
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+    return fn.apply(thisArg, args);
+  };
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/helpers/btoa.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// btoa polyfill for IE<10 courtesy https://github.com/davidchambers/Base64.js
+
+var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+function E() {
+  this.message = 'String contains an invalid character';
+}
+E.prototype = new Error;
+E.prototype.code = 5;
+E.prototype.name = 'InvalidCharacterError';
+
+function btoa(input) {
+  var str = String(input);
+  var output = '';
+  for (
+    // initialize result and counter
+    var block, charCode, idx = 0, map = chars;
+    // if the next str index does not exist:
+    //   change the mapping table to "="
+    //   check if d has no fractional digits
+    str.charAt(idx | 0) || (map = '=', idx % 1);
+    // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
+    output += map.charAt(63 & block >> 8 - idx % 1 * 8)
+  ) {
+    charCode = str.charCodeAt(idx += 3 / 4);
+    if (charCode > 0xFF) {
+      throw new E();
+    }
+    block = block << 8 | charCode;
+  }
+  return output;
+}
+
+module.exports = btoa;
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/helpers/buildURL.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/utils.js");
+
+function encode(val) {
+  return encodeURIComponent(val).
+    replace(/%40/gi, '@').
+    replace(/%3A/gi, ':').
+    replace(/%24/g, '$').
+    replace(/%2C/gi, ',').
+    replace(/%20/g, '+').
+    replace(/%5B/gi, '[').
+    replace(/%5D/gi, ']');
+}
+
+/**
+ * Build a URL by appending params to the end
+ *
+ * @param {string} url The base of the url (e.g., http://www.google.com)
+ * @param {object} [params] The params to be appended
+ * @returns {string} The formatted url
+ */
+module.exports = function buildURL(url, params, paramsSerializer) {
+  /*eslint no-param-reassign:0*/
+  if (!params) {
+    return url;
+  }
+
+  var serializedParams;
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params);
+  } else if (utils.isURLSearchParams(params)) {
+    serializedParams = params.toString();
+  } else {
+    var parts = [];
+
+    utils.forEach(params, function serialize(val, key) {
+      if (val === null || typeof val === 'undefined') {
+        return;
+      }
+
+      if (utils.isArray(val)) {
+        key = key + '[]';
+      }
+
+      if (!utils.isArray(val)) {
+        val = [val];
+      }
+
+      utils.forEach(val, function parseValue(v) {
+        if (utils.isDate(v)) {
+          v = v.toISOString();
+        } else if (utils.isObject(v)) {
+          v = JSON.stringify(v);
+        }
+        parts.push(encode(key) + '=' + encode(v));
+      });
+    });
+
+    serializedParams = parts.join('&');
+  }
+
+  if (serializedParams) {
+    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
+  }
+
+  return url;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/helpers/combineURLs.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Creates a new URL by combining the specified URLs
+ *
+ * @param {string} baseURL The base URL
+ * @param {string} relativeURL The relative URL
+ * @returns {string} The combined URL
+ */
+module.exports = function combineURLs(baseURL, relativeURL) {
+  return baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '');
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/helpers/cookies.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/utils.js");
+
+module.exports = (
+  utils.isStandardBrowserEnv() ?
+
+  // Standard browser envs support document.cookie
+  (function standardBrowserEnv() {
+    return {
+      write: function write(name, value, expires, path, domain, secure) {
+        var cookie = [];
+        cookie.push(name + '=' + encodeURIComponent(value));
+
+        if (utils.isNumber(expires)) {
+          cookie.push('expires=' + new Date(expires).toGMTString());
+        }
+
+        if (utils.isString(path)) {
+          cookie.push('path=' + path);
+        }
+
+        if (utils.isString(domain)) {
+          cookie.push('domain=' + domain);
+        }
+
+        if (secure === true) {
+          cookie.push('secure');
+        }
+
+        document.cookie = cookie.join('; ');
+      },
+
+      read: function read(name) {
+        var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+        return (match ? decodeURIComponent(match[3]) : null);
+      },
+
+      remove: function remove(name) {
+        this.write(name, '', Date.now() - 86400000);
+      }
+    };
+  })() :
+
+  // Non standard browser env (web workers, react-native) lack needed support.
+  (function nonStandardBrowserEnv() {
+    return {
+      write: function write() {},
+      read: function read() { return null; },
+      remove: function remove() {}
+    };
+  })()
+);
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/helpers/isAbsoluteURL.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determines whether the specified URL is absolute
+ *
+ * @param {string} url The URL to test
+ * @returns {boolean} True if the specified URL is absolute, otherwise false
+ */
+module.exports = function isAbsoluteURL(url) {
+  // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
+  // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
+  // by any combination of letters, digits, plus, period, or hyphen.
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/helpers/isURLSameOrigin.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/utils.js");
+
+module.exports = (
+  utils.isStandardBrowserEnv() ?
+
+  // Standard browser envs have full support of the APIs needed to test
+  // whether the request URL is of the same origin as current location.
+  (function standardBrowserEnv() {
+    var msie = /(msie|trident)/i.test(navigator.userAgent);
+    var urlParsingNode = document.createElement('a');
+    var originURL;
+
+    /**
+    * Parse a URL to discover it's components
+    *
+    * @param {String} url The URL to be parsed
+    * @returns {Object}
+    */
+    function resolveURL(url) {
+      var href = url;
+
+      if (msie) {
+        // IE needs attribute set twice to normalize properties
+        urlParsingNode.setAttribute('href', href);
+        href = urlParsingNode.href;
+      }
+
+      urlParsingNode.setAttribute('href', href);
+
+      // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
+      return {
+        href: urlParsingNode.href,
+        protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
+        host: urlParsingNode.host,
+        search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
+        hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
+        hostname: urlParsingNode.hostname,
+        port: urlParsingNode.port,
+        pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
+                  urlParsingNode.pathname :
+                  '/' + urlParsingNode.pathname
+      };
+    }
+
+    originURL = resolveURL(window.location.href);
+
+    /**
+    * Determine if a URL shares the same origin as the current location
+    *
+    * @param {String} requestURL The URL to test
+    * @returns {boolean} True if URL shares the same origin, otherwise false
+    */
+    return function isURLSameOrigin(requestURL) {
+      var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
+      return (parsed.protocol === originURL.protocol &&
+            parsed.host === originURL.host);
+    };
+  })() :
+
+  // Non standard browser envs (web workers, react-native) lack needed support.
+  (function nonStandardBrowserEnv() {
+    return function isURLSameOrigin() {
+      return true;
+    };
+  })()
+);
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/helpers/normalizeHeaderName.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/utils.js");
+
+module.exports = function normalizeHeaderName(headers, normalizedName) {
+  utils.forEach(headers, function processHeader(value, name) {
+    if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
+      headers[normalizedName] = value;
+      delete headers[name];
+    }
+  });
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/helpers/parseHeaders.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/utils.js");
+
+/**
+ * Parse headers into an object
+ *
+ * ```
+ * Date: Wed, 27 Aug 2014 08:58:49 GMT
+ * Content-Type: application/json
+ * Connection: keep-alive
+ * Transfer-Encoding: chunked
+ * ```
+ *
+ * @param {String} headers Headers needing to be parsed
+ * @returns {Object} Headers parsed into an object
+ */
+module.exports = function parseHeaders(headers) {
+  var parsed = {};
+  var key;
+  var val;
+  var i;
+
+  if (!headers) { return parsed; }
+
+  utils.forEach(headers.split('\n'), function parser(line) {
+    i = line.indexOf(':');
+    key = utils.trim(line.substr(0, i)).toLowerCase();
+    val = utils.trim(line.substr(i + 1));
+
+    if (key) {
+      parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+    }
+  });
+
+  return parsed;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/helpers/spread.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Syntactic sugar for invoking a function and expanding an array for arguments.
+ *
+ * Common use case would be to use `Function.prototype.apply`.
+ *
+ *  ```js
+ *  function f(x, y, z) {}
+ *  var args = [1, 2, 3];
+ *  f.apply(null, args);
+ *  ```
+ *
+ * With `spread` this example can be re-written.
+ *
+ *  ```js
+ *  spread(function(x, y, z) {})([1, 2, 3]);
+ *  ```
+ *
+ * @param {Function} callback
+ * @returns {Function}
+ */
+module.exports = function spread(callback) {
+  return function wrap(arr) {
+    return callback.apply(null, arr);
+  };
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/axios-fileupload/node_modules/axios/lib/utils.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var bind = __webpack_require__("./node_modules/axios-fileupload/node_modules/axios/lib/helpers/bind.js");
+
+/*global toString:true*/
+
+// utils is a library of generic helper functions non-specific to axios
+
+var toString = Object.prototype.toString;
+
+/**
+ * Determine if a value is an Array
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Array, otherwise false
+ */
+function isArray(val) {
+  return toString.call(val) === '[object Array]';
+}
+
+/**
+ * Determine if a value is an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an ArrayBuffer, otherwise false
+ */
+function isArrayBuffer(val) {
+  return toString.call(val) === '[object ArrayBuffer]';
+}
+
+/**
+ * Determine if a value is a FormData
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an FormData, otherwise false
+ */
+function isFormData(val) {
+  return (typeof FormData !== 'undefined') && (val instanceof FormData);
+}
+
+/**
+ * Determine if a value is a view on an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a view on an ArrayBuffer, otherwise false
+ */
+function isArrayBufferView(val) {
+  var result;
+  if ((typeof ArrayBuffer !== 'undefined') && (ArrayBuffer.isView)) {
+    result = ArrayBuffer.isView(val);
+  } else {
+    result = (val) && (val.buffer) && (val.buffer instanceof ArrayBuffer);
+  }
+  return result;
+}
+
+/**
+ * Determine if a value is a String
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a String, otherwise false
+ */
+function isString(val) {
+  return typeof val === 'string';
+}
+
+/**
+ * Determine if a value is a Number
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Number, otherwise false
+ */
+function isNumber(val) {
+  return typeof val === 'number';
+}
+
+/**
+ * Determine if a value is undefined
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if the value is undefined, otherwise false
+ */
+function isUndefined(val) {
+  return typeof val === 'undefined';
+}
+
+/**
+ * Determine if a value is an Object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Object, otherwise false
+ */
+function isObject(val) {
+  return val !== null && typeof val === 'object';
+}
+
+/**
+ * Determine if a value is a Date
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Date, otherwise false
+ */
+function isDate(val) {
+  return toString.call(val) === '[object Date]';
+}
+
+/**
+ * Determine if a value is a File
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a File, otherwise false
+ */
+function isFile(val) {
+  return toString.call(val) === '[object File]';
+}
+
+/**
+ * Determine if a value is a Blob
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Blob, otherwise false
+ */
+function isBlob(val) {
+  return toString.call(val) === '[object Blob]';
+}
+
+/**
+ * Determine if a value is a Function
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Function, otherwise false
+ */
+function isFunction(val) {
+  return toString.call(val) === '[object Function]';
+}
+
+/**
+ * Determine if a value is a Stream
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Stream, otherwise false
+ */
+function isStream(val) {
+  return isObject(val) && isFunction(val.pipe);
+}
+
+/**
+ * Determine if a value is a URLSearchParams object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a URLSearchParams object, otherwise false
+ */
+function isURLSearchParams(val) {
+  return typeof URLSearchParams !== 'undefined' && val instanceof URLSearchParams;
+}
+
+/**
+ * Trim excess whitespace off the beginning and end of a string
+ *
+ * @param {String} str The String to trim
+ * @returns {String} The String freed of excess whitespace
+ */
+function trim(str) {
+  return str.replace(/^\s*/, '').replace(/\s*$/, '');
+}
+
+/**
+ * Determine if we're running in a standard browser environment
+ *
+ * This allows axios to run in a web worker, and react-native.
+ * Both environments support XMLHttpRequest, but not fully standard globals.
+ *
+ * web workers:
+ *  typeof window -> undefined
+ *  typeof document -> undefined
+ *
+ * react-native:
+ *  typeof document.createElement -> undefined
+ */
+function isStandardBrowserEnv() {
+  return (
+    typeof window !== 'undefined' &&
+    typeof document !== 'undefined' &&
+    typeof document.createElement === 'function'
+  );
+}
+
+/**
+ * Iterate over an Array or an Object invoking a function for each item.
+ *
+ * If `obj` is an Array callback will be called passing
+ * the value, index, and complete array for each item.
+ *
+ * If 'obj' is an Object callback will be called passing
+ * the value, key, and complete object for each property.
+ *
+ * @param {Object|Array} obj The object to iterate
+ * @param {Function} fn The callback to invoke for each item
+ */
+function forEach(obj, fn) {
+  // Don't bother if no value provided
+  if (obj === null || typeof obj === 'undefined') {
+    return;
+  }
+
+  // Force an array if not already something iterable
+  if (typeof obj !== 'object' && !isArray(obj)) {
+    /*eslint no-param-reassign:0*/
+    obj = [obj];
+  }
+
+  if (isArray(obj)) {
+    // Iterate over array values
+    for (var i = 0, l = obj.length; i < l; i++) {
+      fn.call(null, obj[i], i, obj);
+    }
+  } else {
+    // Iterate over object keys
+    for (var key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        fn.call(null, obj[key], key, obj);
+      }
+    }
+  }
+}
+
+/**
+ * Accepts varargs expecting each argument to be an object, then
+ * immutably merges the properties of each object and returns result.
+ *
+ * When multiple objects contain the same key the later object in
+ * the arguments list will take precedence.
+ *
+ * Example:
+ *
+ * ```js
+ * var result = merge({foo: 123}, {foo: 456});
+ * console.log(result.foo); // outputs 456
+ * ```
+ *
+ * @param {Object} obj1 Object to merge
+ * @returns {Object} Result of all merge properties
+ */
+function merge(/* obj1, obj2, obj3, ... */) {
+  var result = {};
+  function assignValue(val, key) {
+    if (typeof result[key] === 'object' && typeof val === 'object') {
+      result[key] = merge(result[key], val);
+    } else {
+      result[key] = val;
+    }
+  }
+
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    forEach(arguments[i], assignValue);
+  }
+  return result;
+}
+
+/**
+ * Extends object a by mutably adding to it the properties of object b.
+ *
+ * @param {Object} a The object to be extended
+ * @param {Object} b The object to copy properties from
+ * @param {Object} thisArg The object to bind function to
+ * @return {Object} The resulting value of object a
+ */
+function extend(a, b, thisArg) {
+  forEach(b, function assignValue(val, key) {
+    if (thisArg && typeof val === 'function') {
+      a[key] = bind(val, thisArg);
+    } else {
+      a[key] = val;
+    }
+  });
+  return a;
+}
+
+module.exports = {
+  isArray: isArray,
+  isArrayBuffer: isArrayBuffer,
+  isFormData: isFormData,
+  isArrayBufferView: isArrayBufferView,
+  isString: isString,
+  isNumber: isNumber,
+  isObject: isObject,
+  isUndefined: isUndefined,
+  isDate: isDate,
+  isFile: isFile,
+  isBlob: isBlob,
+  isFunction: isFunction,
+  isStream: isStream,
+  isURLSearchParams: isURLSearchParams,
+  isStandardBrowserEnv: isStandardBrowserEnv,
+  forEach: forEach,
+  merge: merge,
+  extend: extend,
+  trim: trim
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/axios/index.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1638,6 +3198,40 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/WaitDots.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            dots: '...',
+            interval: null
+        };
+    },
+
+    mounted: function mounted() {
+        this.interval = setInterval(function () {
+            if (this.dots.length >= 3) {
+                this.dots = "";
+            } else {
+                this.dots += ".";
+            }
+        }.bind(this), 500);
+    },
+    destroyed: function destroyed() {
+        clearInterval(this.interval);
+    }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/forms/form-button-submit.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2682,7 +4276,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   created: function created() {
-    this.kpis = this.value;
+    this.kpis = this.value ? this.value : [{ id: uniqid(), time: '', description: '' }];
   },
 
 
@@ -2895,7 +4489,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   computed: {
     linksWithUniqueId: function linksWithUniqueId() {
-      return this.value.map(function (link) {
+      var value = this.value ? this.value : [''];
+      return value.map(function (link) {
         return {
           id: uniqid(),
           link: link
@@ -2936,6 +4531,192 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     updateLink: function updateLink(index, value) {
       this.links[index].link = value;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form-photo.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var axiosFileupload = __webpack_require__("./node_modules/axios-fileupload/index.js");
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    form: {
+      type: Object,
+      required: true
+    }
+  },
+
+  data: function data() {
+    return {
+      choosing: false,
+      saving: false,
+
+      croppa: null,
+      maxFileSize: App.maxFileSize ? App.maxFileSize : 2000000,
+      active: false,
+      uploadedImageUrl: null
+    };
+  },
+
+
+  computed: {
+    hasImage: function hasImage() {
+      return this.form.image;
+    },
+
+    /**
+       * El tamaño en MB
+       */
+    maxFileSizeInMb: function maxFileSizeInMb() {
+      return Math.round(this.maxFileSize * 0.000001);
+    }
+  },
+
+  methods: {
+    saveImage: function saveImage() {
+      var _this = this;
+
+      this.saving = true;
+      this.croppa.generateBlob(function (image) {
+        axiosFileupload('/upload/image', image).then(function (response) {
+          console.log(response.data.url);
+          _this.form.image = response.data.name;
+          _this.uploadedImageUrl = response.data.url;
+          _this.active = false;
+          _this.saving = false;
+        }).catch(function (errors) {
+          _this.saving = false;
+          console.log(errors);
+        });
+      }, 'image/jpeg', 1);
+    },
+
+
+    /**
+       * Cuando se selecciona la imagen
+       */
+    fileChoose: function fileChoose() {
+      this.choosing = true;
+    },
+
+
+    /**
+       * Cuando la imagen se mostró correctamente
+       */
+    newImage: function newImage() {
+      this.choosing = false;
+      this.form.errors.clear('image');
+      this.active = true;
+    },
+
+
+    /**
+       * Cuando el tipo de archivo no sea válido
+       */
+    onFileTypeMismatch: function onFileTypeMismatch() {
+      this.form.errors.add('image', 'Tipo de archivo no permitido, solo aceptamos imágenes JPG y PNG');
+      this.onError();
+    },
+
+
+    /**
+       * Tareas comunes cada vez que ocurre un error
+       */
+    onError: function onError() {
+      this.choosing = false;
+    },
+
+
+    /**
+       * Cuando la imagen selecciona es muy grande
+       */
+    onFileSizeExceed: function onFileSizeExceed() {
+      this.form.errors.add('image', 'La imagen que seleccionaste es muy grande, el tamaño máximo permitido es ' + this.maxFileSizeInMb + 'MB');
+      this.onError();
     }
   }
 });
@@ -3057,7 +4838,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   created: function created() {
-    this.members = this.value;
+    this.members = this.value ? this.value : [{ id: uniqid(), links: null, name: '' }];
   },
 
 
@@ -3087,6 +4868,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__project_form_team_members___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__project_form_team_members__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__project_form_kpis__ = __webpack_require__("./resources/assets/js/project/project-form-kpis.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__project_form_kpis___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__project_form_kpis__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__project_form_photo__ = __webpack_require__("./resources/assets/js/project/project-form-photo.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__project_form_photo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__project_form_photo__);
 //
 //
 //
@@ -3400,6 +5183,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+
 
 
 
@@ -3407,6 +5195,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
+    ProjectFormPhoto: __WEBPACK_IMPORTED_MODULE_3__project_form_photo___default.a,
     ProjectFormLinks: __WEBPACK_IMPORTED_MODULE_0__project_form_links___default.a,
     ProjectFormTeamMembers: __WEBPACK_IMPORTED_MODULE_1__project_form_team_members___default.a,
     ProjectFormKpis: __WEBPACK_IMPORTED_MODULE_2__project_form_kpis___default.a
@@ -3423,15 +5212,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       form: new Form({
         // 1.
-        name: '',
-        holder: '',
-        phone: '',
-        email: '',
-        video: '',
-        address: '',
+        name: null,
+        holder: null,
+        phone: null,
+        email: null,
+        holder_links: null,
+        image: null,
+        video: null,
+        address: null,
         latitude: 19.4336626,
         longitude: -99.1410542,
-        holder_links: [''],
+
         // 2.
         description: '',
         // 3.
@@ -3439,11 +5230,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         // 4.
         competition: '',
         // 5.
-        company_files: [],
+        company_documents: null,
         // 6.
-        links: [''],
+        links: null,
         // 7.
-        sectors: [],
+        sectors: null,
         // 8.
         stage_id: null,
         // 9.
@@ -3458,19 +5249,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         expected_sales_year_1: null,
         expected_sales_year_2: null,
         expected_sales_year_3: null,
-        rewards: [],
+        rewards: null,
         // 11.
-        team: [{ id: uniqid(), links: [''], name: '' }],
+        team: null,
         // 12.
-        kpis: [{ id: uniqid(), time: '', description: '' }],
+        kpis: null,
         // 13.
-        key_files: [],
+        key_documents: null,
         // 14.
-        extra_files: []
+        extra_documents: null
       }),
       sectors: null,
       stages: null,
-      rewards: ['Deuda simple', 'Deuda convertible', 'Participación', 'Revenue share', 'Mixto'],
+      rewards: null,
 
       // TEMPORAL
       results: null
@@ -3498,6 +5289,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   created: function created() {
     this.loadSectors();
     this.loadStages();
+    this.loadRewards();
   },
 
 
@@ -3523,11 +5315,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this2.sectors = response.data;
       });
     },
-    loadStages: function loadStages() {
+    loadRewards: function loadRewards() {
       var _this3 = this;
 
+      axios.get('/rewards').then(function (response) {
+        _this3.rewards = response.data;
+      });
+    },
+    loadStages: function loadStages() {
+      var _this4 = this;
+
       axios.get('/stages').then(function (response) {
-        _this3.stages = response.data;
+        _this4.stages = response.data;
       });
     }
   }
@@ -15943,6 +17742,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.File {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  padding: 10px;\n  border-bottom: 1px solid #ced4da;\n}\n.File__icon {\n  font-size: 48px;\n  color: #84BE00;\n  margin-right: 15px;\n}\n.File__iconstatus {\n  margin-left: 15px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-26caf7f6\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/project/project-form-photo.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.sk-fading-circle {\n  position: absolute;\n}\n.sk-fading-circle .sk-circle {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n.sk-fading-circle .sk-circle .sk-circle-indicator {\n  display: block;\n  margin: 0 auto;\n  width: 15%;\n  height: 15%;\n  border-radius: 100%;\n  -webkit-animation: sk-circleFadeDelay 1s infinite ease-in-out both;\n  animation: sk-circleFadeDelay 1s infinite ease-in-out both;\n}\n.sk-fading-circle .sk-circle2 {\n  -webkit-transform: rotate(30deg);\n  transform: rotate(30deg);\n}\n.sk-fading-circle .sk-circle3 {\n  -webkit-transform: rotate(60deg);\n  transform: rotate(60deg);\n}\n.sk-fading-circle .sk-circle4 {\n  -webkit-transform: rotate(90deg);\n  transform: rotate(90deg);\n}\n.sk-fading-circle .sk-circle5 {\n  -webkit-transform: rotate(120deg);\n  transform: rotate(120deg);\n}\n.sk-fading-circle .sk-circle6 {\n  -webkit-transform: rotate(150deg);\n  transform: rotate(150deg);\n}\n.sk-fading-circle .sk-circle7 {\n  -webkit-transform: rotate(180deg);\n  transform: rotate(180deg);\n}\n.sk-fading-circle .sk-circle8 {\n  -webkit-transform: rotate(210deg);\n  transform: rotate(210deg);\n}\n.sk-fading-circle .sk-circle9 {\n  -webkit-transform: rotate(240deg);\n  transform: rotate(240deg);\n}\n.sk-fading-circle .sk-circle10 {\n  -webkit-transform: rotate(270deg);\n  transform: rotate(270deg);\n}\n.sk-fading-circle .sk-circle11 {\n  -webkit-transform: rotate(300deg);\n  transform: rotate(300deg);\n}\n.sk-fading-circle .sk-circle12 {\n  -webkit-transform: rotate(330deg);\n  transform: rotate(330deg);\n}\n.sk-fading-circle .sk-circle2 .sk-circle-indicator {\n  -webkit-animation-delay: -0.91667s;\n  animation-delay: -0.91667s;\n}\n.sk-fading-circle .sk-circle3 .sk-circle-indicator {\n  -webkit-animation-delay: -0.83333s;\n  animation-delay: -0.83333s;\n}\n.sk-fading-circle .sk-circle4 .sk-circle-indicator {\n  -webkit-animation-delay: -0.75s;\n  animation-delay: -0.75s;\n}\n.sk-fading-circle .sk-circle5 .sk-circle-indicator {\n  -webkit-animation-delay: -0.66667s;\n  animation-delay: -0.66667s;\n}\n.sk-fading-circle .sk-circle6 .sk-circle-indicator {\n  -webkit-animation-delay: -0.58333s;\n  animation-delay: -0.58333s;\n}\n.sk-fading-circle .sk-circle7 .sk-circle-indicator {\n  -webkit-animation-delay: -0.5s;\n  animation-delay: -0.5s;\n}\n.sk-fading-circle .sk-circle8 .sk-circle-indicator {\n  -webkit-animation-delay: -0.41667s;\n  animation-delay: -0.41667s;\n}\n.sk-fading-circle .sk-circle9 .sk-circle-indicator {\n  -webkit-animation-delay: -0.33333s;\n  animation-delay: -0.33333s;\n}\n.sk-fading-circle .sk-circle10 .sk-circle-indicator {\n  -webkit-animation-delay: -0.25s;\n  animation-delay: -0.25s;\n}\n.sk-fading-circle .sk-circle11 .sk-circle-indicator {\n  -webkit-animation-delay: -0.16667s;\n  animation-delay: -0.16667s;\n}\n.sk-fading-circle .sk-circle12 .sk-circle-indicator {\n  -webkit-animation-delay: -0.08333s;\n  animation-delay: -0.08333s;\n}\n@-webkit-keyframes sk-circleFadeDelay {\n0%,\n  39%,\n  100% {\n    opacity: 0;\n}\n40% {\n    opacity: 1;\n}\n}\n@keyframes sk-circleFadeDelay {\n0%,\n  39%,\n  100% {\n    opacity: 0;\n}\n40% {\n    opacity: 1;\n}\n}\n.croppa-container {\n  display: inline-block;\n  cursor: pointer;\n  -webkit-transition: all 0.3s;\n  transition: all 0.3s;\n  position: relative;\n  font-size: 0;\n  -ms-flex-item-align: start;\n  align-self: flex-start;\n  background-color: #e6e6e6;\n}\n.croppa-container canvas {\n  -webkit-transition: all 0.3s;\n  transition: all 0.3s;\n}\n.croppa-container:hover {\n  opacity: 0.7;\n}\n.croppa-container.croppa--dropzone {\n  -webkit-box-shadow: inset 0 0 10px #333;\n  box-shadow: inset 0 0 10px #333;\n}\n.croppa-container.croppa--dropzone canvas {\n  opacity: 0.5;\n}\n.croppa-container.croppa--disabled-cc {\n  cursor: default;\n}\n.croppa-container.croppa--disabled-cc:hover {\n  opacity: 1;\n}\n.croppa-container.croppa--has-target {\n  cursor: move;\n}\n.croppa-container.croppa--has-target:hover {\n  opacity: 1;\n}\n.croppa-container.croppa--has-target.croppa--disabled-mz {\n  cursor: default;\n}\n.croppa-container.croppa--disabled {\n  cursor: not-allowed;\n}\n.croppa-container.croppa--disabled:hover {\n  opacity: 1;\n}\n.croppa-container svg.icon-remove {\n  position: absolute;\n  background: #fff;\n  border-radius: 50%;\n  -webkit-filter: drop-shadow(-2px 2px 2px rgba(0, 0, 0, 0.7));\n  filter: drop-shadow(-2px 2px 2px rgba(0, 0, 0, 0.7));\n  z-index: 10;\n  cursor: pointer;\n  border: 2px solid #fff;\n}\n.PhotoInput {\n  display: block;\n  width: 100%;\n  height: auto;\n  position: relative;\n  padding: 56.25% 0 0 0;\n}\n.PhotoInput__image {\n  display: block;\n  width: 100%;\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n}\n.PhotoInput__toolbar {\n  width: 100%;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  position: absolute;\n}\n.PhotoInput__toolbar.top {\n    top: -43px;\n}\n.PhotoInput__toolbar.bottom {\n    margin-top: 57.25%;\n}\n.PhotoInput__toolbar .btn {\n    min-width: inherit;\n}\n.PhotoInput--active {\n  z-index: 1041;\n}\n.PhotoInput__backdrop {\n  z-index: 1040;\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 1040;\n  background-color: rgba(0, 0, 0, 0.8);\n}\n.PhotoInput__menu {\n  z-index: 1042;\n}\n.PhotoInput__icon {\n  color: #ced4da;\n  font-size: 80px;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  position: absolute;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  width: 100%;\n  height: 100%;\n}\n.PhotoInput__wrapper {\n  display: block;\n  max-width: 100%;\n  max-height: 100%;\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background: #FFF;\n  border: #ced4da 1px solid;\n}\n.PhotoInput__wrapper .croppa-container {\n    overflow: hidden;\n    position: absolute;\n    top: 0;\n    left: 0;\n    bottom: 0;\n    right: 0;\n    width: 100%;\n    height: 100%;\n}\n.PhotoInput__wrapper .croppa-container canvas {\n      max-width: 100%;\n      max-height: 100%;\n}\n.form-group.is-invalid .PhotoInput__wrapper {\n  border-color: #dc3545;\n}\n", ""]);
 
 // exports
 
@@ -46953,6 +48767,1563 @@ function macHandler(error){
 
 /***/ }),
 
+/***/ "./node_modules/vue-croppa/dist/vue-croppa.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {/*
+ * vue-croppa v1.1.4
+ * https://github.com/zhanziyang/vue-croppa
+ * 
+ * Copyright (c) 2017 zhanziyang
+ * Released under the ISC license
+ */
+  
+(function (global, factory) {
+	 true ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.Croppa = factory());
+}(this, (function () { 'use strict';
+
+var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+
+
+
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+var index = createCommonjsModule(function (module, exports) {
+(function (root, factory) {
+    if (false) {
+        undefined([], factory);
+    } else {
+        module.exports = factory();
+    }
+}(commonjsGlobal, function () {
+  'use strict';
+
+  function drawImage(img, orientation, x, y, width, height) {
+    if (!/^[1-8]$/.test(orientation)) throw new Error('orientation should be [1-8]');
+
+    if (x == null) x = 0;
+    if (y == null) y = 0;
+    if (width == null) width = img.width;
+    if (height == null) height = img.height;
+
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx.save();
+    switch (+orientation) {
+      // 1 = The 0th row is at the visual top of the image, and the 0th column is the visual left-hand side.
+      case 1:
+          break;
+
+      // 2 = The 0th row is at the visual top of the image, and the 0th column is the visual right-hand side.
+      case 2:
+         ctx.translate(width, 0);
+         ctx.scale(-1, 1);
+         break;
+
+      // 3 = The 0th row is at the visual bottom of the image, and the 0th column is the visual right-hand side.
+      case 3:
+          ctx.translate(width, height);
+          ctx.rotate(180 / 180 * Math.PI);
+          break;
+
+      // 4 = The 0th row is at the visual bottom of the image, and the 0th column is the visual left-hand side.
+      case 4:
+          ctx.translate(0, height);
+          ctx.scale(1, -1);
+          break;
+
+      // 5 = The 0th row is the visual left-hand side of the image, and the 0th column is the visual top.
+      case 5:
+          canvas.width = height;
+          canvas.height = width;
+          ctx.rotate(90 / 180 * Math.PI);
+          ctx.scale(1, -1);
+          break;
+
+      // 6 = The 0th row is the visual right-hand side of the image, and the 0th column is the visual top.
+      case 6:
+          canvas.width = height;
+          canvas.height = width;
+          ctx.rotate(90 / 180 * Math.PI);
+          ctx.translate(0, -height);
+          break;
+
+      // 7 = The 0th row is the visual right-hand side of the image, and the 0th column is the visual bottom.
+      case 7:
+          canvas.width = height;
+          canvas.height = width;
+          ctx.rotate(270 / 180 * Math.PI);
+          ctx.translate(-width, height);
+          ctx.scale(1, -1);
+          break;
+
+      // 8 = The 0th row is the visual left-hand side of the image, and the 0th column is the visual bottom.
+      case 8:
+          canvas.width = height;
+          canvas.height = width;
+          ctx.translate(0, width);
+          ctx.rotate(270 / 180 * Math.PI);
+          break;
+    }
+
+    ctx.drawImage(img, x, y, width, height);
+    ctx.restore();
+
+    return canvas;
+  }
+
+  return {
+    drawImage: drawImage
+  };
+}));
+});
+
+var u = {
+  onePointCoord: function onePointCoord(point, vm) {
+    var canvas = vm.canvas,
+        quality = vm.quality;
+
+    var rect = canvas.getBoundingClientRect();
+    var clientX = point.clientX;
+    var clientY = point.clientY;
+    return {
+      x: (clientX - rect.left) * quality,
+      y: (clientY - rect.top) * quality
+    };
+  },
+  getPointerCoords: function getPointerCoords(evt, vm) {
+    var pointer = void 0;
+    if (evt.touches && evt.touches[0]) {
+      pointer = evt.touches[0];
+    } else if (evt.changedTouches && evt.changedTouches[0]) {
+      pointer = evt.changedTouches[0];
+    } else {
+      pointer = evt;
+    }
+    return this.onePointCoord(pointer, vm);
+  },
+  getPinchDistance: function getPinchDistance(evt, vm) {
+    var pointer1 = evt.touches[0];
+    var pointer2 = evt.touches[1];
+    var coord1 = this.onePointCoord(pointer1, vm);
+    var coord2 = this.onePointCoord(pointer2, vm);
+
+    return Math.sqrt(Math.pow(coord1.x - coord2.x, 2) + Math.pow(coord1.y - coord2.y, 2));
+  },
+  getPinchCenterCoord: function getPinchCenterCoord(evt, vm) {
+    var pointer1 = evt.touches[0];
+    var pointer2 = evt.touches[1];
+    var coord1 = this.onePointCoord(pointer1, vm);
+    var coord2 = this.onePointCoord(pointer2, vm);
+
+    return {
+      x: (coord1.x + coord2.x) / 2,
+      y: (coord1.y + coord2.y) / 2
+    };
+  },
+  imageLoaded: function imageLoaded(img) {
+    return img.complete && img.naturalWidth !== 0;
+  },
+  rAFPolyfill: function rAFPolyfill() {
+    // rAF polyfill
+    if (typeof document == 'undefined' || typeof window == 'undefined') return;
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+      window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+      window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || // Webkit中此取消方法的名字变了
+      window[vendors[x] + 'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame) {
+      window.requestAnimationFrame = function (callback) {
+        var currTime = new Date().getTime();
+        var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
+        var id = window.setTimeout(function () {
+          var arg = currTime + timeToCall;
+          callback(arg);
+        }, timeToCall);
+        lastTime = currTime + timeToCall;
+        return id;
+      };
+    }
+    if (!window.cancelAnimationFrame) {
+      window.cancelAnimationFrame = function (id) {
+        clearTimeout(id);
+      };
+    }
+
+    Array.isArray = function (arg) {
+      return Object.prototype.toString.call(arg) === '[object Array]';
+    };
+  },
+  toBlobPolyfill: function toBlobPolyfill() {
+    if (typeof document == 'undefined' || typeof window == 'undefined' || !HTMLCanvasElement) return;
+    var binStr, len, arr;
+    if (!HTMLCanvasElement.prototype.toBlob) {
+      Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
+        value: function value(callback, type, quality) {
+          binStr = atob(this.toDataURL(type, quality).split(',')[1]);
+          len = binStr.length;
+          arr = new Uint8Array(len);
+
+          for (var i = 0; i < len; i++) {
+            arr[i] = binStr.charCodeAt(i);
+          }
+
+          callback(new Blob([arr], { type: type || 'image/png' }));
+        }
+      });
+    }
+  },
+  eventHasFile: function eventHasFile(evt) {
+    var dt = evt.dataTransfer || evt.originalEvent.dataTransfer;
+    if (dt.types) {
+      for (var i = 0, len = dt.types.length; i < len; i++) {
+        if (dt.types[i] == 'Files') {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  },
+  getFileOrientation: function getFileOrientation(arrayBuffer) {
+    var view = new DataView(arrayBuffer);
+    if (view.getUint16(0, false) != 0xFFD8) return -2;
+    var length = view.byteLength;
+    var offset = 2;
+    while (offset < length) {
+      var marker = view.getUint16(offset, false);
+      offset += 2;
+      if (marker == 0xFFE1) {
+        if (view.getUint32(offset += 2, false) != 0x45786966) return -1;
+        var little = view.getUint16(offset += 6, false) == 0x4949;
+        offset += view.getUint32(offset + 4, little);
+        var tags = view.getUint16(offset, little);
+        offset += 2;
+        for (var i = 0; i < tags; i++) {
+          if (view.getUint16(offset + i * 12, little) == 0x0112) {
+            return view.getUint16(offset + i * 12 + 8, little);
+          }
+        }
+      } else if ((marker & 0xFF00) != 0xFF00) break;else offset += view.getUint16(offset, false);
+    }
+    return -1;
+  },
+  base64ToArrayBuffer: function base64ToArrayBuffer(base64) {
+    base64 = base64.replace(/^data:([^;]+);base64,/gmi, '');
+    var binaryString = atob(base64);
+    var len = binaryString.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes.buffer;
+  },
+  getRotatedImage: function getRotatedImage(img, orientation) {
+    var _canvas = index.drawImage(img, orientation);
+    var _img = new Image();
+    _img.src = _canvas.toDataURL();
+    return _img;
+  },
+  flipX: function flipX(ori) {
+    if (ori % 2 == 0) {
+      return ori - 1;
+    }
+
+    return ori + 1;
+  },
+  flipY: function flipY(ori) {
+    var map = {
+      1: 4,
+      4: 1,
+      2: 3,
+      3: 2,
+      5: 8,
+      8: 5,
+      6: 7,
+      7: 6
+    };
+
+    return map[ori];
+  },
+  rotate90: function rotate90(ori) {
+    var map = {
+      1: 6,
+      2: 7,
+      3: 8,
+      4: 5,
+      5: 2,
+      6: 3,
+      7: 4,
+      8: 1
+    };
+
+    return map[ori];
+  },
+  numberValid: function numberValid(n) {
+    return typeof n === 'number' && !isNaN(n);
+  }
+};
+
+Number.isInteger = Number.isInteger || function (value) {
+  return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
+};
+
+var initialImageType = String;
+if (typeof window !== 'undefined' && window.Image) {
+  initialImageType = [String, Image];
+}
+
+var props = {
+  value: Object,
+  width: {
+    type: Number,
+    default: 200,
+    validator: function validator(val) {
+      return val > 0;
+    }
+  },
+  height: {
+    type: Number,
+    default: 200,
+    validator: function validator(val) {
+      return val > 0;
+    }
+  },
+  placeholder: {
+    type: String,
+    default: 'Choose an image'
+  },
+  placeholderColor: {
+    default: '#606060'
+  },
+  placeholderFontSize: {
+    type: Number,
+    default: 0,
+    validator: function validator(val) {
+      return val >= 0;
+    }
+  },
+  canvasColor: {
+    default: 'transparent'
+  },
+  quality: {
+    type: Number,
+    default: 2,
+    validator: function validator(val) {
+      return val > 0;
+    }
+  },
+  zoomSpeed: {
+    default: 3,
+    type: Number,
+    validator: function validator(val) {
+      return val > 0;
+    }
+  },
+  accept: String,
+  fileSizeLimit: {
+    type: Number,
+    default: 0,
+    validator: function validator(val) {
+      return val >= 0;
+    }
+  },
+  disabled: Boolean,
+  disableDragAndDrop: Boolean,
+  disableClickToChoose: Boolean,
+  disableDragToMove: Boolean,
+  disableScrollToZoom: Boolean,
+  disablePinchToZoom: Boolean,
+  disableRotation: Boolean,
+  reverseScrollToZoom: Boolean,
+  preventWhiteSpace: Boolean,
+  showRemoveButton: {
+    type: Boolean,
+    default: true
+  },
+  removeButtonColor: {
+    type: String,
+    default: 'red'
+  },
+  removeButtonSize: {
+    type: Number
+  },
+  initialImage: initialImageType,
+  initialSize: {
+    type: String,
+    default: 'cover',
+    validator: function validator(val) {
+      return val === 'cover' || val === 'contain' || val === 'natural';
+    }
+  },
+  initialPosition: {
+    type: String,
+    default: 'center',
+    validator: function validator(val) {
+      var valids = ['center', 'top', 'bottom', 'left', 'right'];
+      return val.split(' ').every(function (word) {
+        return valids.indexOf(word) >= 0;
+      }) || /^-?\d+% -?\d+%$/.test(val);
+    }
+  },
+  inputAttrs: Object,
+  showLoading: Boolean,
+  loadingSize: {
+    type: Number,
+    default: 20
+  },
+  loadingColor: {
+    type: String,
+    default: '#606060'
+  },
+  replaceDrop: Boolean
+};
+
+var events = {
+  INIT_EVENT: 'init',
+  FILE_CHOOSE_EVENT: 'file-choose',
+  FILE_SIZE_EXCEED_EVENT: 'file-size-exceed',
+  FILE_TYPE_MISMATCH_EVENT: 'file-type-mismatch',
+  NEW_IMAGE: 'new-image',
+  NEW_IMAGE_DRAWN: 'new-image-drawn',
+  IMAGE_REMOVE_EVENT: 'image-remove',
+  MOVE_EVENT: 'move',
+  ZOOM_EVENT: 'zoom',
+  DRAW: 'draw',
+  INITIAL_IMAGE_LOADED_EVENT: 'initial-image-loaded',
+  LOADING_START: 'loading-start',
+  LOADING_END: 'loading-end'
+};
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+var PCT_PER_ZOOM = 1 / 100000; // The amount of zooming everytime it happens, in percentage of image width.
+var MIN_MS_PER_CLICK = 500; // If touch duration is shorter than the value, then it is considered as a click.
+var CLICK_MOVE_THRESHOLD = 100; // If touch move distance is greater than this value, then it will by no mean be considered as a click.
+var MIN_WIDTH = 10; // The minimal width the user can zoom to.
+var DEFAULT_PLACEHOLDER_TAKEUP = 2 / 3; // Placeholder text by default takes up this amount of times of canvas width.
+var PINCH_ACCELERATION = 1; // The amount of times by which the pinching is more sensitive than the scolling
+// const DEBUG = false
+
+var component = { render: function render() {
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { ref: "wrapper", class: 'croppa-container ' + (_vm.img ? 'croppa--has-target' : '') + ' ' + (_vm.disabled ? 'croppa--disabled' : '') + ' ' + (_vm.disableClickToChoose ? 'croppa--disabled-cc' : '') + ' ' + (_vm.disableDragToMove && _vm.disableScrollToZoom ? 'croppa--disabled-mz' : '') + ' ' + (_vm.fileDraggedOver ? 'croppa--dropzone' : ''), on: { "dragenter": function dragenter($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handleDragEnter($event);
+        }, "dragleave": function dragleave($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handleDragLeave($event);
+        }, "dragover": function dragover($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handleDragOver($event);
+        }, "drop": function drop($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handleDrop($event);
+        } } }, [_c('input', _vm._b({ ref: "fileInput", staticStyle: { "height": "1px", "width": "1px", "overflow": "hidden", "margin-left": "-99999px", "position": "absolute" }, attrs: { "type": "file", "accept": _vm.accept, "disabled": _vm.disabled }, on: { "change": _vm._handleInputChange } }, 'input', _vm.inputAttrs)), _c('div', { staticClass: "slots", staticStyle: { "width": "0", "height": "0", "visibility": "hidden" } }, [_vm._t("initial"), _vm._t("placeholder")], 2), _c('canvas', { ref: "canvas", on: { "click": function click($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handleClick($event);
+        }, "touchstart": function touchstart($event) {
+          $event.stopPropagation();_vm._handlePointerStart($event);
+        }, "mousedown": function mousedown($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handlePointerStart($event);
+        }, "pointerstart": function pointerstart($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handlePointerStart($event);
+        }, "touchend": function touchend($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handlePointerEnd($event);
+        }, "touchcancel": function touchcancel($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handlePointerEnd($event);
+        }, "mouseup": function mouseup($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handlePointerEnd($event);
+        }, "pointerend": function pointerend($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handlePointerEnd($event);
+        }, "pointercancel": function pointercancel($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handlePointerEnd($event);
+        }, "touchmove": function touchmove($event) {
+          $event.stopPropagation();_vm._handlePointerMove($event);
+        }, "mousemove": function mousemove($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handlePointerMove($event);
+        }, "pointermove": function pointermove($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handlePointerMove($event);
+        }, "pointerleave": function pointerleave($event) {
+          $event.stopPropagation();$event.preventDefault();_vm._handlePointerLeave($event);
+        }, "DOMMouseScroll": function DOMMouseScroll($event) {
+          $event.stopPropagation();_vm._handleWheel($event);
+        }, "wheel": function wheel($event) {
+          $event.stopPropagation();_vm._handleWheel($event);
+        }, "mousewheel": function mousewheel($event) {
+          $event.stopPropagation();_vm._handleWheel($event);
+        } } }), _vm.showRemoveButton && _vm.img ? _c('svg', { staticClass: "icon icon-remove", style: 'top: -' + _vm.height / 40 + 'px; right: -' + _vm.width / 40 + 'px', attrs: { "viewBox": "0 0 1024 1024", "version": "1.1", "xmlns": "http://www.w3.org/2000/svg", "xmlns:xlink": "http://www.w3.org/1999/xlink", "width": _vm.removeButtonSize || _vm.width / 10, "height": _vm.removeButtonSize || _vm.width / 10 }, on: { "click": _vm.remove } }, [_c('path', { attrs: { "d": "M511.921231 0C229.179077 0 0 229.257846 0 512 0 794.702769 229.179077 1024 511.921231 1024 794.781538 1024 1024 794.702769 1024 512 1024 229.257846 794.781538 0 511.921231 0ZM732.041846 650.633846 650.515692 732.081231C650.515692 732.081231 521.491692 593.683692 511.881846 593.683692 502.429538 593.683692 373.366154 732.081231 373.366154 732.081231L291.761231 650.633846C291.761231 650.633846 430.316308 523.500308 430.316308 512.196923 430.316308 500.696615 291.761231 373.523692 291.761231 373.523692L373.366154 291.918769C373.366154 291.918769 503.453538 430.395077 511.881846 430.395077 520.349538 430.395077 650.515692 291.918769 650.515692 291.918769L732.041846 373.523692C732.041846 373.523692 593.447385 502.547692 593.447385 512.196923 593.447385 521.412923 732.041846 650.633846 732.041846 650.633846Z", "fill": _vm.removeButtonColor } })]) : _vm._e(), _vm.showLoading && _vm.loading ? _c('div', { staticClass: "sk-fading-circle", style: _vm.loadingStyle }, _vm._l(12, function (i) {
+      return _c('div', { key: i, class: 'sk-circle' + i + ' sk-circle' }, [_c('div', { staticClass: "sk-circle-indicator", style: { backgroundColor: _vm.loadingColor } })]);
+    })) : _vm._e(), _vm._t("default")], 2);
+  }, staticRenderFns: [],
+  model: {
+    prop: 'value',
+    event: events.INIT_EVENT
+  },
+
+  props: props,
+
+  data: function data() {
+    return {
+      canvas: null,
+      ctx: null,
+      originalImage: null,
+      img: null,
+      dragging: false,
+      lastMovingCoord: null,
+      imgData: {
+        width: 0,
+        height: 0,
+        startX: 0,
+        startY: 0
+      },
+      fileDraggedOver: false,
+      tabStart: 0,
+      scrolling: false,
+      pinching: false,
+      rotating: false,
+      pinchDistance: 0,
+      supportTouch: false,
+      pointerMoved: false,
+      pointerStartCoord: null,
+      naturalWidth: 0,
+      naturalHeight: 0,
+      scaleRatio: null,
+      orientation: 1,
+      userMetadata: null,
+      imageSet: false,
+      currentPointerCoord: null,
+      currentIsInitial: false,
+      loading: false
+    };
+  },
+
+
+  computed: {
+    outputWidth: function outputWidth() {
+      return this.width * this.quality;
+    },
+    outputHeight: function outputHeight() {
+      return this.height * this.quality;
+    },
+    computedPlaceholderFontSize: function computedPlaceholderFontSize() {
+      return this.placeholderFontSize * this.quality;
+    },
+    aspectRatio: function aspectRatio() {
+      return this.naturalWidth / this.naturalHeight;
+    },
+    loadingStyle: function loadingStyle() {
+      return {
+        width: this.loadingSize + 'px',
+        height: this.loadingSize + 'px',
+        right: '15px',
+        bottom: '10px'
+      };
+    }
+  },
+
+  mounted: function mounted() {
+    this._initialize();
+    u.rAFPolyfill();
+    u.toBlobPolyfill();
+
+    var supports = this.supportDetection();
+    if (!supports.basic) {
+      console.warn('Your browser does not support vue-croppa functionality.');
+    }
+  },
+
+
+  watch: {
+    outputWidth: function outputWidth() {
+      this.onDimensionChange();
+    },
+    outputHeight: function outputHeight() {
+      this.onDimensionChange();
+    },
+    canvasColor: function canvasColor() {
+      if (!this.img) {
+        this._setPlaceholders();
+      } else {
+        this._draw();
+      }
+    },
+    placeholder: function placeholder() {
+      if (!this.img) {
+        this._setPlaceholders();
+      }
+    },
+    placeholderColor: function placeholderColor() {
+      if (!this.img) {
+        this._setPlaceholders();
+      }
+    },
+    computedPlaceholderFontSize: function computedPlaceholderFontSize() {
+      if (!this.img) {
+        this._setPlaceholders();
+      }
+    },
+    preventWhiteSpace: function preventWhiteSpace(val) {
+      if (val) {
+        this.imageSet = false;
+      }
+      this._placeImage();
+    },
+    scaleRatio: function scaleRatio(val, oldVal) {
+      if (!this.img) return;
+      if (!u.numberValid(val)) return;
+
+      var x = 1;
+      if (u.numberValid(oldVal) && oldVal !== 0) {
+        x = val / oldVal;
+      }
+      var pos = this.currentPointerCoord || {
+        x: this.imgData.startX + this.imgData.width / 2,
+        y: this.imgData.startY + this.imgData.height / 2
+      };
+      this.imgData.width = this.naturalWidth * val;
+      this.imgData.height = this.naturalHeight * val;
+
+      if (this.preventWhiteSpace) {
+        this._preventZoomingToWhiteSpace();
+        this._preventMovingToWhiteSpace();
+      }
+
+      if (this.userMetadata || !this.imageSet || this.rotating) return;
+      var offsetX = (x - 1) * (pos.x - this.imgData.startX);
+      var offsetY = (x - 1) * (pos.y - this.imgData.startY);
+      this.imgData.startX = this.imgData.startX - offsetX;
+      this.imgData.startY = this.imgData.startY - offsetY;
+    },
+
+    'imgData.width': function imgDataWidth(val, oldVal) {
+      if (!u.numberValid(val)) return;
+      this.scaleRatio = val / this.naturalWidth;
+      if (this.hasImage()) {
+        if (Math.abs(val - oldVal) > val * (1 / 100000)) {
+          this.$emit(events.ZOOM_EVENT);
+          this._draw();
+        }
+      }
+    },
+    'imgData.height': function imgDataHeight(val) {
+      if (!u.numberValid(val)) return;
+      this.scaleRatio = val / this.naturalHeight;
+    },
+    loading: function loading(val) {
+      if (val) {
+        this.$emit(events.LOADING_START);
+      } else {
+        this.$emit(events.LOADING_END);
+      }
+    }
+  },
+
+  methods: {
+    getCanvas: function getCanvas() {
+      return this.canvas;
+    },
+    getContext: function getContext() {
+      return this.ctx;
+    },
+    getChosenFile: function getChosenFile() {
+      return this.$refs.fileInput.files[0];
+    },
+    move: function move(offset) {
+      if (!offset) return;
+      var oldX = this.imgData.startX;
+      var oldY = this.imgData.startY;
+      this.imgData.startX += offset.x;
+      this.imgData.startY += offset.y;
+      if (this.preventWhiteSpace) {
+        this._preventMovingToWhiteSpace();
+      }
+      if (this.imgData.startX !== oldX || this.imgData.startY !== oldY) {
+        this.$emit(events.MOVE_EVENT);
+        this._draw();
+      }
+    },
+    moveUpwards: function moveUpwards() {
+      var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+      this.move({ x: 0, y: -amount });
+    },
+    moveDownwards: function moveDownwards() {
+      var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+      this.move({ x: 0, y: amount });
+    },
+    moveLeftwards: function moveLeftwards() {
+      var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+      this.move({ x: -amount, y: 0 });
+    },
+    moveRightwards: function moveRightwards() {
+      var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+      this.move({ x: amount, y: 0 });
+    },
+    zoom: function zoom() {
+      var zoomIn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+      var acceleration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
+      var realSpeed = this.zoomSpeed * acceleration;
+      var speed = this.outputWidth * PCT_PER_ZOOM * realSpeed;
+      var x = 1;
+      if (zoomIn) {
+        x = 1 + speed;
+      } else if (this.imgData.width > MIN_WIDTH) {
+        x = 1 - speed;
+      }
+
+      this.scaleRatio *= x;
+    },
+    zoomIn: function zoomIn() {
+      this.zoom(true);
+    },
+    zoomOut: function zoomOut() {
+      this.zoom(false);
+    },
+    rotate: function rotate() {
+      var step = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+      if (this.disableRotation || this.disabled) return;
+      step = parseInt(step);
+      if (isNaN(step) || step > 3 || step < -3) {
+        console.warn('Invalid argument for rotate() method. It should one of the integers from -3 to 3.');
+        step = 1;
+      }
+      this._rotateByStep(step);
+    },
+    flipX: function flipX() {
+      if (this.disableRotation || this.disabled) return;
+      this._setOrientation(2);
+    },
+    flipY: function flipY() {
+      if (this.disableRotation || this.disabled) return;
+      this._setOrientation(4);
+    },
+    refresh: function refresh() {
+      this.$nextTick(this._initialize);
+    },
+    hasImage: function hasImage() {
+      return !!this.imageSet;
+    },
+    applyMetadata: function applyMetadata(metadata) {
+      if (!metadata) return;
+      this.userMetadata = metadata;
+      var ori = metadata.orientation || this.orientation || 1;
+      this._setOrientation(ori, true);
+    },
+    generateDataUrl: function generateDataUrl(type, compressionRate) {
+      if (!this.hasImage()) return '';
+      return this.canvas.toDataURL(type, compressionRate);
+    },
+    generateBlob: function generateBlob(callback, mimeType, qualityArgument) {
+      if (!this.hasImage()) {
+        callback(null);
+        return;
+      }
+      this.canvas.toBlob(callback, mimeType, qualityArgument);
+    },
+    promisedBlob: function promisedBlob() {
+      var _this = this;
+
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      if (typeof Promise == 'undefined') {
+        console.warn('No Promise support. Please add Promise polyfill if you want to use this method.');
+        return;
+      }
+      return new Promise(function (resolve, reject) {
+        try {
+          _this.generateBlob.apply(_this, [function (blob) {
+            resolve(blob);
+          }].concat(args));
+        } catch (err) {
+          reject(err);
+        }
+      });
+    },
+    getMetadata: function getMetadata() {
+      if (!this.hasImage()) return {};
+      var _imgData = this.imgData,
+          startX = _imgData.startX,
+          startY = _imgData.startY;
+
+
+      return {
+        startX: startX,
+        startY: startY,
+        scale: this.scaleRatio,
+        orientation: this.orientation
+      };
+    },
+    supportDetection: function supportDetection() {
+      if (typeof window === 'undefined') return;
+      var div = document.createElement('div');
+      return {
+        'basic': window.requestAnimationFrame && window.File && window.FileReader && window.FileList && window.Blob,
+        'dnd': 'ondragstart' in div && 'ondrop' in div
+      };
+    },
+    chooseFile: function chooseFile() {
+      this.$refs.fileInput.click();
+    },
+    remove: function remove() {
+      this._setPlaceholders();
+
+      var hadImage = this.img != null;
+      this.originalImage = null;
+      this.img = null;
+      this.$refs.fileInput.value = '';
+      this.imgData = {
+        width: 0,
+        height: 0,
+        startX: 0,
+        startY: 0
+      };
+      this.orientation = 1;
+      this.scaleRatio = null;
+      this.userMetadata = null;
+      this.imageSet = false;
+      this.loading = false;
+
+      if (hadImage) {
+        this.$emit(events.IMAGE_REMOVE_EVENT);
+      }
+    },
+    _initialize: function _initialize() {
+      this.canvas = this.$refs.canvas;
+      this._setSize();
+      this.canvas.style.backgroundColor = !this.canvasColor || this.canvasColor == 'default' ? 'transparent' : typeof this.canvasColor === 'string' ? this.canvasColor : '';
+      this.ctx = this.canvas.getContext('2d');
+      this.originalImage = null;
+      this.img = null;
+      this.imageSet = false;
+      this._setInitial();
+      this.$emit(events.INIT_EVENT, this);
+    },
+    _setSize: function _setSize() {
+      this.canvas.width = this.outputWidth;
+      this.canvas.height = this.outputHeight;
+      this.canvas.style.width = this.width + 'px';
+      this.canvas.style.height = this.height + 'px';
+    },
+    _rotateByStep: function _rotateByStep(step) {
+      var orientation = 1;
+      switch (step) {
+        case 1:
+          orientation = 6;
+          break;
+        case 2:
+          orientation = 3;
+          break;
+        case 3:
+          orientation = 8;
+          break;
+        case -1:
+          orientation = 8;
+          break;
+        case -2:
+          orientation = 3;
+          break;
+        case -3:
+          orientation = 6;
+          break;
+      }
+      this._setOrientation(orientation);
+    },
+    _setImagePlaceholder: function _setImagePlaceholder() {
+      var _this2 = this;
+
+      var img = void 0;
+      if (this.$slots.placeholder && this.$slots.placeholder[0]) {
+        var vNode = this.$slots.placeholder[0];
+        var tag = vNode.tag,
+            elm = vNode.elm;
+
+        if (tag == 'img' && elm) {
+          img = elm;
+        }
+      }
+
+      if (!img) return;
+
+      var onLoad = function onLoad() {
+        _this2.ctx.drawImage(img, 0, 0, _this2.outputWidth, _this2.outputHeight);
+      };
+
+      if (u.imageLoaded(img)) {
+        onLoad();
+      } else {
+        img.onload = onLoad;
+      }
+    },
+    _setTextPlaceholder: function _setTextPlaceholder() {
+      var ctx = this.ctx;
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'center';
+      var defaultFontSize = this.outputWidth * DEFAULT_PLACEHOLDER_TAKEUP / this.placeholder.length;
+      var fontSize = !this.computedPlaceholderFontSize || this.computedPlaceholderFontSize == 0 ? defaultFontSize : this.computedPlaceholderFontSize;
+      ctx.font = fontSize + 'px sans-serif';
+      ctx.fillStyle = !this.placeholderColor || this.placeholderColor == 'default' ? '#606060' : this.placeholderColor;
+      ctx.fillText(this.placeholder, this.outputWidth / 2, this.outputHeight / 2);
+    },
+    _setPlaceholders: function _setPlaceholders() {
+      this._paintBackground();
+      this._setImagePlaceholder();
+      this._setTextPlaceholder();
+    },
+    _setInitial: function _setInitial() {
+      var _this3 = this;
+
+      var src = void 0,
+          img = void 0;
+      if (this.$slots.initial && this.$slots.initial[0]) {
+        var vNode = this.$slots.initial[0];
+        var tag = vNode.tag,
+            elm = vNode.elm;
+
+        if (tag == 'img' && elm) {
+          img = elm;
+        }
+      }
+      if (this.initialImage && typeof this.initialImage === 'string') {
+        src = this.initialImage;
+        img = new Image();
+        if (!/^data:/.test(src) && !/^blob:/.test(src)) {
+          img.setAttribute('crossOrigin', 'anonymous');
+        }
+        img.src = src;
+      } else if (_typeof(this.initialImage) === 'object' && this.initialImage instanceof Image) {
+        img = this.initialImage;
+      }
+      if (!src && !img) {
+        this._setPlaceholders();
+        return;
+      }
+      this.currentIsInitial = true;
+      if (u.imageLoaded(img)) {
+        // this.$emit(events.INITIAL_IMAGE_LOADED_EVENT)
+        this._onload(img, +img.dataset['exifOrientation'], true);
+      } else {
+        this.loading = true;
+        img.onload = function () {
+          // this.$emit(events.INITIAL_IMAGE_LOADED_EVENT)
+          _this3._onload(img, +img.dataset['exifOrientation'], true);
+        };
+
+        img.onerror = function () {
+          _this3._setPlaceholders();
+        };
+      }
+    },
+    _onload: function _onload(img) {
+      var orientation = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+      var initial = arguments[2];
+
+      this.originalImage = img;
+      this.img = img;
+
+      if (isNaN(orientation)) {
+        orientation = 1;
+      }
+
+      this._setOrientation(orientation);
+
+      if (initial) {
+        this.$emit(events.INITIAL_IMAGE_LOADED_EVENT);
+      }
+    },
+    _handleClick: function _handleClick() {
+      if (!this.hasImage() && !this.disableClickToChoose && !this.disabled && !this.supportTouch) {
+        this.chooseFile();
+      }
+    },
+    _handleInputChange: function _handleInputChange() {
+      var input = this.$refs.fileInput;
+      if (!input.files.length) return;
+
+      var file = input.files[0];
+      this._onNewFileIn(file);
+    },
+    _onNewFileIn: function _onNewFileIn(file) {
+      var _this4 = this;
+
+      this.currentIsInitial = false;
+      this.loading = true;
+      this.$emit(events.FILE_CHOOSE_EVENT, file);
+      if (!this._fileSizeIsValid(file)) {
+        this.loading = false;
+        this.$emit(events.FILE_SIZE_EXCEED_EVENT, file);
+        throw new Error('File size exceeds limit which is ' + this.fileSizeLimit + ' bytes.');
+      }
+      if (!this._fileTypeIsValid(file)) {
+        this.loading = false;
+        this.$emit(events.FILE_TYPE_MISMATCH_EVENT, file);
+        var type = file.type || file.name.toLowerCase().split('.').pop();
+        throw new Error('File type (' + type + ') does not match what you specified (' + this.accept + ').');
+      }
+      if (typeof window !== 'undefined' && typeof window.FileReader !== 'undefined') {
+        var fr = new FileReader();
+        fr.onload = function (e) {
+          var fileData = e.target.result;
+          var orientation = 1;
+          try {
+            orientation = u.getFileOrientation(u.base64ToArrayBuffer(fileData));
+          } catch (err) {}
+          if (orientation < 1) orientation = 1;
+          var img = new Image();
+          img.src = fileData;
+          img.onload = function () {
+            _this4._onload(img, orientation);
+            _this4.$emit(events.NEW_IMAGE);
+          };
+        };
+        fr.readAsDataURL(file);
+      }
+    },
+    _fileSizeIsValid: function _fileSizeIsValid(file) {
+      if (!file) return false;
+      if (!this.fileSizeLimit || this.fileSizeLimit == 0) return true;
+
+      return file.size < this.fileSizeLimit;
+    },
+    _fileTypeIsValid: function _fileTypeIsValid(file) {
+      if (!this.accepct) return true;
+      var accept = this.accept;
+      var baseMimetype = accept.replace(/\/.*$/, '');
+      var types = accept.split(',');
+      for (var i = 0, len = types.length; i < len; i++) {
+        var type = types[i];
+        var t = type.trim();
+        if (t.charAt(0) == '.') {
+          if (file.name.toLowerCase().split('.').pop() === t.toLowerCase().slice(1)) return true;
+        } else if (/\/\*$/.test(t)) {
+          var fileBaseType = file.type.replace(/\/.*$/, '');
+          if (fileBaseType === baseMimetype) {
+            return true;
+          }
+        } else if (file.type === type) {
+          return true;
+        }
+      }
+
+      return false;
+    },
+    _placeImage: function _placeImage(applyMetadata) {
+      if (!this.img) return;
+      var imgData = this.imgData;
+
+      this.naturalWidth = this.img.naturalWidth;
+      this.naturalHeight = this.img.naturalHeight;
+
+      imgData.startX = u.numberValid(imgData.startX) ? imgData.startX : 0;
+      imgData.startY = u.numberValid(imgData.startY) ? imgData.startY : 0;
+
+      if (this.preventWhiteSpace) {
+        this._aspectFill();
+      } else if (!this.imageSet) {
+        if (this.initialSize == 'contain') {
+          this._aspectFit();
+        } else if (this.initialSize == 'natural') {
+          this._naturalSize();
+        } else {
+          this._aspectFill();
+        }
+      } else {
+        this.imgData.width = this.naturalWidth * this.scaleRatio;
+        this.imgData.height = this.naturalHeight * this.scaleRatio;
+      }
+
+      if (!this.imageSet) {
+        if (/top/.test(this.initialPosition)) {
+          imgData.startY = 0;
+        } else if (/bottom/.test(this.initialPosition)) {
+          imgData.startY = this.outputHeight - imgData.height;
+        }
+
+        if (/left/.test(this.initialPosition)) {
+          imgData.startX = 0;
+        } else if (/right/.test(this.initialPosition)) {
+          imgData.startX = this.outputWidth - imgData.width;
+        }
+
+        if (/^-?\d+% -?\d+%$/.test(this.initialPosition)) {
+          var result = /^(-?\d+)% (-?\d+)%$/.exec(this.initialPosition);
+          var x = +result[1] / 100;
+          var y = +result[2] / 100;
+          imgData.startX = x * (this.outputWidth - imgData.width);
+          imgData.startY = y * (this.outputHeight - imgData.height);
+        }
+      }
+
+      applyMetadata && this._applyMetadata();
+
+      if (applyMetadata && this.preventWhiteSpace) {
+        this.zoom(false, 0);
+      } else {
+        this.move({ x: 0, y: 0 });
+        this._draw();
+      }
+    },
+    _aspectFill: function _aspectFill() {
+      var imgWidth = this.naturalWidth;
+      var imgHeight = this.naturalHeight;
+      var canvasRatio = this.outputWidth / this.outputHeight;
+      var scaleRatio = void 0;
+
+      if (this.aspectRatio > canvasRatio) {
+        scaleRatio = imgHeight / this.outputHeight;
+        this.imgData.width = imgWidth / scaleRatio;
+        this.imgData.height = this.outputHeight;
+        this.imgData.startX = -(this.imgData.width - this.outputWidth) / 2;
+        this.imgData.startY = 0;
+      } else {
+        scaleRatio = imgWidth / this.outputWidth;
+        this.imgData.height = imgHeight / scaleRatio;
+        this.imgData.width = this.outputWidth;
+        this.imgData.startY = -(this.imgData.height - this.outputHeight) / 2;
+        this.imgData.startX = 0;
+      }
+    },
+    _aspectFit: function _aspectFit() {
+      var imgWidth = this.naturalWidth;
+      var imgHeight = this.naturalHeight;
+      var canvasRatio = this.outputWidth / this.outputHeight;
+      var scaleRatio = void 0;
+      if (this.aspectRatio > canvasRatio) {
+        scaleRatio = imgWidth / this.outputWidth;
+        this.imgData.height = imgHeight / scaleRatio;
+        this.imgData.width = this.outputWidth;
+        this.imgData.startY = -(this.imgData.height - this.outputHeight) / 2;
+      } else {
+        scaleRatio = imgHeight / this.outputHeight;
+        this.imgData.width = imgWidth / scaleRatio;
+        this.imgData.height = this.outputHeight;
+        this.imgData.startX = -(this.imgData.width - this.outputWidth) / 2;
+      }
+    },
+    _naturalSize: function _naturalSize() {
+      var imgWidth = this.naturalWidth;
+      var imgHeight = this.naturalHeight;
+      this.imgData.width = imgWidth;
+      this.imgData.height = imgHeight;
+      this.imgData.startX = -(this.imgData.width - this.outputWidth) / 2;
+      this.imgData.startY = -(this.imgData.height - this.outputHeight) / 2;
+    },
+    _handlePointerStart: function _handlePointerStart(evt) {
+      this.supportTouch = true;
+      this.pointerMoved = false;
+      var pointerCoord = u.getPointerCoords(evt, this);
+      this.pointerStartCoord = pointerCoord;
+
+      if (this.disabled) return;
+      // simulate click with touch on mobile devices
+      if (!this.hasImage() && !this.disableClickToChoose) {
+        this.tabStart = new Date().valueOf();
+        return;
+      }
+      // ignore mouse right click and middle click
+      if (evt.which && evt.which > 1) return;
+
+      if (!evt.touches || evt.touches.length === 1) {
+        this.dragging = true;
+        this.pinching = false;
+        var coord = u.getPointerCoords(evt, this);
+        this.lastMovingCoord = coord;
+      }
+
+      if (evt.touches && evt.touches.length === 2 && !this.disablePinchToZoom) {
+        this.dragging = false;
+        this.pinching = true;
+        this.pinchDistance = u.getPinchDistance(evt, this);
+      }
+
+      var cancelEvents = ['mouseup', 'touchend', 'touchcancel', 'pointerend', 'pointercancel'];
+      for (var i = 0, len = cancelEvents.length; i < len; i++) {
+        var e = cancelEvents[i];
+        document.addEventListener(e, this._handlePointerEnd);
+      }
+    },
+    _handlePointerEnd: function _handlePointerEnd(evt) {
+      var pointerMoveDistance = 0;
+      if (this.pointerStartCoord) {
+        var pointerCoord = u.getPointerCoords(evt, this);
+        pointerMoveDistance = Math.sqrt(Math.pow(pointerCoord.x - this.pointerStartCoord.x, 2) + Math.pow(pointerCoord.y - this.pointerStartCoord.y, 2)) || 0;
+      }
+      if (this.disabled) return;
+      if (!this.hasImage() && !this.disableClickToChoose) {
+        var tabEnd = new Date().valueOf();
+        if (pointerMoveDistance < CLICK_MOVE_THRESHOLD && tabEnd - this.tabStart < MIN_MS_PER_CLICK && this.supportTouch) {
+          this.chooseFile();
+        }
+        this.tabStart = 0;
+        return;
+      }
+
+      this.dragging = false;
+      this.pinching = false;
+      this.pinchDistance = 0;
+      this.lastMovingCoord = null;
+      this.pointerMoved = false;
+      this.pointerStartCoord = null;
+    },
+    _handlePointerMove: function _handlePointerMove(evt) {
+      this.pointerMoved = true;
+      if (!this.hasImage()) return;
+      var coord = u.getPointerCoords(evt, this);
+      this.currentPointerCoord = coord;
+
+      if (this.disabled || this.disableDragToMove) return;
+
+      evt.preventDefault();
+      if (!evt.touches || evt.touches.length === 1) {
+        if (!this.dragging) return;
+        if (this.lastMovingCoord) {
+          this.move({
+            x: coord.x - this.lastMovingCoord.x,
+            y: coord.y - this.lastMovingCoord.y
+          });
+        }
+        this.lastMovingCoord = coord;
+      }
+
+      if (evt.touches && evt.touches.length === 2 && !this.disablePinchToZoom) {
+        if (!this.pinching) return;
+        var distance = u.getPinchDistance(evt, this);
+        var delta = distance - this.pinchDistance;
+        this.zoom(delta > 0, PINCH_ACCELERATION);
+        this.pinchDistance = distance;
+      }
+    },
+    _handlePointerLeave: function _handlePointerLeave() {
+      this.currentPointerCoord = null;
+    },
+    _handleWheel: function _handleWheel(evt) {
+      var _this5 = this;
+
+      if (this.disabled || this.disableScrollToZoom || !this.hasImage()) return;
+      evt.preventDefault();
+      this.scrolling = true;
+      if (evt.wheelDelta < 0 || evt.deltaY > 0 || evt.detail > 0) {
+        this.zoom(this.reverseScrollToZoom);
+      } else if (evt.wheelDelta > 0 || evt.deltaY < 0 || evt.detail < 0) {
+        this.zoom(!this.reverseScrollToZoom);
+      }
+      this.$nextTick(function () {
+        _this5.scrolling = false;
+      });
+    },
+    _handleDragEnter: function _handleDragEnter(evt) {
+      if (this.disabled || this.disableDragAndDrop || !u.eventHasFile(evt)) return;
+      if (this.hasImage() && !this.replaceDrop) return;
+      this.fileDraggedOver = true;
+    },
+    _handleDragLeave: function _handleDragLeave(evt) {
+      if (!this.fileDraggedOver || !u.eventHasFile(evt)) return;
+      this.fileDraggedOver = false;
+    },
+    _handleDragOver: function _handleDragOver(evt) {},
+    _handleDrop: function _handleDrop(evt) {
+      if (!this.fileDraggedOver || !u.eventHasFile(evt)) return;
+      if (this.hasImage() && this.replaceDrop) {
+        this.remove();
+      }
+      this.fileDraggedOver = false;
+
+      var file = void 0;
+      var dt = evt.dataTransfer;
+      if (!dt) return;
+      if (dt.items) {
+        for (var i = 0, len = dt.items.length; i < len; i++) {
+          var item = dt.items[i];
+          if (item.kind == 'file') {
+            file = item.getAsFile();
+            break;
+          }
+        }
+      } else {
+        file = dt.files[0];
+      }
+
+      if (file) {
+        this._onNewFileIn(file);
+      }
+    },
+    _preventMovingToWhiteSpace: function _preventMovingToWhiteSpace() {
+      if (this.imgData.startX > 0) {
+        this.imgData.startX = 0;
+      }
+      if (this.imgData.startY > 0) {
+        this.imgData.startY = 0;
+      }
+      if (this.outputWidth - this.imgData.startX > this.imgData.width) {
+        this.imgData.startX = -(this.imgData.width - this.outputWidth);
+      }
+      if (this.outputHeight - this.imgData.startY > this.imgData.height) {
+        this.imgData.startY = -(this.imgData.height - this.outputHeight);
+      }
+    },
+    _preventZoomingToWhiteSpace: function _preventZoomingToWhiteSpace() {
+      if (this.imgData.width < this.outputWidth) {
+        this.scaleRatio = this.outputWidth / this.naturalWidth;
+      }
+
+      if (this.imgData.height < this.outputHeight) {
+        this.scaleRatio = this.outputHeight / this.naturalHeight;
+      }
+    },
+    _setOrientation: function _setOrientation() {
+      var _this6 = this;
+
+      var orientation = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 6;
+      var applyMetadata = arguments[1];
+
+      var useOriginal = applyMetadata;
+      if (orientation > 1 || useOriginal) {
+        if (!this.img) return;
+        this.rotating = true;
+        var _img = u.getRotatedImage(useOriginal ? this.originalImage : this.img, orientation);
+        _img.onload = function () {
+          _this6.img = _img;
+          _this6._placeImage(applyMetadata);
+        };
+      } else {
+        this._placeImage(applyMetadata);
+      }
+
+      if (orientation == 2) {
+        // flip x
+        this.orientation = u.flipX(this.orientation);
+      } else if (orientation == 4) {
+        // flip y
+        this.orientation = u.flipY(this.orientation);
+      } else if (orientation == 6) {
+        // 90 deg
+        this.orientation = u.rotate90(this.orientation);
+      } else if (orientation == 3) {
+        // 180 deg
+        this.orientation = u.rotate90(u.rotate90(this.orientation));
+      } else if (orientation == 8) {
+        // 270 deg
+        this.orientation = u.rotate90(u.rotate90(u.rotate90(this.orientation)));
+      } else {
+        this.orientation = orientation;
+      }
+
+      if (useOriginal) {
+        this.orientation = orientation;
+      }
+    },
+    _paintBackground: function _paintBackground() {
+      var backgroundColor = !this.canvasColor || this.canvasColor == 'default' ? 'transparent' : this.canvasColor;
+      this.ctx.fillStyle = backgroundColor;
+      this.ctx.clearRect(0, 0, this.outputWidth, this.outputHeight);
+      this.ctx.fillRect(0, 0, this.outputWidth, this.outputHeight);
+    },
+    _draw: function _draw() {
+      var _this7 = this;
+
+      this.$nextTick(function () {
+        if (!_this7.img) return;
+        if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+          requestAnimationFrame(_this7._drawFrame);
+        } else {
+          _this7._drawFrame();
+        }
+      });
+    },
+    _drawFrame: function _drawFrame() {
+      this.loading = false;
+      var ctx = this.ctx;
+      var _imgData2 = this.imgData,
+          startX = _imgData2.startX,
+          startY = _imgData2.startY,
+          width = _imgData2.width,
+          height = _imgData2.height;
+
+
+      this._paintBackground();
+      ctx.drawImage(this.img, startX, startY, width, height);
+      this.$emit(events.DRAW, ctx);
+      if (!this.imageSet) {
+        this.imageSet = true;
+        this.$emit(events.NEW_IMAGE_DRAWN);
+      }
+      this.rotating = false;
+    },
+    _applyMetadata: function _applyMetadata() {
+      var _this8 = this;
+
+      if (!this.userMetadata) return;
+      var _userMetadata = this.userMetadata,
+          startX = _userMetadata.startX,
+          startY = _userMetadata.startY,
+          scale = _userMetadata.scale;
+
+
+      if (u.numberValid(startX)) {
+        this.imgData.startX = startX;
+      }
+
+      if (u.numberValid(startY)) {
+        this.imgData.startY = startY;
+      }
+
+      if (u.numberValid(scale)) {
+        this.scaleRatio = scale;
+      }
+
+      this.$nextTick(function () {
+        _this8.userMetadata = null;
+      });
+    },
+    onDimensionChange: function onDimensionChange() {
+      if (!this.img) {
+        this._initialize();
+      } else {
+        if (this.preventWhiteSpace) {
+          this.imageSet = false;
+        }
+        this._setSize();
+        this._placeImage();
+      }
+    }
+  }
+};
+
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+/* eslint-disable no-unused-vars */
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+var index$1 = shouldUseNative() ? Object.assign : function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
+};
+
+var defaultOptions = {
+  componentName: 'croppa'
+};
+
+var VueCroppa = {
+  install: function install(Vue, options) {
+    options = index$1({}, defaultOptions, options);
+    var version = Number(Vue.version.split('.')[0]);
+    if (version < 2) {
+      throw new Error('vue-croppa supports vue version 2.0 and above. You are using Vue@' + version + '. Please upgrade to the latest version of Vue.');
+    }
+    var componentName = options.componentName || 'croppa';
+
+    // registration
+    Vue.component(componentName, component);
+  },
+
+  component: component
+};
+
+return VueCroppa;
+
+})));
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/component-normalizer.js":
 /***/ (function(module, exports) {
 
@@ -47553,6 +50924,8 @@ var render = function() {
                       }
                     }),
                     _vm._v(" "),
+                    _c("project-form-photo", { attrs: { form: _vm.form } }),
+                    _vm._v(" "),
                     _c("form-text", {
                       attrs: {
                         form: _vm.form,
@@ -47680,11 +51053,11 @@ var render = function() {
                         "btn-text": "Subir presentación, foto(s) o video(s)"
                       },
                       model: {
-                        value: _vm.form.company_files,
+                        value: _vm.form.company_documents,
                         callback: function($$v) {
-                          _vm.$set(_vm.form, "company_files", $$v)
+                          _vm.$set(_vm.form, "company_documents", $$v)
                         },
-                        expression: "form.company_files"
+                        expression: "form.company_documents"
                       }
                     })
                   ],
@@ -48039,39 +51412,44 @@ var render = function() {
                     _vm._v("¿Qué das a cambio de la inversión?")
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "b-form-checkbox-group",
-                    {
-                      staticClass: "form-row",
-                      model: {
-                        value: _vm.form.rewards,
-                        callback: function($$v) {
-                          _vm.$set(_vm.form, "rewards", $$v)
+                  _vm.rewards === null
+                    ? _c("p", [
+                        _c("i", { staticClass: "icon-spinner spinner" }),
+                        _vm._v(" Cargando recompensas...\n              ")
+                      ])
+                    : _c(
+                        "b-form-checkbox-group",
+                        {
+                          staticClass: "form-row",
+                          model: {
+                            value: _vm.form.rewards,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "rewards", $$v)
+                            },
+                            expression: "form.rewards"
+                          }
                         },
-                        expression: "form.rewards"
-                      }
-                    },
-                    _vm._l(_vm.rewardsColumns, function(chunk, index) {
-                      return _c(
-                        "div",
-                        { key: index, staticClass: "col" },
-                        _vm._l(chunk, function(reward) {
+                        _vm._l(_vm.rewardsColumns, function(chunk, index) {
                           return _c(
                             "div",
-                            { key: reward, staticClass: "form-check" },
-                            [
-                              _c(
-                                "b-form-checkbox",
-                                { attrs: { value: reward } },
-                                [_vm._v(_vm._s(reward))]
+                            { key: index, staticClass: "col" },
+                            _vm._l(chunk, function(reward) {
+                              return _c(
+                                "div",
+                                { key: reward.id, staticClass: "form-check" },
+                                [
+                                  _c(
+                                    "b-form-checkbox",
+                                    { attrs: { value: reward.id } },
+                                    [_vm._v(_vm._s(reward.label))]
+                                  )
+                                ],
+                                1
                               )
-                            ],
-                            1
+                            })
                           )
                         })
                       )
-                    })
-                  )
                 ],
                 1
               )
@@ -48152,11 +51530,11 @@ var render = function() {
                     _vm._v(" "),
                     _c("form-files", {
                       model: {
-                        value: _vm.form.key_files,
+                        value: _vm.form.key_documents,
                         callback: function($$v) {
-                          _vm.$set(_vm.form, "key_files", $$v)
+                          _vm.$set(_vm.form, "key_documents", $$v)
                         },
-                        expression: "form.key_files"
+                        expression: "form.key_documents"
                       }
                     })
                   ],
@@ -48181,11 +51559,11 @@ var render = function() {
                   _vm._v(" "),
                   _c("form-files", {
                     model: {
-                      value: _vm.form.extra_files,
+                      value: _vm.form.extra_documents,
                       callback: function($$v) {
-                        _vm.$set(_vm.form, "extra_files", $$v)
+                        _vm.$set(_vm.form, "extra_documents", $$v)
                       },
-                      expression: "form.extra_files"
+                      expression: "form.extra_documents"
                     }
                   })
                 ],
@@ -48309,7 +51687,7 @@ var staticRenderFns = [
       _c("span", { staticClass: "h2 text-primary" }, [_vm._v("5.")]),
       _vm._v(" "),
       _c("span", { staticClass: "h3" }, [
-        _vm._v("Presentación y videos adicionales de la empresa")
+        _vm._v("Presentación, fotos y videos adicionales de la empresa")
       ])
     ])
   },
@@ -48442,6 +51820,324 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-224dc260", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-26caf7f6\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/project/project-form-photo.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "b-form-group",
+        {
+          attrs: {
+            label: "Imagen principal",
+            feedback: _vm.form.errors.get("image"),
+            state: _vm.form.errors.has("image") ? "invalid" : ""
+          }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass:
+                "align-items-center justify-content-center justify-content-md-start"
+            },
+            [
+              _c(
+                "div",
+                {
+                  class: { PhotoInput: true, "PhotoInput--active": _vm.active }
+                },
+                [
+                  _c("div", { staticClass: "PhotoInput__wrapper" }, [
+                    _c(
+                      "div",
+                      {
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.croppa.chooseFile()
+                          }
+                        }
+                      },
+                      [
+                        _vm.hasImage
+                          ? _c("img", {
+                              staticClass: "PhotoInput__image",
+                              attrs: {
+                                src: _vm.uploadedImageUrl,
+                                alt: _vm.form.image
+                              }
+                            })
+                          : _c("i", {
+                              staticClass: "PhotoInput__icon icon-camera"
+                            })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.active,
+                            expression: "active"
+                          }
+                        ]
+                      },
+                      [
+                        _c(
+                          "div",
+                          { staticClass: "PhotoInput__toolbar top" },
+                          [
+                            _c(
+                              "b-button-group",
+                              {
+                                staticClass: "mb-1 mx-1",
+                                attrs: { size: "sm" }
+                              },
+                              [
+                                _c(
+                                  "b-btn",
+                                  {
+                                    attrs: { variant: "secondary-light" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.croppa.zoomIn()
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "icon-zoom-in" })]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "b-btn",
+                                  {
+                                    attrs: { variant: "secondary-light" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.croppa.zoomOut()
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "icon-zoom-out" })]
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-button-group",
+                              {
+                                staticClass: "mb-1 mx-1",
+                                attrs: { size: "sm" }
+                              },
+                              [
+                                _c(
+                                  "b-btn",
+                                  {
+                                    attrs: { variant: "secondary-light" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.croppa.moveLeftwards(10)
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "icon-arrow-left" })]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "b-btn",
+                                  {
+                                    attrs: { variant: "secondary-light" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.croppa.moveRightwards(10)
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "icon-arrow-right" })]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "b-btn",
+                                  {
+                                    attrs: { variant: "secondary-light" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.croppa.moveUpwards(10)
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "icon-arrow-up" })]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "b-btn",
+                                  {
+                                    attrs: { variant: "secondary-light" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.croppa.moveDownwards(10)
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "icon-arrow-down" })]
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c("croppa", {
+                          attrs: {
+                            width: 854,
+                            height: 480,
+                            quality: 1,
+                            "prevent-white-space": true,
+                            "show-remove-button": !_vm.active,
+                            accept: "image/jpeg, image/png",
+                            placeholder: "",
+                            "initial-size": "cover",
+                            "file-size-limit": _vm.maxFileSize
+                          },
+                          on: {
+                            "file-type-mismatch": _vm.onFileTypeMismatch,
+                            "file-size-exceed": _vm.onFileSizeExceed,
+                            "file-choose": _vm.fileChoose,
+                            "new-image": _vm.newImage
+                          },
+                          model: {
+                            value: _vm.croppa,
+                            callback: function($$v) {
+                              _vm.croppa = $$v
+                            },
+                            expression: "croppa"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "PhotoInput__toolbar bottom" },
+                          [
+                            _c(
+                              "b-button-group",
+                              { staticClass: "mt-1 mx-1" },
+                              [
+                                _c(
+                                  "b-btn",
+                                  {
+                                    attrs: { variant: "secondary-light" },
+                                    on: {
+                                      click: function($event) {
+                                        _vm.active = false
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Cancelar")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "b-btn",
+                                  {
+                                    attrs: { variant: "secondary" },
+                                    on: { click: _vm.saveImage }
+                                  },
+                                  [
+                                    !_vm.saving
+                                      ? [
+                                          _c("i", {
+                                            staticClass: "icon-floppy-disk"
+                                          }),
+                                          _vm._v(" Guardar")
+                                        ]
+                                      : _c("wait-dots", [
+                                          _c("i", {
+                                            staticClass: "icon-spinner spinner"
+                                          }),
+                                          _vm._v(" Guardando")
+                                        ])
+                                  ],
+                                  2
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "mt-3" }, [
+                _c(
+                  "button",
+                  {
+                    class: {
+                      btn: true,
+                      "btn-secondary": !_vm.form.errors.has("image"),
+                      "btn-danger": _vm.form.errors.has("image"),
+                      disabled: _vm.choosing
+                    },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        _vm.croppa.chooseFile()
+                      }
+                    }
+                  },
+                  [
+                    _vm.choosing
+                      ? _c("wait-dots", [
+                          _c("i", { staticClass: "spinner icon-spinner" })
+                        ])
+                      : _vm.hasImage
+                        ? _c("span", [_vm._v("Cambiar imagen")])
+                        : _c("span", [_vm._v("Sube una imagen")])
+                  ],
+                  1
+                )
+              ])
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _vm.active ? _c("div", { staticClass: "PhotoInput__backdrop" }) : _vm._e()
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-26caf7f6", module.exports)
   }
 }
 
@@ -49060,6 +52756,34 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-c617cdd4\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/WaitDots.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "span",
+    [
+      _vm._t("default"),
+      _c("span", { domProps: { textContent: _vm._s(_vm.dots) } })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-c617cdd4", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e96a59b4\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/project/project-form-team-members.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -49162,6 +52886,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-18ab4199\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./form-files-file.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-18ab4199\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./form-files-file.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-26caf7f6\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/project/project-form-photo.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-26caf7f6\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/project/project-form-photo.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("7b108d5b", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-26caf7f6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./project-form-photo.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-26caf7f6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./project-form-photo.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -61481,6 +65232,55 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/WaitDots.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/WaitDots.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-c617cdd4\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/WaitDots.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/WaitDots.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-c617cdd4", Component.options)
+  } else {
+    hotAPI.reload("data-v-c617cdd4", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/forms/bootstrap.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -62454,6 +66254,59 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/project/project-form-photo.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-26caf7f6\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/project/project-form-photo.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/project/project-form-photo.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-26caf7f6\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/project/project-form-photo.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/project/project-form-photo.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-26caf7f6", Component.options)
+  } else {
+    hotAPI.reload("data-v-26caf7f6", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/project/project-form-team-members-member.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -62666,6 +66519,8 @@ window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 
 Vue.component('project-form', __webpack_require__("./resources/assets/js/project/project-form.vue"));
 
+Vue.component('wait-dots', __webpack_require__("./resources/assets/js/components/WaitDots.vue"));
+
 /***/ }),
 
 /***/ "./resources/assets/js/site/libs.js":
@@ -62674,9 +66529,15 @@ Vue.component('project-form', __webpack_require__("./resources/assets/js/project
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_bootstrap_vue_dist_bootstrap_vue_esm__ = __webpack_require__("./node_modules/bootstrap-vue/dist/bootstrap-vue.esm.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_croppa__ = __webpack_require__("./node_modules/vue-croppa/dist/vue-croppa.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_croppa___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_croppa__);
 // Componentes de Bootstrap para VUe
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_bootstrap_vue_dist_bootstrap_vue_esm__["a" /* default */]);
+
+// Previsualizar imagenes
+
+Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_croppa___default.a);
 
 /***/ }),
 

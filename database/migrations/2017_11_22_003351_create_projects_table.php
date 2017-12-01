@@ -15,12 +15,15 @@ class CreateProjectsTable extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('owner_id')->unsigned()->nullable();
             // 1.
             $table->string('name');
+            $table->string('slug')->unique();
             $table->string('holder');
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->text('holder_links')->nullable();
+            $table->string('image')->nullable();
             $table->string('video')->nullable();
             $table->mediumText('address')->nullable();
             $table->string('latitude')->nullable();
@@ -31,7 +34,12 @@ class CreateProjectsTable extends Migration
             $table->longText('opportunity')->nullable();
             // 4.
             $table->longText('competition')->nullable();
-
+            // 5.
+            // company_files
+            // 6.
+            $table->text('links')->nullable();
+            // 7.
+            // sectors
             // 8.
             $table->integer('stage_id')->unsigned()->nullable();
             // 9.
@@ -50,7 +58,17 @@ class CreateProjectsTable extends Migration
             $table->bigInteger('expected_sales_year_2')->nullable();
             $table->bigInteger('expected_sales_year_3')->nullable();
 
-            $table->longText('rewards')->nullable();
+            $table->boolean('is_featured')->default(0);
+
+            $table->timestamp('published_at');
+            $table->timestamps();
+
+            $table
+                ->foreign('owner_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
             $table
                 ->foreign('stage_id')
@@ -59,7 +77,6 @@ class CreateProjectsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->timestamps();
         });
     }
 

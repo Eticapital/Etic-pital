@@ -98,10 +98,10 @@ export default {
   },
 
   watch: {
-    currentValue (link) {
-      this.error = false
-      this.$emit('input', this.index, link)
-    },
+    // currentValue (link) {
+    //   this.error = false
+    //   this.$emit('input', this.index, link)
+    // },
 
     link (link) {
       this.currentValue = link || ''
@@ -124,7 +124,11 @@ export default {
     onChange () {
       this.addHttps()
       if (this.isValidUrl(this.currentValue)) {
+        this.error = false
+        this.$emit('input', this.index, this.currentValue)
         this.newLink()
+      } else {
+        this.error = true
       }
     },
 

@@ -51,7 +51,7 @@ export default {
   watch: {
     value (value) {
       value.forEach((newLink) => {
-        // Es un link nuevo (quizá traido desde fuera)
+        // Es un link nuevo
         if (this.links.findIndex(link => link.link === newLink) === -1) {
           // Si hay un link vacio lo inserto en ese link,
           // de lo contrario lo agrego como nuevo
@@ -67,7 +67,7 @@ export default {
         }
       })
 
-      // Por ultimo siempre debe de haber un link "Vacio" para agregar nuevos
+      // Por último siempre debe de haber un link "Vacio" para agregar nuevos
       // links
       let emptyIndex = this.links.findIndex(link => link.link === '')
       if (emptyIndex === -1) {

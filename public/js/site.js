@@ -4744,10 +4744,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   watch: {
-    currentValue: function currentValue(link) {
-      this.error = false;
-      this.$emit('input', this.index, link);
-    },
+    // currentValue (link) {
+    //   this.error = false
+    //   this.$emit('input', this.index, link)
+    // },
+
     link: function link(_link) {
       this.currentValue = _link || '';
     }
@@ -4769,7 +4770,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     onChange: function onChange() {
       this.addHttps();
       if (this.isValidUrl(this.currentValue)) {
+        this.error = false;
+        this.$emit('input', this.index, this.currentValue);
         this.newLink();
+      } else {
+        this.error = true;
       }
     },
     isValidUrl: function isValidUrl(url) {
@@ -4855,7 +4860,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this = this;
 
       _value.forEach(function (newLink) {
-        // Es un link nuevo (quizá traido desde fuera)
+        // Es un link nuevo
         if (_this.links.findIndex(function (link) {
           return link.link === newLink;
         }) === -1) {
@@ -4875,7 +4880,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       });
 
-      // Por ultimo siempre debe de haber un link "Vacio" para agregar nuevos
+      // Por último siempre debe de haber un link "Vacio" para agregar nuevos
       // links
       var emptyIndex = this.links.findIndex(function (link) {
         return link.link === '';

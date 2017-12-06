@@ -3,6 +3,7 @@
     <ul class="d-flex flex-column list-unstyled" v-if="files.length">
       <form-file
         v-for="(file, index) in files"
+        v-if="!file.deleted"
         :key="file.id"
         :file="file"
         :max-file-size="maxFileSize"
@@ -38,6 +39,11 @@ export default {
     btnText: {
       type: String,
       default: 'Subir documentos'
+    },
+    value: {
+      type: Array,
+      default: [],
+      required: false
     }
   },
 
@@ -55,12 +61,14 @@ export default {
     formFiles () {
       return this.files
         .filter(file => {
-          return file.response && file.response.type
+          return Number.isInteger(file.id) || (file.response && file.response.type)
         })
         .map(file => {
           return {
+            id: file.id || null,
             name: file.name,
-            tmp_name: file.response.name
+            tmp_name: file.response && file.response.name ? file.response.name : null,
+            deleted: file.deleted || false
           }
         })
     }
@@ -72,7 +80,23 @@ export default {
         this.$emit('input', files)
       },
       deep: true
+    },
+
+    value: {
+      handler (value) {
+        value.forEach(item => {
+          let index = this.files.findIndex(file => file.id === item.id)
+          if (index === -1) {
+            this.files.push(item)
+          }
+        })
+      },
+      deep: true
     }
+  },
+
+  created () {
+    this.files = this.value || []
   },
 
   methods: {
@@ -116,17 +140,27 @@ export default {
     },
 
     manageNewFile (newFile) {
-      console.log('add', newFile)
+      // console.log('add', newFile)
     },
     manageFileUpdated (newFile, oldFile) {
-      console.log('update', oldFile)
+      // console.log('update', oldFile)
     },
     manageFileRemoved (oldFile) {
-      console.log('remove', oldFile)
+      // console.log('remove', oldFile)
     },
 
-    removeFile (file) {
-      this.$refs.upload.remove(file)
+    removeFile (fileToRemove) {
+      if (Number.isInteger(fileToRemove.id)) {
+        let index = this.files.findIndex(file => {
+          return file.id === fileToRemove.id
+        })
+
+        if (index >= 0) {
+          Vue.set(this.files[index], 'deleted', true)
+        }
+      } else {
+        this.$refs.upload.remove(fileToRemove)
+      }
     }
   }
 }

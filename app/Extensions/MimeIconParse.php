@@ -13,7 +13,7 @@ class MimeIconParser {
         'text' => 'file-text',
         'code' => 'file-xml',
         'image' => 'file-picture',
-        'video' => 'file-play',
+        'video' => 'file-video',
         'audio' => 'file-music',
         'zip' => 'file-zip',
     ];

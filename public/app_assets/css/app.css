@@ -1,8 +1,8 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);@charset "UTF-8";
 @font-face {
   font-family: 'icomoon';
-  src: url("fonts/icomoon.eot?w3rg8u");
-  src: url("fonts/icomoon.eot?w3rg8u#iefix") format("embedded-opentype"), url("fonts/icomoon.woff2?w3rg8u") format("woff2"), url("fonts/icomoon.ttf?w3rg8u") format("truetype"), url("fonts/icomoon.woff?w3rg8u") format("woff"), url("fonts/icomoon.svg?w3rg8u#icomoon") format("svg");
+  src: url("fonts/icomoon.eot?z99klg");
+  src: url("fonts/icomoon.eot?z99klg#iefix") format("embedded-opentype"), url("fonts/icomoon.woff2?z99klg") format("woff2"), url("fonts/icomoon.ttf?z99klg") format("truetype"), url("fonts/icomoon.woff?z99klg") format("woff"), url("fonts/icomoon.svg?z99klg#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -42,10 +42,6 @@
 }
 
 .icon-document:before {
-  content: "\E910";
-}
-
-.icon-file-excel:before {
   content: "\E910";
 }
 
@@ -187,6 +183,50 @@
 
 .icon-spinner:before {
   content: "\E900";
+}
+
+.icon-file-empty:before {
+  content: "\E99D";
+}
+
+.icon-file-text:before {
+  content: "\E9AD";
+}
+
+.icon-file-picture:before {
+  content: "\E9AF";
+}
+
+.icon-file-music:before {
+  content: "\E9B1";
+}
+
+.icon-file-video:before {
+  content: "\E9B5";
+}
+
+.icon-file-zip:before {
+  content: "\E9B9";
+}
+
+.icon-file-xml:before {
+  content: "\E9BB";
+}
+
+.icon-file-presentation:before {
+  content: "\E9BF";
+}
+
+.icon-file-pdf:before {
+  content: "\EF3E";
+}
+
+.icon-file-word:before {
+  content: "\EF40";
+}
+
+.icon-file-excel:before {
+  content: "\EF41";
 }
 
 .icon-calendar-full:before {

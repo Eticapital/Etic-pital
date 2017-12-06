@@ -97,7 +97,7 @@
               <div class="col-12 col-lg-6">
                 <a href="#">Términos y condiciones</a>
                 <br><a href="#">Aviso de privacidad</a>
-                <br><a href="#">Etic@pital Corporativo</a>
+                <br><a href="/corporativo">Etic@pital Corporativo</a>
               </div> <!-- / .col-lg-6 -->
               <div class="col-12 col-lg-6">
                 <strong>Contáctanos:</strong>

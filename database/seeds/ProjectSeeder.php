@@ -30,7 +30,7 @@ class ProjectSeeder extends Seeder
 
             factory(ProjectKpi::class, rand(0, 5))->create(['project_id' => $project->id]);
 
-            factory(ProjectDocument::class, rand(0, 10))->create(['project_id' => $project->id]);
+            factory(ProjectDocument::class, rand(0, 15))->create(['project_id' => $project->id]);
         });
     }
 }

@@ -422,7 +422,7 @@ export default {
 
   created () {
     // Temporar eliminr
-    this.loadDemoProject()
+    // this.loadDemoProject()
 
     this.loadSectors()
     this.loadStages()

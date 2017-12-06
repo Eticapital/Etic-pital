@@ -71,9 +71,11 @@ export default {
 
   watch: {
     coordinates: {
-      handler (coordinates) {
-        this.marker.setPosition(coordinates)
-        this.map.panTo(coordinates)
+      handler (coordinates, oldCoordinates) {
+        if (coordinates.lat !== oldCoordinates.lat && coordinates.lng !== oldCoordinates.lng) {
+          this.marker.setPosition(coordinates)
+          this.map.panTo(coordinates)
+        }
       },
       deep: true
     },

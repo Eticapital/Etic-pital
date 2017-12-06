@@ -1,18 +1,18 @@
 <template>
   <li class="File" >
     <i v-if="file.error" class="File__icon icon-file-empty text-danger"></i>
-    <i v-else-if="file.success" class="File__icon icon-file-empty text-succes"></i>
-    <i v-else class="File__icon icon-file-empty text-muted"></i>
+    <i v-else-if="file.active" class="File__icon icon-file-empty text-muted"></i>
+    <i v-else :class="['File__icon', 'text-success', 'icon-' + (file.icon || 'file-empty')]"></i>
 
     <span class="File__name">{{ file.name }}</span>
     <span v-if="file.error" class="File__iconstatus text-danger" v-b-tooltip.hover :title="errorMessage">
       <i class="icon-warning"></i>
       (más)
     </span>
-    <i v-else-if="file.success" class="File__iconstatus icon-checkmark text-success"></i>
     <i v-else-if="file.active" class="File__iconstatus icon-spinner spinner text-muted"></i>
+    <i v-else class="File__iconstatus icon-checkmark text-success"></i>
 
-    <a @click.prevent="$emit('remove')" href="#" class="text-danger ml-auto"><i class="icon-bin"></i><span class="d-none d-lg-inline"> Eliminar</span></a>
+    <a @click.prevent="doDelete" href="#" class="text-danger ml-auto"><i class="icon-bin"></i><span class="d-none d-lg-inline"> Eliminar</span></a>
   </li>
 </template>
 
@@ -47,6 +47,12 @@ export default {
 
       console.log(this.file.error)
       return 'Ocurrio un problema con el servidor, por favor vuelve a intentarlo o contacta al administrador'
+    }
+  },
+
+  methods: {
+    doDelete () {
+      this.$emit('remove')
     }
   }
 }

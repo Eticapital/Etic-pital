@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\ProjectDocument;
 use App\Models\Traits\HasImages;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
@@ -210,6 +211,16 @@ class Project extends Model
 HTML;
     }
 
+    /**
+     * Un proyecto puede tener múltiples docuemtnos
+     *
+     * @return HasMany
+     */
+    public function documents()
+    {
+        return $this->hasMany(ProjectDocument::class);
+    }
+
     public function toFormArray()
     {
         $array = $this->toArray();
@@ -217,6 +228,9 @@ HTML;
         $array['sectors'] = $this->sectors()->pluck('id');
         $array['rewards'] = $this->rewards()->pluck('id');
         $array['team'] = $this->team()->get()->toArray();
+        $array['company_documents'] = $this->documents()->company()->get()->toArray();
+        $array['key_documents'] = $this->documents()->key()->get()->toArray();
+        $array['extra_documents'] = $this->documents()->extra()->get()->toArray();
         return $array;
     }
 }

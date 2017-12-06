@@ -1,0 +1,229 @@
+<manifest alg="2" build="2017.0.1.363" opt="false" iceEnabled="true" iceMarkupVersion="2" iceEnabledOptions="link,responsive,cachebuster" exportTarget="other" domain="eticapital.mx" resolutions="1x" timestamp="1507243572467">
+  <folder name="css">
+    <file name="site_global.css" crc="3765861665"/>
+    <file name="index.css" crc="13892691" ref="index"/>
+    <file name="fondos-de-inversi_n.css" crc="477986069" ref="fondos-de-inversión"/>
+    <file name="inicio.css" crc="296224759" ref="inicio"/>
+    <file name="nomq_inicio.css" crc="3875548583" ref="inicio"/>
+  </folder>
+  <folder name="assets">
+    <file name="muselog.txt" crc="3921359502" seo="true" mt="1507243525000"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="209076791" ref="index:inicio:fondos-de-inversión"/>
+    <file name="museutils.js" crc="4148063285" ref="index:inicio:fondos-de-inversión"/>
+    <file name="whatinput.js" crc="86476730" ref="index:inicio:fondos-de-inversión"/>
+    <file name="museconfig.js" crc="172512987" ref="index:inicio:fondos-de-inversión"/>
+    <file name="jquery.watch.js" crc="437028206" ref="index:inicio:fondos-de-inversión"/>
+    <file name="jquery.scrolleffects.js" crc="3801019579" ref="index:inicio:fondos-de-inversión"/>
+    <file name="require.js" crc="4159430777" ref="index:inicio:fondos-de-inversión"/>
+    <file name="jquery.musemenu.js" crc="3765830709" ref="inicio:fondos-de-inversión"/>
+    <file name="jquery.musepolyfill.bgsize.js" crc="4001026563" ref="inicio:fondos-de-inversión"/>
+    <file name="webpro.js" crc="3986320349" ref="inicio:fondos-de-inversión"/>
+    <file name="musewpslideshow.js" crc="405464237" ref="inicio:fondos-de-inversión"/>
+    <file name="jquery.museoverlay.js" crc="305414130" ref="inicio:fondos-de-inversión"/>
+    <file name="touchswipe.js" crc="221459597" ref="inicio:fondos-de-inversión"/>
+    <file name="form_check.php" crc="303648844" ref="inicio"/>
+    <file name="form_throttle.php" crc="236764551" ref="inicio"/>
+    <file name="form_process.php" crc="4272079531" ref="inicio"/>
+    <file name="form-u3030.php" crc="4234233395" ref="inicio"/>
+    <file name="html5shiv.js" crc="4241844378" ref="inicio:fondos-de-inversión"/>
+    <file name="jquery.museresponsive.js" crc="3991890305" ref="inicio"/>
+  </folder>
+  <folder name="images">
+    <file name="u400-4.png" crc="298279965" ref="index"/>
+    <file name="u401-4.png" crc="342656066" ref="index"/>
+    <file name="u2112-4.png" crc="3970405733" ref="index"/>
+    <file name="u402-4.png" crc="159251696" ref="index"/>
+    <file name="u1243-4.png" crc="196819024" ref="index"/>
+    <file name="u404-4.png" crc="3884119520" ref="index"/>
+    <file name="svg-pegado-175847x44.svg" crc="3845267928" seo="true" ref="index"/>
+    <file name="svg pegado 175847x44_poster_.png" crc="4290693921" ref="index"/>
+    <file name="light-bulb.png" crc="213528224" seo="true" ref="index"/>
+    <file name="blank.gif" crc="4208392903" ref="inicio:fondos-de-inversión"/>
+    <file name="u7914.png" crc="498828489" ref="inicio"/>
+    <file name="u7914-r.png" crc="3770187442" ref="inicio"/>
+    <file name="u7914-a.png" crc="4100500408" ref="inicio"/>
+    <file name="u7901.png" crc="10791259" ref="inicio"/>
+    <file name="u7901-r.png" crc="3866076438" ref="inicio"/>
+    <file name="u7901-a.png" crc="3760504391" ref="inicio"/>
+    <file name="u7911.png" crc="433576874" ref="inicio"/>
+    <file name="u7911-r.png" crc="4224253800" ref="inicio"/>
+    <file name="u7911-a.png" crc="4224253800" ref="inicio"/>
+    <file name="u7886.png" crc="331347755" ref="inicio"/>
+    <file name="u7886-r.png" crc="152044261" ref="inicio"/>
+    <file name="u7886-a.png" crc="4010393529" ref="inicio"/>
+    <file name="u7895.png" crc="3780274426" ref="inicio"/>
+    <file name="u7895-r.png" crc="150931565" ref="inicio"/>
+    <file name="u7895-a.png" crc="31381694" ref="inicio"/>
+    <file name="bolitas.png" crc="4251780646" seo="true" ref="inicio:fondos-de-inversión"/>
+    <file name="2737.jpg" crc="4094065481" ref="inicio"/>
+    <file name="agriculture-71592_1280.jpg" crc="3763612702" ref="inicio:fondos-de-inversión"/>
+    <file name="u2058-4.png" crc="333783836" ref="inicio"/>
+    <file name="u2166-4.png" crc="3922863371" ref="inicio"/>
+    <file name="u2178-6.png" crc="127253538" ref="inicio"/>
+    <file name="u3340-4.png" crc="123111094" ref="inicio"/>
+    <file name="u3330-8.png" crc="4025721694" ref="inicio"/>
+    <file name="u3335-6.png" crc="211510162" ref="inicio"/>
+    <file name="u3468-6.png" crc="3802677294" ref="inicio"/>
+    <file name="header.jpg" crc="258053186" ref="inicio"/>
+    <file name="proposito_01.png" crc="469976724" seo="true" ref="inicio"/>
+    <file name="proposito_02.png" crc="475581048" seo="true" ref="inicio"/>
+    <file name="proposito_03.png" crc="4044373808" seo="true" ref="inicio"/>
+    <file name="proposito_04.png" crc="3840499798" seo="true" ref="inicio"/>
+    <file name="proposito_05.png" crc="4229356292" seo="true" ref="inicio"/>
+    <file name="748.jpg" crc="3780602909" ref="inicio:fondos-de-inversión"/>
+    <file name="u2259-4.png" crc="444028782" ref="inicio"/>
+    <file name="u5782-4.png" crc="3842593000" ref="inicio"/>
+    <file name="u3049.png" crc="4148195060" ref="inicio"/>
+    <file name="u3049-ferr.png" crc="4075755061" ref="inicio"/>
+    <file name="u3043.png" crc="4278164883" ref="inicio"/>
+    <file name="u3043-ferr.png" crc="3917301989" ref="inicio"/>
+    <file name="u3032.png" crc="35056761" ref="inicio"/>
+    <file name="u3032-ferr.png" crc="131919593" ref="inicio"/>
+    <file name="u3060.png" crc="3921372802" ref="inicio"/>
+    <file name="u3060-ferr.png" crc="55507278" ref="inicio"/>
+    <file name="u3053.png" crc="4145753723" ref="inicio"/>
+    <file name="u3053-r.png" crc="3891972428" ref="inicio"/>
+    <file name="u3053-m.png" crc="4070110602" ref="inicio"/>
+    <file name="u3053-fs.png" crc="276208025" ref="inicio"/>
+    <file name="u3058.png" crc="225816984" ref="inicio"/>
+    <file name="u3058-ferr.png" crc="10986058" ref="inicio"/>
+    <file name="u3162.png" crc="460961389" ref="inicio"/>
+    <file name="u3162-ferr.png" crc="377834462" ref="inicio"/>
+    <file name="u5393-4.png" crc="87205152" ref="inicio"/>
+    <file name="u5399-6.png" crc="4195373018" ref="inicio"/>
+    <file name="fce.jpg" crc="4215806668" ref="inicio"/>
+    <file name="fce_2.png" crc="166601596" ref="inicio"/>
+    <file name="cf.png" crc="3801015842" ref="inicio"/>
+    <file name="cf_2.png" crc="532800367" ref="inicio"/>
+    <file name="svg-pegado-59964x150.svg" crc="293968353" seo="true" ref="inicio:fondos-de-inversión"/>
+    <file name="svg pegado 59964x150_poster_.png" crc="4061079298" ref="inicio"/>
+    <file name="u6808-9.png" crc="3858196187" ref="inicio"/>
+    <file name="u6809-4.png" crc="345417368" ref="inicio"/>
+    <file name="u6810-4.png" crc="234680660" ref="inicio"/>
+    <file name="fb_bn.png" crc="494928276" ref="inicio:fondos-de-inversión"/>
+    <file name="fb_color.png" crc="439377252" ref="inicio:fondos-de-inversión"/>
+    <file name="tw_bn.png" crc="412947426" ref="inicio:fondos-de-inversión"/>
+    <file name="tw_color.png" crc="4032554286" ref="inicio:fondos-de-inversión"/>
+    <file name="in_bn.png" crc="3894412472" ref="inicio:fondos-de-inversión"/>
+    <file name="in_color.png" crc="454549069" ref="inicio:fondos-de-inversión"/>
+    <file name="lk_bn.png" crc="3785040988" ref="inicio:fondos-de-inversión"/>
+    <file name="ln_color.png" crc="4941093" ref="inicio:fondos-de-inversión"/>
+    <file name="yt_bn.png" crc="397240425" ref="inicio:fondos-de-inversión"/>
+    <file name="yt_color.png" crc="3904600323" ref="inicio:fondos-de-inversión"/>
+    <file name="u6813-4.png" crc="4180427767" ref="inicio"/>
+    <file name="u6812.png" crc="4143472614" ref="inicio"/>
+    <file name="u6812-r.png" crc="151542321" ref="inicio"/>
+    <file name="u6814_states.png" crc="4113955624" ref="inicio"/>
+    <file name="u6814_states-r.png" crc="4188056672" ref="inicio"/>
+    <file name="u79142.png" crc="498828489" ref="inicio"/>
+    <file name="u7914-r2.png" crc="3770187442" ref="inicio"/>
+    <file name="u7914-a2.png" crc="4100500408" ref="inicio"/>
+    <file name="u79012.png" crc="10791259" ref="inicio"/>
+    <file name="u7901-r2.png" crc="3866076438" ref="inicio"/>
+    <file name="u7901-a2.png" crc="3760504391" ref="inicio"/>
+    <file name="u79112.png" crc="433576874" ref="inicio"/>
+    <file name="u7911-r2.png" crc="4224253800" ref="inicio"/>
+    <file name="u7911-a2.png" crc="4224253800" ref="inicio"/>
+    <file name="u78862.png" crc="331347755" ref="inicio"/>
+    <file name="u7886-r2.png" crc="152044261" ref="inicio"/>
+    <file name="u7886-a2.png" crc="4010393529" ref="inicio"/>
+    <file name="u78952.png" crc="3780274426" ref="inicio"/>
+    <file name="u7895-r2.png" crc="150931565" ref="inicio"/>
+    <file name="u7895-a2.png" crc="31381694" ref="inicio"/>
+    <file name="header-u3518-fr.jpg" crc="287110777" ref="inicio"/>
+    <file name="2737-u1768-fr.jpg" crc="29017429" ref="inicio"/>
+    <file name="u2058-42.png" crc="333783836" ref="inicio"/>
+    <file name="u3340-42.png" crc="123111094" ref="inicio"/>
+    <file name="u3330-82.png" crc="4025721694" ref="inicio"/>
+    <file name="u3335-62.png" crc="211510162" ref="inicio"/>
+    <file name="u3468-62.png" crc="107040579" ref="inicio"/>
+    <file name="748-u2250-fr.jpg" crc="243750175" ref="inicio"/>
+    <file name="u2166-42.png" crc="4168245868" ref="inicio"/>
+    <file name="u2259-42.png" crc="4027683739" ref="inicio"/>
+    <file name="u2178-62.png" crc="127253538" ref="inicio"/>
+    <file name="u5782-42.png" crc="3842593000" ref="inicio"/>
+    <file name="u68122.png" crc="4053040684" ref="inicio"/>
+    <file name="u6812-r2.png" crc="3926101455" ref="inicio"/>
+    <file name="u6813-42.png" crc="190115976" ref="inicio"/>
+    <file name="u6814_states2.png" crc="4214594217" ref="inicio"/>
+    <file name="u6814_states-r2.png" crc="387211622" ref="inicio"/>
+    <file name="u30492.png" crc="4148195060" ref="inicio"/>
+    <file name="u3049-ferr2.png" crc="4075755061" ref="inicio"/>
+    <file name="u30432.png" crc="4278164883" ref="inicio"/>
+    <file name="u3043-ferr2.png" crc="3917301989" ref="inicio"/>
+    <file name="u30322.png" crc="35056761" ref="inicio"/>
+    <file name="u3032-ferr2.png" crc="131919593" ref="inicio"/>
+    <file name="u30602.png" crc="3921372802" ref="inicio"/>
+    <file name="u3060-ferr2.png" crc="55507278" ref="inicio"/>
+    <file name="u30532.png" crc="4145753723" ref="inicio"/>
+    <file name="u3053-r2.png" crc="3891972428" ref="inicio"/>
+    <file name="u3053-m2.png" crc="4070110602" ref="inicio"/>
+    <file name="u3053-fs2.png" crc="276208025" ref="inicio"/>
+    <file name="u30582.png" crc="225816984" ref="inicio"/>
+    <file name="u3058-ferr2.png" crc="10986058" ref="inicio"/>
+    <file name="u31622.png" crc="460961389" ref="inicio"/>
+    <file name="u3162-ferr2.png" crc="377834462" ref="inicio"/>
+    <file name="u5393-42.png" crc="87205152" ref="inicio"/>
+    <file name="u5399-62.png" crc="4086292888" ref="inicio"/>
+    <file name="u6808-92.png" crc="438857150" ref="inicio"/>
+    <file name="u6809-42.png" crc="3815963777" ref="inicio"/>
+    <file name="u6810-42.png" crc="272882631" ref="inicio"/>
+    <file name="u8190.png" crc="498828489" ref="fondos-de-inversión"/>
+    <file name="u8190-r.png" crc="3770187442" ref="fondos-de-inversión"/>
+    <file name="u8190-a.png" crc="4100500408" ref="fondos-de-inversión"/>
+    <file name="u8202.png" crc="192722222" ref="fondos-de-inversión"/>
+    <file name="u8202-r.png" crc="4213329668" ref="fondos-de-inversión"/>
+    <file name="u8202-a.png" crc="4213329668" ref="fondos-de-inversión"/>
+    <file name="u8209.png" crc="4096318142" ref="fondos-de-inversión"/>
+    <file name="u8209-r.png" crc="341948658" ref="fondos-de-inversión"/>
+    <file name="u8209-a.png" crc="341948658" ref="fondos-de-inversión"/>
+    <file name="u8194.png" crc="3780274426" ref="fondos-de-inversión"/>
+    <file name="u8194-r.png" crc="4172705128" ref="fondos-de-inversión"/>
+    <file name="u8194-a.png" crc="4172705128" ref="fondos-de-inversión"/>
+    <file name="u8353-4.png" crc="4176148623" ref="fondos-de-inversión"/>
+    <file name="fce.png" crc="3833463472" seo="true" ref="fondos-de-inversión"/>
+    <file name="u8407-4.png" crc="3900191173" ref="fondos-de-inversión"/>
+    <file name="u9228-4.png" crc="535474427" ref="fondos-de-inversión"/>
+    <file name="emprendedores.png" crc="4080016063" seo="true" ref="fondos-de-inversión"/>
+    <file name="u8910-5.png" crc="3943527389" ref="fondos-de-inversión"/>
+    <file name="u8912-4.png" crc="443519296" ref="fondos-de-inversión"/>
+    <file name="proyectos.png" crc="3768575068" seo="true" ref="fondos-de-inversión"/>
+    <file name="u8911-5.png" crc="37386534" ref="fondos-de-inversión"/>
+    <file name="u8921-4.png" crc="4028785707" ref="fondos-de-inversión"/>
+    <file name="inversionistas.png" crc="4045409021" seo="true" ref="fondos-de-inversión"/>
+    <file name="u8920-5.png" crc="4192065518" ref="fondos-de-inversión"/>
+    <file name="u8915-4.png" crc="4063433908" ref="fondos-de-inversión"/>
+    <file name="u9595-4.png" crc="4110444747" ref="fondos-de-inversión"/>
+    <file name="tierra.png" crc="4222289047" seo="true" ref="fondos-de-inversión"/>
+    <file name="cosecha.png" crc="464875002" seo="true" ref="fondos-de-inversión"/>
+    <file name="cuidar.png" crc="121054478" seo="true" ref="fondos-de-inversión"/>
+    <file name="u9591-5.png" crc="4066371817" ref="fondos-de-inversión"/>
+    <file name="u9588-6.png" crc="4112074262" ref="fondos-de-inversión"/>
+    <file name="u9593-7.png" crc="4185852077" ref="fondos-de-inversión"/>
+    <file name="u9594-6.png" crc="4035144691" ref="fondos-de-inversión"/>
+    <file name="u9589-4.png" crc="197440444" ref="fondos-de-inversión"/>
+    <file name="u9590-4.png" crc="194732204" ref="fondos-de-inversión"/>
+    <file name="u9592-18.png" crc="504057614" ref="fondos-de-inversión"/>
+    <file name="u9446-4.png" crc="37598302" ref="fondos-de-inversión"/>
+    <file name="u9449-6.png" crc="4195373018" ref="fondos-de-inversión"/>
+    <file name="empresa.png" crc="3984563599" ref="fondos-de-inversión"/>
+    <file name="empresa_2.png" crc="504868882" ref="fondos-de-inversión"/>
+    <file name="inversionista.png" crc="526914452" ref="fondos-de-inversión"/>
+    <file name="inversionista_2.png" crc="259481957" ref="fondos-de-inversión"/>
+    <file name="u9447-6.png" crc="134501706" ref="fondos-de-inversión"/>
+    <file name="u9448-6.png" crc="453984398" ref="fondos-de-inversión"/>
+    <file name="u8483-9.png" crc="3858196187" ref="fondos-de-inversión"/>
+    <file name="u8484-4.png" crc="345417368" ref="fondos-de-inversión"/>
+    <file name="u8485-4.png" crc="234680660" ref="fondos-de-inversión"/>
+    <file name="u8488-4.png" crc="4180427767" ref="fondos-de-inversión"/>
+    <file name="u8487.png" crc="4143472614" ref="fondos-de-inversión"/>
+    <file name="u8487-r.png" crc="151542321" ref="fondos-de-inversión"/>
+    <file name="u8489_states.png" crc="4113955624" ref="fondos-de-inversión"/>
+    <file name="u8489_states-r.png" crc="4188056672" ref="fondos-de-inversión"/>
+  </folder>
+  <file name="index.html" crc="3953746234" seo="true" mt="1499096924533" redirect="true"/>
+  <file name="inicio.html" crc="35545608" seo="true" mt="1507243567980" redirect="true"/>
+  <file name="fondos-de-inversión.html" crc="4085893288" seo="true" mt="1507238274983" redirect="true"/>
+</manifest>

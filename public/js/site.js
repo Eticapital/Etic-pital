@@ -3642,6 +3642,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       console.log(this.file.error);
       return 'Ocurrio un problema con el servidor, por favor vuelve a intentarlo o contacta al administrador';
     }
+  },
+
+  methods: {
+    doDelete: function doDelete() {
+      this.$emit('remove');
+    }
   }
 });
 
@@ -3682,6 +3688,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -3696,6 +3703,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     btnText: {
       type: String,
       default: 'Subir documentos'
+    },
+    value: {
+      type: Array,
+      default: [],
+      required: false
     }
   },
 
@@ -3713,11 +3725,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     formFiles: function formFiles() {
       return this.files.filter(function (file) {
-        return file.response && file.response.type;
+        return Number.isInteger(file.id) || file.response && file.response.type;
       }).map(function (file) {
         return {
+          id: file.id || null,
           name: file.name,
-          tmp_name: file.response.name
+          tmp_name: file.response && file.response.name ? file.response.name : null,
+          deleted: file.deleted || false
         };
       });
     }
@@ -3730,8 +3744,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       },
 
       deep: true
+    },
+
+    value: {
+      handler: function handler(value) {
+        var _this = this;
+
+        value.forEach(function (item) {
+          var index = _this.files.findIndex(function (file) {
+            return file.id === item.id;
+          });
+          if (index === -1) {
+            _this.files.push(item);
+          }
+        });
+      },
+
+      deep: true
     }
   },
+
+  created: function created() {
+    this.files = this.value || [];
+  },
+
 
   methods: {
     inputFilter: function inputFilter(newFile, oldFile, prevent) {
@@ -3772,16 +3808,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     },
     manageNewFile: function manageNewFile(newFile) {
-      console.log('add', newFile);
+      // console.log('add', newFile)
     },
     manageFileUpdated: function manageFileUpdated(newFile, oldFile) {
-      console.log('update', oldFile);
+      // console.log('update', oldFile)
     },
     manageFileRemoved: function manageFileRemoved(oldFile) {
-      console.log('remove', oldFile);
+      // console.log('remove', oldFile)
     },
-    removeFile: function removeFile(file) {
-      this.$refs.upload.remove(file);
+    removeFile: function removeFile(fileToRemove) {
+      if (Number.isInteger(fileToRemove.id)) {
+        var index = this.files.findIndex(function (file) {
+          return file.id === fileToRemove.id;
+        });
+
+        if (index >= 0) {
+          Vue.set(this.files[index], 'deleted', true);
+        }
+      } else {
+        this.$refs.upload.remove(fileToRemove);
+      }
     }
   }
 });
@@ -3913,9 +3959,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   watch: {
     coordinates: {
-      handler: function handler(coordinates) {
-        this.marker.setPosition(coordinates);
-        this.map.panTo(coordinates);
+      handler: function handler(coordinates, oldCoordinates) {
+        if (coordinates.lat !== oldCoordinates.lat && coordinates.lng !== oldCoordinates.lng) {
+          this.marker.setPosition(coordinates);
+          this.map.panTo(coordinates);
+        }
       },
 
       deep: true
@@ -5700,7 +5748,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   created: function created() {
     // Temporar eliminr
-    this.loadDemoProject();
+    // this.loadDemoProject()
 
     this.loadSectors();
     this.loadStages();
@@ -91700,9 +91748,15 @@ var render = function() {
   return _c("li", { staticClass: "File" }, [
     _vm.file.error
       ? _c("i", { staticClass: "File__icon icon-file-empty text-danger" })
-      : _vm.file.success
-        ? _c("i", { staticClass: "File__icon icon-file-empty text-succes" })
-        : _c("i", { staticClass: "File__icon icon-file-empty text-muted" }),
+      : _vm.file.active
+        ? _c("i", { staticClass: "File__icon icon-file-empty text-muted" })
+        : _c("i", {
+            class: [
+              "File__icon",
+              "text-success",
+              "icon-" + (_vm.file.icon || "file-empty")
+            ]
+          }),
     _vm._v(" "),
     _c("span", { staticClass: "File__name" }, [_vm._v(_vm._s(_vm.file.name))]),
     _vm._v(" "),
@@ -91722,15 +91776,13 @@ var render = function() {
           },
           [_c("i", { staticClass: "icon-warning" }), _vm._v("\n    (más)\n  ")]
         )
-      : _vm.file.success
+      : _vm.file.active
         ? _c("i", {
-            staticClass: "File__iconstatus icon-checkmark text-success"
+            staticClass: "File__iconstatus icon-spinner spinner text-muted"
           })
-        : _vm.file.active
-          ? _c("i", {
-              staticClass: "File__iconstatus icon-spinner spinner text-muted"
-            })
-          : _vm._e(),
+        : _c("i", {
+            staticClass: "File__iconstatus icon-checkmark text-success"
+          }),
     _vm._v(" "),
     _c(
       "a",
@@ -91740,7 +91792,7 @@ var render = function() {
         on: {
           click: function($event) {
             $event.preventDefault()
-            _vm.$emit("remove")
+            _vm.doDelete($event)
           }
         }
       },
@@ -93189,15 +93241,17 @@ var render = function() {
             "ul",
             { staticClass: "d-flex flex-column list-unstyled" },
             _vm._l(_vm.files, function(file, index) {
-              return _c("form-file", {
-                key: file.id,
-                attrs: { file: file, "max-file-size": _vm.maxFileSize },
-                on: {
-                  remove: function($event) {
-                    _vm.removeFile(file)
-                  }
-                }
-              })
+              return !file.deleted
+                ? _c("form-file", {
+                    key: file.id,
+                    attrs: { file: file, "max-file-size": _vm.maxFileSize },
+                    on: {
+                      remove: function($event) {
+                        _vm.removeFile(file)
+                      }
+                    }
+                  })
+                : _vm._e()
             })
           )
         : _vm._e(),

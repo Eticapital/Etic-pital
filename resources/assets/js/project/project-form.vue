@@ -34,7 +34,12 @@
             <fieldset>
               <p><legend><span class="h2 text-primary">2.</span> <span class="h3">Resumen</span></legend></p>
 
-              <form-textarea :form="form" name="description" label="A qué te dedicas, cuánto tiempo llevas haciéndolo, resultados en ventas, validación de la idea y por qué comenzaste a hacerlo." />
+              <form-textarea
+                :form="form"
+                :rich="true"
+                name="description"
+                label="A qué te dedicas, cuánto tiempo llevas haciéndolo, resultados en ventas, validación de la idea y por qué comenzaste a hacerlo."
+              />
             </fieldset>
           </div> <!-- / .col-lg-8 -->
         </div> <!-- / .row -->
@@ -53,6 +58,7 @@
                 <form-textarea
                 :form="form"
                 name="opportunity"
+                :rich="true"
                 />
               </fieldset>
             </div> <!-- / .col-lg-8 -->
@@ -70,6 +76,7 @@
               <form-textarea
               :form="form"
               name="competition"
+              :rich="true"
               />
             </fieldset>
           </div> <!-- / .col-lg-8 -->
@@ -159,6 +166,7 @@
                 <p><legend><span class="h2 text-primary">9.</span> <span class="h3">Modelo de negocio</span></legend></p>
                 <form-textarea
                   :form="form"
+                  :rich="true"
                   name="business_model" label="¿Cómo generas dinero? ¿Qué tipo de producto o servicio vendes y quién te lo compra? ¿A través de qué medios lo comercializas o cómo cierras tus ventas?" />
               </fieldset>
             </div> <!-- / .col-lg-8 -->

@@ -76,8 +76,8 @@ export default {
           link: ''
         })
       }
-
     },
+
     links: {
       handler (links) {
         let input = links

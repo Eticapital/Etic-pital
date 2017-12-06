@@ -10,6 +10,7 @@
       <help-icon type="popover" :help="tooltip" />
     </span>
     <b-form-textarea
+      v-if="!rich"
       :state="form.errors.has(name) ? 'invalid' : ''"
       v-model="form[name]"
       ref="input"
@@ -19,11 +20,52 @@
       @input="form.errors.clear(name)"
       @change="form.errors.clear(name)"
     />
+    <quill-editor
+      v-else
+      v-model="form[name]"
+      :options="editorOptions"
+    />
+    <!-- <wysiwyg
+      v-else
+      v-model="form[name]"
+      ref="input"
+      :rows="rows"
+      :placeholder="placeholder"
+      :disabled="form.busy"
+      @input="form.errors.clear(name)"
+      @change="form.errors.clear(name)"
+    /> -->
   </b-form-group>
 </template>
 
 <script>
+// require styles
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
+import { quillEditor } from 'vue-quill-editor'
+
 export default {
+  components: {
+    quillEditor
+  },
+
+  data () {
+    return {
+      editorOptions: {
+        placeholder: this.placeholder,
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            ['clean'] // remove formatting button
+          ]
+        }
+      }
+    }
+  },
+
   props: {
     form: {
       type: Object,
@@ -49,7 +91,31 @@ export default {
       type: Number,
       required: false,
       default: 3
+    },
+    rich: {
+      type: Boolean,
+      default: false
     }
   }
 }
 </script>
+
+<style>
+.ql-container {
+  font-family: "Open Sans", sans-serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #4C4E52;
+  min-height: 180px
+}
+.ql-container strong {
+  font-weight: bold;
+}
+.ql-container p {
+  margin-bottom: 1rem;
+}
+.quill-editor {
+  background: #FFF;
+}
+</style>

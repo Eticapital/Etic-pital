@@ -60,9 +60,9 @@ $factory->define(Project::class, function (Faker $faker) {
         'latitude' => $faker->latitude,
         'longitude' => $faker->longitude,
 
-        'description' => collect($faker->paragraphs($faker->numberBetween(1, 3)))->implode("\n"),
-        'opportunity' => collect($faker->paragraphs($faker->numberBetween(1, 3)))->implode("\n"),
-        'competition' => collect($faker->paragraphs($faker->numberBetween(1, 3)))->implode("\n"),
+        'description' => '<p>' . collect($faker->paragraphs($faker->numberBetween(1, 3)))->implode("</p><p>") . '</p>',
+        'opportunity' => '<p>' . collect($faker->paragraphs($faker->numberBetween(1, 3)))->implode("</p><p>") . '</p>',
+        'competition' => '<p>' . collect($faker->paragraphs($faker->numberBetween(1, 3)))->implode("</p><p>") . '</p>',
 
         // company_documents
 
@@ -73,7 +73,7 @@ $factory->define(Project::class, function (Faker $faker) {
         // sectors
 
         'stage_id' => $faker->numberBetween(1, 3),
-        'business_model' => collect($faker->paragraphs($faker->numberBetween(1, 3)))->implode("\n"),
+        'business_model' => '<p>' . collect($faker->paragraphs($faker->numberBetween(1, 3)))->implode("</p><p>") . '</p>',
 
         'previous_capital' => $faker->numberBetween(100000 * 100, 10000000 * 100),
         'total_sales' => $faker->numberBetween(100000 * 100, 10000000 * 100),

@@ -29,6 +29,23 @@ class ProjectController extends Controller
             abort(404, 'Proyecto no encontrado');
         }
 
-        return view('proyecto')->with(compact('project'));
+        if (request()->ajax()) {
+            return $project->toFormArray();
+        }
+
+        $team = $project->team()->get();
+        $kpis = $project->kpis()->get();
+
+        return view('projects.show')->with(compact('project', 'team', 'kpis'));
+    }
+
+    /**
+     * Encuentra las imagenes y video de un proyecto
+     *
+     * @return json
+     */
+    public function media()
+    {
+        #code
     }
 }

@@ -12,7 +12,10 @@ class Project extends Model
 
     protected $casts = [
         'links' => 'json',
-        'holder_links' => 'json'
+        'holder_links' => 'json',
+        'latitude' => 'float',
+        'longitude' => 'float',
+        'has_interested_investor' => 'boolean',
     ];
 
     public static $images = [
@@ -40,14 +43,21 @@ class Project extends Model
         ];
     }
 
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
+    public function getVideoTypeAttribute()
     {
-        return 'slug';
+        if (!$this->video) {
+            return null;
+        }
+
+        $regex = '/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/';
+        if (preg_match($regex, $this->video)) {
+            return 'youtube';
+        }
+
+        $regex = '/(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/';
+        if (preg_match($regex, $this->video)) {
+            return 'vimeo';
+        }
     }
 
     /**
@@ -157,6 +167,56 @@ class Project extends Model
      */
     public function scopePublished($query)
     {
-        return $query->whereRaw('published_at >= NOW()');
+        return $query->whereNotNull('published_at');
+    }
+
+    /**
+     * Un proyecto tiene N miembros del equipo
+     *
+     * @return HasMany
+     */
+    public function team()
+    {
+        return $this->hasMany(\App\Models\ProjectTeam::class);
+    }
+
+    /**
+     * Un proyecto tiene N miembros del equipo
+     *
+     * @return HasMany
+     */
+    public function kpis()
+    {
+        return $this->hasMany(\App\Models\ProjectKpi::class);
+    }
+
+    public function getHasLatitudeLongitudeAttribute()
+    {
+        return $this->latitude && $this->longitude;
+    }
+
+
+    /**
+     * Devuelve el código html de embed de google
+     *
+     * @return string
+     */
+    public function map($width = '100%', $height = "200")
+    {
+        $latitude = $this->latitude;
+        $longitude = $this->longitude;
+        return <<<HTML
+<iframe src = "https://maps.google.com/maps?q=$latitude,$longitude&hl=es;z=14&amp;output=embed" width="$width" height="$height" frameborder="0" style="border:0" allowfullscreen></iframe>
+HTML;
+    }
+
+    public function toFormArray()
+    {
+        $array = $this->toArray();
+        $array['kpis'] = $this->kpis()->get()->toArray();
+        $array['sectors'] = $this->sectors()->pluck('id');
+        $array['rewards'] = $this->rewards()->pluck('id');
+        $array['team'] = $this->team()->get()->toArray();
+        return $array;
     }
 }

@@ -5,12 +5,17 @@
       <div class="container-fluid">
         <div class="row no-gutters text-center text-md-left">
           <div class="col-12 col-md-6">
-            <div class="project-img">
-              <img src="{{ $project->photo_854_url }}" alt="{{ $project->name }}" />
-            </div>
+            <project-video
+                  type="{{ $project->video_type }}"
+                  link="{{$project->link}}"
+                  id="{{ $project->id }}"
+                  image="{{ $project->photo_854_url }}"
+                  video="{{ $project->video }}"
+                  name="{{ $project->name }}"
+                ></project-video>
           </div> <!-- / .col-md-6 -->
-          <div class="col-12 col-md-6">
-            <div class="container">
+          <div class="col-12 col-md-6 d-flex flex-column justify-content-between flex">
+            <div class="container d-flex justify-content-center flex-column" style="flex-grow: 1" >
                 <div class="row pt-3">
                   <div class="col">
                     <p>
@@ -58,54 +63,40 @@
             <div class="text-justify">{!! str_replace("\n", "</p>\n<p>", '<p>'.nl2br($project->business_model).'</p>') !!}</div>
             <p><span class="h3">Competencia</span></p>
             <div class="text-justify">{!! str_replace("\n", "</p>\n<p>", '<p>'.nl2br($project->competition).'</p>') !!}</div>
+            @if($team->count())
             <p><span class="h3">Equipo</span></p>
-            <div class="team-member bg-light">
-              <img class="team-img" src="img/placeholdergrey.png">
-              <p><strong>Lorem Ipsum</strong></p>
-              <p>Puesto</p>
-            </div> <!-- / .team-member-->
-            <div class="team-member bg-light">
-              <img class="team-img" src="img/placeholdergrey.png">
-              <p><strong>Lorem Ipsum</strong></p>
-              <p>Puesto</p>
-            </div> <!-- / .team-member-->
-            <div class="team-member bg-light">
-              <img class="team-img" src="img/placeholdergrey.png">
-              <p><strong>Lorem Ipsum</strong></p>
-              <p>Puesto</p>
-            </div> <!-- / .team-member-->
+            @foreach($team as $member)
+              <div class="team-member bg-light">
+                <img class="team-img" src="{{ asset('img/placeholdergrey.png') }}">
+                <p><strong>{{ $member->name }}</strong></p>
+                {{-- <p>Puesto</p> --}}
+              </div> <!-- / .team-member-->
+              @endforeach
+            @endif
+
           </div> <!-- / .col-lg-8 -->
 
           <div class="col-12 col-md-6 col-lg-4 order-md-1">
+            @if($project->has_latitude_longitude)
             <p><span class="h3" id="ubicacion">Ubicación</span>
-            <p><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30332.22485154439!2d-96.81867992425157!3d18.13957035843407!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85c43cdd1161f62d%3A0x4bd35257856751e!2sSan+Andr%C3%A9s+Hidalgo%2C+Oax.!5e0!3m2!1ses!2smx!4v1510251206930" width="300" height="200" frameborder="0" style="border:0" allowfullscreen></iframe></p>
+            <p>
+              {!! $project->map() !!}
+            </p>
             <p><span class="h3">Etapa de desarrollo del capital</span></p>
+            @endif
+            @if($kpis->count())
             <p>Crecimiento</p>
             <p><span class="h3">KPIs</span></p>
-            <p>
-              <table>
-                <tr>
-                  <td class="text-muted kpi-name">Dos semanas</td>
-                  <td class="kpi-line"><div class="bullet"></div></td>
-                  <td class="kpi-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis faucibus nibh. Fusce faucibus lacus id orci suscipit suscipit.</td>
-                </tr>
-                <tr>
-                  <td class="text-muted kpi-name">Dos semanas</td>
-                  <td class="kpi-line"><div class="bullet"></div></td>
-                  <td class="kpi-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis faucibus nibh. Fusce faucibus lacus id orci suscipit suscipit.</td>
-                </tr>
-                <tr>
-                  <td class="text-muted kpi-name">Dos semanas</td>
-                  <td class="kpi-line"><div class="bullet"></div></td>
-                  <td class="kpi-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis faucibus nibh. Fusce faucibus lacus id orci suscipit suscipit.</td>
-                </tr>
-                <tr>
-                  <td class="text-muted kpi-name">Dos semanas</td>
-                  <td class="kpi-line"><div class="bullet"></div></td>
-                  <td class="kpi-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In quis faucibus nibh. Fusce faucibus lacus id orci suscipit suscipit.</td>
-                </tr>
-              </table>
-            </p>
+            <table>
+              @foreach($kpis as $kpi)
+              <tr>
+                <td class="text-muted kpi-name">{{ $kpi->time }}</td>
+                <td class="kpi-line"><div class="bullet"></div></td>
+                <td class="kpi-text">{{ $kpi->description }}</td>
+              </tr>
+              @endforeach
+            </table>
+            @endif
           </div> <!-- / .col-lg-4 -->
 
         </div> <!-- / .row -->
@@ -117,7 +108,7 @@
 
         <div class="content">
           <p class="text-center"><span class="h3">Fotos y video</span></p>
-
+          <project-carousel :project-id="{{ $project->id }}"></project-carousel>
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
               <!-- indicadores -->
               <ol class="carousel-indicators">

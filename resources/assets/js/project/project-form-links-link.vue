@@ -101,7 +101,15 @@ export default {
     currentValue (link) {
       this.error = false
       this.$emit('input', this.index, link)
+    },
+
+    link (link) {
+      this.currentValue = link || ''
     }
+  },
+
+  created () {
+    this.currentValue = this.link || ''
   },
 
   methods: {

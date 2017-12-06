@@ -38,11 +38,15 @@ export default {
         this.$emit('input', members)
       },
       deep: true
+    },
+
+    value (value) {
+      this.members = value || [{ id: uniqid(), links: null, name: '' }]
     }
   },
 
   created () {
-    this.members = this.value ? this.value : [{ id: uniqid(), links: null, name: '' }]
+    this.members = this.value || [{ id: uniqid(), links: null, name: '' }]
   },
 
   methods: {

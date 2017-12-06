@@ -38,11 +38,15 @@ export default {
         this.$emit('input', kpis)
       },
       deep: true
+    },
+
+    value (value) {
+      this.kpis = value || [{ id: uniqid(), time: '', description: '' }]
     }
   },
 
   created () {
-    this.kpis = this.value ? this.value : [{ id: uniqid(), time: '', description: '' }]
+    this.kpis = this.value || [{ id: uniqid(), time: '', description: '' }]
   },
 
   methods: {

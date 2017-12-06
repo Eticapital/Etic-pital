@@ -70,12 +70,17 @@
           <div class="row mb-3">
             @foreach($chunk as $project)
             <div class="col-lg-4">
-              <a href="{{$project->link}}" class="card project-card">
-                <div class="project-img">
-                  <img src="{{ $project->photo_380_url }}" alt="{{ $project->name }}" />
-                </div>
+              <div class="card project-card">
+                <project-video
+                  type="{{ $project->video_type }}"
+                  link="{{$project->link}}"
+                  id="{{ $project->id }}"
+                  image="{{ $project->photo_380_url }}"
+                  video="{{ $project->video }}"
+                  name="{{ $project->name }}"
+                ></project-video>
                 <div class="card-body">
-                  <p><span class="h3 card-title">{{ $project->name }}</span></p>
+                  <p><span class="h3 card-title"><a href="{{ $project->link }}">{{ $project->name }}</a></span></p>
                   <div class="d-flex">
                     <div class="">
                       <small title="{{ $project->address }}" v-b-tooltip.hover class="project-card-address card-text text-muted">Ubicación</small>
@@ -90,7 +95,7 @@
                     <br><span class="h3 text-primary">{{ money($project->collected) }}</span> / {{ money($project->goal) }}
                   </p>
                 </div> <!-- / .card-body -->
-              </a> <!-- / .project-card -->
+              </div> <!-- / .project-card -->
             </div><!-- /.col-lg -->
             @endforeach
           </div> <!-- / .card-columns -->

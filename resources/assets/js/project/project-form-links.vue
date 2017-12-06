@@ -49,6 +49,35 @@ export default {
   },
 
   watch: {
+    value (value) {
+      value.forEach((newLink) => {
+        // Es un link nuevo (quizá traido desde fuera)
+        if (this.links.findIndex(link => link.link === newLink) === -1) {
+          // Si hay un link vacio lo inserto en ese link,
+          // de lo contrario lo agrego como nuevo
+          let emptyIndex = this.links.findIndex(link => link.link === '')
+          if (emptyIndex >= 0) {
+            this.links[emptyIndex].link = newLink
+          } else {
+            this.links.push({
+              id: uniqid(),
+              link: newLink
+            })
+          }
+        }
+      })
+
+      // Por ultimo siempre debe de haber un link "Vacio" para agregar nuevos
+      // links
+      let emptyIndex = this.links.findIndex(link => link.link === '')
+      if (emptyIndex === -1) {
+        this.links.push({
+          id: uniqid(),
+          link: ''
+        })
+      }
+
+    },
     links: {
       handler (links) {
         let input = links
@@ -58,6 +87,7 @@ export default {
           .map(link => {
             return link.link
           })
+
         this.$emit('input', input)
       },
       deep: true

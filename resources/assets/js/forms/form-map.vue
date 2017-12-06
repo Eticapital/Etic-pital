@@ -19,20 +19,19 @@
 <script>
 export default {
   props: {
+    value: {
+      type: String
+    },
     apiKey: {
       type: String,
       required: true
     },
-    initialLatitude: {
-      type: Number,
-      default: 55.01657628017477
-    },
-    initialLongitude: {
-      type: Number,
-      default: -7.309233337402361
-    },
-    value: {
-      type: String
+    initialCoordinates: {
+      type: Object,
+      default: {
+        lat: 55.01657628017477,
+        lng: -7.309233337402361
+      }
     },
     isAddressPredefined: {
       type: Boolean,
@@ -80,13 +79,20 @@ export default {
     },
     address (address) {
       this.$emit('input', address)
+    },
+    value (value) {
+      this.address = value
+    },
+    initialCoordinates (coordinates) {
+      if (coordinates.lng && coordinates.lat) {
+        this.coordinates = coordinates
+      }
     }
   },
 
   created () {
     this.address = this.value
-    this.coordinates.lat = this.initialLatitude
-    this.coordinates.lng = this.initialLongitude
+    this.coordinates = this.initialCoordinates
   },
 
   mounted () {

@@ -23,7 +23,16 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Route::bind('project', function ($value) {
+            if (intval($value)) {
+                $project = \App\Models\Project::where('id', intval($value))->first();
+                if ($project) {
+                    return $project;
+                }
+            }
+
+            return \App\Models\Project::where('slug', $value)->first() ?? abort(404);
+        });
 
         parent::boot();
     }

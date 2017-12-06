@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -3771,20 +3771,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
+    value: {
+      type: String
+    },
     apiKey: {
       type: String,
       required: true
     },
-    initialLatitude: {
-      type: Number,
-      default: 55.01657628017477
-    },
-    initialLongitude: {
-      type: Number,
-      default: -7.309233337402361
-    },
-    value: {
-      type: String
+    initialCoordinates: {
+      type: Object,
+      default: {
+        lat: 55.01657628017477,
+        lng: -7.309233337402361
+      }
     },
     isAddressPredefined: {
       type: Boolean,
@@ -3833,13 +3832,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     address: function address(_address) {
       this.$emit('input', _address);
+    },
+    value: function value(_value) {
+      this.address = _value;
+    },
+    initialCoordinates: function initialCoordinates(coordinates) {
+      if (coordinates.lng && coordinates.lat) {
+        this.coordinates = coordinates;
+      }
     }
   },
 
   created: function created() {
     this.address = this.value;
-    this.coordinates.lat = this.initialLatitude;
-    this.coordinates.lng = this.initialLongitude;
+    this.coordinates = this.initialCoordinates;
   },
   mounted: function mounted() {
     var _this = this;
@@ -88834,7 +88840,7 @@ var xhrClient = function (request) {
 
 var nodeClient = function (request) {
 
-    var client = __webpack_require__(2);
+    var client = __webpack_require__(3);
 
     return new PromiseObj(function (resolve) {
 
@@ -108446,7 +108452,7 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 1:
+/***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__("./resources/assets/js/app.js");
@@ -108454,7 +108460,7 @@ module.exports = __webpack_require__("./resources/assets/js/app.js");
 
 /***/ }),
 
-/***/ 2:
+/***/ 3:
 /***/ (function(module, exports) {
 
 /* (ignored) */

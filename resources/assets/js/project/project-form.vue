@@ -17,8 +17,7 @@
                 <form-map
                   v-model="form.address"
                   :api-key="googleMapsApiKey"
-                  :initial-latitude="form.latitude"
-                  :initial-longitude="form.longitude"
+                  :initial-coordinates="{lat: form.latitude, lng: form.longitude}"
                   @location-updated="locationUpdated"
                 />
               </fieldset>
@@ -414,12 +413,25 @@ export default {
   },
 
   created () {
+    // Temporar eliminr
+    this.loadDemoProject()
+
     this.loadSectors()
     this.loadStages()
     this.loadRewards()
   },
 
   methods: {
+    loadDemoProject () {
+      axios.get('/projects/1')
+        .then(response => {
+          console.log(response.data);
+          this.form.appendModel(response.data)
+        })
+        .catch(errors => {
+          console.log(errors)
+        })
+    },
     onSubmit () {
 
     },

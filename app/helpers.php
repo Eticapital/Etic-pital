@@ -45,7 +45,6 @@ if (! function_exists('growl')) {
     }
 }
 
-
 if (!function_exists('format_percent')) {
     function format_percent($value, $decimals = 0)
     {
@@ -93,7 +92,6 @@ if (! function_exists('file_upload_max_size')) {
     }
 }
 
-
 if (! function_exists('money')) {
     /**
      * Devuelve el máximo tamaño permitdo para cargas
@@ -102,5 +100,29 @@ if (! function_exists('money')) {
     function money($amount, $decimals = 0, $symbol = '$', $is_cents = true)
     {
         return $symbol . number_format($is_cents ? $amount / 100 : $amount, $decimals);
+    }
+}
+
+if (! function_exists('is_media')) {
+    /**
+     * Revisa sin un archivo es una imagne
+     *
+     * @return boolean
+     */
+    function is_media(\Illuminate\Http\UploadedFile $file)
+    {
+         $validator = Validator::make(['file' => $file], [
+            'file' => 'required|image'
+        ]);
+
+        if ($validator->passes()) {
+            return true;
+        }
+
+         $validator = Validator::make(['file' => $file], [
+            'video' => 'mimetypes:video/avi,video/mpeg,video/quicktime'
+        ]);
+
+        return $validator->passes();
     }
 }

@@ -46,7 +46,11 @@
   },
   "dependencies": {
     "axios-cancel": "^0.2.2",
+    "videojs-vimeo": "^2.0.2",
+    "videojs-youtube": "^2.4.1",
     "vue-croppa": "^1.1.4",
-    "vue-upload-component": "^2.7.1"
+    "vue-easy-slider": "^3.1.7",
+    "vue-upload-component": "^2.7.1",
+    "vue-video-player": "^4.0.6"
   }
 }

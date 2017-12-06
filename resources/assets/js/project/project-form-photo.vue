@@ -9,7 +9,7 @@
         <div :class="{'PhotoInput': true, 'PhotoInput--active': active }">
           <div class="PhotoInput__wrapper">
             <div @click.prevent="croppa.chooseFile()">
-              <img v-if="hasImage" class="PhotoInput__image" :src="uploadedImageUrl" :alt="form[name]" >
+              <img v-if="hasImage" class="PhotoInput__image" :src="imageUrl" :alt="form[name]" >
               <i v-else class="PhotoInput__icon icon-camera" ></i>
             </div>
             <div v-show="active">
@@ -103,6 +103,10 @@ export default {
   },
 
   computed: {
+    imageUrl() {
+      return this.uploadedImageUrl || '/storage/projects/images/' + this.form[this.name]
+    },
+
     hasImage () {
       return this.form[this.name]
     },
@@ -120,7 +124,6 @@ export default {
       this.croppa.generateBlob((image) => {
         axiosFileupload('/upload/image', image)
           .then(response => {
-            console.log(response.data.url)
             this.form[this.name] = response.data.name
             this.uploadedImageUrl = response.data.url
             this.active = false

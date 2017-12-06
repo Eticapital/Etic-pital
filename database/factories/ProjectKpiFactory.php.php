@@ -10,8 +10,6 @@ $factory->define(ProjectKpi::class, function (Faker $faker) {
             return factory(\App\Models\Project::class)->create()->id;
         },
         'time' => $times->random(),
-        'description' => $faker->boolean
-            ? collect($faker->paragraphs($faker->numberBetween(1, 2)))->implode("\n")
-            : null,
+        'description' => collect($faker->paragraphs($faker->numberBetween(1, 2)))->implode("\n"),
     ];
 });

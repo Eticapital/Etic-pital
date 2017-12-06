@@ -15,9 +15,14 @@
       <div class="project-preview">
         <div class="row">
           <div class="col-12 col-md-6 col-lg-4 p-0">
-            <a class="project-img" href="{{ $project->link }}">
-              <img src="{{ $project->photo_380_url }}" alt="{{ $project->name }}" />
-            </a>
+            <project-video
+              type="{{ $project->video_type }}"
+              link="{{$project->link}}"
+              id="{{ $project->id }}"
+              image="{{ $project->photo_380_url }}"
+              video="{{ $project->video }}"
+              name="{{ $project->name }}"
+            ></project-video>
           </div> <!-- / .col-lg-4 -->
           <div class="col-12 col-md-6 col-lg-8">
             <span class="h3 project-title"><a class="text-default" href="{{ $project->link }}">{{ $project->name }}</a></span>

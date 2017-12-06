@@ -16,7 +16,7 @@ Route::get('/rewards', 'RewardController@index');
 
 Route::get('/invertir', 'ProjectController@index')->name('invertir');
 Route::post('/projects', 'ProjectController@store');
-Route::get('/proyectos/{project}', 'ProjectController@show')->name('projects.show');
+Route::get('/projects/{project}', 'ProjectController@show')->name('projects.show');
 
 
 Auth::routes();

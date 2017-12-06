@@ -3556,7 +3556,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     doDelete: function doDelete() {
-      this.$emit('remove');
+      var _this = this;
+
+      if (this.file.error) {
+        return this.$emit('remove');
+      }
+      swal({
+        title: '¿Estás seguro que deseas eliminar?',
+        type: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Estoy seguro, eliminar'
+      }).then(function (result) {
+        if (result.value) {
+          _this.$emit('remove');
+        } else if (result.dismiss === 'cancel') {
+          console.log("cancelado");
+        }
+      });
     }
   }
 });
@@ -91457,7 +91473,7 @@ module.exports = function (css) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
- * sweetalert2 v7.0.6
+ * sweetalert2 v7.0.7
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -92455,7 +92471,12 @@ var sweetAlert$1 = function sweetAlert() {
       }
     };
 
-    if (!windowOnkeydownOverridden) {
+    if (params.toast && windowOnkeydownOverridden) {
+      window.onkeydown = previousWindowKeyDown;
+      windowOnkeydownOverridden = false;
+    }
+
+    if (!params.toast && !windowOnkeydownOverridden) {
       previousWindowKeyDown = window.onkeydown;
       windowOnkeydownOverridden = true;
       window.onkeydown = handleKeyDown;
@@ -93000,7 +93021,7 @@ sweetAlert$1.adaptInputValidator = function (legacyValidator) {
 
 sweetAlert$1.noop = function () {};
 
-sweetAlert$1.version = '7.0.6';
+sweetAlert$1.version = '7.0.7';
 
 sweetAlert$1.default = sweetAlert$1;
 

@@ -2,6 +2,15 @@ window._ = require('lodash')
 
 window.uniqid = require('uniqid')
 
+const swal = require('sweetalert2')
+swal.setDefaults({
+  confirmButtonClass: 'btn btn-success',
+  cancelButtonClass: 'btn btn-danger',
+  buttonsStyling: false,
+  cancelButtonText: 'Cancelar'
+})
+window.swal = swal
+
 try {
   window.$ = window.jQuery = require('jquery')
 

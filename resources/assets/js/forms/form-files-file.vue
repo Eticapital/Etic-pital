@@ -52,7 +52,21 @@ export default {
 
   methods: {
     doDelete () {
-      this.$emit('remove')
+      if (this.file.error) {
+        return this.$emit('remove')
+      }
+      swal({
+        title: '¿Estás seguro que deseas eliminar?',
+        type: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Estoy seguro, eliminar',
+      }).then((result) => {
+        if (result.value) {
+          this.$emit('remove')
+        } else if (result.dismiss === 'cancel') {
+          console.log("cancelado")
+        }
+      })
     }
   }
 }

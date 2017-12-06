@@ -27,8 +27,8 @@ $form = array(
 		'unknown_method' => 'Método de solicitud de servidor desconocido'
 	),
 	'email' => array(
-		'from' => 'informes@eticapital.mx',
-		'to' => 'informes@eticapital.mx'
+		'from' => 'alfonso@vexilo.com',
+		'to' => 'alfonso@vexilo.com'
 	),
 	'fields' => array(
 		'custom_U3048' => array(

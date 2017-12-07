@@ -10,6 +10,9 @@ Vue.use(BootstrapVue);
 import Croppa from 'vue-croppa'
 Vue.use(Croppa)
 
+import VueScrollTo from 'vue-scrollto'
+Vue.use(VueScrollTo)
+
 import VueVideoPlayer from 'vue-video-player'
 Vue.use(VueVideoPlayer)
 

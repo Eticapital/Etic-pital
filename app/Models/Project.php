@@ -231,6 +231,7 @@ HTML;
         $array['company_documents'] = $this->documents()->company()->get()->toArray();
         $array['key_documents'] = $this->documents()->key()->get()->toArray();
         $array['extra_documents'] = $this->documents()->extra()->get()->toArray();
+        // unset($array['has_interested_investor']);
         return $array;
     }
 }

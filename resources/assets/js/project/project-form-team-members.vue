@@ -1,15 +1,21 @@
 <template>
-  <div>
+  <b-form-group
+    :feedback="form ? form.errors.get(name) : ''"
+    :state="form && form.errors.has(name) ? 'invalid' : ''"
+    ref="input"
+  >
     <team-member
       v-for="(member, index) in members"
       :key="member.id"
       :member="member"
       :index="index"
+      :form="form"
+      :name="name + '.' + index"
       @changed="memberChanged"
       @remove="removeMember(index)"
     />
-    <p><b-btn variant="secondary" @click.prevent="addMember">Agregar otro miembro</b-btn></p>
-  </div>
+    <p><b-btn :variant="form && form.errors.has(name) ? 'danger' : 'secondary'" @click.prevent="addMember">Agregar otro miembro</b-btn></p>
+  </b-form-group>
 </template>
 
 <script>
@@ -23,7 +29,9 @@ export default {
   props: {
     value: {
       type: Array
-    }
+    },
+    form: Object,
+    name: String
   },
 
   data () {
@@ -35,6 +43,7 @@ export default {
   watch: {
     members: {
       handler (members) {
+        this.form.errors.clear(this.name)
         this.$emit('input', members)
       },
       deep: true

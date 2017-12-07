@@ -2,6 +2,9 @@
   <div>
     <b-form-group
       :label="label"
+      :feedback="form ? form.errors.get(name) : ''"
+      :state="form && form.errors.has(name) ? 'invalid' : ''"
+      ref="input"
     >
       <project-form-link
         v-for="(link, index) in links"
@@ -9,6 +12,8 @@
         :index="index"
         :link="link.link"
         :total-links="links.length"
+        :form="form"
+        :name="name + '.' + index"
         @new-link="newLink"
         @remove-link="removeLink(index)"
         @input="updateLink"
@@ -27,7 +32,9 @@ export default {
 
   props: {
     value: Array,
-    label: String
+    label: String,
+    form: Object,
+    name: String
   },
 
   data () {
@@ -50,6 +57,10 @@ export default {
 
   watch: {
     value (value) {
+      if (this.form && this.name) {
+        this.form.errors.clear(this.name)
+      }
+
       value.forEach((newLink) => {
         // Es un link nuevo
         if (this.links.findIndex(link => link.link === newLink) === -1) {
@@ -114,3 +125,5 @@ export default {
   }
 }
 </script>
+
+

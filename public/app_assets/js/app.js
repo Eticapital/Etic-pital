@@ -3615,6 +3615,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3634,7 +3641,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       type: Array,
       default: [],
       required: false
-    }
+    },
+    form: Object,
+    name: String
   },
 
   data: function data() {
@@ -3646,6 +3655,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   computed: {
+    activeFiles: function activeFiles() {
+      return this.files.filter(function (file) {
+        return !file.deleted;
+      });
+    },
     maxFileSize: function maxFileSize() {
       return App.maxFileSize || 25165824;
     },
@@ -3676,6 +3690,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       handler: function handler(value) {
         var _this = this;
 
+        if (this.form && this.name) {
+          this.form.errors.clear(this.name);
+        }
         value.forEach(function (item) {
           var index = _this.files.findIndex(function (file) {
             return file.id === item.id;
@@ -3830,6 +3847,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -3850,6 +3872,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     isAddressPredefined: {
       type: Boolean,
       default: false
+    },
+    feedback: {
+      type: String,
+      default: ''
     }
   },
 
@@ -3888,7 +3914,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       handler: function handler(coordinates, oldCoordinates) {
         if (coordinates.lat !== oldCoordinates.lat && coordinates.lng !== oldCoordinates.lng) {
           this.marker.setPosition(coordinates);
-          this.map.panTo(coordinates);
+          // this.map.panTo(coordinates)
         }
       },
 
@@ -4195,6 +4221,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 // require styles
 
@@ -4221,6 +4250,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
 
+
+  computed: {
+    editor: function editor() {
+      if (this.rich) {
+        return this.$refs.input.quill;
+      }
+    }
+  },
 
   props: {
     form: {
@@ -4262,6 +4299,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -4336,6 +4374,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     inCents: {
       type: Boolean,
       default: false
+    },
+    state: {
+      required: false,
+      default: ''
     }
   },
 
@@ -19608,7 +19650,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.ql-container {\n  font-family: \"Open Sans\", sans-serif;\n  font-size: 1.125rem;\n  font-weight: 400;\n  line-height: 1.5;\n  color: #4C4E52;\n  min-height: 180px\n}\n.ql-container strong {\n  font-weight: bold;\n}\n.ql-container p {\n  margin-bottom: 1rem;\n}\n.quill-editor {\n  background: #FFF;\n}\n", ""]);
+exports.push([module.i, "\n.ql-container {\n  font-family: \"Open Sans\", sans-serif;\n  font-size: 1.125rem;\n  font-weight: 400;\n  line-height: 1.5;\n  color: #4C4E52;\n  min-height: 180px\n}\n.ql-container strong {\n  font-weight: bold;\n}\n.ql-container p {\n  margin-bottom: 1rem;\n}\n.quill-editor {\n  background: #FFF;\n}\n.quill-editor-invalid .ql-toolbar,\n.quill-editor-invalid .ql-container{\nborder-color: #dc3545;\n}\n\n", ""]);
 
 // exports
 
@@ -19624,6 +19666,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.File {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  padding: 10px;\n  border-bottom: 1px solid #ced4da;\n}\n.File__icon {\n  font-size: 48px;\n  color: #84BE00;\n  margin-right: 15px;\n}\n.File__iconstatus {\n  margin-left: 15px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abdb180\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/forms/form-files.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.Files--list--error {\n  border: 1px solid #dc3545;\n}\n", ""]);
 
 // exports
 
@@ -98553,7 +98610,14 @@ var render = function() {
             }
           })
         : _c("quill-editor", {
+            ref: "input",
+            class: { "quill-editor-invalid": _vm.form.errors.has(_vm.name) },
             attrs: { options: _vm.editorOptions },
+            on: {
+              change: function($event) {
+                _vm.form.errors.clear(_vm.name)
+              }
+            },
             model: {
               value: _vm.form[_vm.name],
               callback: function($$v) {
@@ -98834,7 +98898,8 @@ var render = function() {
       required: _vm.required,
       readonly: _vm.readonly || _vm.plaintext,
       placeholder: _vm.placeholder,
-      autocomplete: _vm.autocomplete || null
+      autocomplete: _vm.autocomplete || null,
+      state: _vm.state
     },
     on: {
       change: function($event) {
@@ -99270,34 +99335,59 @@ var render = function() {
     "div",
     { staticClass: "Files" },
     [
-      _vm.files.length
-        ? _c(
-            "ul",
-            { staticClass: "d-flex flex-column list-unstyled" },
-            _vm._l(_vm.files, function(file, index) {
-              return !file.deleted
-                ? _c("form-file", {
-                    key: file.id,
-                    attrs: { file: file, "max-file-size": _vm.maxFileSize },
-                    on: {
-                      remove: function($event) {
-                        _vm.removeFile(file)
-                      }
-                    }
-                  })
-                : _vm._e()
-            })
-          )
-        : _vm._e(),
+      _c(
+        "div",
+        {
+          class: {
+            "Files--list": true,
+            "Files--list--error": _vm.form && _vm.form.errors.has(_vm.name)
+          }
+        },
+        [
+          _vm.activeFiles.length
+            ? _c(
+                "ul",
+                { staticClass: "d-flex flex-column list-unstyled" },
+                _vm._l(_vm.activeFiles, function(file, index) {
+                  return !file.deleted
+                    ? _c("form-file", {
+                        key: file.id,
+                        attrs: { file: file, "max-file-size": _vm.maxFileSize },
+                        on: {
+                          remove: function($event) {
+                            _vm.removeFile(file)
+                          }
+                        }
+                      })
+                    : _vm._e()
+                })
+              )
+            : _c("p", [_vm._v("\n      Sin documentos\n    ")]),
+          _vm._v(" "),
+          _vm.form && _vm.form.errors.has(_vm.name)
+            ? _c("p", {
+                staticClass: "invalid-feedback",
+                staticStyle: { display: "block" },
+                domProps: { textContent: _vm._s(_vm.form.errors.get(_vm.name)) }
+              })
+            : _vm._e()
+        ]
+      ),
       _vm._v(" "),
       _c(
         "file-upload",
         {
           ref: "upload",
-          staticClass: "btn btn-secondary",
+          class: [
+            "btn",
+            _vm.form && _vm.form.errors.has(_vm.name)
+              ? "btn-danger"
+              : "btn-secondary"
+          ],
           attrs: {
             "post-action": "/upload",
             multiple: true,
+            "input-id": "file-" + _vm.name,
             headers: _vm.headers,
             size: _vm.maxFileSize
           },
@@ -99990,7 +100080,12 @@ var render = function() {
     [
       _c(
         "b-input-group",
-        { attrs: { left: "$" } },
+        {
+          attrs: {
+            left: "$",
+            state: _vm.form.errors.has(_vm.name) ? "invalid" : ""
+          }
+        },
         [
           _c("input-float", {
             ref: "input",
@@ -100763,9 +100858,17 @@ var render = function() {
     [
       _c(
         "b-form-group",
-        { staticClass: "mr-3", attrs: { label: "Ubicación" } },
+        {
+          staticClass: "mr-3",
+          attrs: {
+            label: "Ubicación",
+            feedback: _vm.feedback,
+            state: _vm.feedback ? "invalid" : ""
+          }
+        },
         [
           _c("b-form-input", {
+            attrs: { state: _vm.feedback ? "invalid" : "" },
             nativeOn: {
               keyup: function($event) {
                 _vm.newAddress($event)
@@ -105673,6 +105776,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-18ab4199\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./form-files-file.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-18ab4199\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./form-files-file.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abdb180\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/forms/form-files.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abdb180\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/forms/form-files.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("8f408004", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abdb180\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./form-files.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abdb180\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./form-files.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -120480,6 +120610,12 @@ window.FormErrors = function () {
       if (_this.has(item)) {
         Vue.delete(_this.errors, item);
       }
+      // Borro los relativos error.id
+      _.each(_this.errors, function (error, key) {
+        if (_.startsWith(key, field + '.')) {
+          Vue.delete(_this.errors, key);
+        }
+      });
     });
   };
 };
@@ -120641,6 +120777,10 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abdb180\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/forms/form-files.vue")
+}
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/forms/form-files.vue")
@@ -120649,7 +120789,7 @@ var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/templa
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */

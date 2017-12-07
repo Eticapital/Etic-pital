@@ -1,8 +1,12 @@
 <template>
   <div v-if="index < totalLinks -1" class="ProjectLink">
-    <a :href="currentValue" target="_blank">
+    <a :class="{'text-danger': hasError }" :href="currentValue" target="_blank">
       <i :class="'icon-' + icon"></i>
       {{ currentValue }}
+      <template v-if="hasError">
+      <br />
+      <small><i class="icon-warning text-danger"></i> {{feedback}}</small>
+      </template>
     </a>
     <a @click.prevent="$emit('remove-link')" class="ml-auto text-danger" href="#">
       <i class="icon-bin"></i> Eliminar
@@ -19,7 +23,7 @@
     <b-button
       @click.prevent="newLink"
       size="sm"
-      :variant="error ? 'danger' : 'secondary'"
+      :variant="hasError ? 'danger' : 'secondary'"
       class="ml-2"
     >
       <template v-if="totalLinks > 1">Agregar otro link</template>
@@ -52,7 +56,9 @@ export default {
     totalLinks: {
       type: Number,
       required: true
-    }
+    },
+    form: Object,
+    name: String
   },
 
   data () {
@@ -63,8 +69,20 @@ export default {
   },
 
   computed: {
+    hasError () {
+      if (this.form && this.name && this.form.errors.has(this.name)) {
+          return true
+      }
+
+      return this.error
+    },
+    feedback () {
+      if (this.form && this.name && this.form.errors.has(this.name)) {
+          return this.form.errors.get(this.name)
+      }
+    },
     icon () {
-      // Vimeo o Youtube
+      // Youtube
       if (/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/.test(this.currentValue)) {
         return 'youtube'
       }

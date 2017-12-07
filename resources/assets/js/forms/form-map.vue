@@ -1,7 +1,12 @@
 <template>
   <div class="FormLocation">
-    <b-form-group label="Ubicación" class="mr-3">
-      <b-form-input v-model="address" @keyup.native="newAddress" />
+    <b-form-group
+      label="Ubicación"
+      class="mr-3"
+      :feedback="feedback"
+      :state="feedback ? 'invalid' : ''"
+    >
+      <b-form-input v-model="address" @keyup.native="newAddress" :state="feedback ? 'invalid' : ''" />
       <div v-if="firstAddresses.length || calculating" class="FormLocation__addresses" >
         <a href="" @click.prevent="selectAddress(address)" class="FormLocation__address" v-for="address in firstAddresses">
           {{address.formatted_address}}
@@ -36,6 +41,10 @@ export default {
     isAddressPredefined: {
       type: Boolean,
       default: false
+    },
+    feedback: {
+      type: String,
+      default: ''
     }
   },
 
@@ -74,7 +83,7 @@ export default {
       handler (coordinates, oldCoordinates) {
         if (coordinates.lat !== oldCoordinates.lat && coordinates.lng !== oldCoordinates.lng) {
           this.marker.setPosition(coordinates)
-          this.map.panTo(coordinates)
+          // this.map.panTo(coordinates)
         }
       },
       deep: true

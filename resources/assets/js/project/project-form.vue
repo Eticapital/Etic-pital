@@ -7,14 +7,23 @@
             <div class="col-lg-8">
               <fieldset>
                 <p><legend><span class="h2 text-primary">1.</span> <span class="h3">Datos Generales</span></legend></p>
-                <form-text :form="form" name="name" label="Nombre del proyecto:" />
-                <form-text :form="form" name="holder" label="Nombre del titular:" />
-                <form-text :form="form" name="phone" label="Teléfono de contacto:" />
-                <form-text :form="form" name="email" label="Correo de contacto:" />
-                <project-form-links v-model="form.holder_links" label="Redes sociales del titular" />
-                <project-form-photo :form="form" name="photo" />
+                <form-text :form="form" ref="name" name="name" label="Nombre del proyecto:" />
+                <form-text :form="form" ref="holder" name="holder" label="Nombre del titular:" />
+                <form-text :form="form" ref="phone" name="phone" label="Teléfono de contacto:" />
+                <form-text :form="form" ref="email" name="email" label="Correo de contacto:" />
+                <project-form-links
+                  ref="holder_links"
+                  v-model="form.holder_links"
+                  :form="form"
+                  name="holder_links"
+                  label="Redes sociales del titular"
+                />
+                <project-form-photo ref="photo" :form="form" name="photo" />
                 <form-text :form="form" name="video" placeholder="https://" label="Video de la iniciativa:" />
                 <form-map
+                  ref="address"
+                  :feedback="form.errors.get('address') || form.errors.get('latitude') || form.errors.get('longitude')"
+                  :change="form.errors.clear('address') && form.errors.clear('latitude') && form.errors.clear('longitude')"
                   v-model="form.address"
                   :api-key="googleMapsApiKey"
                   :initial-coordinates="{lat: form.latitude, lng: form.longitude}"
@@ -35,6 +44,7 @@
               <p><legend><span class="h2 text-primary">2.</span> <span class="h3">Resumen</span></legend></p>
 
               <form-textarea
+                ref="description"
                 :form="form"
                 :rich="true"
                 name="description"
@@ -91,7 +101,13 @@
             <div class="col-lg-8">
               <fieldset>
                 <p><legend><span class="h2 text-primary">5.</span> <span class="h3">Presentación, fotos y videos adicionales de la empresa</span></legend></p>
-                <form-files v-model="form.company_documents" btn-text="Subir presentación, foto(s) o video(s)" />
+                <form-files
+                  name="key_documents"
+                  ref="key_documents"
+                  v-model="form.key_documents"
+                  :form="form"
+                  btn-text="Subir presentación, foto(s) o video(s)"
+                />
               </fieldset>
             </div> <!-- / .col-lg-8 -->
           </div> <!-- / .row -->
@@ -105,7 +121,13 @@
           <div class="col-lg-8">
             <fieldset>
               <p><legend><span class="h2 text-primary">6.</span> <span class="h3">Página y redes de la empresa</span></legend></p>
-              <project-form-links v-model="form.links" label="Tu página oficial, página de facebook, twitter, etc." />
+              <project-form-links
+                ref="links"
+                :form="form"
+                name="links"
+                v-model="form.links"
+                label="Tu página oficial, página de facebook, twitter, etc."
+              />
             </fieldset>
           </div> <!-- / .col-lg-8 -->
         </div> <!-- / .row -->
@@ -122,13 +144,20 @@
                 <p v-if="sectors === null">
                   <i class="icon-spinner spinner"></i> Cargando sectores...
                 </p>
-                  <b-form-checkbox-group v-else class="form-row" v-model="form.sectors">
+                <b-form-group
+                  v-else
+                  :feedback="form.errors.get('sectors')"
+                  :state="form.errors.has('sectors') ? 'invalid' : ''"
+                  ref="sectors"
+                >
+                  <b-form-checkbox-group @change="form.errors.clear('sectors')" class="form-row" v-model="form.sectors" :state="form.errors.has('sectors') ? 'invalid' : ''" >
                     <div v-for="(chunk, index) in sectorsColumns" class="col" :key="index">
                       <div class="form-check" v-for="sector in chunk" :key="sector.id">
                         <b-form-checkbox :value="sector.id">{{ sector.label }}</b-form-checkbox>
                       </div><!-- /.form-check -->
                     </div>
                   </b-form-checkbox-group>
+                </b-form-group>
               </fieldset>
             </div> <!-- / .col-lg-8 -->
           </div> <!-- / .row -->
@@ -145,12 +174,18 @@
               <p v-if="stages === null">
                 <i class="icon-spinner spinner"></i> Cargando etapas...
               </p>
-              <b-form-radio-group v-else v-model="form.stage_id" stacked>
-                <b-form-radio v-for="stage in stages" :key="stage.id" :value="stage.id">
-                  {{ stage.label }} ({{stage.description}})
-                </b-form-radio>
-              </b-form-radio-group>
-
+              <b-form-group
+                v-else
+                :feedback="form.errors.get('stage_id')"
+                :state="form.errors.has('stage_id') ? 'invalid' : ''"
+                ref="stage_id"
+              >
+                <b-form-radio-group v-model="form.stage_id" stacked :state="form.errors.has('stage_id') ? 'invalid' : ''" @change="form.errors.clear('stage_id')">
+                  <b-form-radio v-for="stage in stages" :key="stage.id" :value="stage.id">
+                    {{ stage.label }} ({{stage.description}})
+                  </b-form-radio>
+                </b-form-radio-group>
+              </b-form-group>
             </fieldset>
           </div> <!-- / .col-lg-8 -->
         </div> <!-- / .row -->
@@ -167,7 +202,8 @@
                 <form-textarea
                   :form="form"
                   :rich="true"
-                  name="business_model" label="¿Cómo generas dinero? ¿Qué tipo de producto o servicio vendes y quién te lo compra? ¿A través de qué medios lo comercializas o cómo cierras tus ventas?" />
+                  name="business_model"
+                  label="¿Cómo generas dinero? ¿Qué tipo de producto o servicio vendes y quién te lo compra? ¿A través de qué medios lo comercializas o cómo cierras tus ventas?" />
               </fieldset>
             </div> <!-- / .col-lg-8 -->
           </div> <!-- / .row -->
@@ -181,19 +217,37 @@
           <div class="col-lg-8">
             <fieldset>
               <p><legend><span class="h2 text-primary">10.</span> <span class="h3">Datos de inversión</span></legend></p>
-              <form-money :form="form" :in-cents="true" name="previous_capital" label="Capital previamente obtenido (si aplica)" />
-              <form-money :form="form" :in-cents="true" name="total_sales" label="Ventas totales al día de hoy (si aplica)" />
-              <form-money :form="form" :in-cents="true" name="round_size" label="Tamaño de la ronda (¿Cuánto necesitas?)" />
+              <form-money :form="form" :in-cents="true" ref="previous_capital" name="previous_capital" label="Capital previamente obtenido (si aplica)" />
+              <form-money :form="form" :in-cents="true" ref="total_sales" name="total_sales" label="Ventas totales al día de hoy (si aplica)" />
+              <form-money :form="form" :in-cents="true" ref="round_size" name="round_size" label="Tamaño de la ronda (¿Cuánto necesitas?)" />
+              <form-money :form="form" :in-cents="true" ref="minimal_needed" name="minimal_needed" label="¿Cuánto es lo mínimo que te serviría para levantar capital?:" />
             </fieldset>
             <fieldset>
               <div class="form-row">
-                <legend class="col-form-legend">¿Tienes algún inversionista interesado?</legend>
-                <b-form-radio-group v-model="form.has_interested_investor">
-                    <b-form-radio :value="true">Sí</b-form-radio>
-                    <b-form-radio :value="false">No</b-form-radio>
-                </b-form-radio-group>
+                <b-form-group
+                  label="¿Tienes algún inversionista interesado?"
+                  :feedback="form.errors.get('has_interested_investor')"
+                  :state="form.errors.has('has_interested_investor') ? 'invalid' : ''"
+                  ref="has_interested_investor"
+                >
+                  <b-form-radio-group
+                    v-model="form.has_interested_investor"
+                    :state="form.errors.has('has_interested_investor') ? 'invalid' : ''"
+                    @change="form.errors.clear('has_interested_investor')"
+                  >
+                      <b-form-radio :value="true">Sí</b-form-radio>
+                      <b-form-radio :value="false">No</b-form-radio>
+                  </b-form-radio-group>
+                </b-form-group>
               </div> <!-- / .form-row -->
-              <form-text v-if="form.has_interested_investor" :form="form" name="interested_investor_name" label="¿Qué inversionista?" placeholder="Opcional" />
+              <form-text
+                v-if="form.has_interested_investor"
+                :form="form"
+                ref="interested_investor_name"
+                name="interested_investor_name"
+                label="¿Qué inversionista?"
+                placeholder="Opcional"
+              />
             </fieldset>
             <fieldset>
               <legend class="col-form-legend">Ventas esperadas en los próximos tres años</legend>
@@ -233,13 +287,25 @@
               <p v-if="rewards === null">
                 <i class="icon-spinner spinner"></i> Cargando recompensas...
               </p>
-              <b-form-checkbox-group v-else class="form-row" v-model="form.rewards">
-                <div v-for="(chunk, index) in rewardsColumns" class="col" :key="index">
-                  <div class="form-check" v-for="reward in chunk" :key="reward.id">
-                    <b-form-checkbox :value="reward.id">{{ reward.label }}</b-form-checkbox>
-                  </div><!-- /.form-check -->
-                </div>
-              </b-form-checkbox-group>
+              <b-form-group
+                  v-else
+                  :feedback="form.errors.get('rewards')"
+                  :state="form.errors.has('rewards') ? 'invalid' : ''"
+                  ref="rewards"
+                >
+                  <b-form-checkbox-group
+                    class="form-row"
+                    v-model="form.rewards"
+                    @change="form.errors.clear('rewards')"
+                     :state="form.errors.has('rewards') ? 'invalid' : ''"
+                  >
+                    <div v-for="(chunk, index) in rewardsColumns" class="col" :key="index">
+                      <div class="form-check" v-for="reward in chunk" :key="reward.id">
+                        <b-form-checkbox :value="reward.id">{{ reward.label }}</b-form-checkbox>
+                      </div><!-- /.form-check -->
+                    </div>
+                  </b-form-checkbox-group>
+                </b-form-group>
             </fieldset>
           </div> <!-- / .col-lg-8 -->
         </div> <!-- / .row -->
@@ -253,7 +319,7 @@
             <div class="col-lg-8">
               <fieldset>
                 <p><legend><span class="h2 text-primary">11.</span> <span class="h3">Miembros del equipo</span></legend></p>
-                <project-form-team-members v-model="form.team" />
+                <project-form-team-members ref="team" :form="form" name="team" v-model="form.team" />
               </fieldset>
             </div> <!-- / .col-lg-8 -->
           </div> <!-- / .row -->
@@ -267,7 +333,7 @@
           <div class="col-lg-8">
             <fieldset>
               <p><legend><span class="h2 text-primary">12.</span> <span class="h3">Indicadores claves de rendimiento (KPIs)</span></legend></p>
-              <project-form-kpis v-model="form.kpis" />
+              <project-form-kpis v-model="form.kpis" ref="kpis" :form="form" name="kpis" />
             </fieldset>
           </div> <!-- / .col-lg-8 -->
         </div> <!-- / .row -->
@@ -281,7 +347,12 @@
             <div class="col-lg-8">
               <fieldset>
                 <p><legend><span class="h2 text-primary">13.</span> <span class="h3">Documentos  Clave</span></legend></p>
-                <form-files v-model="form.key_documents" />
+                <form-files
+                  name="key_documents"
+                  ref="key_documents"
+                  v-model="form.key_documents"
+                  :form="form"
+                />
               </fieldset>
             </div> <!-- / .col-lg-8 -->
           </div> <!-- / .row -->
@@ -295,7 +366,13 @@
           <div class="col-lg-8">
             <fieldset>
               <p><legend><span class="h2 text-primary">14.</span> <span class="h3">Material extra</span></legend></p>
-              <form-files v-model="form.extra_documents" />
+              <form-files
+                name="key_documents"
+                ref="key_documents"
+                v-model="form.key_documents"
+                :form="form"
+              />
+
             </fieldset>
           </div> <!-- / .col-lg-8 -->
         </div> <!-- / .row -->
@@ -433,22 +510,46 @@ export default {
     loadDemoProject () {
       axios.get('/projects/1')
         .then(response => {
-          console.log(response.data);
           this.form.appendModel(response.data)
         })
         .catch(errors => {
-          console.log(errors)
+          console.log("errors", errors)
         })
     },
     onSubmit () {
-
+      //
     },
     submitProject () {
       App.post('/projects', this.form)
         .then(response => {
           this.results = response
         }).catch(errors => {
-          console.log(errors)
+          if (errors.errors) {
+            _.find(errors.errors, (error, name) => {
+              name = name.split('.')[0]
+              if (name === 'latitude' || name === 'longitude') {
+                name = 'address'
+              }
+
+              if (!this.$refs[name]) {
+                return false
+              }
+
+              var input = $('input:visible:not([type=file]), textarea:visible, select:visible, button:visible', this.$refs[name].$el).first()
+              if (input.length) {
+                $(input).focus()
+              } else {
+                this.$scrollTo(this.$refs[name].$el, 0)
+              }
+
+              if (this.$refs[name].editor) {
+                this.$refs[name].editor.focus()
+              }
+
+              return true
+            })
+
+          }
         })
     },
 

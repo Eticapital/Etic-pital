@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700|Open+Sans);@font-face {
   font-family: 'icomoon';
-  src: url("fonts/icomoon.eot?9b4hfg");
-  src: url("fonts/icomoon.eot?9b4hfg#iefix") format("embedded-opentype"), url("fonts/icomoon.woff2?9b4hfg") format("woff2"), url("fonts/icomoon.ttf?9b4hfg") format("truetype"), url("fonts/icomoon.woff?9b4hfg") format("woff"), url("fonts/icomoon.svg?9b4hfg#icomoon") format("svg");
+  src: url("fonts/icomoon.eot?an5g0y");
+  src: url("fonts/icomoon.eot?an5g0y#iefix") format("embedded-opentype"), url("fonts/icomoon.woff2?an5g0y") format("woff2"), url("fonts/icomoon.ttf?an5g0y") format("truetype"), url("fonts/icomoon.woff?an5g0y") format("woff"), url("fonts/icomoon.svg?an5g0y#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -80,6 +80,10 @@
   content: "\EC32";
 }
 
+.icon-sphere:before {
+  content: "\EC91";
+}
+
 .icon-warning:before {
   content: "\ED50";
 }
@@ -94,6 +98,34 @@
 
 .icon-checkmark-circle:before {
   content: "\EE76";
+}
+
+.icon-google-plus:before {
+  content: "\EEEA";
+}
+
+.icon-facebook:before {
+  content: "\EEEF";
+}
+
+.icon-instagram:before {
+  content: "\EEF1";
+}
+
+.icon-twitter:before {
+  content: "\EEF5";
+}
+
+.icon-youtube:before {
+  content: "\EEFC";
+}
+
+.icon-vimeo:before {
+  content: "\EEFF";
+}
+
+.icon-linkedin:before {
+  content: "\EF28";
 }
 
 .icon-file-pdf:before {
@@ -9429,6 +9461,12 @@ a.project-card:hover {
 
 .btn-primary {
   color: #FFF;
+}
+
+.btn-swal {
+  min-width: inherit;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .btn.btn-loading {

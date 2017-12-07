@@ -7,6 +7,7 @@
       :readonly="readonly || plaintext"
       :placeholder="placeholder"
       :autocomplete="autocomplete || null"
+      :state="state"
       @change="isFocus = false"
       @focus.native="isFocus = true"
       @blur.native="isFocus = false"
@@ -71,6 +72,10 @@ export default {
     inCents: {
       type: Boolean,
       default: false
+    },
+    state: {
+      required: false,
+      default: '',
     }
   },
 

@@ -1,20 +1,27 @@
 <template>
   <div class="Files">
-    <ul class="d-flex flex-column list-unstyled" v-if="files.length">
-      <form-file
-        v-for="(file, index) in files"
-        v-if="!file.deleted"
-        :key="file.id"
-        :file="file"
-        :max-file-size="maxFileSize"
-        @remove="removeFile(file)"
-      />
-    </ul>
+    <div :class="{'Files--list': true, 'Files--list--error': form && form.errors.has(name)}">
+      <ul class="d-flex flex-column list-unstyled" v-if="activeFiles.length">
+        <form-file
+          v-for="(file, index) in activeFiles"
+          v-if="!file.deleted"
+          :key="file.id"
+          :file="file"
+          :max-file-size="maxFileSize"
+          @remove="removeFile(file)"
+        />
+      </ul>
+      <p v-else>
+        Sin documentos
+      </p>
+    <p v-if="form&&form.errors.has(name)" style="display: block" class="invalid-feedback" v-text="form.errors.get(name)"></p>
+    </div>
     <file-upload
-      class="btn btn-secondary"
+      :class="['btn', form && form.errors.has(name) ? 'btn-danger' : 'btn-secondary']"
       post-action="/upload"
       :multiple="true"
       v-model="files"
+      :input-id="'file-' + name"
       :headers="headers"
       @input-filter="inputFilter"
       @input-file="inputFile"
@@ -44,7 +51,9 @@ export default {
       type: Array,
       default: [],
       required: false
-    }
+    },
+    form: Object,
+    name: String
   },
 
   data () {
@@ -55,6 +64,9 @@ export default {
   },
 
   computed: {
+    activeFiles () {
+      return this.files.filter(file => !file.deleted)
+    },
     maxFileSize () {
       return App.maxFileSize || 25165824
     },
@@ -84,6 +96,9 @@ export default {
 
     value: {
       handler (value) {
+        if (this.form && this.name) {
+          this.form.errors.clear(this.name)
+        }
         value.forEach(item => {
           let index = this.files.findIndex(file => file.id === item.id)
           if (index === -1) {
@@ -165,3 +180,9 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  @import "resources/assets/sass/globals";
+  .Files--list--error {
+    border: 1px solid theme-color('danger');
+  }
+</style>

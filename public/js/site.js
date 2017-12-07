@@ -3705,6 +3705,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3724,7 +3731,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       type: Array,
       default: [],
       required: false
-    }
+    },
+    form: Object,
+    name: String
   },
 
   data: function data() {
@@ -3736,6 +3745,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   computed: {
+    activeFiles: function activeFiles() {
+      return this.files.filter(function (file) {
+        return !file.deleted;
+      });
+    },
     maxFileSize: function maxFileSize() {
       return App.maxFileSize || 25165824;
     },
@@ -3766,6 +3780,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       handler: function handler(value) {
         var _this = this;
 
+        if (this.form && this.name) {
+          this.form.errors.clear(this.name);
+        }
         value.forEach(function (item) {
           var index = _this.files.findIndex(function (file) {
             return file.id === item.id;
@@ -3920,6 +3937,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -3940,6 +3962,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     isAddressPredefined: {
       type: Boolean,
       default: false
+    },
+    feedback: {
+      type: String,
+      default: ''
     }
   },
 
@@ -3978,7 +4004,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       handler: function handler(coordinates, oldCoordinates) {
         if (coordinates.lat !== oldCoordinates.lat && coordinates.lng !== oldCoordinates.lng) {
           this.marker.setPosition(coordinates);
-          this.map.panTo(coordinates);
+          // this.map.panTo(coordinates)
         }
       },
 
@@ -4285,6 +4311,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 // require styles
 
@@ -4311,6 +4340,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
 
+
+  computed: {
+    editor: function editor() {
+      if (this.rich) {
+        return this.$refs.input.quill;
+      }
+    }
+  },
 
   props: {
     form: {
@@ -4352,6 +4389,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -4426,6 +4464,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     inCents: {
       type: Boolean,
       default: false
+    },
+    state: {
+      required: false,
+      default: ''
     }
   },
 
@@ -4593,6 +4635,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -4603,7 +4653,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     kpi: {
       type: Object,
       required: true
-    }
+    },
+    form: Object,
+    name: String
   },
 
   data: function data() {
@@ -4647,6 +4699,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4658,7 +4716,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   props: {
     value: {
       type: Array
-    }
+    },
+    form: Object,
+    name: String
   },
 
   data: function data() {
@@ -4671,6 +4731,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   watch: {
     kpis: {
       handler: function handler(kpis) {
+        this.form.errors.clear(this.name);
         this.$emit('input', kpis);
       },
 
@@ -4747,6 +4808,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -4761,7 +4826,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     totalLinks: {
       type: Number,
       required: true
-    }
+    },
+    form: Object,
+    name: String
   },
 
   data: function data() {
@@ -4773,8 +4840,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   computed: {
+    hasError: function hasError() {
+      if (this.form && this.name && this.form.errors.has(this.name)) {
+        return true;
+      }
+
+      return this.error;
+    },
+    feedback: function feedback() {
+      if (this.form && this.name && this.form.errors.has(this.name)) {
+        return this.form.errors.get(this.name);
+      }
+    },
     icon: function icon() {
-      // Vimeo o Youtube
+      // Youtube
       if (/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/.test(this.currentValue)) {
         return 'youtube';
       }
@@ -4887,6 +4966,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -4897,7 +4981,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   props: {
     value: Array,
-    label: String
+    label: String,
+    form: Object,
+    name: String
   },
 
   data: function data() {
@@ -4922,6 +5008,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   watch: {
     value: function value(_value) {
       var _this = this;
+
+      if (this.form && this.name) {
+        this.form.errors.clear(this.name);
+      }
 
       _value.forEach(function (newLink) {
         // Es un link nuevo
@@ -5211,6 +5301,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -5227,7 +5320,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     member: {
       type: Object,
       required: true
-    }
+    },
+    form: Object,
+    name: String
   },
 
   data: function data() {
@@ -5237,9 +5332,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
 
+  computed: {
+    hasError: function hasError() {
+      if (this.form && this.name && this.form.errors.has(this.name)) {
+        return true;
+      }
+
+      return false;
+    }
+  },
+
   watch: {
     currentMember: {
       handler: function handler(member) {
+        this.form.errors.clear(this.name);
         this.$emit('changed', member, this.index);
       },
 
@@ -5271,6 +5377,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -5282,7 +5394,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   props: {
     value: {
       type: Array
-    }
+    },
+    form: Object,
+    name: String
   },
 
   data: function data() {
@@ -5295,6 +5409,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   watch: {
     members: {
       handler: function handler(members) {
+        this.form.errors.clear(this.name);
         this.$emit('input', members);
       },
 
@@ -5339,6 +5454,83 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__project_form_kpis___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__project_form_kpis__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__project_form_photo__ = __webpack_require__("./resources/assets/js/project/project-form-photo.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__project_form_photo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__project_form_photo__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5777,20 +5969,45 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this = this;
 
       axios.get('/projects/1').then(function (response) {
-        console.log(response.data);
         _this.form.appendModel(response.data);
       }).catch(function (errors) {
-        console.log(errors);
+        console.log("errors", errors);
       });
     },
-    onSubmit: function onSubmit() {},
+    onSubmit: function onSubmit() {
+      //
+    },
     submitProject: function submitProject() {
       var _this2 = this;
 
       App.post('/projects', this.form).then(function (response) {
         _this2.results = response;
       }).catch(function (errors) {
-        console.log(errors);
+        if (errors.errors) {
+          _.find(errors.errors, function (error, name) {
+            name = name.split('.')[0];
+            if (name === 'latitude' || name === 'longitude') {
+              name = 'address';
+            }
+
+            if (!_this2.$refs[name]) {
+              return false;
+            }
+
+            var input = $('input:visible:not([type=file]), textarea:visible, select:visible, button:visible', _this2.$refs[name].$el).first();
+            if (input.length) {
+              $(input).focus();
+            } else {
+              _this2.$scrollTo(_this2.$refs[name].$el, 0);
+            }
+
+            if (_this2.$refs[name].editor) {
+              _this2.$refs[name].editor.focus();
+            }
+
+            return true;
+          });
+        }
       });
     },
     locationUpdated: function locationUpdated(coordinates, isManualChanged) {
@@ -20195,7 +20412,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.ql-container {\n  font-family: \"Open Sans\", sans-serif;\n  font-size: 1.125rem;\n  font-weight: 400;\n  line-height: 1.5;\n  color: #4C4E52;\n  min-height: 180px\n}\n.ql-container strong {\n  font-weight: bold;\n}\n.ql-container p {\n  margin-bottom: 1rem;\n}\n.quill-editor {\n  background: #FFF;\n}\n", ""]);
+exports.push([module.i, "\n.ql-container {\n  font-family: \"Open Sans\", sans-serif;\n  font-size: 1.125rem;\n  font-weight: 400;\n  line-height: 1.5;\n  color: #4C4E52;\n  min-height: 180px\n}\n.ql-container strong {\n  font-weight: bold;\n}\n.ql-container p {\n  margin-bottom: 1rem;\n}\n.quill-editor {\n  background: #FFF;\n}\n.quill-editor-invalid .ql-toolbar,\n.quill-editor-invalid .ql-container{\nborder-color: #dc3545;\n}\n\n", ""]);
 
 // exports
 
@@ -20241,6 +20458,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.sk-fading-circle {\n  position: absolute;\n}\n.sk-fading-circle .sk-circle {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n.sk-fading-circle .sk-circle .sk-circle-indicator {\n  display: block;\n  margin: 0 auto;\n  width: 15%;\n  height: 15%;\n  border-radius: 100%;\n  -webkit-animation: sk-circleFadeDelay 1s infinite ease-in-out both;\n  animation: sk-circleFadeDelay 1s infinite ease-in-out both;\n}\n.sk-fading-circle .sk-circle2 {\n  -webkit-transform: rotate(30deg);\n  transform: rotate(30deg);\n}\n.sk-fading-circle .sk-circle3 {\n  -webkit-transform: rotate(60deg);\n  transform: rotate(60deg);\n}\n.sk-fading-circle .sk-circle4 {\n  -webkit-transform: rotate(90deg);\n  transform: rotate(90deg);\n}\n.sk-fading-circle .sk-circle5 {\n  -webkit-transform: rotate(120deg);\n  transform: rotate(120deg);\n}\n.sk-fading-circle .sk-circle6 {\n  -webkit-transform: rotate(150deg);\n  transform: rotate(150deg);\n}\n.sk-fading-circle .sk-circle7 {\n  -webkit-transform: rotate(180deg);\n  transform: rotate(180deg);\n}\n.sk-fading-circle .sk-circle8 {\n  -webkit-transform: rotate(210deg);\n  transform: rotate(210deg);\n}\n.sk-fading-circle .sk-circle9 {\n  -webkit-transform: rotate(240deg);\n  transform: rotate(240deg);\n}\n.sk-fading-circle .sk-circle10 {\n  -webkit-transform: rotate(270deg);\n  transform: rotate(270deg);\n}\n.sk-fading-circle .sk-circle11 {\n  -webkit-transform: rotate(300deg);\n  transform: rotate(300deg);\n}\n.sk-fading-circle .sk-circle12 {\n  -webkit-transform: rotate(330deg);\n  transform: rotate(330deg);\n}\n.sk-fading-circle .sk-circle2 .sk-circle-indicator {\n  -webkit-animation-delay: -0.91667s;\n  animation-delay: -0.91667s;\n}\n.sk-fading-circle .sk-circle3 .sk-circle-indicator {\n  -webkit-animation-delay: -0.83333s;\n  animation-delay: -0.83333s;\n}\n.sk-fading-circle .sk-circle4 .sk-circle-indicator {\n  -webkit-animation-delay: -0.75s;\n  animation-delay: -0.75s;\n}\n.sk-fading-circle .sk-circle5 .sk-circle-indicator {\n  -webkit-animation-delay: -0.66667s;\n  animation-delay: -0.66667s;\n}\n.sk-fading-circle .sk-circle6 .sk-circle-indicator {\n  -webkit-animation-delay: -0.58333s;\n  animation-delay: -0.58333s;\n}\n.sk-fading-circle .sk-circle7 .sk-circle-indicator {\n  -webkit-animation-delay: -0.5s;\n  animation-delay: -0.5s;\n}\n.sk-fading-circle .sk-circle8 .sk-circle-indicator {\n  -webkit-animation-delay: -0.41667s;\n  animation-delay: -0.41667s;\n}\n.sk-fading-circle .sk-circle9 .sk-circle-indicator {\n  -webkit-animation-delay: -0.33333s;\n  animation-delay: -0.33333s;\n}\n.sk-fading-circle .sk-circle10 .sk-circle-indicator {\n  -webkit-animation-delay: -0.25s;\n  animation-delay: -0.25s;\n}\n.sk-fading-circle .sk-circle11 .sk-circle-indicator {\n  -webkit-animation-delay: -0.16667s;\n  animation-delay: -0.16667s;\n}\n.sk-fading-circle .sk-circle12 .sk-circle-indicator {\n  -webkit-animation-delay: -0.08333s;\n  animation-delay: -0.08333s;\n}\n@-webkit-keyframes sk-circleFadeDelay {\n0%,\n  39%,\n  100% {\n    opacity: 0;\n}\n40% {\n    opacity: 1;\n}\n}\n@keyframes sk-circleFadeDelay {\n0%,\n  39%,\n  100% {\n    opacity: 0;\n}\n40% {\n    opacity: 1;\n}\n}\n.croppa-container {\n  display: inline-block;\n  cursor: pointer;\n  -webkit-transition: all 0.3s;\n  transition: all 0.3s;\n  position: relative;\n  font-size: 0;\n  -ms-flex-item-align: start;\n  align-self: flex-start;\n  background-color: #e6e6e6;\n}\n.croppa-container canvas {\n  -webkit-transition: all 0.3s;\n  transition: all 0.3s;\n}\n.croppa-container:hover {\n  opacity: 0.7;\n}\n.croppa-container.croppa--dropzone {\n  -webkit-box-shadow: inset 0 0 10px #333;\n  box-shadow: inset 0 0 10px #333;\n}\n.croppa-container.croppa--dropzone canvas {\n  opacity: 0.5;\n}\n.croppa-container.croppa--disabled-cc {\n  cursor: default;\n}\n.croppa-container.croppa--disabled-cc:hover {\n  opacity: 1;\n}\n.croppa-container.croppa--has-target {\n  cursor: move;\n}\n.croppa-container.croppa--has-target:hover {\n  opacity: 1;\n}\n.croppa-container.croppa--has-target.croppa--disabled-mz {\n  cursor: default;\n}\n.croppa-container.croppa--disabled {\n  cursor: not-allowed;\n}\n.croppa-container.croppa--disabled:hover {\n  opacity: 1;\n}\n.croppa-container svg.icon-remove {\n  position: absolute;\n  background: #fff;\n  border-radius: 50%;\n  -webkit-filter: drop-shadow(-2px 2px 2px rgba(0, 0, 0, 0.7));\n  filter: drop-shadow(-2px 2px 2px rgba(0, 0, 0, 0.7));\n  z-index: 10;\n  cursor: pointer;\n  border: 2px solid #fff;\n}\n.PhotoInput {\n  display: block;\n  width: 100%;\n  height: auto;\n  position: relative;\n  padding: 56.25% 0 0 0;\n}\n.PhotoInput__image {\n  display: block;\n  width: 100%;\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n}\n.PhotoInput__toolbar {\n  width: 100%;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  position: absolute;\n}\n.PhotoInput__toolbar.top {\n    top: -43px;\n}\n.PhotoInput__toolbar.bottom {\n    margin-top: 57.25%;\n}\n.PhotoInput__toolbar .btn {\n    min-width: inherit;\n}\n.PhotoInput--active {\n  z-index: 1041;\n}\n.PhotoInput__backdrop {\n  z-index: 1040;\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  z-index: 1040;\n  background-color: rgba(0, 0, 0, 0.8);\n}\n.PhotoInput__menu {\n  z-index: 1042;\n}\n.PhotoInput__icon {\n  color: #ced4da;\n  font-size: 80px;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  position: absolute;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  width: 100%;\n  height: 100%;\n}\n.PhotoInput__wrapper {\n  display: block;\n  max-width: 100%;\n  max-height: 100%;\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background: #FFF;\n  border: #ced4da 1px solid;\n}\n.PhotoInput__wrapper .croppa-container {\n    overflow: hidden;\n    position: absolute;\n    top: 0;\n    left: 0;\n    bottom: 0;\n    right: 0;\n    width: 100%;\n    height: 100%;\n}\n.PhotoInput__wrapper .croppa-container canvas {\n      max-width: 100%;\n      max-height: 100%;\n}\n.form-group.is-invalid .PhotoInput__wrapper {\n  border-color: #dc3545;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abdb180\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/forms/form-files.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.Files--list--error {\n  border: 1px solid #dc3545;\n}\n", ""]);
 
 // exports
 
@@ -93443,7 +93675,14 @@ var render = function() {
             }
           })
         : _c("quill-editor", {
+            ref: "input",
+            class: { "quill-editor-invalid": _vm.form.errors.has(_vm.name) },
             attrs: { options: _vm.editorOptions },
+            on: {
+              change: function($event) {
+                _vm.form.errors.clear(_vm.name)
+              }
+            },
             model: {
               value: _vm.form[_vm.name],
               callback: function($$v) {
@@ -93538,10 +93777,28 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _vm.index < _vm.totalLinks - 1
     ? _c("div", { staticClass: "ProjectLink" }, [
-        _c("a", { attrs: { href: _vm.currentValue, target: "_blank" } }, [
-          _c("i", { class: "icon-" + _vm.icon }),
-          _vm._v("\n    " + _vm._s(_vm.currentValue) + "\n  ")
-        ]),
+        _c(
+          "a",
+          {
+            class: { "text-danger": _vm.hasError },
+            attrs: { href: _vm.currentValue, target: "_blank" }
+          },
+          [
+            _c("i", { class: "icon-" + _vm.icon }),
+            _vm._v("\n    " + _vm._s(_vm.currentValue) + "\n    "),
+            _vm.hasError
+              ? [
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("small", [
+                    _c("i", { staticClass: "icon-warning text-danger" }),
+                    _vm._v(" " + _vm._s(_vm.feedback))
+                  ])
+                ]
+              : _vm._e()
+          ],
+          2
+        ),
         _vm._v(" "),
         _c(
           "a",
@@ -93594,7 +93851,7 @@ var render = function() {
               staticClass: "ml-2",
               attrs: {
                 size: "sm",
-                variant: _vm.error ? "danger" : "secondary"
+                variant: _vm.hasError ? "danger" : "secondary"
               },
               on: {
                 click: function($event) {
@@ -93717,7 +93974,8 @@ var render = function() {
       required: _vm.required,
       readonly: _vm.readonly || _vm.plaintext,
       placeholder: _vm.placeholder,
-      autocomplete: _vm.autocomplete || null
+      autocomplete: _vm.autocomplete || null,
+      state: _vm.state
     },
     on: {
       change: function($event) {
@@ -93764,12 +94022,24 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
+    "b-form-group",
+    {
+      ref: "input",
+      attrs: {
+        feedback: _vm.form ? _vm.form.errors.get(_vm.name) : "",
+        state: _vm.form && _vm.form.errors.has(_vm.name) ? "invalid" : ""
+      }
+    },
     [
       _vm._l(_vm.kpis, function(kpi, index) {
         return _c("kpi", {
           key: kpi.id,
-          attrs: { kpi: kpi, index: index },
+          attrs: {
+            kpi: kpi,
+            index: index,
+            form: _vm.form,
+            name: _vm.name + "." + index
+          },
           on: {
             changed: _vm.kpiChanged,
             remove: function($event) {
@@ -93846,6 +94116,7 @@ var render = function() {
                     _c("p"),
                     _vm._v(" "),
                     _c("form-text", {
+                      ref: "name",
                       attrs: {
                         form: _vm.form,
                         name: "name",
@@ -93854,6 +94125,7 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _c("form-text", {
+                      ref: "holder",
                       attrs: {
                         form: _vm.form,
                         name: "holder",
@@ -93862,6 +94134,7 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _c("form-text", {
+                      ref: "phone",
                       attrs: {
                         form: _vm.form,
                         name: "phone",
@@ -93870,6 +94143,7 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _c("form-text", {
+                      ref: "email",
                       attrs: {
                         form: _vm.form,
                         name: "email",
@@ -93878,7 +94152,12 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _c("project-form-links", {
-                      attrs: { label: "Redes sociales del titular" },
+                      ref: "holder_links",
+                      attrs: {
+                        form: _vm.form,
+                        name: "holder_links",
+                        label: "Redes sociales del titular"
+                      },
                       model: {
                         value: _vm.form.holder_links,
                         callback: function($$v) {
@@ -93889,6 +94168,7 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _c("project-form-photo", {
+                      ref: "photo",
                       attrs: { form: _vm.form, name: "photo" }
                     }),
                     _vm._v(" "),
@@ -93902,7 +94182,16 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _c("form-map", {
+                      ref: "address",
                       attrs: {
+                        feedback:
+                          _vm.form.errors.get("address") ||
+                          _vm.form.errors.get("latitude") ||
+                          _vm.form.errors.get("longitude"),
+                        change:
+                          _vm.form.errors.clear("address") &&
+                          _vm.form.errors.clear("latitude") &&
+                          _vm.form.errors.clear("longitude"),
                         "api-key": _vm.googleMapsApiKey,
                         "initial-coordinates": {
                           lat: _vm.form.latitude,
@@ -93939,6 +94228,7 @@ var render = function() {
                   _c("p"),
                   _vm._v(" "),
                   _c("form-textarea", {
+                    ref: "description",
                     attrs: {
                       form: _vm.form,
                       rich: true,
@@ -94018,15 +94308,18 @@ var render = function() {
                     _c("p"),
                     _vm._v(" "),
                     _c("form-files", {
+                      ref: "key_documents",
                       attrs: {
+                        name: "key_documents",
+                        form: _vm.form,
                         "btn-text": "Subir presentación, foto(s) o video(s)"
                       },
                       model: {
-                        value: _vm.form.company_documents,
+                        value: _vm.form.key_documents,
                         callback: function($$v) {
-                          _vm.$set(_vm.form, "company_documents", $$v)
+                          _vm.$set(_vm.form, "key_documents", $$v)
                         },
-                        expression: "form.company_documents"
+                        expression: "form.key_documents"
                       }
                     })
                   ],
@@ -94050,7 +94343,10 @@ var render = function() {
                   _c("p"),
                   _vm._v(" "),
                   _c("project-form-links", {
+                    ref: "links",
                     attrs: {
+                      form: _vm.form,
+                      name: "links",
                       label:
                         "Tu página oficial, página de facebook, twitter, etc."
                     },
@@ -94088,37 +94384,68 @@ var render = function() {
                           _vm._v(" Cargando sectores...\n                ")
                         ])
                       : _c(
-                          "b-form-checkbox-group",
+                          "b-form-group",
                           {
-                            staticClass: "form-row",
-                            model: {
-                              value: _vm.form.sectors,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "sectors", $$v)
-                              },
-                              expression: "form.sectors"
+                            ref: "sectors",
+                            attrs: {
+                              feedback: _vm.form.errors.get("sectors"),
+                              state: _vm.form.errors.has("sectors")
+                                ? "invalid"
+                                : ""
                             }
                           },
-                          _vm._l(_vm.sectorsColumns, function(chunk, index) {
-                            return _c(
-                              "div",
-                              { key: index, staticClass: "col" },
-                              _vm._l(chunk, function(sector) {
+                          [
+                            _c(
+                              "b-form-checkbox-group",
+                              {
+                                staticClass: "form-row",
+                                attrs: {
+                                  state: _vm.form.errors.has("sectors")
+                                    ? "invalid"
+                                    : ""
+                                },
+                                on: {
+                                  change: function($event) {
+                                    _vm.form.errors.clear("sectors")
+                                  }
+                                },
+                                model: {
+                                  value: _vm.form.sectors,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "sectors", $$v)
+                                  },
+                                  expression: "form.sectors"
+                                }
+                              },
+                              _vm._l(_vm.sectorsColumns, function(
+                                chunk,
+                                index
+                              ) {
                                 return _c(
                                   "div",
-                                  { key: sector.id, staticClass: "form-check" },
-                                  [
-                                    _c(
-                                      "b-form-checkbox",
-                                      { attrs: { value: sector.id } },
-                                      [_vm._v(_vm._s(sector.label))]
+                                  { key: index, staticClass: "col" },
+                                  _vm._l(chunk, function(sector) {
+                                    return _c(
+                                      "div",
+                                      {
+                                        key: sector.id,
+                                        staticClass: "form-check"
+                                      },
+                                      [
+                                        _c(
+                                          "b-form-checkbox",
+                                          { attrs: { value: sector.id } },
+                                          [_vm._v(_vm._s(sector.label))]
+                                        )
+                                      ],
+                                      1
                                     )
-                                  ],
-                                  1
+                                  })
                                 )
                               })
                             )
-                          })
+                          ],
+                          1
                         )
                   ],
                   1
@@ -94146,32 +94473,57 @@ var render = function() {
                         _vm._v(" Cargando etapas...\n              ")
                       ])
                     : _c(
-                        "b-form-radio-group",
+                        "b-form-group",
                         {
-                          attrs: { stacked: "" },
-                          model: {
-                            value: _vm.form.stage_id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "stage_id", $$v)
-                            },
-                            expression: "form.stage_id"
+                          ref: "stage_id",
+                          attrs: {
+                            feedback: _vm.form.errors.get("stage_id"),
+                            state: _vm.form.errors.has("stage_id")
+                              ? "invalid"
+                              : ""
                           }
                         },
-                        _vm._l(_vm.stages, function(stage) {
-                          return _c(
-                            "b-form-radio",
-                            { key: stage.id, attrs: { value: stage.id } },
-                            [
-                              _vm._v(
-                                "\n                  " +
-                                  _vm._s(stage.label) +
-                                  " (" +
-                                  _vm._s(stage.description) +
-                                  ")\n                "
+                        [
+                          _c(
+                            "b-form-radio-group",
+                            {
+                              attrs: {
+                                stacked: "",
+                                state: _vm.form.errors.has("stage_id")
+                                  ? "invalid"
+                                  : ""
+                              },
+                              on: {
+                                change: function($event) {
+                                  _vm.form.errors.clear("stage_id")
+                                }
+                              },
+                              model: {
+                                value: _vm.form.stage_id,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "stage_id", $$v)
+                                },
+                                expression: "form.stage_id"
+                              }
+                            },
+                            _vm._l(_vm.stages, function(stage) {
+                              return _c(
+                                "b-form-radio",
+                                { key: stage.id, attrs: { value: stage.id } },
+                                [
+                                  _vm._v(
+                                    "\n                    " +
+                                      _vm._s(stage.label) +
+                                      " (" +
+                                      _vm._s(stage.description) +
+                                      ")\n                  "
+                                  )
+                                ]
                               )
-                            ]
+                            })
                           )
-                        })
+                        ],
+                        1
                       )
                 ],
                 1
@@ -94223,6 +94575,7 @@ var render = function() {
                   _c("p"),
                   _vm._v(" "),
                   _c("form-money", {
+                    ref: "previous_capital",
                     attrs: {
                       form: _vm.form,
                       "in-cents": true,
@@ -94232,6 +94585,7 @@ var render = function() {
                   }),
                   _vm._v(" "),
                   _c("form-money", {
+                    ref: "total_sales",
                     attrs: {
                       form: _vm.form,
                       "in-cents": true,
@@ -94241,11 +94595,23 @@ var render = function() {
                   }),
                   _vm._v(" "),
                   _c("form-money", {
+                    ref: "round_size",
                     attrs: {
                       form: _vm.form,
                       "in-cents": true,
                       name: "round_size",
                       label: "Tamaño de la ronda (¿Cuánto necesitas?)"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("form-money", {
+                    ref: "minimal_needed",
+                    attrs: {
+                      form: _vm.form,
+                      "in-cents": true,
+                      name: "minimal_needed",
+                      label:
+                        "¿Cuánto es lo mínimo que te serviría para levantar capital?:"
                     }
                   })
                 ],
@@ -94259,29 +94625,63 @@ var render = function() {
                     "div",
                     { staticClass: "form-row" },
                     [
-                      _c("legend", { staticClass: "col-form-legend" }, [
-                        _vm._v("¿Tienes algún inversionista interesado?")
-                      ]),
-                      _vm._v(" "),
                       _c(
-                        "b-form-radio-group",
+                        "b-form-group",
                         {
-                          model: {
-                            value: _vm.form.has_interested_investor,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "has_interested_investor", $$v)
-                            },
-                            expression: "form.has_interested_investor"
+                          ref: "has_interested_investor",
+                          attrs: {
+                            label: "¿Tienes algún inversionista interesado?",
+                            feedback: _vm.form.errors.get(
+                              "has_interested_investor"
+                            ),
+                            state: _vm.form.errors.has(
+                              "has_interested_investor"
+                            )
+                              ? "invalid"
+                              : ""
                           }
                         },
                         [
-                          _c("b-form-radio", { attrs: { value: true } }, [
-                            _vm._v("Sí")
-                          ]),
-                          _vm._v(" "),
-                          _c("b-form-radio", { attrs: { value: false } }, [
-                            _vm._v("No")
-                          ])
+                          _c(
+                            "b-form-radio-group",
+                            {
+                              attrs: {
+                                state: _vm.form.errors.has(
+                                  "has_interested_investor"
+                                )
+                                  ? "invalid"
+                                  : ""
+                              },
+                              on: {
+                                change: function($event) {
+                                  _vm.form.errors.clear(
+                                    "has_interested_investor"
+                                  )
+                                }
+                              },
+                              model: {
+                                value: _vm.form.has_interested_investor,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.form,
+                                    "has_interested_investor",
+                                    $$v
+                                  )
+                                },
+                                expression: "form.has_interested_investor"
+                              }
+                            },
+                            [
+                              _c("b-form-radio", { attrs: { value: true } }, [
+                                _vm._v("Sí")
+                              ]),
+                              _vm._v(" "),
+                              _c("b-form-radio", { attrs: { value: false } }, [
+                                _vm._v("No")
+                              ])
+                            ],
+                            1
+                          )
                         ],
                         1
                       )
@@ -94291,6 +94691,7 @@ var render = function() {
                   _vm._v(" "),
                   _vm.form.has_interested_investor
                     ? _c("form-text", {
+                        ref: "interested_investor_name",
                         attrs: {
                           form: _vm.form,
                           name: "interested_investor_name",
@@ -94388,37 +94789,65 @@ var render = function() {
                         _vm._v(" Cargando recompensas...\n              ")
                       ])
                     : _c(
-                        "b-form-checkbox-group",
+                        "b-form-group",
                         {
-                          staticClass: "form-row",
-                          model: {
-                            value: _vm.form.rewards,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "rewards", $$v)
-                            },
-                            expression: "form.rewards"
+                          ref: "rewards",
+                          attrs: {
+                            feedback: _vm.form.errors.get("rewards"),
+                            state: _vm.form.errors.has("rewards")
+                              ? "invalid"
+                              : ""
                           }
                         },
-                        _vm._l(_vm.rewardsColumns, function(chunk, index) {
-                          return _c(
-                            "div",
-                            { key: index, staticClass: "col" },
-                            _vm._l(chunk, function(reward) {
+                        [
+                          _c(
+                            "b-form-checkbox-group",
+                            {
+                              staticClass: "form-row",
+                              attrs: {
+                                state: _vm.form.errors.has("rewards")
+                                  ? "invalid"
+                                  : ""
+                              },
+                              on: {
+                                change: function($event) {
+                                  _vm.form.errors.clear("rewards")
+                                }
+                              },
+                              model: {
+                                value: _vm.form.rewards,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "rewards", $$v)
+                                },
+                                expression: "form.rewards"
+                              }
+                            },
+                            _vm._l(_vm.rewardsColumns, function(chunk, index) {
                               return _c(
                                 "div",
-                                { key: reward.id, staticClass: "form-check" },
-                                [
-                                  _c(
-                                    "b-form-checkbox",
-                                    { attrs: { value: reward.id } },
-                                    [_vm._v(_vm._s(reward.label))]
+                                { key: index, staticClass: "col" },
+                                _vm._l(chunk, function(reward) {
+                                  return _c(
+                                    "div",
+                                    {
+                                      key: reward.id,
+                                      staticClass: "form-check"
+                                    },
+                                    [
+                                      _c(
+                                        "b-form-checkbox",
+                                        { attrs: { value: reward.id } },
+                                        [_vm._v(_vm._s(reward.label))]
+                                      )
+                                    ],
+                                    1
                                   )
-                                ],
-                                1
+                                })
                               )
                             })
                           )
-                        })
+                        ],
+                        1
                       )
                 ],
                 1
@@ -94441,6 +94870,8 @@ var render = function() {
                     _c("p"),
                     _vm._v(" "),
                     _c("project-form-team-members", {
+                      ref: "team",
+                      attrs: { form: _vm.form, name: "team" },
                       model: {
                         value: _vm.form.team,
                         callback: function($$v) {
@@ -94470,6 +94901,8 @@ var render = function() {
                   _c("p"),
                   _vm._v(" "),
                   _c("project-form-kpis", {
+                    ref: "kpis",
+                    attrs: { form: _vm.form, name: "kpis" },
                     model: {
                       value: _vm.form.kpis,
                       callback: function($$v) {
@@ -94499,6 +94932,8 @@ var render = function() {
                     _c("p"),
                     _vm._v(" "),
                     _c("form-files", {
+                      ref: "key_documents",
+                      attrs: { name: "key_documents", form: _vm.form },
                       model: {
                         value: _vm.form.key_documents,
                         callback: function($$v) {
@@ -94528,12 +94963,14 @@ var render = function() {
                   _c("p"),
                   _vm._v(" "),
                   _c("form-files", {
+                    ref: "key_documents",
+                    attrs: { name: "key_documents", form: _vm.form },
                     model: {
-                      value: _vm.form.extra_documents,
+                      value: _vm.form.key_documents,
                       callback: function($$v) {
-                        _vm.$set(_vm.form, "extra_documents", $$v)
+                        _vm.$set(_vm.form, "key_documents", $$v)
                       },
-                      expression: "form.extra_documents"
+                      expression: "form.key_documents"
                     }
                   })
                 ],
@@ -95124,34 +95561,59 @@ var render = function() {
     "div",
     { staticClass: "Files" },
     [
-      _vm.files.length
-        ? _c(
-            "ul",
-            { staticClass: "d-flex flex-column list-unstyled" },
-            _vm._l(_vm.files, function(file, index) {
-              return !file.deleted
-                ? _c("form-file", {
-                    key: file.id,
-                    attrs: { file: file, "max-file-size": _vm.maxFileSize },
-                    on: {
-                      remove: function($event) {
-                        _vm.removeFile(file)
-                      }
-                    }
-                  })
-                : _vm._e()
-            })
-          )
-        : _vm._e(),
+      _c(
+        "div",
+        {
+          class: {
+            "Files--list": true,
+            "Files--list--error": _vm.form && _vm.form.errors.has(_vm.name)
+          }
+        },
+        [
+          _vm.activeFiles.length
+            ? _c(
+                "ul",
+                { staticClass: "d-flex flex-column list-unstyled" },
+                _vm._l(_vm.activeFiles, function(file, index) {
+                  return !file.deleted
+                    ? _c("form-file", {
+                        key: file.id,
+                        attrs: { file: file, "max-file-size": _vm.maxFileSize },
+                        on: {
+                          remove: function($event) {
+                            _vm.removeFile(file)
+                          }
+                        }
+                      })
+                    : _vm._e()
+                })
+              )
+            : _c("p", [_vm._v("\n      Sin documentos\n    ")]),
+          _vm._v(" "),
+          _vm.form && _vm.form.errors.has(_vm.name)
+            ? _c("p", {
+                staticClass: "invalid-feedback",
+                staticStyle: { display: "block" },
+                domProps: { textContent: _vm._s(_vm.form.errors.get(_vm.name)) }
+              })
+            : _vm._e()
+        ]
+      ),
       _vm._v(" "),
       _c(
         "file-upload",
         {
           ref: "upload",
-          staticClass: "btn btn-secondary",
+          class: [
+            "btn",
+            _vm.form && _vm.form.errors.has(_vm.name)
+              ? "btn-danger"
+              : "btn-secondary"
+          ],
           attrs: {
             "post-action": "/upload",
             multiple: true,
+            "input-id": "file-" + _vm.name,
             headers: _vm.headers,
             size: _vm.maxFileSize
           },
@@ -95246,6 +95708,12 @@ var render = function() {
     [
       _c(
         "b-form-group",
+        {
+          attrs: {
+            state: _vm.form.errors.has(this.name + ".name") ? "invalid" : "",
+            feedback: _vm.form.errors.get(this.name + ".name")
+          }
+        },
         [
           _vm._t("label", [
             _c("div", { staticClass: "d-flex" }, [
@@ -95270,6 +95738,9 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("b-form-input", {
+            attrs: {
+              state: _vm.form.errors.has(this.name + ".name") ? "invalid" : ""
+            },
             model: {
               value: _vm.currentMember.name,
               callback: function($$v) {
@@ -95322,6 +95793,12 @@ var render = function() {
     [
       _c(
         "b-form-group",
+        {
+          attrs: {
+            state: _vm.form.errors.has(this.name + ".time") ? "invalid" : "",
+            feedback: _vm.form.errors.get(this.name + ".time")
+          }
+        },
         [
           _vm._t("label", [
             _c("div", { staticClass: "d-flex" }, [
@@ -95346,7 +95823,10 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("b-form-input", {
-            attrs: { placeholder: "Dos semanas, un mes, un año" },
+            attrs: {
+              placeholder: "Dos semanas, un mes, un año",
+              state: _vm.form.errors.has(this.name + ".time") ? "invalid" : ""
+            },
             model: {
               value: _vm.currentKpi.time,
               callback: function($$v) {
@@ -95361,10 +95841,23 @@ var render = function() {
       _vm._v(" "),
       _c(
         "b-form-group",
-        { attrs: { label: "Descripcion:" } },
+        {
+          attrs: {
+            state: _vm.form.errors.has(this.name + ".description")
+              ? "invalid"
+              : "",
+            feedback: _vm.form.errors.get(this.name + ".description"),
+            label: "Descripcion:"
+          }
+        },
         [
           _c("b-form-textarea", {
-            attrs: { rows: "4" },
+            attrs: {
+              rows: "4",
+              state: _vm.form.errors.has(this.name + ".description")
+                ? "invalid"
+                : ""
+            },
             model: {
               value: _vm.currentKpi.description,
               callback: function($$v) {
@@ -95414,7 +95907,12 @@ var render = function() {
     [
       _c(
         "b-input-group",
-        { attrs: { left: "$" } },
+        {
+          attrs: {
+            left: "$",
+            state: _vm.form.errors.has(_vm.name) ? "invalid" : ""
+          }
+        },
         [
           _c("input-float", {
             ref: "input",
@@ -95501,14 +95999,23 @@ var render = function() {
     [
       _c(
         "b-form-group",
-        { attrs: { label: _vm.label } },
+        {
+          ref: "input",
+          attrs: {
+            label: _vm.label,
+            feedback: _vm.form ? _vm.form.errors.get(_vm.name) : "",
+            state: _vm.form && _vm.form.errors.has(_vm.name) ? "invalid" : ""
+          }
+        },
         _vm._l(_vm.links, function(link, index) {
           return _c("project-form-link", {
             key: link.id,
             attrs: {
               index: index,
               link: link.link,
-              "total-links": _vm.links.length
+              "total-links": _vm.links.length,
+              form: _vm.form,
+              name: _vm.name + "." + index
             },
             on: {
               "new-link": _vm.newLink,
@@ -95762,9 +96269,17 @@ var render = function() {
     [
       _c(
         "b-form-group",
-        { staticClass: "mr-3", attrs: { label: "Ubicación" } },
+        {
+          staticClass: "mr-3",
+          attrs: {
+            label: "Ubicación",
+            feedback: _vm.feedback,
+            state: _vm.feedback ? "invalid" : ""
+          }
+        },
         [
           _c("b-form-input", {
+            attrs: { state: _vm.feedback ? "invalid" : "" },
             nativeOn: {
               keyup: function($event) {
                 _vm.newAddress($event)
@@ -95874,12 +96389,24 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
+    "b-form-group",
+    {
+      ref: "input",
+      attrs: {
+        feedback: _vm.form ? _vm.form.errors.get(_vm.name) : "",
+        state: _vm.form && _vm.form.errors.has(_vm.name) ? "invalid" : ""
+      }
+    },
     [
       _vm._l(_vm.members, function(member, index) {
         return _c("team-member", {
           key: member.id,
-          attrs: { member: member, index: index },
+          attrs: {
+            member: member,
+            index: index,
+            form: _vm.form,
+            name: _vm.name + "." + index
+          },
           on: {
             changed: _vm.memberChanged,
             remove: function($event) {
@@ -95895,7 +96422,12 @@ var render = function() {
           _c(
             "b-btn",
             {
-              attrs: { variant: "secondary" },
+              attrs: {
+                variant:
+                  _vm.form && _vm.form.errors.has(_vm.name)
+                    ? "danger"
+                    : "secondary"
+              },
               on: {
                 click: function($event) {
                   $event.preventDefault()
@@ -95928,6 +96460,483 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(t,e){ true?module.exports=e(__webpack_require__("./node_modules/quill/dist/quill.js")):"function"==typeof define&&define.amd?define(["quill"],e):"object"==typeof exports?exports.VueQuillEditor=e(require("quill")):t.VueQuillEditor=e(t.quill)}(this,function(t){return function(t){function e(i){if(n[i])return n[i].exports;var l=n[i]={i:i,l:!1,exports:{}};return t[i].call(l.exports,l,l.exports,e),l.l=!0,l.exports}var n={};return e.m=t,e.c=n,e.i=function(t){return t},e.d=function(t,n,i){e.o(t,n)||Object.defineProperty(t,n,{configurable:!1,enumerable:!0,get:i})},e.n=function(t){var n=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(n,"a",n),n},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p="/",e(e.s=2)}([function(e,n){e.exports=t},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i=n(4),l=n.n(i),o=n(6),r=n(5),u=r(l.a,o.a,!1,null,null,null);e.default=u.exports},function(t,e,n){"use strict";function i(t){return t&&t.__esModule?t:{default:t}}Object.defineProperty(e,"__esModule",{value:!0}),e.install=e.quillEditor=e.Quill=void 0;var l=n(0),o=i(l),r=n(1),u=i(r),s=window.Quill||o.default,a=function(t,e){e&&(u.default.props.globalOptions.default=function(){return e}),t.component(u.default.name,u.default)},c={Quill:s,quillEditor:u.default,install:a};e.default=c,e.Quill=s,e.quillEditor=u.default,e.install=a},function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0}),e.default={theme:"snow",boundary:document.body,modules:{toolbar:[["bold","italic","underline","strike"],["blockquote","code-block"],[{header:1},{header:2}],[{list:"ordered"},{list:"bullet"}],[{script:"sub"},{script:"super"}],[{indent:"-1"},{indent:"+1"}],[{direction:"rtl"}],[{size:["small",!1,"large","huge"]}],[{header:[1,2,3,4,5,6,!1]}],[{color:[]},{background:[]}],[{font:[]}],[{align:[]}],["clean"],["link","image","video"]]},placeholder:"Insert text here ...",readOnly:!1}},function(t,e,n){"use strict";function i(t){return t&&t.__esModule?t:{default:t}}Object.defineProperty(e,"__esModule",{value:!0});var l=n(0),o=i(l),r=n(3),u=i(r),s=window.Quill||o.default;"function"!=typeof Object.assign&&Object.defineProperty(Object,"assign",{value:function(t,e){if(null==t)throw new TypeError("Cannot convert undefined or null to object");for(var n=Object(t),i=1;i<arguments.length;i++){var l=arguments[i];if(null!=l)for(var o in l)Object.prototype.hasOwnProperty.call(l,o)&&(n[o]=l[o])}return n},writable:!0,configurable:!0}),e.default={name:"quill-editor",data:function(){return{_options:{},_content:"",defaultOptions:u.default}},props:{content:String,value:String,disabled:Boolean,options:{type:Object,required:!1,default:function(){return{}}},globalOptions:{type:Object,required:!1,default:function(){return{}}}},mounted:function(){this.initialize()},beforeDestroy:function(){this.quill=null,delete this.quill},methods:{initialize:function(){var t=this;this.$el&&(this._options=Object.assign({},this.defaultOptions,this.globalOptions,this.options),this.quill=new s(this.$refs.editor,this._options),(this.value||this.content)&&this.quill.pasteHTML(this.value||this.content),this.disabled&&this.quill.enable(!1),this.quill.on("selection-change",function(e){e?t.$emit("focus",t.quill):t.$emit("blur",t.quill)}),this.quill.on("text-change",function(e,n,i){var l=t.$refs.editor.children[0].innerHTML,o=t.quill,r=t.quill.getText();"<p><br></p>"===l&&(l=""),t._content=l,t.$emit("input",t._content),t.$emit("change",{html:l,text:r,quill:o})}),this.$emit("ready",this.quill))}},watch:{content:function(t,e){this.quill&&(t&&t!==this._content?(this._content=t,this.quill.pasteHTML(t)):t||this.quill.setText(""))},value:function(t,e){this.quill&&(t&&t!==this._content?(this._content=t,this.quill.pasteHTML(t)):t||this.quill.setText(""))},disabled:function(t,e){this.quill&&this.quill.enable(!t)}}}},function(t,e){t.exports=function(t,e,n,i,l,o){var r,u=t=t||{},s=typeof t.default;"object"!==s&&"function"!==s||(r=t,u=t.default);var a="function"==typeof u?u.options:u;e&&(a.render=e.render,a.staticRenderFns=e.staticRenderFns,a._compiled=!0),n&&(a.functional=!0),l&&(a._scopeId=l);var c;if(o?(c=function(t){t=t||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext,t||"undefined"==typeof __VUE_SSR_CONTEXT__||(t=__VUE_SSR_CONTEXT__),i&&i.call(this,t),t&&t._registeredComponents&&t._registeredComponents.add(o)},a._ssrRegister=c):i&&(c=i),c){var d=a.functional,f=d?a.render:a.beforeCreate;d?(a._injectStyles=c,a.render=function(t,e){return c.call(e),f(t,e)}):a.beforeCreate=f?[].concat(f,c):[c]}return{esModule:r,exports:u,options:a}}},function(t,e,n){"use strict";var i=function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("div",{staticClass:"quill-editor"},[t._t("toolbar"),t._v(" "),n("div",{ref:"editor"})],2)},l=[],o={render:i,staticRenderFns:l};e.a=o}])});
+
+/***/ }),
+
+/***/ "./node_modules/vue-scrollto/vue-scrollto.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+(function (global, factory) {
+	 true ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global['vue-scrollto'] = factory());
+}(this, (function () { 'use strict';
+
+/**
+ * https://github.com/gre/bezier-easing
+ * BezierEasing - use bezier curve for transition easing function
+ * by Gaëtan Renaudeau 2014 - 2015 – MIT License
+ */
+
+// These values are established by empiricism with tests (tradeoff: performance VS precision)
+var NEWTON_ITERATIONS = 4;
+var NEWTON_MIN_SLOPE = 0.001;
+var SUBDIVISION_PRECISION = 0.0000001;
+var SUBDIVISION_MAX_ITERATIONS = 10;
+
+var kSplineTableSize = 11;
+var kSampleStepSize = 1.0 / (kSplineTableSize - 1.0);
+
+var float32ArraySupported = typeof Float32Array === 'function';
+
+function A (aA1, aA2) { return 1.0 - 3.0 * aA2 + 3.0 * aA1; }
+function B (aA1, aA2) { return 3.0 * aA2 - 6.0 * aA1; }
+function C (aA1)      { return 3.0 * aA1; }
+
+// Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
+function calcBezier (aT, aA1, aA2) { return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT; }
+
+// Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
+function getSlope (aT, aA1, aA2) { return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1); }
+
+function binarySubdivide (aX, aA, aB, mX1, mX2) {
+  var currentX, currentT, i = 0;
+  do {
+    currentT = aA + (aB - aA) / 2.0;
+    currentX = calcBezier(currentT, mX1, mX2) - aX;
+    if (currentX > 0.0) {
+      aB = currentT;
+    } else {
+      aA = currentT;
+    }
+  } while (Math.abs(currentX) > SUBDIVISION_PRECISION && ++i < SUBDIVISION_MAX_ITERATIONS);
+  return currentT;
+}
+
+function newtonRaphsonIterate (aX, aGuessT, mX1, mX2) {
+ for (var i = 0; i < NEWTON_ITERATIONS; ++i) {
+   var currentSlope = getSlope(aGuessT, mX1, mX2);
+   if (currentSlope === 0.0) {
+     return aGuessT;
+   }
+   var currentX = calcBezier(aGuessT, mX1, mX2) - aX;
+   aGuessT -= currentX / currentSlope;
+ }
+ return aGuessT;
+}
+
+var index = function bezier (mX1, mY1, mX2, mY2) {
+  if (!(0 <= mX1 && mX1 <= 1 && 0 <= mX2 && mX2 <= 1)) {
+    throw new Error('bezier x values must be in [0, 1] range');
+  }
+
+  // Precompute samples table
+  var sampleValues = float32ArraySupported ? new Float32Array(kSplineTableSize) : new Array(kSplineTableSize);
+  if (mX1 !== mY1 || mX2 !== mY2) {
+    for (var i = 0; i < kSplineTableSize; ++i) {
+      sampleValues[i] = calcBezier(i * kSampleStepSize, mX1, mX2);
+    }
+  }
+
+  function getTForX (aX) {
+    var intervalStart = 0.0;
+    var currentSample = 1;
+    var lastSample = kSplineTableSize - 1;
+
+    for (; currentSample !== lastSample && sampleValues[currentSample] <= aX; ++currentSample) {
+      intervalStart += kSampleStepSize;
+    }
+    --currentSample;
+
+    // Interpolate to provide an initial guess for t
+    var dist = (aX - sampleValues[currentSample]) / (sampleValues[currentSample + 1] - sampleValues[currentSample]);
+    var guessForT = intervalStart + dist * kSampleStepSize;
+
+    var initialSlope = getSlope(guessForT, mX1, mX2);
+    if (initialSlope >= NEWTON_MIN_SLOPE) {
+      return newtonRaphsonIterate(aX, guessForT, mX1, mX2);
+    } else if (initialSlope === 0.0) {
+      return guessForT;
+    } else {
+      return binarySubdivide(aX, intervalStart, intervalStart + kSampleStepSize, mX1, mX2);
+    }
+  }
+
+  return function BezierEasing (x) {
+    if (mX1 === mY1 && mX2 === mY2) {
+      return x; // linear
+    }
+    // Because JavaScript number are imprecise, we should guarantee the extremes are right.
+    if (x === 0) {
+      return 0;
+    }
+    if (x === 1) {
+      return 1;
+    }
+    return calcBezier(getTForX(x), mY1, mY2);
+  };
+};
+
+var easings = {
+    ease: [0.25, 0.1, 0.25, 1.0],
+    linear: [0.00, 0.0, 1.00, 1.0],
+    "ease-in": [0.42, 0.0, 1.00, 1.0],
+    "ease-out": [0.00, 0.0, 0.58, 1.0],
+    "ease-in-out": [0.42, 0.0, 0.58, 1.0]
+};
+
+// https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#feature-detection
+var supportsPassive = false;
+try {
+    var opts = Object.defineProperty({}, "passive", {
+        get: function get() {
+            supportsPassive = true;
+        }
+    });
+    window.addEventListener("test", null, opts);
+} catch (e) {}
+
+var _ = {
+    $: function $(selector) {
+        if (typeof selector !== "string") {
+            return selector;
+        }
+        return document.querySelector(selector);
+    },
+    on: function on(element, events, handler) {
+        var opts = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : { passive: false };
+
+        if (!(events instanceof Array)) {
+            events = [events];
+        }
+        for (var i = 0; i < events.length; i++) {
+            element.addEventListener(events[i], handler, supportsPassive ? opts : false);
+        }
+    },
+    off: function off(element, events, handler) {
+        if (!(events instanceof Array)) {
+            events = [events];
+        }
+        for (var i = 0; i < events.length; i++) {
+            element.removeEventListener(events[i], handler);
+        }
+    },
+    cumulativeOffset: function cumulativeOffset(element) {
+        var top = 0;
+        var left = 0;
+
+        do {
+            top += element.offsetTop || 0;
+            left += element.offsetLeft || 0;
+            element = element.offsetParent;
+        } while (element);
+
+        return {
+            top: top,
+            left: left
+        };
+    }
+};
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+var abortEvents = ["mousedown", "wheel", "DOMMouseScroll", "mousewheel", "keyup", "touchmove"];
+
+var defaults$$1 = {
+    container: "body",
+    duration: 500,
+    easing: "ease",
+    offset: 0,
+    cancelable: true,
+    onDone: false,
+    onCancel: false,
+    x: false,
+    y: true
+};
+
+function setDefaults(options) {
+    defaults$$1 = _extends({}, defaults$$1, options);
+}
+
+var scroller = function scroller() {
+    var element = void 0; // element to scroll to
+    var container = void 0; // container to scroll
+    var duration = void 0; // duration of the scrolling
+    var easing = void 0; // easing to be used when scrolling
+    var offset = void 0; // offset to be added (subtracted)
+    var cancelable = void 0; // indicates if user can cancel the scroll or not.
+    var onDone = void 0; // callback when scrolling is done
+    var onCancel = void 0; // callback when scrolling is canceled / aborted
+    var x = void 0; // scroll on x axis
+    var y = void 0; // scroll on y axis
+
+    var initialX = void 0; // initial X of container
+    var targetX = void 0; // target X of container
+    var initialY = void 0; // initial Y of container
+    var targetY = void 0; // target Y of container
+    var diffX = void 0; // difference
+    var diffY = void 0; // difference
+
+    var abort = void 0; // is scrolling aborted
+
+    var abortEv = void 0; // event that aborted scrolling
+    var abortFn = function abortFn(e) {
+        if (!cancelable) return;
+        abortEv = e;
+        abort = true;
+    };
+    var easingFn = void 0;
+
+    var timeStart = void 0; // time when scrolling started
+    var timeElapsed = void 0; // time elapsed since scrolling started
+
+    var progress = void 0; // progress
+
+    function scrollTop(container) {
+        var scrollTop = container.scrollTop;
+
+        if (container.tagName.toLowerCase() === "body") {
+            // in firefox body.scrollTop always returns 0
+            // thus if we are trying to get scrollTop on a body tag
+            // we need to get it from the documentElement
+            scrollTop = scrollTop || document.documentElement.scrollTop;
+        }
+
+        return scrollTop;
+    }
+
+    function scrollLeft(container) {
+        var scrollLeft = container.scrollLeft;
+
+        if (container.tagName.toLowerCase() === "body") {
+            // in firefox body.scrollLeft always returns 0
+            // thus if we are trying to get scrollLeft on a body tag
+            // we need to get it from the documentElement
+            scrollLeft = scrollLeft || document.documentElement.scrollLeft;
+        }
+
+        return scrollLeft;
+    }
+
+    function step(timestamp) {
+        if (abort) return done();
+        if (!timeStart) timeStart = timestamp;
+
+        timeElapsed = timestamp - timeStart;
+
+        progress = Math.min(timeElapsed / duration, 1);
+        progress = easingFn(progress);
+
+        topLeft(container, initialY + diffY * progress, initialX + diffX * progress);
+
+        timeElapsed < duration ? window.requestAnimationFrame(step) : done();
+    }
+
+    function done() {
+        if (!abort) topLeft(container, targetY, targetX);
+        timeStart = false;
+
+        _.off(container, abortEvents, abortFn);
+        if (abort && onCancel) onCancel(abortEv);
+        if (!abort && onDone) onDone();
+    }
+
+    function topLeft(element, top, left) {
+        if (y) element.scrollTop = top;
+        if (x) element.scrollLeft = left;
+        if (element.tagName.toLowerCase() === "body") {
+            // in firefox body.scrollTop doesn't scroll the page
+            // thus if we are trying to scrollTop on a body tag
+            // we need to scroll on the documentElement
+            if (y) document.documentElement.scrollTop = top;
+            if (x) document.documentElement.scrollLeft = left;
+        }
+    }
+
+    function scrollTo(target, _duration) {
+        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+        if ((typeof _duration === "undefined" ? "undefined" : _typeof(_duration)) === "object") {
+            options = _duration;
+        } else if (typeof _duration === "number") {
+            options.duration = _duration;
+        }
+
+        element = _.$(target);
+
+        if (!element) {
+            return console.warn("[vue-scrollto warn]: Trying to scroll to an element that is not on the page: " + target);
+        }
+
+        container = _.$(options.container || defaults$$1.container);
+        duration = options.duration || defaults$$1.duration;
+        easing = options.easing || defaults$$1.easing;
+        offset = options.offset || defaults$$1.offset;
+        cancelable = options.hasOwnProperty("cancelable") ? options.cancelable !== false : defaults$$1.cancelable;
+        onDone = options.onDone || defaults$$1.onDone;
+        onCancel = options.onCancel || defaults$$1.onCancel;
+        x = options.x === undefined ? defaults$$1.x : options.x;
+        y = options.y === undefined ? defaults$$1.y : options.y;
+
+        var cumulativeOffsetContainer = _.cumulativeOffset(container);
+        var cumulativeOffsetElement = _.cumulativeOffset(element);
+
+        if (typeof offset === "function") {
+            offset = offset();
+        }
+
+        initialY = scrollTop(container);
+        targetY = cumulativeOffsetElement.top - cumulativeOffsetContainer.top + offset;
+
+        initialX = scrollLeft(container);
+        targetX = cumulativeOffsetElement.left - cumulativeOffsetContainer.left + offset;
+
+        abort = false;
+
+        diffY = targetY - initialY;
+        diffX = targetX - initialX;
+
+        if (typeof easing === "string") {
+            easing = easings[easing] || easings["ease"];
+        }
+
+        easingFn = index.apply(index, easing);
+
+        if (!diffY && !diffX) return;
+
+        _.on(container, abortEvents, abortFn, { passive: true });
+
+        window.requestAnimationFrame(step);
+
+        return function () {
+            abortEv = null;
+            abort = true;
+        };
+    }
+
+    return scrollTo;
+};
+
+var _scroller = scroller();
+
+var bindings = []; // store binding data
+
+function deleteBinding(el) {
+    for (var i = 0; i < bindings.length; ++i) {
+        if (bindings[i].el === el) {
+            bindings.splice(i, 1);
+            return true;
+        }
+    }
+    return false;
+}
+
+function findBinding(el) {
+    for (var i = 0; i < bindings.length; ++i) {
+        if (bindings[i].el === el) {
+            return bindings[i];
+        }
+    }
+}
+
+function getBinding(el) {
+    var binding = findBinding(el);
+
+    if (binding) {
+        return binding;
+    }
+
+    bindings.push(binding = {
+        el: el,
+        binding: {}
+    });
+
+    return binding;
+}
+
+function handleClick(e) {
+    e.preventDefault();
+    var ctx = getBinding(this).binding;
+
+    if (typeof ctx.value === "string") {
+        return _scroller(ctx.value);
+    }
+    _scroller(ctx.value.el || ctx.value.element, ctx.value);
+}
+
+var VueScrollTo$1 = {
+    bind: function bind(el, binding) {
+        getBinding(el).binding = binding;
+        _.on(el, "click", handleClick);
+    },
+    unbind: function unbind(el) {
+        deleteBinding(el);
+        _.off(el, "click", handleClick);
+    },
+    update: function update(el, binding) {
+        getBinding(el).binding = binding;
+    },
+
+    scrollTo: _scroller,
+    bindings: bindings
+};
+
+var install = function install(Vue, options) {
+    if (options) setDefaults(options);
+    Vue.directive("scroll-to", VueScrollTo$1);
+    Vue.prototype.$scrollTo = VueScrollTo$1.scrollTo;
+};
+
+if (typeof window !== "undefined" && window.Vue) {
+    window.VueScrollTo = VueScrollTo$1;
+    window.VueScrollTo.setDefaults = setDefaults;
+    Vue.use(install);
+}
+
+VueScrollTo$1.install = install;
+
+return VueScrollTo$1;
+
+})));
+
 
 /***/ }),
 
@@ -96029,6 +97038,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-26caf7f6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./project-form-photo.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-26caf7f6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./project-form-photo.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abdb180\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/forms/form-files.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abdb180\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/forms/form-files.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("8f408004", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abdb180\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./form-files.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abdb180\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./form-files.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -109013,6 +110049,12 @@ window.FormErrors = function () {
       if (_this.has(item)) {
         Vue.delete(_this.errors, item);
       }
+      // Borro los relativos error.id
+      _.each(_this.errors, function (error, key) {
+        if (_.startsWith(key, field + '.')) {
+          Vue.delete(_this.errors, key);
+        }
+      });
     });
   };
 };
@@ -109174,6 +110216,10 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3abdb180\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/forms/form-files.vue")
+}
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/forms/form-files.vue")
@@ -109182,7 +110228,7 @@ var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/templa
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -110121,8 +111167,8 @@ window.uniqid = __webpack_require__("./node_modules/uniqid/index.js");
 
 var swal = __webpack_require__("./node_modules/sweetalert2/dist/sweetalert2.all.js");
 swal.setDefaults({
-  confirmButtonClass: 'btn btn-success',
-  cancelButtonClass: 'btn btn-danger',
+  confirmButtonClass: 'btn btn-success btn-swal',
+  cancelButtonClass: 'btn btn-danger btn-swal',
   buttonsStyling: false,
   cancelButtonText: 'Cancelar'
 });
@@ -110173,8 +111219,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_bootstrap_vue_dist_bootstrap_vue_esm__ = __webpack_require__("./node_modules/bootstrap-vue/dist/bootstrap-vue.esm.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_croppa__ = __webpack_require__("./node_modules/vue-croppa/dist/vue-croppa.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_croppa___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_croppa__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_video_player__ = __webpack_require__("./node_modules/vue-video-player/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_video_player___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_video_player__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_scrollto__ = __webpack_require__("./node_modules/vue-scrollto/vue-scrollto.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_scrollto___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_scrollto__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_video_player__ = __webpack_require__("./node_modules/vue-video-player/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_video_player___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_video_player__);
 // require videojs style [and custom videojs theme]
 __webpack_require__("./node_modules/video.js/dist/video-js.css");
 __webpack_require__("./node_modules/vue-video-player/src/custom-theme.css");
@@ -110188,7 +111236,10 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_bootstrap_vue_dist_bootstrap_vue_esm__["a" /
 Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_croppa___default.a);
 
 
-Vue.use(__WEBPACK_IMPORTED_MODULE_2_vue_video_player___default.a);
+Vue.use(__WEBPACK_IMPORTED_MODULE_2_vue_scrollto___default.a);
+
+
+Vue.use(__WEBPACK_IMPORTED_MODULE_3_vue_video_player___default.a);
 
 __webpack_require__("./node_modules/videojs-youtube/dist/Youtube.js");
 __webpack_require__("./node_modules/videojs-vimeo/src/Vimeo.js");

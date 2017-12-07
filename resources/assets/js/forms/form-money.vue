@@ -5,7 +5,7 @@
       :state="form.errors.has(name) ? 'invalid' : ''"
       ref="group"
   >
-    <b-input-group left="$">
+    <b-input-group left="$" :state="form.errors.has(name) ? 'invalid' : ''">
       <input-float
         :state="form.errors.has(name) ? 'invalid' : ''"
         v-model.trim="form[name]"

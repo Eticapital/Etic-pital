@@ -74,6 +74,12 @@ window.FormErrors = function () {
       if (this.has(item)) {
         Vue.delete(this.errors, item)
       }
+      // Borro los relativos error.id
+      _.each(this.errors, (error, key) => {
+        if (_.startsWith(key, field + '.')) {
+          Vue.delete(this.errors, key)
+        }
+      })
     })
   }
 }

@@ -22,8 +22,11 @@
     />
     <quill-editor
       v-else
+      ref="input"
+      :class="{'quill-editor-invalid' : form.errors.has(name)}"
       v-model="form[name]"
       :options="editorOptions"
+      @change="form.errors.clear(name)"
     />
     <!-- <wysiwyg
       v-else
@@ -62,6 +65,14 @@ export default {
             ['clean'] // remove formatting button
           ]
         }
+      }
+    }
+  },
+
+  computed: {
+    editor() {
+      if (this.rich) {
+        return this.$refs.input.quill
       }
     }
   },
@@ -118,4 +129,10 @@ export default {
 .quill-editor {
   background: #FFF;
 }
+
+.quill-editor-invalid .ql-toolbar,
+.quill-editor-invalid .ql-container{
+border-color: #dc3545;
+}
+
 </style>

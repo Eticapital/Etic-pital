@@ -4,8 +4,8 @@ window.uniqid = require('uniqid')
 
 const swal = require('sweetalert2')
 swal.setDefaults({
-  confirmButtonClass: 'btn btn-success',
-  cancelButtonClass: 'btn btn-danger',
+  confirmButtonClass: 'btn btn-success btn-swal',
+  cancelButtonClass: 'btn btn-danger btn-swal',
   buttonsStyling: false,
   cancelButtonText: 'Cancelar'
 })

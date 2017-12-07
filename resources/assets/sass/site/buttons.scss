@@ -1,7 +1,11 @@
 .btn-primary {
     color: #FFF
 }
-
+.btn-swal {
+    min-width: inherit;
+    margin-left: 5px;
+    margin-right: 5px;
+}
 .btn.btn-loading {
     display: inline-flex;
     position: relative;

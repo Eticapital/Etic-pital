@@ -42,7 +42,7 @@ class UploadController extends Controller
         return [
             'type' => 'success',
             'name' => basename($relative_url),
-            'url' => url($relative_url),
+            'url' => url('storage/' . $relative_url),
         ];
     }
 }

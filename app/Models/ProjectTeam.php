@@ -9,4 +9,9 @@ class ProjectTeam extends Model
     protected $casts = [
         'links' => 'json'
     ];
+
+    protected $fillable = [
+        'name',
+        'links'
+    ];
 }

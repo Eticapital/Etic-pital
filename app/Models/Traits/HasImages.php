@@ -131,10 +131,10 @@ trait HasImages
         }
 
         $appends = collect(self::$images[$name]['sizes'])->map(function ($size) use ($name) {
-            Storage::delete(self::$images[$name]['path'] . $this->{$name . '_' . $size});
+            Storage::disk('public')->delete(self::$images[$name]['path'] . $this->{$name . '_' . $size});
         });
 
-        Storage::delete(self::$images[$name]['path'] . $this->{$name});
+        Storage::disk('public')->delete(self::$images[$name]['path'] . $this->{$name});
 
         $this->{$name} = null;
         $this->save();
@@ -184,15 +184,19 @@ trait HasImages
 
             $slug = md5($image->stream());
             $image_name = $slug . '.jpg';
-            Storage::put(self::$images[$name]['path'] . $image_name, $image->stream());
+            Storage::disk('public')->put(self::$images[$name]['path'] . $image_name, $image->stream());
 
             collect(self::$images[$name]['sizes'])->each(function ($size) use ($image, $slug, $name) {
-                $image = $image->fit($size, $size, function ($constraint) {
+                if (!str_contains($size, ':')) {
+                    $size = $size . ':' . $size;
+                }
+                list($width, $height) = explode(':', $size);
+                $image = $image->fit($width, $width, function ($constraint) {
                     $constraint->upsize();
                 });
 
-                $image_name = $slug . '@' . $size . '.jpg';
-                Storage::put(self::$images[$name]['path'] . $image_name, $image->stream());
+                $image_name = $slug . '@' . $width . '.jpg';
+                Storage::disk('public')->put(self::$images[$name]['path'] . $image_name, $image->stream());
             });
 
             $this->attributes[$name] = $image_name;

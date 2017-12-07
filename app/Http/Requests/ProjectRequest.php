@@ -44,7 +44,7 @@ class ProjectRequest extends FormRequest
             'email' => 'required|email',
             'holder_links' => '',
             'holder_links.*' => 'required|url',
-            // 'photo' => ['required', new TmpImageExists],
+            'photo' => ['required', new TmpImageExists],
             'video' => new ValidVideoUrl,
             'latitude' => 'numeric|required',
             'longitude' => 'numeric|required',
@@ -83,7 +83,7 @@ class ProjectRequest extends FormRequest
             'team' => 'required|array',
             'team.*.name' => 'required',
             // 12.
-            'kpis' => 'required|numeric',
+            'kpis' => 'required|array',
             'kpis.*.time' => 'required',
             'kpis.*.description' => 'required',
             // 13.

@@ -31,7 +31,7 @@ class CompanyDocument implements Rule
         }
 
         if (@$value['tmp_name']) {
-            return !Storage::disk('local')->exists('tmp/' . $value['tmp_name']);
+            return Storage::disk('local')->exists('tmp/' . $value['tmp_name']);
         }
 
         return true;

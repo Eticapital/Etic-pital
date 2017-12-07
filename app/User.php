@@ -62,4 +62,13 @@ class User extends Authenticatable
     {
         return collect(explode(' ', trim($this->name)))->first();
     }
+
+    /**
+     * Un usuario tiene multiples proyectos
+     * @return HasMany
+     */
+    public function projects()
+    {
+        return $this->hasMany(\App\Models\Project::class, 'owner_id');
+    }
 }

@@ -102,9 +102,9 @@
               <fieldset>
                 <p><legend><span class="h2 text-primary">5.</span> <span class="h3">Presentación, fotos y videos adicionales de la empresa</span></legend></p>
                 <form-files
-                  name="key_documents"
-                  ref="key_documents"
-                  v-model="form.key_documents"
+                  name="company_documents"
+                  ref="company_documents"
+                  v-model="form.company_documents"
                   :form="form"
                   btn-text="Subir presentación, foto(s) o video(s)"
                 />
@@ -367,9 +367,9 @@
             <fieldset>
               <p><legend><span class="h2 text-primary">14.</span> <span class="h3">Material extra</span></legend></p>
               <form-files
-                name="key_documents"
-                ref="key_documents"
-                v-model="form.key_documents"
+                name="extra_documents"
+                ref="extra_documents"
+                v-model="form.extra_documents"
                 :form="form"
               />
 
@@ -499,7 +499,7 @@ export default {
 
   created () {
     // Temporar eliminr
-    this.loadDemoProject()
+    // this.loadDemoProject()
 
     this.loadSectors()
     this.loadStages()
@@ -522,7 +522,7 @@ export default {
     submitProject () {
       App.post('/projects', this.form)
         .then(response => {
-          this.results = response
+          window.location.href = response.link
         }).catch(errors => {
           if (errors.errors) {
             _.find(errors.errors, (error, name) => {

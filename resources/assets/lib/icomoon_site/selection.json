@@ -370,6 +370,38 @@
     {
       "icon": {
         "paths": [
+          "M864 0h-832c-17.6 0-32 14.4-32 32v960c0 17.6 14.4 32 32 32h960c17.6 0 32-14.4 32-32v-832l-160-160zM256 32h512v256c0 17.6-14.4 32-32 32h-448c-17.6 0-32-14.4-32-32v-256zM896 992h-768v-416c0-35.348 28.654-64 64-64h640c35.346 0 64 28.652 64 64v416z",
+          "M576 64h128v192h-128v-192z",
+          "M256 576h512v64h-512v-64z",
+          "M256 704h512v64h-512v-64z",
+          "M256 832h512v64h-512v-64z"
+        ],
+        "attrs": [],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "tags": [
+          "floppy-disk",
+          "save"
+        ],
+        "defaultCode": 60041,
+        "grid": 16
+      },
+      "attrs": [],
+      "properties": {
+        "order": 41,
+        "prevSize": 16,
+        "ligatures": "floppy-disk, save2",
+        "name": "floppy-disk",
+        "id": 393,
+        "code": 60041
+      },
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 393
+    },
+    {
+      "icon": {
+        "paths": [
           "M512 64c282.77 0 512 186.25 512 416 0 229.752-229.23 416-512 416-27.156 0-53.81-1.734-79.824-5.044-109.978 109.978-241.25 129.7-368.176 132.596v-26.916c68.536-33.578 128-94.74 128-164.636 0-9.754-0.758-19.33-2.164-28.696-115.796-76.264-189.836-192.754-189.836-323.304 0-229.75 229.23-416 512-416z"
         ],
         "attrs": [],
@@ -427,6 +459,68 @@
       "setIdx": 0,
       "setId": 0,
       "iconIdx": 549
+    },
+    {
+      "icon": {
+        "paths": [
+          "M1024 864l-300.486-300.486c28.384-53.576 44.486-114.66 44.486-179.514 0-212.078-171.922-384-384-384-212.076 0-384 171.922-384 384s171.922 384 384 384c64.854 0 125.938-16.102 179.514-44.486l300.486 300.486 160-160zM128 384c0-141.384 114.616-256 256-256s256 114.616 256 256-114.616 256-256 256-256-114.616-256-256z",
+          "M576 320h-128v-128h-128v128h-128v128h128v128h128v-128h128z"
+        ],
+        "attrs": [],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "tags": [
+          "zoom-in",
+          "magnifier",
+          "magnifier-plus",
+          "enlarge"
+        ],
+        "defaultCode": 60209,
+        "grid": 16
+      },
+      "attrs": [],
+      "properties": {
+        "order": 34,
+        "prevSize": 16,
+        "ligatures": "zoom-in, magnifier2",
+        "name": "zoom-in",
+        "id": 561,
+        "code": 60209
+      },
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 561
+    },
+    {
+      "icon": {
+        "paths": [
+          "M1024 864l-300.486-300.486c28.384-53.576 44.486-114.66 44.486-179.514 0-212.078-171.922-384-384-384-212.076 0-384 171.922-384 384s171.922 384 384 384c64.854 0 125.938-16.102 179.514-44.486l300.486 300.486 160-160zM128 384c0-141.384 114.616-256 256-256s256 114.616 256 256-114.616 256-256 256-256-114.616-256-256z",
+          "M192 320h384v128h-384v-128z"
+        ],
+        "attrs": [],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "tags": [
+          "zoom-out",
+          "magnifier",
+          "magnifier-minus",
+          "reduce"
+        ],
+        "defaultCode": 60210,
+        "grid": 16
+      },
+      "attrs": [],
+      "properties": {
+        "order": 35,
+        "prevSize": 16,
+        "ligatures": "zoom-out, magnifier3",
+        "name": "zoom-out",
+        "id": 562,
+        "code": 60210
+      },
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 562
     },
     {
       "icon": {
@@ -609,6 +703,124 @@
       "setIdx": 0,
       "setId": 0,
       "iconIdx": 1138
+    },
+    {
+      "icon": {
+        "paths": [
+          "M512 32l-480 480h288v512h384v-512h288z"
+        ],
+        "attrs": [],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "tags": [
+          "arrow-up",
+          "up",
+          "upload",
+          "top"
+        ],
+        "defaultCode": 60876,
+        "grid": 16
+      },
+      "attrs": [],
+      "properties": {
+        "order": 37,
+        "prevSize": 16,
+        "ligatures": "arrow-up6, up6",
+        "name": "arrow-up",
+        "id": 1228,
+        "code": 60876
+      },
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 1228
+    },
+    {
+      "icon": {
+        "paths": [
+          "M992 512l-480-480v288h-512v384h512v288z"
+        ],
+        "attrs": [],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "tags": [
+          "arrow-right",
+          "right",
+          "next"
+        ],
+        "defaultCode": 60878,
+        "grid": 16
+      },
+      "attrs": [],
+      "properties": {
+        "order": 38,
+        "prevSize": 16,
+        "ligatures": "arrow-right6, right8",
+        "name": "arrow-right",
+        "id": 1230,
+        "code": 60878
+      },
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 1230
+    },
+    {
+      "icon": {
+        "paths": [
+          "M512 992l480-480h-288v-512h-384v512h-288z"
+        ],
+        "attrs": [],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "tags": [
+          "arrow-down",
+          "down",
+          "download",
+          "bottom"
+        ],
+        "defaultCode": 60880,
+        "grid": 16
+      },
+      "attrs": [],
+      "properties": {
+        "order": 39,
+        "prevSize": 16,
+        "ligatures": "arrow-down6, down6",
+        "name": "arrow-down",
+        "id": 1232,
+        "code": 60880
+      },
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 1232
+    },
+    {
+      "icon": {
+        "paths": [
+          "M32 512l480 480v-288h512v-384h-512v-288z"
+        ],
+        "attrs": [],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "tags": [
+          "arrow-left",
+          "left",
+          "previous"
+        ],
+        "defaultCode": 60882,
+        "grid": 16
+      },
+      "attrs": [],
+      "properties": {
+        "order": 40,
+        "prevSize": 16,
+        "ligatures": "arrow-left6, left9",
+        "name": "arrow-left",
+        "id": 1234,
+        "code": 60882
+      },
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 1234
     },
     {
       "icon": {

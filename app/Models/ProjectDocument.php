@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasFile;
 use Illuminate\Database\Eloquent\Model;
 
 class ProjectDocument extends Model
 {
+    use HasFile;
+
     const CATEGORY_COMPANY = 'company';
     const CATEGORY_KEY = 'key';
     const CATEGORY_EXTRA = 'extra';
@@ -38,11 +41,5 @@ class ProjectDocument extends Model
     public function scopeExtra($query)
     {
         return $query->where('category', self::CATEGORY_EXTRA);
-    }
-
-    public function getIconAttribute()
-    {
-        $icon_parser = new \App\Extensions\MimeIconParser();
-        return $icon_parser->getIconByExtension($this->extension);
     }
 }

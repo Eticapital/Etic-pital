@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?an5g0y');
-  src:  url('fonts/icomoon.eot?an5g0y#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.woff2?an5g0y') format('woff2'),
-    url('fonts/icomoon.ttf?an5g0y') format('truetype'),
-    url('fonts/icomoon.woff?an5g0y') format('woff'),
-    url('fonts/icomoon.svg?an5g0y#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?9xinlr');
+  src:  url('fonts/icomoon.eot?9xinlr#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.woff2?9xinlr') format('woff2'),
+    url('fonts/icomoon.ttf?9xinlr') format('truetype'),
+    url('fonts/icomoon.woff?9xinlr') format('woff'),
+    url('fonts/icomoon.svg?9xinlr#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -58,11 +58,20 @@
 .icon-envelop:before {
   content: "\ea30";
 }
+.icon-floppy-disk:before {
+  content: "\ea89";
+}
 .icon-bubble:before {
   content: "\eac4";
 }
 .icon-spinner:before {
   content: "\eb25";
+}
+.icon-zoom-in:before {
+  content: "\eb31";
+}
+.icon-zoom-out:before {
+  content: "\eb32";
 }
 .icon-bin:before {
   content: "\ebfd";
@@ -81,6 +90,18 @@
 }
 .icon-checkmark:before {
   content: "\ed72";
+}
+.icon-arrow-up:before {
+  content: "\edcc";
+}
+.icon-arrow-right:before {
+  content: "\edce";
+}
+.icon-arrow-down:before {
+  content: "\edd0";
+}
+.icon-arrow-left:before {
+  content: "\edd2";
 }
 .icon-checkmark-circle:before {
   content: "\ee76";

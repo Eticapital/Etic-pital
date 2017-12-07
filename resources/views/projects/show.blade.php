@@ -56,13 +56,13 @@
 
           <div class="col-12 col-md-6 col-lg-8 order-md-12">
             <p><span class="h3">Sobre el proyecto</span></p>
-            <div class="text-justify">{!! str_replace("\n", "</p>\n<p>", '<p>'.nl2br($project->description).'</p>') !!}</div>
+            <div class="text-justify">{!! $project->description !!}</div>
             <p><span class="h3">Oportunidad de inversión</span></p>
-            <div class="text-justify">{!! str_replace("\n", "</p>\n<p>", '<p>'.nl2br($project->opportunity).'</p>') !!}</div>
+            <div class="text-justify">{!! $project->opportunity !!}</div>
             <p><span class="h3">Modelo de negocio</span></p>
-            <div class="text-justify">{!! str_replace("\n", "</p>\n<p>", '<p>'.nl2br($project->business_model).'</p>') !!}</div>
+            <div class="text-justify">{!! $project->business_model !!}</div>
             <p><span class="h3">Competencia</span></p>
-            <div class="text-justify">{!! str_replace("\n", "</p>\n<p>", '<p>'.nl2br($project->competition).'</p>') !!}</div>
+            <div class="text-justify">{!! $project->competition !!}</div>
             @if($team->count())
             <p><span class="h3">Equipo</span></p>
             @foreach($team as $member)
@@ -103,7 +103,7 @@
       </div> <!-- / .content -->
     </div> <!-- / .container -->
 
-    <div class="container-fluid bg-light">
+    {{-- <div class="container-fluid bg-light">
       <div class="container">
 
         <div class="content">
@@ -140,7 +140,7 @@
         </div> <!-- / .content -->
 
       </div> <!-- / .container -->
-    </div> <!-- / .container-fluid -->
+    </div> <!-- / .container-fluid --> --}}
 
     <div class="jumbotron-fluid">
       <div class="content">
@@ -150,13 +150,13 @@
         </div> <!-- / .container -->
         <div class="documents">
           <div class="container">
+            @if($documents->count())
             <ul class="list-group">
-              <li class="list-group-item">Cras justo odio</li>
-              <li class="list-group-item">Dapibus ac facilisis in</li>
-              <li class="list-group-item">Morbi leo risus</li>
-              <li class="list-group-item">Porta ac consectetur ac</li>
-              <li class="list-group-item">Vestibulum at eros</li>
+              @foreach($documents as $document)
+              <li class="list-group-item">{{ $document->name }}</li>
+              @endforeach
             </ul> <!-- / .list-group -->
+            @endif
           </div> <!-- / .container -->
           <div class="no-access">
             <span class="h3">El acceso es sólo para inversionistas</span>

@@ -30,6 +30,56 @@ class Project extends Model
 
     protected $dates = ['published_at'];
 
+    protected $fillable = [
+        'name',
+        'holder',
+        'phone',
+        'email',
+        'holder_links',
+        'photo',
+        'video',
+        'latitude',
+        'longitude',
+        'address',
+        // 2.
+        'description',
+        // 3.
+        'opportunity',
+        // 4.
+        'competition',
+        // 5.
+        // 'company_documents',
+        // // 6.
+        'links',
+        // 7.
+        //✓'sectors',
+        // 8.
+        'stage_id',
+        // 9.
+        'business_model',
+        // 10.
+        'previous_capital',
+        'total_sales',
+        'round_size',
+        'minimal_needed',
+        'has_interested_investor',
+        'interested_investor_name',
+        'expected_sales_year_1',
+        'expected_sales_year_2',
+        'expected_sales_year_3',
+        //✓'rewards',
+        // 11.
+        //✓'team',
+        // 12.
+        //✓ 'kpis',
+        // // 13.
+        // 'key_documents',
+        // // 14.
+        // 'extra_documents',
+    ];
+
+    protected $appends = ['link'];
+
     /**
      * Return the sluggable configuration array for this model.
      *
@@ -140,6 +190,17 @@ class Project extends Model
     }
 
     /**
+     * Define los sectores. debería recibir un arreglo de ids
+     *
+     * @param  $sectors array
+     *
+     */
+    public function setSectorsAttribute($sectors)
+    {
+        $this->sectors()->sync($sectors);
+    }
+
+    /**
      * Un proyecto tiene muchos recompensas
      *
      * @return Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -147,6 +208,17 @@ class Project extends Model
     public function rewards()
     {
         return $this->belongsToMany(\App\Models\Reward::class);
+    }
+
+    /**
+     * Define los rewards. debería recibir un arreglo de ids
+     *
+     * @param  array $rewards
+     *
+     */
+    public function setRewardsAttribute($rewards)
+    {
+        $this->rewards()->sync($rewards);
     }
 
     /**
@@ -182,6 +254,20 @@ class Project extends Model
     }
 
     /**
+     * Recibe un arreglo de miembros del equipo y los agrega/actuliza segun aplique
+     * @param array $kpis
+     */
+    public function setTeamAttribute($team)
+    {
+        $ids = collect($team)->map(function ($member) {
+            return $this->team()->updateOrCreate(['id' => $member['id']], $member);
+        })->pluck('id');
+
+        // Los KPIs que no vinieron en la lista se eliminan
+        $this->team()->whereNotIn('id', $ids)->delete();
+    }
+
+    /**
      * Un proyecto tiene N miembros del equipo
      *
      * @return HasMany
@@ -191,6 +277,25 @@ class Project extends Model
         return $this->hasMany(\App\Models\ProjectKpi::class);
     }
 
+    /**
+     * Recibe un arreglo de kpis y los agrega/actuliza segun aplique
+     * @param array $kpis
+     */
+    public function setKpisAttribute($kpis)
+    {
+        $ids = collect($kpis)->map(function ($kpi) {
+            return $this->kpis()->updateOrCreate(['id' => $kpi['id']], $kpi);
+        })->pluck('id');
+
+        // Los KPIs que no vinieron en la lista se eliminan
+        $this->kpis()->whereNotIn('id', $ids)->delete();
+    }
+
+    /**
+     * Si tiene latitud y longitud
+     *
+     * @return boolean
+     */
     public function getHasLatitudeLongitudeAttribute()
     {
         return $this->latitude && $this->longitude;
@@ -221,6 +326,72 @@ HTML;
         return $this->hasMany(ProjectDocument::class);
     }
 
+    public function setDocuments($documents, $category)
+    {
+        $ids = collect($documents)
+            ->filter(function ($document) {
+                return $document['tmp_name'];
+            })->map(function ($document) use ($category) {
+                return [
+                    'category' => $category,
+                    'file_name' => $document['tmp_name'],
+                    'is_new' => 1,
+                    'file' => $document['name'],
+                    'id' => $document['id']
+                ];
+            })->map(function ($file) {
+                $document = new ProjectDocument;
+                $document->project_id = $this->id;
+                $document->file = $file;
+                $document->save();
+                return $document->id;
+            })->pluck('id');
+
+        // Los documents que no vinieron en la lista se eliminan
+        $this->documents()
+            ->where('category', $category)
+            ->whereNotIn('id', $ids)
+            ->delete();
+    }
+
+    /**
+     * Recibe un arreglo con infomración sobre los documetnos y crea o actualiza segun
+     * sea el caso
+     *
+     * @param array $documents
+     */
+    public function setKeyDocumentsAttribute($documents)
+    {
+        $this->setDocuments($documents, ProjectDocument::CATEGORY_KEY);
+    }
+
+    /**
+     * Recibe un arreglo con infomración sobre los documetnos y crea o actualiza segun
+     * sea el caso
+     *
+     * @param array $documents
+     */
+    public function setExtraDocumentsAttribute($documents)
+    {
+        $this->setDocuments($documents, ProjectDocument::CATEGORY_EXTRA);
+    }
+
+    /**
+     * Recibe un arreglo con infomración sobre los documetnos y crea o actualiza segun
+     * sea el caso
+     *
+     * @param array $documents
+     */
+    public function setCompanyDocumentsAttribute($documents)
+    {
+        $this->setDocuments($documents, ProjectDocument::CATEGORY_COMPANY);
+    }
+
+    /**
+     * Arreglo que recibe el formualrio de nuevo proyecto
+     *
+     * @return array
+     */
     public function toFormArray()
     {
         $array = $this->toArray();
@@ -231,7 +402,6 @@ HTML;
         $array['company_documents'] = $this->documents()->company()->get()->toArray();
         $array['key_documents'] = $this->documents()->key()->get()->toArray();
         $array['extra_documents'] = $this->documents()->extra()->get()->toArray();
-        // unset($array['has_interested_investor']);
         return $array;
     }
 }

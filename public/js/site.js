@@ -5956,7 +5956,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   created: function created() {
     // Temporar eliminr
-    this.loadDemoProject();
+    // this.loadDemoProject()
 
     this.loadSectors();
     this.loadStages();
@@ -5981,7 +5981,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this2 = this;
 
       App.post('/projects', this.form).then(function (response) {
-        _this2.results = response;
+        window.location.href = response.link;
       }).catch(function (errors) {
         if (errors.errors) {
           _.find(errors.errors, function (error, name) {
@@ -94308,18 +94308,18 @@ var render = function() {
                     _c("p"),
                     _vm._v(" "),
                     _c("form-files", {
-                      ref: "key_documents",
+                      ref: "company_documents",
                       attrs: {
-                        name: "key_documents",
+                        name: "company_documents",
                         form: _vm.form,
                         "btn-text": "Subir presentación, foto(s) o video(s)"
                       },
                       model: {
-                        value: _vm.form.key_documents,
+                        value: _vm.form.company_documents,
                         callback: function($$v) {
-                          _vm.$set(_vm.form, "key_documents", $$v)
+                          _vm.$set(_vm.form, "company_documents", $$v)
                         },
-                        expression: "form.key_documents"
+                        expression: "form.company_documents"
                       }
                     })
                   ],
@@ -94963,14 +94963,14 @@ var render = function() {
                   _c("p"),
                   _vm._v(" "),
                   _c("form-files", {
-                    ref: "key_documents",
-                    attrs: { name: "key_documents", form: _vm.form },
+                    ref: "extra_documents",
+                    attrs: { name: "extra_documents", form: _vm.form },
                     model: {
-                      value: _vm.form.key_documents,
+                      value: _vm.form.extra_documents,
                       callback: function($$v) {
-                        _vm.$set(_vm.form, "key_documents", $$v)
+                        _vm.$set(_vm.form, "extra_documents", $$v)
                       },
-                      expression: "form.key_documents"
+                      expression: "form.extra_documents"
                     }
                   })
                 ],

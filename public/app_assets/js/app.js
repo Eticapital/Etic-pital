@@ -3280,6 +3280,121 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/account/account-form.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    windowRedirect: {
+      type: Boolean,
+      default: false
+    },
+    user: {
+      type: Object,
+      required: true
+    }
+  },
+
+  data: function data() {
+    return {
+      form: new Form({
+        name: '',
+        email: ''
+      })
+    };
+  },
+
+  created: function created() {
+    this.form.appendModel(this.user);
+  },
+
+
+  methods: {
+    onSubmit: function onSubmit() {
+      var _this = this;
+
+      App.put('/account', this.form).then(function (user) {
+        if (_this.windowRedirect) {
+          window.location.replace('/account');
+          return;
+        }
+
+        var next = router.match({ name: 'account.index' }).path;
+        router.push(next, function () {
+          growl('Tu cuenta fue actualizada correctamente');
+        });
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/account/password-form.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    windowRedirect: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  data: function data() {
+    return {
+      form: new Form({
+        old_password: '',
+        password: '',
+        password_confirmation: ''
+      })
+    };
+  },
+
+  methods: {
+    onSubmit: function onSubmit() {
+      var _this = this;
+
+      App.put('/account/password', this.form).then(function (user) {
+        if (_this.windowRedirect) {
+          window.location.replace('/account');
+          return;
+        }
+
+        var next = router.match({ name: 'account.index' }).path;
+        router.push(next, function () {
+          growl('Tu contraseña fue actualizada correctamente.');
+        });
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/gui/DataTable.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4570,10 +4685,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_account_account_form__ = __webpack_require__("./resources/assets/js/components/account/account-form.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_account_account_form___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_account_account_form__);
 //
 //
 //
@@ -4581,14 +4694,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    AccountForm: __WEBPACK_IMPORTED_MODULE_0__components_account_account_form___default.a
+  },
+
   data: function data() {
     return {
-      user: null,
-      form: new Form({
-        name: '',
-        email: ''
-      })
+      user: null
     };
   },
 
@@ -4596,25 +4712,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     axios.get(App.basePath + 'account').then(function (response) {
       next(function (vm) {
         vm.user = response.data;
-        vm.form.appendModel(vm.user);
         bus.$emit('view-ready');
       });
     }).catch(function (error) {
       console.log(error);
       next(false);
     });
-  },
-
-
-  methods: {
-    onSubmit: function onSubmit() {
-      App.put(App.basePath + 'account', this.form).then(function (user) {
-        var next = router.match({ name: 'account.index' }).path;
-        router.push(next, function () {
-          growl('Tu cuenta fue actualizada correctamente');
-        });
-      });
-    }
   }
 });
 
@@ -4625,38 +4728,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_account_password_form__ = __webpack_require__("./resources/assets/js/components/account/password-form.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_account_password_form___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_account_password_form__);
 //
 //
 //
 //
 //
 //
-//
-//
-//
-//
-//
+
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      form: new Form({
-        old_password: '',
-        password: '',
-        password_confirmation: ''
-      })
-    };
-  },
-
-  methods: {
-    onSubmit: function onSubmit() {
-      App.put('/account/password', this.form).then(function (user) {
-        var next = router.match({ name: 'account.index' }).path;
-        router.push(next, function () {
-          growl('Tu contraseña fue actualizada correctamente.');
-        });
-      });
-    }
+  components: {
+    PasswordForm: __WEBPACK_IMPORTED_MODULE_0__components_account_password_form___default.a
   }
 });
 
@@ -99418,6 +99503,117 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3d37d4cd\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/account/password-form.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "form",
+    {
+      attrs: { autocomplete: "off" },
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          _vm.onSubmit($event)
+        }
+      }
+    },
+    [
+      _c("form-text", {
+        attrs: {
+          form: _vm.form,
+          type: "password",
+          name: "old_password",
+          label: "Tu contraseña actual"
+        }
+      }),
+      _vm._v(" "),
+      _c("form-text", {
+        attrs: {
+          form: _vm.form,
+          type: "password",
+          name: "password",
+          label: "Nueva contraseña"
+        }
+      }),
+      _vm._v(" "),
+      _c("form-text", {
+        attrs: {
+          form: _vm.form,
+          type: "password",
+          name: "password_confirmation",
+          label: "Repite tu nueva contraseña"
+        }
+      }),
+      _vm._v(" "),
+      _c("form-button-submit", { attrs: { form: _vm.form } }, [
+        _vm._v("Guardar")
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3d37d4cd", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4b98bc9d\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/account/account-form.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "form",
+    {
+      attrs: { autocomplete: "off" },
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          _vm.onSubmit($event)
+        }
+      }
+    },
+    [
+      _c("form-text", {
+        attrs: { form: _vm.form, name: "name", label: "Tu nombre completo" }
+      }),
+      _vm._v(" "),
+      _c("form-text", {
+        attrs: { form: _vm.form, name: "email", label: "Tu correo electrónico" }
+      }),
+      _vm._v(" "),
+      _c("form-button-submit", { attrs: { form: _vm.form } }, [
+        _vm._v("Guardar")
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4b98bc9d", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-508451a6\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/GrowlNotifications.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -100010,42 +100206,12 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _vm.user
-    ? _c("b-card", { attrs: { title: "Actualizar mis datos de usuario" } }, [
-        _c(
-          "form",
-          {
-            attrs: { autocomplete: "off" },
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                _vm.onSubmit($event)
-              }
-            }
-          },
-          [
-            _c("form-text", {
-              attrs: {
-                form: _vm.form,
-                name: "name",
-                label: "Tu nombre completo"
-              }
-            }),
-            _vm._v(" "),
-            _c("form-text", {
-              attrs: {
-                form: _vm.form,
-                name: "email",
-                label: "Tu correo electrónico"
-              }
-            }),
-            _vm._v(" "),
-            _c("form-button-submit", { attrs: { form: _vm.form } }, [
-              _vm._v("Guardar")
-            ])
-          ],
-          1
-        )
-      ])
+    ? _c(
+        "b-card",
+        { attrs: { title: "Actualizar mis datos de usuario" } },
+        [_c("account-form", { attrs: { user: _vm.user } })],
+        1
+      )
     : _vm._e()
 }
 var staticRenderFns = []
@@ -100465,53 +100631,12 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("b-card", { attrs: { title: "Actualizar contraseña" } }, [
-    _c(
-      "form",
-      {
-        attrs: { autocomplete: "off" },
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            _vm.onSubmit($event)
-          }
-        }
-      },
-      [
-        _c("form-text", {
-          attrs: {
-            form: _vm.form,
-            type: "password",
-            name: "old_password",
-            label: "Tu contraseña actual"
-          }
-        }),
-        _vm._v(" "),
-        _c("form-text", {
-          attrs: {
-            form: _vm.form,
-            type: "password",
-            name: "password",
-            label: "Nueva contraseña"
-          }
-        }),
-        _vm._v(" "),
-        _c("form-text", {
-          attrs: {
-            form: _vm.form,
-            type: "password",
-            name: "password_confirmation",
-            label: "Repite tu nueva contraseña"
-          }
-        }),
-        _vm._v(" "),
-        _c("form-button-submit", { attrs: { form: _vm.form } }, [
-          _vm._v("Guardar")
-        ])
-      ],
-      1
-    )
-  ])
+  return _c(
+    "b-card",
+    { attrs: { title: "Actualizar contraseña" } },
+    [_c("password-form")],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -120398,6 +120523,104 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-c617cdd4", Component.options)
   } else {
     hotAPI.reload("data-v-c617cdd4", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/account/account-form.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/account/account-form.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4b98bc9d\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/account/account-form.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/account/account-form.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4b98bc9d", Component.options)
+  } else {
+    hotAPI.reload("data-v-4b98bc9d", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/account/password-form.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/account/password-form.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3d37d4cd\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/account/password-form.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/account/password-form.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3d37d4cd", Component.options)
+  } else {
+    hotAPI.reload("data-v-3d37d4cd", Component.options)
 ' + '  }
   module.hot.dispose(function (data) {
     disposed = true

@@ -6,7 +6,9 @@ Route::get('/nav', 'NavController@get');
 
 // Mi cuenta
 Route::get('account', 'AccountController@index')->name('account.index');
+Route::get('account/edit', 'AccountController@edit')->name('account.edit');
 Route::put('account', 'AccountController@update')->name('account.update');
+Route::get('account/password', 'AccountController@showPasswordForm')->name('account.password-form');
 Route::put('account/password', 'AccountController@password')->name('account.password');
 Route::get('account/permissions', 'AccountController@permissions')->name('account.permissions');
 

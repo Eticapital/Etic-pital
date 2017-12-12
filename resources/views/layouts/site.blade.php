@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>{{ config('app.name', 'Eticapital') }}</title>
+    <title>{{ isset($title) ? $title . ' - ' . config('app.name', 'Eticapital') : config('app.name', 'Eticapital') }}</title>
 
     <link rel="stylesheet" href="{{ mix('/css/site.css') }}">
 
@@ -15,6 +15,7 @@
         window.App = {!! json_encode([
           'csrfToken' => csrf_token(),
           'maxFileSize' => intval(file_upload_max_size()),
+          'user' => auth()->user() ? auth()->user()->toPublicArray() : null,
         ]) !!};
     </script>
   </head>
@@ -53,9 +54,17 @@
                 <a class="nav-link" href="{{ route('nosotros') }}">Nosotros</a>
               </li>
               @if(auth()->user())
-              <li class="nav-item">
-                <a class="nav-link" href="{{ route('login') }}"><i class="fa fa-user"></i> Logueado</a>
-              </li>
+              <b-nav-item-dropdown right>
+                <!-- Using button-content slot -->
+                <template slot="button-content">
+                  Logueado
+                </template>
+                <b-dropdown-item href="{{ route('account.index') }}">Mi perfil</b-dropdown-item>
+                @if(auth()->user()->is_admin)
+                <b-dropdown-item href="{{ route('admin') }}">Administración</b-dropdown-item>
+                @endif
+                <logout-link class="dropdown-item">Cerrar sesión</logout-link>
+              </b-nav-item-dropdown>
               @else
               <li class="nav-item">
                 <a class="nav-link" href="{{ route('login') }}">Ingresar</a>

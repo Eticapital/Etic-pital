@@ -17,7 +17,7 @@
             'title' => config('app.name'),
             'basePath' => '/',
             'csrfToken' => csrf_token(),
-            'user' => auth()->user() ? collect(auth()->user()->toArray())->only('id', 'name', 'email') : null,
+            'user' => auth()->user() ? auth()->user()->toPublicArray() : null,
             'avatar' => auth()->user() ? auth()->user()->avatar_43_url : null,
             'maxFileSize' => intval(file_upload_max_size()),
         ]) !!};

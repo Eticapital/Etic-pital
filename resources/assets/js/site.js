@@ -1,6 +1,6 @@
 require('./site/bootstrap.js')
 
-// Crud Formsº
+// Crud Forms
 require('./forms/bootstrap')
 require('./forms/inputs')
 
@@ -9,5 +9,11 @@ require('./site/libs.js')
 require('./site/components.js')
 
 const app = new Vue({
-  el: '#app'
+  el: '#app',
+
+  methods: {
+    logout () {
+      console.log("logout")
+    }
+  }
 })

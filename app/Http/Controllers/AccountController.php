@@ -11,9 +11,29 @@ class AccountController extends Controller
 {
     protected $fillable = ['name', 'email', 'avatar'];
 
-    public function index()
+    public function index(Request $request)
     {
-        return request()->user();
+        if ($request->ajax()) {
+            return request()->user();
+        }
+
+        return view('account', [
+            'user' => auth()->user()
+        ]);
+    }
+
+    public function edit()
+    {
+        return view('account.edit', [
+            'user' => auth()->user()
+        ]);
+    }
+
+    public function showPasswordForm()
+    {
+        return view('account.password', [
+            'user' => auth()->user()
+        ]);
     }
 
     public function password(Request $request)

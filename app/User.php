@@ -41,6 +41,10 @@ class User extends Authenticatable
         'can_update', 'can_destroy', 'can_show'
     ];
 
+    protected $appends = [
+        'is_admin'
+    ];
+
     /**
      * Get the indexable data array for the model.
      *
@@ -54,6 +58,22 @@ class User extends Authenticatable
     }
 
     /**
+     * La información que se usará como variable globar
+     * @return array
+     */
+    public function toPublicArray()
+    {
+        return collect($this->toArray())
+            ->only('id', 'name', 'email', 'is_admin')
+            ->toArray();
+    }
+
+    public function getIsAdminAttribute()
+    {
+        return $this->hasRole(['root', 'admin']);
+    }
+
+    /**
      * Regresa solo el primer nombre
      *
      * @return string
@@ -61,6 +81,16 @@ class User extends Authenticatable
     public function getShortNameAttribute()
     {
         return collect(explode(' ', trim($this->name)))->first();
+    }
+
+    /**
+     * Devuelve el mail como un link HTML
+     *
+     * @return string
+     */
+    public function getEmailLinkAttribute()
+    {
+        return sprintf('<a href="mailto:%s">%s</a>', $this->email, $this->email);
     }
 
     /**

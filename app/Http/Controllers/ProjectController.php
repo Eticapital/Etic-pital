@@ -107,7 +107,15 @@ class ProjectController extends Controller
             $project->company_documents = $request->input('company_documents');
             $project->key_documents = $request->input('key_documents');
             $project->extra_documents = $request->input('extra_documents');
-            $project->update($request->all());
+
+            $data = $request->all();
+            // Para procesar por el trait de imagenes lo convierto a un
+            // objecto tipo \Intervention\Image\Image y solo si es nueva
+            if (isset($data['photo']) && $project->photo != $data['photo'] && Storage::disk('public')->exists('tmp/' . $data['photo'])) {
+                $data['photo'] = Image::make(storage_path('app/public/tmp/' . $data['photo']));
+            }
+
+            $project->update($data);
         });
     }
 
@@ -115,6 +123,7 @@ class ProjectController extends Controller
     {
         $projects = Project::featuredFirst()
             ->published()
+            ->latest()
             ->paginate(5);
 
         return view('invertir')->with(compact('projects'));

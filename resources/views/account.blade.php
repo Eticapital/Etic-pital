@@ -50,9 +50,12 @@
                 <td>{{ $project->status }}</td>
                 <td>
                   <div class="btn-group btn-group-sm">
-                    <a href="" class="btn btn-primary ">test</a>
-                    <a href="" class="btn btn-primary ">test</a>
-                    <a href="" class="btn btn-primary ">test</a>
+                    @can('show', $project)
+                      <a href="{{ $project->link }}" class="btn btn-primary">Ver</a>
+                    @endcan
+                    @can('edit', $project)
+                    <a href="{{ route('projects.edit', $project) }}" class="btn btn-primary">Editar</a>
+                    @endif
                   </div>
                 </td>
               </tr>

@@ -9656,6 +9656,11 @@ a.project-card:hover {
   }
 }
 
+.alert-link {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
 .btn {
   padding: .75rem .75rem;
   border-radius: 1.5rem;

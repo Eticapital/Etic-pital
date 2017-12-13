@@ -33,8 +33,13 @@ class ProjectPolicy
      */
     public function view(User $user, Project $project)
     {
-        if ($project->published_at) {
+        if ($project->is_published) {
             return true;
+        }
+
+        // Si es dueño siempre lo puede ver salvo que este rechazado
+        if ($user->id === $project->owner_id) {
+            return !$project->is_rejected;
         }
 
         return $user->is_root || $user->can('roles.view');

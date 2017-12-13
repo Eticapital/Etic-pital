@@ -64,7 +64,7 @@ class Project extends Model
         ],
     ];
 
-    protected $dates = ['published_at'];
+    protected $dates = ['published_at', 'rejected_at', 'deleted_at'];
 
     protected $fillable = [
         'name',
@@ -672,11 +672,25 @@ HTML;
      */
     public function getStatusAttribute()
     {
+        if ($this->is_rejected) {
+            return 'Rechazado';
+        }
+
         if ($this->is_pending) {
             return 'En revisión';
         }
 
         return 'Sin definir';
+    }
+
+    /**
+     * Si el proyecto está reachado
+     *
+     * @return boolena
+     */
+    public function getIsRejectedAttribute()
+    {
+        return $this->rejected_at;
     }
 
     /**
@@ -687,5 +701,15 @@ HTML;
     public function getIsPendingAttribute()
     {
         return !$this->published_at;
+    }
+
+    /**
+     * Si el proyecto está publicado
+     *
+     * @return boolena
+     */
+    public function getIsPublishedAttribute()
+    {
+        return $this->published_at && !$this->rejected_at;
     }
 }

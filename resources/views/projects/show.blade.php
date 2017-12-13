@@ -1,18 +1,24 @@
 @extends('layouts.site')
 
 @section('content')
+@if(!$project->is_published)
+<b-alert variant="info" show v-cloak class="container my-3">
+  <h5 class="alert-heading"><i class="icon-warning"></i> Aún no compartas este enlace solo tu lo puedes ver.</h5>
+  <p>Tu proyecto se encuentra actualmente en revisión y mientras tanto eres libre de <a class="alert-link" href="{{ route('projects.edit', $project) }}">modificar todos los detalles.</a></p>
+</b-alert>
+@endif
 <div class="jumbotron-fluid">
       <div class="container-fluid">
         <div class="row no-gutters text-center text-md-left">
           <div class="col-12 col-md-6">
             <project-video
-                  type="{{ $project->video_type }}"
-                  link="{{$project->link}}"
-                  id="{{ $project->id }}"
-                  image="{{ $project->photo_854_url }}"
-                  video="{{ $project->video }}"
-                  name="{{ $project->name }}"
-                ></project-video>
+              type="{{ $project->video_type }}"
+              link="{{$project->link}}"
+              id="{{ $project->id }}"
+              image="{{ $project->photo_854_url }}"
+              video="{{ $project->video }}"
+              name="{{ $project->name }}"
+            ></project-video>
           </div> <!-- / .col-md-6 -->
           <div class="col-12 col-md-6 d-flex flex-column justify-content-between flex">
             <div class="container d-flex justify-content-center flex-column" style="flex-grow: 1" >
@@ -38,7 +44,7 @@
                   <br>{{ money($project->goal) }}</p>
                 </div> <!-- / .col -->
               </div> <!-- / .row -->
-              <p class="py-3"><button class="btn btn-primary">Invertir</button></p>
+              <p class="py-3"><button class="btn btn-primary btn-wide">Invertir</button></p>
             </div> <!-- / .container -->
             <div class="container-fluid bg-light d-inline-flex align-items-center">
                 <img class="user-img rounded-circle m-3" src="/img/placeholdergrey.png">

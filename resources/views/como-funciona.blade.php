@@ -58,7 +58,6 @@
                     <li>Haz una promesa de inversión</li>
                     <li>Espera a que el dueño de la compañía la apruebe</li>
                     <li>Espera una invitación para formalizar la inversión persona a persona en las oficinas de Eticapital. NO REALIZAMOS TRANSACCIONES EN LÍNEA. </li>
-                    <li>Selecciona la forma de invertir (Individualmente o a través del Fondo)</li>
                   </ol>
               </div> <!-- / .col-lg-8 -->
             </div> <!-- / .row -->
@@ -72,8 +71,9 @@
             <div class="row justify-content-center">
               <div class="col-lg-8 text-justify">
                 <p class="text-center"><span class="h2">¿Buscas levantar fondos?</span></p>
-                <p>Si tienes una excelente iniciativa de corte tecnológico y agrícola, y ya tienes más de un año de constitución entonces no dudes en aplicar para que te ayudemos a conseguir fondos de personas que además de confiar en tu modelo de negocios confían en ti.</p>
-                <p>Luego de un proceso de revisión donde admitimos a menos del 5% de los proyectos recibidos, trabajamos con las compañías para ofrecer la mejor alternativa para que estas puedan levantar inversión. <a href="{{ route('fondear-mi-proyecto') }}">Puedes llenar tu formulario aquí.</a></p>
+                <p>Si tienes una excelente iniciativa agrícola innovadora y ya tienes más de un año de constitución entonces no dudes en aplicar, para que te ayudemos a conseguir fondos de personas que además de confiar en tu modelo de negocios confían en ti. </p>
+                <p>O, si tienes una iniciativa innovadora de negocio que, aunque no sea agrícola pueda representar un negocio potencial económico y social, no dudes en subir tu proyecto. </p>
+                <p>Luego de un proceso de análisis de tu proyecto de negocio, en conjunto buscamos que tu empresa sea la mejor alternativa para levantar capital.  <a href="{{ route('fondear-mi-proyecto') }}">Puedes llenar tu formulario aquí.</a></p>
               </div> <!-- / .col-lg-8 -->
             </div> <!-- / .row -->
           </div> <!-- / .container -->
@@ -85,19 +85,20 @@
           <div class="container">
             <div class="row">
               <div class="col-12 col-lg-4 d-flex align-items-center justify-content-center">
-                <img src="img/comofunciona_icon3.png" class="icon">
+                <img src="img/comofunciona_icon4.png" class="icon">
               </div> <!-- / .col-lg-4 -->
               <div class="col-12 col-lg-8">
                 <p><span class="h3">Los principales puntos a evaluar de una compañía, entre otros, son:</span></p>
                 <ul>
-                  <li>La experiencia que tiene realizando su actividad.</li>
-                  <li>En nivel de desarrollo tecnológico.</li>
-                  <li>Su impacto social o ambiental.</li>
-                  <li>Indicadores financieros de liquidez y de generación de valor.</li>
-                  <li>El nivel de tracción de la iniciativa.</li>
-                  <li>Activos como patentes y Capex.</li>
-                  <li>Oportunidad de mercado.</li>
-                  <li>Mecanismos de distribución.</li>
+                  <li>Los principales puntos a evaluar de una compañía, entre otros, son:</li>
+                  <li>La experiencia que tiene realizando su actividad</li>
+                  <li>En nivel de desarrollo tecnológico</li>
+                  <li>Su impacto social o ambiental</li>
+                  <li>Indicadores financieros de liquidez y de generación de valor</li>
+                  <li>El nivel de tracción de la iniciativa </li>
+                  <li>Activos como patentes y Capex</li>
+                  <li>Oportunidad de mercado</li>
+                  <li>Mecanismos de distribución</li>
                   <li>Capital de trabajo & Burning rate</li>
                 </ul>
                 <p><a href="{{ route('fondear-mi-proyecto') }}" class="btn btn-wide btn-secondary">Aplicar ahora</a></p>

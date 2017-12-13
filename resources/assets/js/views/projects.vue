@@ -20,7 +20,7 @@
           <a
             v-if="canDataTable(props, 'update')"
             class="btn btn-primary"
-            :href="'/projects/' + props.rowData.id + '/edit'">
+            :href="'/projects/' + props.rowData.id + '/edit?return=admin'">
             <i class="icon-pen"></i> Editar
           </a>
 

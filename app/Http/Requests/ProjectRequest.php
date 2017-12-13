@@ -37,7 +37,7 @@ class ProjectRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required',
             'holder' => 'required',
             'phone' => 'required',
@@ -93,5 +93,13 @@ class ProjectRequest extends FormRequest
             'extra_documents' => 'array',
             'extra_documents.*' => new CompanyDocument,
         ];
+
+        // // Si el proyecto es un paramtro cambia un
+        // // poco las condiciones
+        // if (optional($this->project)->id) {
+        //     // $rules['photo'] = new TmpImageExists;
+        // }
+
+        return $rules;
     }
 }

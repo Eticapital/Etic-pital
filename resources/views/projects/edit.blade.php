@@ -20,6 +20,7 @@
     <project-form
       google-maps-api-key="{{ config('services.googlemaps.key') }}"
       :project-id="{{ $project->id }}"
+      :return="'{{ request()->input('return', '') }}'"
     >
       <p class="my-4 h4 text-primary text-center">
         <i class="icon-spinner spinner"></i> Cargando formulario...

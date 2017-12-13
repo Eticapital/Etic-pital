@@ -524,21 +524,28 @@ HTML;
         $ids = collect($documents)
             ->filter(function ($document) {
                 return $document['tmp_name'];
-            })->map(function ($document) use ($category) {
+            })->map(function ($document) {
                 return [
-                    'category' => $category,
                     'file_name' => $document['tmp_name'],
                     'is_new' => 1,
                     'file' => $document['name'],
                     'id' => $document['id']
                 ];
-            })->map(function ($file) {
+            })->map(function ($file) use ($category) {
                 $document = new ProjectDocument;
                 $document->project_id = $this->id;
                 $document->file = $file;
+                $document->category = $category;
                 $document->save();
                 return $document->id;
+            });
+
+        $existing_ids = collect($documents)
+            ->filter(function ($document) {
+                return !@$document['tmp_name'] && !@$document['deleted'];
             })->pluck('id');
+
+        $ids = $ids->merge($existing_ids);
 
         // Los documents que no vinieron en la lista se eliminan
         $this->documents()
@@ -656,5 +663,16 @@ HTML;
         $array['key_documents'] = $this->documents()->key()->get()->toArray();
         $array['extra_documents'] = $this->documents()->extra()->get()->toArray();
         return $array;
+    }
+
+
+    /**
+     * Si el proyecto esta pendiente de publicar
+     *
+     * @return boolena
+     */
+    public function getIsPendingAttribute()
+    {
+        return !$this->published_at;
     }
 }

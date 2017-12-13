@@ -388,7 +388,15 @@
           <div class="row justify-content-center">
             <div class="col-lg-8">
               <p class="text-center">
-                <form-button-submit variant="primary" :form="form" @click.prevent.native="submitProject">Enviar solicitud</form-button-submit>
+                <form-button-submit
+                  variant="primary"
+                  :form="form"
+                  @click.prevent.native="submitProject"
+                >
+                  <template v-if="!project">Enviar solicitud</template>
+                  <template v-else>Actualizar proyecto</template>
+                </form-button-submit>
+
               </p>
             </div> <!-- / .col-lg-8 -->
           </div> <!-- / .row -->
@@ -420,6 +428,10 @@ export default {
     projectId: {
       required: false,
       default: false
+    },
+    return: {
+      type: String,
+      default: ''
     }
   },
 
@@ -528,7 +540,7 @@ export default {
           'rewards'
         ]
       }
-      axios.get(`/projects/${this.projectId}`, { params: params })
+      axios.get(`/projects/${this.projectId}`, { params: params })
         .then(response => {
           this.project = response.data
         })
@@ -540,36 +552,44 @@ export default {
       //
     },
     submitProject () {
-      App.post('/projects', this.form)
-        .then(response => {
-          window.location.href = response.link
-        }).catch(errors => {
-          if (errors.errors) {
-            _.find(errors.errors, (error, name) => {
-              name = name.split('.')[0]
-              if (name === 'latitude' || name === 'longitude') {
-                name = 'address'
-              }
+      let promise = this.project.id
+        ? App.put(`/projects/${this.project.id}`, this.form)
+        : App.post('/projects', this.form)
 
-              if (!this.$refs[name]) {
-                return false
-              }
+      promise.then(response => {
+        if (this.return === 'admin') {
+          window.location.href = `/admin#/projects/${this.project.id}`
+          return
+        }
 
-              var input = $('input:visible:not([type=file]), textarea:visible, select:visible, button:visible', this.$refs[name].$el).first()
-              if (input.length) {
-                $(input).focus()
-              } else {
-                this.$scrollTo(this.$refs[name].$el, 0)
-              }
+        window.location.href = response.link
+      }).catch(errors => {
+        if (errors.errors) {
+          _.find(errors.errors, (error, name) => {
+            name = name.split('.')[0]
+            if (name === 'latitude' || name === 'longitude') {
+              name = 'address'
+            }
 
-              if (this.$refs[name].editor) {
-                this.$refs[name].editor.focus()
-              }
+            if (!this.$refs[name]) {
+              return false
+            }
 
-              return true
-            })
-          }
-        })
+            var input = $('input:visible:not([type=file]), textarea:visible, select:visible, button:visible', this.$refs[name].$el).first()
+            if (input.length) {
+              $(input).focus()
+            } else {
+              this.$scrollTo(this.$refs[name].$el, 0)
+            }
+
+            if (this.$refs[name].editor) {
+              this.$refs[name].editor.focus()
+            }
+
+            return true
+          })
+        }
+      })
     },
 
     locationUpdated (coordinates, isManualChanged) {

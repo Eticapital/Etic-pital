@@ -95,21 +95,20 @@ class ProjectController extends Controller
         });
     }
 
-    public function update(Request $request, Project $project)
+    public function update(ProjectRequest $request, Project $project)
     {
         $this->authorize('update', $project);
 
-        $data = $this->validate($request, [
-            'name' => 'required',
-            'password' => 'sometimes|nullable|confirmed',
-            'email' => 'email|unique:users,email,'.$project->id,
-        ]);
-
-        if (!$data['password']) {
-            unset($data['password']);
-        }
-
-        return tap($project)->update($data);
+        return tap($project, function ($project) use ($request) {
+            $project->sectors = $request->input('sectors');
+            $project->rewards = $request->input('rewards');
+            $project->kpis = $request->input('kpis');
+            $project->team = $request->input('team');
+            $project->company_documents = $request->input('company_documents');
+            $project->key_documents = $request->input('key_documents');
+            $project->extra_documents = $request->input('extra_documents');
+            $project->update($request->all());
+        });
     }
 
     public function publicList()

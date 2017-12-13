@@ -32,6 +32,12 @@ class ProjectDocument extends Model
         'download_link'
     ];
 
+    protected $fillable = [
+        'description',
+        'file',
+        'category',
+    ];
+
     /**
      * El link para descargar el archivo
      *

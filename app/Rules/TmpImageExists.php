@@ -30,7 +30,9 @@ class TmpImageExists implements Rule
             return true;
         }
 
-        return Storage::disk('public')->exists('tmp/' . $value);
+        return
+            Storage::disk('public')->exists('tmp/' . $value)
+            || Storage::disk('public')->exists('projects/images/' . $value);
     }
 
     /**

@@ -100982,7 +100982,9 @@ var render = function() {
                                 staticClass: "btn btn-primary",
                                 attrs: {
                                   href:
-                                    "/projects/" + props.rowData.id + "/edit"
+                                    "/projects/" +
+                                    props.rowData.id +
+                                    "/edit?return=admin"
                                 }
                               },
                               [

@@ -84,9 +84,18 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project)
     {
-        return
-            $this->view($user, $project)
-            && ($user->is_root || $user->can('projects.update'));
+        if (!$this->view($user, $project)) {
+            return false;
+        }
+
+        // Si el usuario tiene permisos para hacer el ajuste
+        if ($user->is_root || $user->can('projects.update')) {
+            return true;
+        }
+
+        // SI no tiene permisos solo lo puede editar si el proyecto no está publicado
+        // y es el dueño del proyecto
+        return ($user->id === $project->owner_id && $project->is_pending);
     }
 
     /**

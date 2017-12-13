@@ -6001,6 +6001,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -6023,6 +6031,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     projectId: {
       required: false,
       default: false
+    },
+    return: {
+      type: String,
+      default: ''
     }
   },
 
@@ -6139,7 +6151,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     submitProject: function submitProject() {
       var _this2 = this;
 
-      App.post('/projects', this.form).then(function (response) {
+      var promise = this.project.id ? App.put('/projects/' + this.project.id, this.form) : App.post('/projects', this.form);
+
+      promise.then(function (response) {
+        if (_this2.return === 'admin') {
+          window.location.href = '/admin#/projects/' + _this2.project.id;
+          return;
+        }
+
         window.location.href = response.link;
       }).catch(function (errors) {
         if (errors.errors) {
@@ -95225,7 +95244,12 @@ var render = function() {
                               }
                             }
                           },
-                          [_vm._v("Enviar solicitud")]
+                          [
+                            !_vm.project
+                              ? [_vm._v("Enviar solicitud")]
+                              : [_vm._v("Actualizar proyecto")]
+                          ],
+                          2
                         )
                       ],
                       1

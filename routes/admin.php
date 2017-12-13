@@ -16,7 +16,18 @@ Route::get('account/permissions', 'AccountController@permissions')->name('accoun
 Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
 
 // Proyectos
-Route::resource('projects', 'ProjectController', ['except' => ['create', 'show', 'edit']]);
+Route::get('/fondear-mi-proyecto', 'ProjectController@create')
+    ->name('fondear-mi-proyecto');
+Route::resource('projects', 'ProjectController', ['except' => ['create', 'show']]);
+// Route::group(['prefix' => 'projects/{project}'], function () {
+
+// });
+
+Route::get(
+    '/documents/{document}/download/{name?}',
+    'ProjectDocumentController@download'
+)->name('documents.download');
+
 
 // Administrar grupos
 Route::group(['prefix' => 'roles/{role}'], function () {

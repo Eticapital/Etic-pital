@@ -42,11 +42,16 @@ class Project extends Model
         'photo_854_url',
         'map',
         'sectors_list',
+        'sectors',
         'stage_label',
         'stage_description',
+        'rewards',
         'rewards_list',
         'team',
         'kpis',
+        'key_documents',
+        'company_documents',
+        'extra_documents',
     ];
 
     public static $images = [
@@ -246,6 +251,15 @@ class Project extends Model
      */
     public function getSectorsAttribute()
     {
+        return $this->sectors()->get()->pluck('id');
+    }
+
+    /**
+     * Los sectores separados por coma
+     * @return array
+     */
+    public function getSectorsNamesAttribute()
+    {
         return $this->sectors_list->implode(', ');
     }
 
@@ -349,6 +363,16 @@ class Project extends Model
     public function setRewardsAttribute($rewards)
     {
         $this->rewards()->sync($rewards);
+    }
+
+    /**
+     * Devuelve un arreglo con los nombres de las recompensas
+     *
+     * @return array
+     */
+    public function getRewardsAttribute()
+    {
+        return $this->rewards()->pluck('id');
     }
 
     /**
@@ -551,6 +575,36 @@ HTML;
     public function getStageDescriptionAttribute()
     {
         return optional($this->stage)->description;
+    }
+
+    /**
+     * Devuelve la lista de documentos como un atributo
+     *
+     * @return array
+     */
+    public function getKeyDocumentsAttribute()
+    {
+        return $this->documents()->key()->get();
+    }
+
+    /**
+     * Devuelve la lista de documentos como un atributo
+     *
+     * @return array
+     */
+    public function getCompanyDocumentsAttribute()
+    {
+        return $this->documents()->company()->get();
+    }
+
+    /**
+     * Devuelve la lista de documentos como un atributo
+     *
+     * @return array
+     */
+    public function getExtraDocumentsAttribute()
+    {
+        return $this->documents()->extra()->get();
     }
 
     /**

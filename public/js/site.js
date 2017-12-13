@@ -6001,7 +6001,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -6020,6 +6019,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     googleMapsApiKey: {
       type: String,
       required: true
+    },
+    projectId: {
+      required: false,
+      default: false
     }
   },
 
@@ -6078,8 +6081,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       stages: null,
       rewards: null,
 
-      // TEMPORAL
-      results: null
+      project: null
     };
   },
 
@@ -6101,9 +6103,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
 
+  watch: {
+    project: function project(_project) {
+      this.form.appendModel(_project);
+    }
+  },
+
   created: function created() {
-    // Temporar eliminr
-    // this.loadDemoProject()
+    if (this.projectId) {
+      this.loadProject();
+    }
 
     this.loadSectors();
     this.loadStages();
@@ -6112,13 +6121,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   methods: {
-    loadDemoProject: function loadDemoProject() {
+    loadProject: function loadProject() {
       var _this = this;
 
-      axios.get('/projects/1').then(function (response) {
-        _this.form.appendModel(response.data);
+      var params = {
+        appends: ['key_documents', 'extra_documents', 'company_documents', 'kpis', 'team', 'sectors', 'rewards']
+      };
+      axios.get('/projects/' + this.projectId, { params: params }).then(function (response) {
+        _this.project = response.data;
       }).catch(function (errors) {
-        console.log("errors", errors);
+        console.log('Error:', errors);
       });
     },
     onSubmit: function onSubmit() {
@@ -94279,682 +94291,125 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "form",
-    {
-      attrs: { novalidate: "" },
-      on: {
-        submit: function($event) {
-          $event.preventDefault()
-          _vm.onSubmit($event)
-        }
-      }
-    },
-    [
-      _c("div", { staticClass: "container-fluid bg-light" }, [
-        _c("div", { staticClass: "container" }, [
-          _c("div", { staticClass: "content" }, [
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _c("div", { staticClass: "col-lg-8" }, [
-                _c(
-                  "fieldset",
-                  [
-                    _c("p"),
-                    _vm._m(0, false, false),
-                    _c("p"),
-                    _vm._v(" "),
-                    _c("form-text", {
-                      ref: "name",
-                      attrs: {
-                        form: _vm.form,
-                        name: "name",
-                        label: "Nombre del proyecto:"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("form-text", {
-                      ref: "holder",
-                      attrs: {
-                        form: _vm.form,
-                        name: "holder",
-                        label: "Nombre del titular:"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("form-text", {
-                      ref: "phone",
-                      attrs: {
-                        form: _vm.form,
-                        name: "phone",
-                        label: "Teléfono de contacto:"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("form-text", {
-                      ref: "email",
-                      attrs: {
-                        form: _vm.form,
-                        name: "email",
-                        label: "Correo de contacto:"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("project-form-links", {
-                      ref: "holder_links",
-                      attrs: {
-                        form: _vm.form,
-                        name: "holder_links",
-                        label: "Redes sociales del titular"
-                      },
-                      model: {
-                        value: _vm.form.holder_links,
-                        callback: function($$v) {
-                          _vm.$set(_vm.form, "holder_links", $$v)
-                        },
-                        expression: "form.holder_links"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("project-form-photo", {
-                      ref: "photo",
-                      attrs: { form: _vm.form, name: "photo" }
-                    }),
-                    _vm._v(" "),
-                    _c("form-text", {
-                      attrs: {
-                        form: _vm.form,
-                        name: "video",
-                        placeholder: "https://",
-                        label: "Video de la iniciativa:"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("form-map", {
-                      ref: "address",
-                      attrs: {
-                        feedback:
-                          _vm.form.errors.get("address") ||
-                          _vm.form.errors.get("latitude") ||
-                          _vm.form.errors.get("longitude"),
-                        change:
-                          _vm.form.errors.clear("address") &&
-                          _vm.form.errors.clear("latitude") &&
-                          _vm.form.errors.clear("longitude"),
-                        "api-key": _vm.googleMapsApiKey,
-                        "initial-coordinates": {
-                          lat: _vm.form.latitude,
-                          lng: _vm.form.longitude
-                        }
-                      },
-                      on: { "location-updated": _vm.locationUpdated },
-                      model: {
-                        value: _vm.form.address,
-                        callback: function($$v) {
-                          _vm.$set(_vm.form, "address", $$v)
-                        },
-                        expression: "form.address"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "content" }, [
-          _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "col-lg-8" }, [
-              _c(
-                "fieldset",
-                [
-                  _c("p"),
-                  _vm._m(1, false, false),
-                  _c("p"),
-                  _vm._v(" "),
-                  _c("form-textarea", {
-                    ref: "description",
-                    attrs: {
-                      form: _vm.form,
-                      rich: true,
-                      name: "description",
-                      label:
-                        "A qué te dedicas, cuánto tiempo llevas haciéndolo, resultados en ventas, validación de la idea y por qué comenzaste a hacerlo."
-                    }
-                  })
-                ],
-                1
-              )
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container-fluid bg-light" }, [
-        _c("div", { staticClass: "container" }, [
-          _c("div", { staticClass: "content" }, [
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _c("div", { staticClass: "col-lg-8" }, [
-                _c(
-                  "fieldset",
-                  [
-                    _c("p"),
-                    _vm._m(2, false, false),
-                    _c("p"),
-                    _vm._v(" "),
-                    _vm._m(3, false, false),
-                    _vm._v(" "),
-                    _vm._m(4, false, false),
-                    _vm._v(" "),
-                    _c("form-textarea", {
-                      attrs: { form: _vm.form, name: "opportunity", rich: true }
-                    })
-                  ],
-                  1
-                )
-              ])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "content" }, [
-          _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "col-lg-8" }, [
-              _c(
-                "fieldset",
-                [
-                  _c("p"),
-                  _vm._m(5, false, false),
-                  _c("p"),
-                  _vm._v(" "),
-                  _c("form-textarea", {
-                    attrs: { form: _vm.form, name: "competition", rich: true }
-                  })
-                ],
-                1
-              )
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container-fluid bg-light" }, [
-        _c("div", { staticClass: "container" }, [
-          _c("div", { staticClass: "content" }, [
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _c("div", { staticClass: "col-lg-8" }, [
-                _c(
-                  "fieldset",
-                  [
-                    _c("p"),
-                    _vm._m(6, false, false),
-                    _c("p"),
-                    _vm._v(" "),
-                    _c("form-files", {
-                      ref: "company_documents",
-                      attrs: {
-                        name: "company_documents",
-                        form: _vm.form,
-                        "btn-text": "Subir presentación, foto(s) o video(s)"
-                      },
-                      model: {
-                        value: _vm.form.company_documents,
-                        callback: function($$v) {
-                          _vm.$set(_vm.form, "company_documents", $$v)
-                        },
-                        expression: "form.company_documents"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "content" }, [
-          _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "col-lg-8" }, [
-              _c(
-                "fieldset",
-                [
-                  _c("p"),
-                  _vm._m(7, false, false),
-                  _c("p"),
-                  _vm._v(" "),
-                  _c("project-form-links", {
-                    ref: "links",
-                    attrs: {
-                      form: _vm.form,
-                      name: "links",
-                      label:
-                        "Tu página oficial, página de facebook, twitter, etc."
-                    },
-                    model: {
-                      value: _vm.form.links,
-                      callback: function($$v) {
-                        _vm.$set(_vm.form, "links", $$v)
-                      },
-                      expression: "form.links"
-                    }
-                  })
-                ],
-                1
-              )
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container-fluid bg-light" }, [
-        _c("div", { staticClass: "container" }, [
-          _c("div", { staticClass: "content" }, [
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _c("div", { staticClass: "col-lg-8" }, [
-                _c(
-                  "fieldset",
-                  [
-                    _c("p"),
-                    _vm._m(8, false, false),
-                    _c("p"),
-                    _vm._v(" "),
-                    _vm.sectors === null
-                      ? _c("p", [
-                          _c("i", { staticClass: "icon-spinner spinner" }),
-                          _vm._v(" Cargando sectores...\n                ")
-                        ])
-                      : _c(
-                          "b-form-group",
-                          {
-                            ref: "sectors",
-                            attrs: {
-                              feedback: _vm.form.errors.get("sectors"),
-                              state: _vm.form.errors.has("sectors")
-                                ? "invalid"
-                                : ""
+  return _vm.projectId && !_vm.project
+    ? _c("p", { staticClass: "my-4 h4 text-primary text-center" }, [
+        _c("i", { staticClass: "icon-spinner spinner" }),
+        _vm._v("  Cargando información...\n")
+      ])
+    : _c(
+        "form",
+        {
+          attrs: { novalidate: "" },
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              _vm.onSubmit($event)
+            }
+          }
+        },
+        [
+          _c("div", { staticClass: "container-fluid bg-light" }, [
+            _c("div", { staticClass: "container" }, [
+              _c("div", { staticClass: "content" }, [
+                _c("div", { staticClass: "row justify-content-center" }, [
+                  _c("div", { staticClass: "col-lg-8" }, [
+                    _c(
+                      "fieldset",
+                      [
+                        _c("p"),
+                        _vm._m(0, false, false),
+                        _c("p"),
+                        _vm._v(" "),
+                        _c("form-text", {
+                          ref: "name",
+                          attrs: {
+                            form: _vm.form,
+                            name: "name",
+                            label: "Nombre del proyecto:"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("form-text", {
+                          ref: "holder",
+                          attrs: {
+                            form: _vm.form,
+                            name: "holder",
+                            label: "Nombre del titular:"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("form-text", {
+                          ref: "phone",
+                          attrs: {
+                            form: _vm.form,
+                            name: "phone",
+                            label: "Teléfono de contacto:"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("form-text", {
+                          ref: "email",
+                          attrs: {
+                            form: _vm.form,
+                            name: "email",
+                            label: "Correo de contacto:"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("project-form-links", {
+                          ref: "holder_links",
+                          attrs: {
+                            form: _vm.form,
+                            name: "holder_links",
+                            label: "Redes sociales del titular"
+                          },
+                          model: {
+                            value: _vm.form.holder_links,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "holder_links", $$v)
+                            },
+                            expression: "form.holder_links"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("project-form-photo", {
+                          ref: "photo",
+                          attrs: { form: _vm.form, name: "photo" }
+                        }),
+                        _vm._v(" "),
+                        _c("form-text", {
+                          attrs: {
+                            form: _vm.form,
+                            name: "video",
+                            placeholder: "https://",
+                            label: "Video de la iniciativa:"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("form-map", {
+                          ref: "address",
+                          attrs: {
+                            feedback:
+                              _vm.form.errors.get("address") ||
+                              _vm.form.errors.get("latitude") ||
+                              _vm.form.errors.get("longitude"),
+                            change:
+                              _vm.form.errors.clear("address") &&
+                              _vm.form.errors.clear("latitude") &&
+                              _vm.form.errors.clear("longitude"),
+                            "api-key": _vm.googleMapsApiKey,
+                            "initial-coordinates": {
+                              lat: _vm.form.latitude,
+                              lng: _vm.form.longitude
                             }
                           },
-                          [
-                            _c(
-                              "b-form-checkbox-group",
-                              {
-                                staticClass: "form-row",
-                                attrs: {
-                                  state: _vm.form.errors.has("sectors")
-                                    ? "invalid"
-                                    : ""
-                                },
-                                on: {
-                                  change: function($event) {
-                                    _vm.form.errors.clear("sectors")
-                                  }
-                                },
-                                model: {
-                                  value: _vm.form.sectors,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "sectors", $$v)
-                                  },
-                                  expression: "form.sectors"
-                                }
-                              },
-                              _vm._l(_vm.sectorsColumns, function(
-                                chunk,
-                                index
-                              ) {
-                                return _c(
-                                  "div",
-                                  { key: index, staticClass: "col" },
-                                  _vm._l(chunk, function(sector) {
-                                    return _c(
-                                      "div",
-                                      {
-                                        key: sector.id,
-                                        staticClass: "form-check"
-                                      },
-                                      [
-                                        _c(
-                                          "b-form-checkbox",
-                                          { attrs: { value: sector.id } },
-                                          [_vm._v(_vm._s(sector.label))]
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  })
-                                )
-                              })
-                            )
-                          ],
-                          1
-                        )
-                  ],
-                  1
-                )
-              ])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "content" }, [
-          _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "col-lg-8" }, [
-              _c(
-                "fieldset",
-                [
-                  _c("p"),
-                  _vm._m(9, false, false),
-                  _c("p"),
-                  _vm._v(" "),
-                  _vm.stages === null
-                    ? _c("p", [
-                        _c("i", { staticClass: "icon-spinner spinner" }),
-                        _vm._v(" Cargando etapas...\n              ")
-                      ])
-                    : _c(
-                        "b-form-group",
-                        {
-                          ref: "stage_id",
-                          attrs: {
-                            feedback: _vm.form.errors.get("stage_id"),
-                            state: _vm.form.errors.has("stage_id")
-                              ? "invalid"
-                              : ""
-                          }
-                        },
-                        [
-                          _c(
-                            "b-form-radio-group",
-                            {
-                              attrs: {
-                                stacked: "",
-                                state: _vm.form.errors.has("stage_id")
-                                  ? "invalid"
-                                  : ""
-                              },
-                              on: {
-                                change: function($event) {
-                                  _vm.form.errors.clear("stage_id")
-                                }
-                              },
-                              model: {
-                                value: _vm.form.stage_id,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.form, "stage_id", $$v)
-                                },
-                                expression: "form.stage_id"
-                              }
+                          on: { "location-updated": _vm.locationUpdated },
+                          model: {
+                            value: _vm.form.address,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "address", $$v)
                             },
-                            _vm._l(_vm.stages, function(stage) {
-                              return _c(
-                                "b-form-radio",
-                                { key: stage.id, attrs: { value: stage.id } },
-                                [
-                                  _vm._v(
-                                    "\n                    " +
-                                      _vm._s(stage.label) +
-                                      " (" +
-                                      _vm._s(stage.description) +
-                                      ")\n                  "
-                                  )
-                                ]
-                              )
-                            })
-                          )
-                        ],
-                        1
-                      )
-                ],
-                1
-              )
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container-fluid bg-light" }, [
-        _c("div", { staticClass: "container" }, [
-          _c("div", { staticClass: "content" }, [
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _c("div", { staticClass: "col-lg-8" }, [
-                _c(
-                  "fieldset",
-                  [
-                    _c("p"),
-                    _vm._m(10, false, false),
-                    _c("p"),
-                    _vm._v(" "),
-                    _c("form-textarea", {
-                      attrs: {
-                        form: _vm.form,
-                        rich: true,
-                        name: "business_model",
-                        label:
-                          "¿Cómo generas dinero? ¿Qué tipo de producto o servicio vendes y quién te lo compra? ¿A través de qué medios lo comercializas o cómo cierras tus ventas?"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "content" }, [
-          _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "col-lg-8" }, [
-              _c(
-                "fieldset",
-                [
-                  _c("p"),
-                  _vm._m(11, false, false),
-                  _c("p"),
-                  _vm._v(" "),
-                  _c("form-money", {
-                    ref: "previous_capital",
-                    attrs: {
-                      form: _vm.form,
-                      "in-cents": true,
-                      name: "previous_capital",
-                      label: "Capital previamente obtenido (si aplica)"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("form-money", {
-                    ref: "total_sales",
-                    attrs: {
-                      form: _vm.form,
-                      "in-cents": true,
-                      name: "total_sales",
-                      label: "Ventas totales al día de hoy (si aplica)"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("form-money", {
-                    ref: "round_size",
-                    attrs: {
-                      form: _vm.form,
-                      "in-cents": true,
-                      name: "round_size",
-                      label: "Tamaño de la ronda (¿Cuánto necesitas?)"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("form-money", {
-                    ref: "minimal_needed",
-                    attrs: {
-                      form: _vm.form,
-                      "in-cents": true,
-                      name: "minimal_needed",
-                      label:
-                        "¿Cuánto es lo mínimo que te serviría para levantar capital?:"
-                    }
-                  })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "fieldset",
-                [
-                  _c(
-                    "div",
-                    { staticClass: "form-row" },
-                    [
-                      _c(
-                        "b-form-group",
-                        {
-                          ref: "has_interested_investor",
-                          attrs: {
-                            label: "¿Tienes algún inversionista interesado?",
-                            feedback: _vm.form.errors.get(
-                              "has_interested_investor"
-                            ),
-                            state: _vm.form.errors.has(
-                              "has_interested_investor"
-                            )
-                              ? "invalid"
-                              : ""
-                          }
-                        },
-                        [
-                          _c(
-                            "b-form-radio-group",
-                            {
-                              attrs: {
-                                state: _vm.form.errors.has(
-                                  "has_interested_investor"
-                                )
-                                  ? "invalid"
-                                  : ""
-                              },
-                              on: {
-                                change: function($event) {
-                                  _vm.form.errors.clear(
-                                    "has_interested_investor"
-                                  )
-                                }
-                              },
-                              model: {
-                                value: _vm.form.has_interested_investor,
-                                callback: function($$v) {
-                                  _vm.$set(
-                                    _vm.form,
-                                    "has_interested_investor",
-                                    $$v
-                                  )
-                                },
-                                expression: "form.has_interested_investor"
-                              }
-                            },
-                            [
-                              _c("b-form-radio", { attrs: { value: true } }, [
-                                _vm._v("Sí")
-                              ]),
-                              _vm._v(" "),
-                              _c("b-form-radio", { attrs: { value: false } }, [
-                                _vm._v("No")
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _vm.form.has_interested_investor
-                    ? _c("form-text", {
-                        ref: "interested_investor_name",
-                        attrs: {
-                          form: _vm.form,
-                          name: "interested_investor_name",
-                          label: "¿Qué inversionista?",
-                          placeholder: "Opcional"
-                        }
-                      })
-                    : _vm._e()
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c("fieldset", [
-                _c("legend", { staticClass: "col-form-legend" }, [
-                  _vm._v("Ventas esperadas en los próximos tres años")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("div", { staticClass: "form-row" }, [
-                    _vm._m(12, false, false),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "col-6" },
-                      [
-                        _c("form-money", {
-                          staticClass: "mb-0",
-                          attrs: {
-                            form: _vm.form,
-                            "in-cents": true,
-                            name: "expected_sales_year_1"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("div", { staticClass: "form-row" }, [
-                    _vm._m(13, false, false),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "col-6" },
-                      [
-                        _c("form-money", {
-                          staticClass: "mb-0",
-                          attrs: {
-                            form: _vm.form,
-                            "in-cents": true,
-                            name: "expected_sales_year_2"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("div", { staticClass: "form-row" }, [
-                    _vm._m(14, false, false),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "col-6" },
-                      [
-                        _c("form-money", {
-                          staticClass: "mb-0",
-                          attrs: {
-                            form: _vm.form,
-                            "in-cents": true,
-                            name: "expected_sales_year_3"
+                            expression: "form.address"
                           }
                         })
                       ],
@@ -94962,254 +94417,826 @@ var render = function() {
                     )
                   ])
                 ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "fieldset",
-                [
-                  _c("legend", { staticClass: "col-form-legend" }, [
-                    _vm._v("¿Qué das a cambio de la inversión?")
-                  ]),
-                  _vm._v(" "),
-                  _vm.rewards === null
-                    ? _c("p", [
-                        _c("i", { staticClass: "icon-spinner spinner" }),
-                        _vm._v(" Cargando recompensas...\n              ")
-                      ])
-                    : _c(
-                        "b-form-group",
-                        {
-                          ref: "rewards",
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container" }, [
+            _c("div", { staticClass: "content" }, [
+              _c("div", { staticClass: "row justify-content-center" }, [
+                _c("div", { staticClass: "col-lg-8" }, [
+                  _c(
+                    "fieldset",
+                    [
+                      _c("p"),
+                      _vm._m(1, false, false),
+                      _c("p"),
+                      _vm._v(" "),
+                      _c("form-textarea", {
+                        ref: "description",
+                        attrs: {
+                          form: _vm.form,
+                          rich: true,
+                          name: "description",
+                          label:
+                            "A qué te dedicas, cuánto tiempo llevas haciéndolo, resultados en ventas, validación de la idea y por qué comenzaste a hacerlo."
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container-fluid bg-light" }, [
+            _c("div", { staticClass: "container" }, [
+              _c("div", { staticClass: "content" }, [
+                _c("div", { staticClass: "row justify-content-center" }, [
+                  _c("div", { staticClass: "col-lg-8" }, [
+                    _c(
+                      "fieldset",
+                      [
+                        _c("p"),
+                        _vm._m(2, false, false),
+                        _c("p"),
+                        _vm._v(" "),
+                        _vm._m(3, false, false),
+                        _vm._v(" "),
+                        _vm._m(4, false, false),
+                        _vm._v(" "),
+                        _c("form-textarea", {
                           attrs: {
-                            feedback: _vm.form.errors.get("rewards"),
-                            state: _vm.form.errors.has("rewards")
-                              ? "invalid"
-                              : ""
+                            form: _vm.form,
+                            name: "opportunity",
+                            rich: true
                           }
+                        })
+                      ],
+                      1
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container" }, [
+            _c("div", { staticClass: "content" }, [
+              _c("div", { staticClass: "row justify-content-center" }, [
+                _c("div", { staticClass: "col-lg-8" }, [
+                  _c(
+                    "fieldset",
+                    [
+                      _c("p"),
+                      _vm._m(5, false, false),
+                      _c("p"),
+                      _vm._v(" "),
+                      _c("form-textarea", {
+                        attrs: {
+                          form: _vm.form,
+                          name: "competition",
+                          rich: true
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container-fluid bg-light" }, [
+            _c("div", { staticClass: "container" }, [
+              _c("div", { staticClass: "content" }, [
+                _c("div", { staticClass: "row justify-content-center" }, [
+                  _c("div", { staticClass: "col-lg-8" }, [
+                    _c(
+                      "fieldset",
+                      [
+                        _c("p"),
+                        _vm._m(6, false, false),
+                        _c("p"),
+                        _vm._v(" "),
+                        _c("form-files", {
+                          ref: "company_documents",
+                          attrs: {
+                            name: "company_documents",
+                            form: _vm.form,
+                            "btn-text": "Subir presentación, foto(s) o video(s)"
+                          },
+                          model: {
+                            value: _vm.form.company_documents,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "company_documents", $$v)
+                            },
+                            expression: "form.company_documents"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container" }, [
+            _c("div", { staticClass: "content" }, [
+              _c("div", { staticClass: "row justify-content-center" }, [
+                _c("div", { staticClass: "col-lg-8" }, [
+                  _c(
+                    "fieldset",
+                    [
+                      _c("p"),
+                      _vm._m(7, false, false),
+                      _c("p"),
+                      _vm._v(" "),
+                      _c("project-form-links", {
+                        ref: "links",
+                        attrs: {
+                          form: _vm.form,
+                          name: "links",
+                          label:
+                            "Tu página oficial, página de facebook, twitter, etc."
                         },
-                        [
-                          _c(
-                            "b-form-checkbox-group",
-                            {
-                              staticClass: "form-row",
-                              attrs: {
-                                state: _vm.form.errors.has("rewards")
-                                  ? "invalid"
-                                  : ""
-                              },
-                              on: {
-                                change: function($event) {
-                                  _vm.form.errors.clear("rewards")
+                        model: {
+                          value: _vm.form.links,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "links", $$v)
+                          },
+                          expression: "form.links"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container-fluid bg-light" }, [
+            _c("div", { staticClass: "container" }, [
+              _c("div", { staticClass: "content" }, [
+                _c("div", { staticClass: "row justify-content-center" }, [
+                  _c("div", { staticClass: "col-lg-8" }, [
+                    _c(
+                      "fieldset",
+                      [
+                        _c("p"),
+                        _vm._m(8, false, false),
+                        _c("p"),
+                        _vm._v(" "),
+                        _vm.sectors === null
+                          ? _c("p", [
+                              _c("i", { staticClass: "icon-spinner spinner" }),
+                              _vm._v(" Cargando sectores...\n              ")
+                            ])
+                          : _c(
+                              "b-form-group",
+                              {
+                                ref: "sectors",
+                                attrs: {
+                                  feedback: _vm.form.errors.get("sectors"),
+                                  state: _vm.form.errors.has("sectors")
+                                    ? "invalid"
+                                    : ""
                                 }
                               },
-                              model: {
-                                value: _vm.form.rewards,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.form, "rewards", $$v)
-                                },
-                                expression: "form.rewards"
+                              [
+                                _c(
+                                  "b-form-checkbox-group",
+                                  {
+                                    staticClass: "form-row",
+                                    attrs: {
+                                      state: _vm.form.errors.has("sectors")
+                                        ? "invalid"
+                                        : ""
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        _vm.form.errors.clear("sectors")
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.form.sectors,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "sectors", $$v)
+                                      },
+                                      expression: "form.sectors"
+                                    }
+                                  },
+                                  _vm._l(_vm.sectorsColumns, function(
+                                    chunk,
+                                    index
+                                  ) {
+                                    return _c(
+                                      "div",
+                                      { key: index, staticClass: "col" },
+                                      _vm._l(chunk, function(sector) {
+                                        return _c(
+                                          "div",
+                                          {
+                                            key: sector.id,
+                                            staticClass: "form-check"
+                                          },
+                                          [
+                                            _c(
+                                              "b-form-checkbox",
+                                              { attrs: { value: sector.id } },
+                                              [_vm._v(_vm._s(sector.label))]
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      })
+                                    )
+                                  })
+                                )
+                              ],
+                              1
+                            )
+                      ],
+                      1
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container" }, [
+            _c("div", { staticClass: "content" }, [
+              _c("div", { staticClass: "row justify-content-center" }, [
+                _c("div", { staticClass: "col-lg-8" }, [
+                  _c(
+                    "fieldset",
+                    [
+                      _c("p"),
+                      _vm._m(9, false, false),
+                      _c("p"),
+                      _vm._v(" "),
+                      _vm.stages === null
+                        ? _c("p", [
+                            _c("i", { staticClass: "icon-spinner spinner" }),
+                            _vm._v(" Cargando etapas...\n            ")
+                          ])
+                        : _c(
+                            "b-form-group",
+                            {
+                              ref: "stage_id",
+                              attrs: {
+                                feedback: _vm.form.errors.get("stage_id"),
+                                state: _vm.form.errors.has("stage_id")
+                                  ? "invalid"
+                                  : ""
                               }
                             },
-                            _vm._l(_vm.rewardsColumns, function(chunk, index) {
-                              return _c(
-                                "div",
-                                { key: index, staticClass: "col" },
-                                _vm._l(chunk, function(reward) {
+                            [
+                              _c(
+                                "b-form-radio-group",
+                                {
+                                  attrs: {
+                                    stacked: "",
+                                    state: _vm.form.errors.has("stage_id")
+                                      ? "invalid"
+                                      : ""
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      _vm.form.errors.clear("stage_id")
+                                    }
+                                  },
+                                  model: {
+                                    value: _vm.form.stage_id,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.form, "stage_id", $$v)
+                                    },
+                                    expression: "form.stage_id"
+                                  }
+                                },
+                                _vm._l(_vm.stages, function(stage) {
                                   return _c(
-                                    "div",
+                                    "b-form-radio",
                                     {
-                                      key: reward.id,
-                                      staticClass: "form-check"
+                                      key: stage.id,
+                                      attrs: { value: stage.id }
                                     },
                                     [
-                                      _c(
-                                        "b-form-checkbox",
-                                        { attrs: { value: reward.id } },
-                                        [_vm._v(_vm._s(reward.label))]
+                                      _vm._v(
+                                        "\n                  " +
+                                          _vm._s(stage.label) +
+                                          " (" +
+                                          _vm._s(stage.description) +
+                                          ")\n                "
                                       )
-                                    ],
-                                    1
+                                    ]
                                   )
                                 })
                               )
-                            })
+                            ],
+                            1
+                          )
+                    ],
+                    1
+                  )
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container-fluid bg-light" }, [
+            _c("div", { staticClass: "container" }, [
+              _c("div", { staticClass: "content" }, [
+                _c("div", { staticClass: "row justify-content-center" }, [
+                  _c("div", { staticClass: "col-lg-8" }, [
+                    _c(
+                      "fieldset",
+                      [
+                        _c("p"),
+                        _vm._m(10, false, false),
+                        _c("p"),
+                        _vm._v(" "),
+                        _c("form-textarea", {
+                          attrs: {
+                            form: _vm.form,
+                            rich: true,
+                            name: "business_model",
+                            label:
+                              "¿Cómo generas dinero? ¿Qué tipo de producto o servicio vendes y quién te lo compra? ¿A través de qué medios lo comercializas o cómo cierras tus ventas?"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container" }, [
+            _c("div", { staticClass: "content" }, [
+              _c("div", { staticClass: "row justify-content-center" }, [
+                _c("div", { staticClass: "col-lg-8" }, [
+                  _c(
+                    "fieldset",
+                    [
+                      _c("p"),
+                      _vm._m(11, false, false),
+                      _c("p"),
+                      _vm._v(" "),
+                      _c("form-money", {
+                        ref: "previous_capital",
+                        attrs: {
+                          form: _vm.form,
+                          "in-cents": true,
+                          name: "previous_capital",
+                          label: "Capital previamente obtenido (si aplica)"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("form-money", {
+                        ref: "total_sales",
+                        attrs: {
+                          form: _vm.form,
+                          "in-cents": true,
+                          name: "total_sales",
+                          label: "Ventas totales al día de hoy (si aplica)"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("form-money", {
+                        ref: "round_size",
+                        attrs: {
+                          form: _vm.form,
+                          "in-cents": true,
+                          name: "round_size",
+                          label: "Tamaño de la ronda (¿Cuánto necesitas?)"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("form-money", {
+                        ref: "minimal_needed",
+                        attrs: {
+                          form: _vm.form,
+                          "in-cents": true,
+                          name: "minimal_needed",
+                          label:
+                            "¿Cuánto es lo mínimo que te serviría para levantar capital?:"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "fieldset",
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "form-row" },
+                        [
+                          _c(
+                            "b-form-group",
+                            {
+                              ref: "has_interested_investor",
+                              attrs: {
+                                label:
+                                  "¿Tienes algún inversionista interesado?",
+                                feedback: _vm.form.errors.get(
+                                  "has_interested_investor"
+                                ),
+                                state: _vm.form.errors.has(
+                                  "has_interested_investor"
+                                )
+                                  ? "invalid"
+                                  : ""
+                              }
+                            },
+                            [
+                              _c(
+                                "b-form-radio-group",
+                                {
+                                  attrs: {
+                                    state: _vm.form.errors.has(
+                                      "has_interested_investor"
+                                    )
+                                      ? "invalid"
+                                      : ""
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      _vm.form.errors.clear(
+                                        "has_interested_investor"
+                                      )
+                                    }
+                                  },
+                                  model: {
+                                    value: _vm.form.has_interested_investor,
+                                    callback: function($$v) {
+                                      _vm.$set(
+                                        _vm.form,
+                                        "has_interested_investor",
+                                        $$v
+                                      )
+                                    },
+                                    expression: "form.has_interested_investor"
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "b-form-radio",
+                                    { attrs: { value: true } },
+                                    [_vm._v("Sí")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "b-form-radio",
+                                    { attrs: { value: false } },
+                                    [_vm._v("No")]
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
                           )
                         ],
                         1
-                      )
-                ],
-                1
-              )
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container-fluid bg-light" }, [
-        _c("div", { staticClass: "container" }, [
-          _c("div", { staticClass: "content" }, [
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _c("div", { staticClass: "col-lg-8" }, [
-                _c(
-                  "fieldset",
-                  [
-                    _c("p"),
-                    _vm._m(15, false, false),
-                    _c("p"),
+                      ),
+                      _vm._v(" "),
+                      _vm.form.has_interested_investor
+                        ? _c("form-text", {
+                            ref: "interested_investor_name",
+                            attrs: {
+                              form: _vm.form,
+                              name: "interested_investor_name",
+                              label: "¿Qué inversionista?",
+                              placeholder: "Opcional"
+                            }
+                          })
+                        : _vm._e()
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("fieldset", [
+                    _c("legend", { staticClass: "col-form-legend" }, [
+                      _vm._v("Ventas esperadas en los próximos tres años")
+                    ]),
                     _vm._v(" "),
-                    _c("project-form-team-members", {
-                      ref: "team",
-                      attrs: { form: _vm.form, name: "team" },
-                      model: {
-                        value: _vm.form.team,
-                        callback: function($$v) {
-                          _vm.$set(_vm.form, "team", $$v)
-                        },
-                        expression: "form.team"
-                      }
-                    })
-                  ],
-                  1
-                )
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("div", { staticClass: "form-row" }, [
+                        _vm._m(12, false, false),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "col-6" },
+                          [
+                            _c("form-money", {
+                              staticClass: "mb-0",
+                              attrs: {
+                                form: _vm.form,
+                                "in-cents": true,
+                                name: "expected_sales_year_1"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("div", { staticClass: "form-row" }, [
+                        _vm._m(13, false, false),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "col-6" },
+                          [
+                            _c("form-money", {
+                              staticClass: "mb-0",
+                              attrs: {
+                                form: _vm.form,
+                                "in-cents": true,
+                                name: "expected_sales_year_2"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("div", { staticClass: "form-row" }, [
+                        _vm._m(14, false, false),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "col-6" },
+                          [
+                            _c("form-money", {
+                              staticClass: "mb-0",
+                              attrs: {
+                                form: _vm.form,
+                                "in-cents": true,
+                                name: "expected_sales_year_3"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "fieldset",
+                    [
+                      _c("legend", { staticClass: "col-form-legend" }, [
+                        _vm._v("¿Qué das a cambio de la inversión?")
+                      ]),
+                      _vm._v(" "),
+                      _vm.rewards === null
+                        ? _c("p", [
+                            _c("i", { staticClass: "icon-spinner spinner" }),
+                            _vm._v(" Cargando recompensas...\n            ")
+                          ])
+                        : _c(
+                            "b-form-group",
+                            {
+                              ref: "rewards",
+                              attrs: {
+                                feedback: _vm.form.errors.get("rewards"),
+                                state: _vm.form.errors.has("rewards")
+                                  ? "invalid"
+                                  : ""
+                              }
+                            },
+                            [
+                              _c(
+                                "b-form-checkbox-group",
+                                {
+                                  staticClass: "form-row",
+                                  attrs: {
+                                    state: _vm.form.errors.has("rewards")
+                                      ? "invalid"
+                                      : ""
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      _vm.form.errors.clear("rewards")
+                                    }
+                                  },
+                                  model: {
+                                    value: _vm.form.rewards,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.form, "rewards", $$v)
+                                    },
+                                    expression: "form.rewards"
+                                  }
+                                },
+                                _vm._l(_vm.rewardsColumns, function(
+                                  chunk,
+                                  index
+                                ) {
+                                  return _c(
+                                    "div",
+                                    { key: index, staticClass: "col" },
+                                    _vm._l(chunk, function(reward) {
+                                      return _c(
+                                        "div",
+                                        {
+                                          key: reward.id,
+                                          staticClass: "form-check"
+                                        },
+                                        [
+                                          _c(
+                                            "b-form-checkbox",
+                                            { attrs: { value: reward.id } },
+                                            [_vm._v(_vm._s(reward.label))]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    })
+                                  )
+                                })
+                              )
+                            ],
+                            1
+                          )
+                    ],
+                    1
+                  )
+                ])
               ])
             ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "content" }, [
-          _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "col-lg-8" }, [
-              _c(
-                "fieldset",
-                [
-                  _c("p"),
-                  _vm._m(16, false, false),
-                  _c("p"),
-                  _vm._v(" "),
-                  _c("project-form-kpis", {
-                    ref: "kpis",
-                    attrs: { form: _vm.form, name: "kpis" },
-                    model: {
-                      value: _vm.form.kpis,
-                      callback: function($$v) {
-                        _vm.$set(_vm.form, "kpis", $$v)
-                      },
-                      expression: "form.kpis"
-                    }
-                  })
-                ],
-                1
-              )
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container-fluid bg-light" }, [
-        _c("div", { staticClass: "container" }, [
-          _c("div", { staticClass: "content" }, [
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _c("div", { staticClass: "col-lg-8" }, [
-                _c(
-                  "fieldset",
-                  [
-                    _c("p"),
-                    _vm._m(17, false, false),
-                    _c("p"),
-                    _vm._v(" "),
-                    _c("form-files", {
-                      ref: "key_documents",
-                      attrs: { name: "key_documents", form: _vm.form },
-                      model: {
-                        value: _vm.form.key_documents,
-                        callback: function($$v) {
-                          _vm.$set(_vm.form, "key_documents", $$v)
-                        },
-                        expression: "form.key_documents"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "content" }, [
-          _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "col-lg-8" }, [
-              _c(
-                "fieldset",
-                [
-                  _c("p"),
-                  _vm._m(18, false, false),
-                  _c("p"),
-                  _vm._v(" "),
-                  _c("form-files", {
-                    ref: "extra_documents",
-                    attrs: { name: "extra_documents", form: _vm.form },
-                    model: {
-                      value: _vm.form.extra_documents,
-                      callback: function($$v) {
-                        _vm.$set(_vm.form, "extra_documents", $$v)
-                      },
-                      expression: "form.extra_documents"
-                    }
-                  })
-                ],
-                1
-              )
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container-fluid bg-light" }, [
-        _c("div", { staticClass: "container" }, [
-          _c("div", { staticClass: "content" }, [
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _c("div", { staticClass: "col-lg-8" }, [
-                _c(
-                  "p",
-                  { staticClass: "text-center" },
-                  [
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container-fluid bg-light" }, [
+            _c("div", { staticClass: "container" }, [
+              _c("div", { staticClass: "content" }, [
+                _c("div", { staticClass: "row justify-content-center" }, [
+                  _c("div", { staticClass: "col-lg-8" }, [
                     _c(
-                      "form-button-submit",
-                      {
-                        attrs: { variant: "primary", form: _vm.form },
-                        nativeOn: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            _vm.submitProject($event)
+                      "fieldset",
+                      [
+                        _c("p"),
+                        _vm._m(15, false, false),
+                        _c("p"),
+                        _vm._v(" "),
+                        _c("project-form-team-members", {
+                          ref: "team",
+                          attrs: { form: _vm.form, name: "team" },
+                          model: {
+                            value: _vm.form.team,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "team", $$v)
+                            },
+                            expression: "form.team"
                           }
-                        }
-                      },
-                      [_vm._v("Enviar solicitud")]
+                        })
+                      ],
+                      1
                     )
-                  ],
-                  1
-                )
+                  ])
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container" }, [
+            _c("div", { staticClass: "content" }, [
+              _c("div", { staticClass: "row justify-content-center" }, [
+                _c("div", { staticClass: "col-lg-8" }, [
+                  _c(
+                    "fieldset",
+                    [
+                      _c("p"),
+                      _vm._m(16, false, false),
+                      _c("p"),
+                      _vm._v(" "),
+                      _c("project-form-kpis", {
+                        ref: "kpis",
+                        attrs: { form: _vm.form, name: "kpis" },
+                        model: {
+                          value: _vm.form.kpis,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "kpis", $$v)
+                          },
+                          expression: "form.kpis"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container-fluid bg-light" }, [
+            _c("div", { staticClass: "container" }, [
+              _c("div", { staticClass: "content" }, [
+                _c("div", { staticClass: "row justify-content-center" }, [
+                  _c("div", { staticClass: "col-lg-8" }, [
+                    _c(
+                      "fieldset",
+                      [
+                        _c("p"),
+                        _vm._m(17, false, false),
+                        _c("p"),
+                        _vm._v(" "),
+                        _c("form-files", {
+                          ref: "key_documents",
+                          attrs: { name: "key_documents", form: _vm.form },
+                          model: {
+                            value: _vm.form.key_documents,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "key_documents", $$v)
+                            },
+                            expression: "form.key_documents"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container" }, [
+            _c("div", { staticClass: "content" }, [
+              _c("div", { staticClass: "row justify-content-center" }, [
+                _c("div", { staticClass: "col-lg-8" }, [
+                  _c(
+                    "fieldset",
+                    [
+                      _c("p"),
+                      _vm._m(18, false, false),
+                      _c("p"),
+                      _vm._v(" "),
+                      _c("form-files", {
+                        ref: "extra_documents",
+                        attrs: { name: "extra_documents", form: _vm.form },
+                        model: {
+                          value: _vm.form.extra_documents,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "extra_documents", $$v)
+                          },
+                          expression: "form.extra_documents"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "container-fluid bg-light" }, [
+            _c("div", { staticClass: "container" }, [
+              _c("div", { staticClass: "content" }, [
+                _c("div", { staticClass: "row justify-content-center" }, [
+                  _c("div", { staticClass: "col-lg-8" }, [
+                    _c(
+                      "p",
+                      { staticClass: "text-center" },
+                      [
+                        _c(
+                          "form-button-submit",
+                          {
+                            attrs: { variant: "primary", form: _vm.form },
+                            nativeOn: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                _vm.submitProject($event)
+                              }
+                            }
+                          },
+                          [_vm._v("Enviar solicitud")]
+                        )
+                      ],
+                      1
+                    )
+                  ])
+                ])
               ])
             ])
           ])
-        ])
-      ]),
-      _vm._v(" "),
-      _vm.results
-        ? _c(
-            "b-card",
-            { attrs: { title: "Resultados del formulario: (Temporal)" } },
-            [_c("pre", [_vm._v(_vm._s(_vm.results))])]
-          )
-        : _vm._e()
-    ],
-    1
-  )
+        ]
+      )
 }
 var staticRenderFns = [
   function() {

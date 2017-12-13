@@ -81,7 +81,9 @@ class AclSeeder extends Seeder
                 $data['password'] = bcrypt($new_user['password']);
                 $data['is_published'] = 1;
                 $user = \App\User::forceCreate($data);
-                $user->attachRoles(explode(',', $new_user->roles));
+                if ($new_user->roles) {
+                    $user->attachRoles(explode(',', $new_user->roles));
+                }
             });
         });
     }

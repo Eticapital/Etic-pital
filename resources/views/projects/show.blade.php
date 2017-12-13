@@ -24,7 +24,7 @@
                       </p>
                   </div> <!-- / .col -->
                   <div class="col">
-                    <p class="text-muted"  v-b-tooltip.hover title="{{ $project->sectors }}">{{ $project->sector }}</p>
+                    <p class="text-muted"  v-b-tooltip.hover title="{{ $project->sectors_names }}">{{ $project->sector }}</p>
                   </div> <!-- / .col -->
                 </div> <!-- / .row -->
               <p><span class="h2 text-primary">{{ $project->name }}</span></p>

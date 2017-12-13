@@ -30,6 +30,17 @@ class ProjectController extends Controller
         return $results;
     }
 
+    public function create()
+    {
+        return view('projects.create');
+    }
+
+    public function edit(Project $project)
+    {
+        $this->authorize('edit', $project);
+        return view('projects.edit')->with(compact('project'));
+    }
+
     public function show(Project $project)
     {
         if (!auth()->user()) {

@@ -26,7 +26,24 @@ class ProjectDocument extends Model
         'updated_at',
     ];
 
-    protected $appends = ['icon'];
+    protected $appends = [
+        'icon',
+        'size_mb',
+        'download_link'
+    ];
+
+    /**
+     * El link para descargar el archivo
+     *
+     * @return string
+     */
+    public function getDownloadLinkAttribute()
+    {
+        return route('documents.download', [
+            'document' => $this->id,
+            'name' => urlencode($this->name),
+        ]);
+    }
 
     public function scopeCompany($query)
     {

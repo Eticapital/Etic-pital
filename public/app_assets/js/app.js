@@ -4791,6 +4791,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4822,6 +4830,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }]
       }
     };
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/views/projects/_projects_file.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    file: {
+      type: Object,
+      required: true
+    }
   }
 });
 
@@ -4903,6 +4956,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__projects_file_vue__ = __webpack_require__("./resources/assets/js/views/projects/_projects_file.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__projects_file_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__projects_file_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5087,7 +5187,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    ProjectFile: __WEBPACK_IMPORTED_MODULE_0__projects_file_vue___default.a
+  },
   data: function data() {
     return {
       project: null
@@ -5096,7 +5201,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     var params = {
-      appends: ['email_link', 'photo_380_url', 'map', 'sectors_list', 'stage_label', 'stage_description', 'rewards_list', 'team', 'kpis']
+      appends: ['email_link', 'photo_380_url', 'map', 'sectors_list', 'stage_label', 'stage_description', 'rewards_list', 'team', 'kpis', 'key_documents', 'company_documents', 'extra_documents']
     };
     axios.get(App.basePath + 'projects/' + to.params.id, { params: params }).then(function (response) {
       next(function (vm) {
@@ -20148,6 +20253,21 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "\n.GrowlNotifications {\n    z-index: 9999;\n    position: fixed;\n    right: 15px;\n    top: 15px;\n    min-width: 400px;\n}\n.GrowlNotifications--center {\n    left: 0;\n    right: 0;\n    margin: 5% auto;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-50b635f4\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/views/projects/_projects_file.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.File--icon {\n  font-size: 40px;\n  margin-right: 10px;\n}\n.File--info {\n  margin-left: auto;\n}\n.File {\n  width: 100%;\n}\n.File,\n.File--link {\ndisplay: -webkit-box;\ndisplay: -ms-flexbox;\ndisplay: flex;\n-webkit-box-align: center;\n    -ms-flex-align: center;\n        align-items: center;\n}\n", ""]);
 
 // exports
 
@@ -99398,466 +99518,578 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _vm.project
-    ? _c("div", [
-        _c("div", { staticClass: "row" }, [
-          _c(
-            "div",
-            { staticClass: "col-md-6" },
-            [
-              _c(
-                "b-card",
-                {
-                  staticClass: "card-table",
-                  attrs: {
-                    title: "Datos básicos del proyecto",
-                    "img-src": _vm.project.photo_380_url
-                  }
-                },
-                [
-                  _c("table", { staticClass: "table" }, [
-                    _c("tr", [
-                      _c("td", [_vm._v("Nombre del proyecto:")]),
+    ? _c(
+        "div",
+        [
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              { staticClass: "col-md-6" },
+              [
+                _c(
+                  "b-card",
+                  {
+                    staticClass: "card-table",
+                    attrs: {
+                      title: "Datos básicos del proyecto",
+                      "img-src": _vm.project.photo_380_url
+                    }
+                  },
+                  [
+                    _c("table", { staticClass: "table" }, [
+                      _c("tr", [
+                        _c("td", [_vm._v("Nombre del proyecto:")]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(_vm.project.name))])
+                      ]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(_vm.project.name))])
-                    ]),
-                    _vm._v(" "),
-                    _vm.project.video
-                      ? _c("tr", [
-                          _c("td", [_vm._v("Video:")]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c("a", {
-                              attrs: {
-                                href: _vm.project.video,
-                                target: "_blank"
-                              },
-                              domProps: {
-                                textContent: _vm._s(_vm.project.video)
-                              }
-                            })
-                          ])
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [_vm._v("Nombre del titular:")]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(_vm.project.name))])
-                    ]),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [_vm._v("Teléfono de contacto:")]),
-                      _vm._v(" "),
-                      _c("td", {
-                        domProps: { innerHTML: _vm._s(_vm.project.phone) }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [_vm._v("Correo de contacto::")]),
-                      _vm._v(" "),
-                      _c("td", {
-                        domProps: { innerHTML: _vm._s(_vm.project.email_link) }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _vm.project.holder_links.length
-                      ? _c("tr", [
-                          _c("td", [_vm._v("Redes sociales del titular:")]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c(
-                              "ul",
-                              { staticClass: "list-unstyled" },
-                              _vm._l(_vm.project.holder_links, function(
-                                link,
-                                index
-                              ) {
-                                return _c("li", { key: index }, [
-                                  _c("a", {
-                                    attrs: { href: link, target: "_blank" },
-                                    domProps: { textContent: _vm._s(link) }
-                                  })
-                                ])
+                      _vm.project.video
+                        ? _c("tr", [
+                            _c("td", [_vm._v("Video:")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("a", {
+                                attrs: {
+                                  href: _vm.project.video,
+                                  target: "_blank"
+                                },
+                                domProps: {
+                                  textContent: _vm._s(_vm.project.video)
+                                }
                               })
-                            )
+                            ])
                           ])
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.project.sectors_list.length
-                      ? _c("tr", [
-                          _c("td", [
-                            _vm._v("Sectores a lo que pertenece la innovación:")
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c(
-                              "ul",
-                              _vm._l(_vm.project.sectors_list, function(
-                                sector,
-                                index
-                              ) {
-                                return _c("li", {
-                                  key: index,
-                                  domProps: { textContent: _vm._s(sector) }
-                                })
-                              })
-                            )
-                          ])
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [_vm._v("Etapa del negocio:")]),
+                        : _vm._e(),
                       _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n              " +
-                            _vm._s(_vm.project.stage_label) +
-                            "\n              "
-                        ),
-                        _c("br"),
-                        _c("small", {
+                      _c("tr", [
+                        _c("td", [_vm._v("Nombre del titular:")]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(_vm.project.name))])
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Teléfono de contacto:")]),
+                        _vm._v(" "),
+                        _c("td", {
+                          domProps: { innerHTML: _vm._s(_vm.project.phone) }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Correo de contacto::")]),
+                        _vm._v(" "),
+                        _c("td", {
                           domProps: {
-                            textContent: _vm._s(_vm.project.stage_description)
+                            innerHTML: _vm._s(_vm.project.email_link)
                           }
                         })
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _vm.project.address
-                      ? _c("tr", [
-                          _c("td", [_vm._v("Direccion:")]),
-                          _vm._v(" "),
-                          _c("td", [
-                            _c("p", [_vm._v(_vm._s(_vm.project.address))]),
+                      ]),
+                      _vm._v(" "),
+                      _vm.project.holder_links.length
+                        ? _c("tr", [
+                            _c("td", [_vm._v("Redes sociales del titular:")]),
                             _vm._v(" "),
-                            _vm.project.map
-                              ? _c("div", {
-                                  domProps: {
-                                    innerHTML: _vm._s(_vm.project.map)
-                                  }
-                                })
-                              : _vm._e()
-                          ])
-                        ])
-                      : _vm._e()
-                  ])
-                ]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-md-6" },
-            [
-              _c(
-                "b-card",
-                { staticClass: "mb-3", attrs: { title: "Resumen" } },
-                [
-                  _c("div", {
-                    staticClass: "small",
-                    domProps: { innerHTML: _vm._s(_vm.project.description) }
-                  })
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "b-card",
-                {
-                  staticClass: "mb-3",
-                  attrs: { title: "Oportunidad de inversión" }
-                },
-                [
-                  _c("div", {
-                    staticClass: "small",
-                    domProps: { innerHTML: _vm._s(_vm.project.opportunity) }
-                  })
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "b-card",
-                { staticClass: "mb-3", attrs: { title: "Competencia" } },
-                [
-                  _c("div", {
-                    staticClass: "small",
-                    domProps: { innerHTML: _vm._s(_vm.project.competition) }
-                  })
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "b-card",
-                { staticClass: "mb-3", attrs: { title: "Modelo de Negocio" } },
-                [
-                  _c("div", {
-                    staticClass: "small",
-                    domProps: { innerHTML: _vm._s(_vm.project.business_model) }
-                  })
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "b-card",
-                {
-                  staticClass: "mb-3 card-table",
-                  attrs: { title: "Datos de la inversión" }
-                },
-                [
-                  _c("table", { staticClass: "table" }, [
-                    _c("tr", [
-                      _c("td", [_vm._v("Capital previamente obtenido")]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          _vm._s(
-                            _vm._f("placeholder")(
-                              _vm._f("currency")(
-                                _vm.project.previous_capital / 100
-                              ),
-                              "-"
-                            )
-                          )
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [_vm._v("Ventas totales al día de hoy")]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          _vm._s(
-                            _vm._f("placeholder")(
-                              _vm._f("currency")(_vm.project.total_sales / 100),
-                              "-"
-                            )
-                          )
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [_vm._v("Tamaño de la ronda")]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          _vm._s(
-                            _vm._f("placeholder")(
-                              _vm._f("currency")(_vm.project.round_size / 100),
-                              "-"
-                            )
-                          )
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [_vm._v("Mínimo para levantar capital")]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          _vm._s(
-                            _vm._f("placeholder")(
-                              _vm._f("currency")(
-                                _vm.project.minimal_needed / 100
-                              ),
-                              "-"
-                            )
-                          )
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [_vm._v("Inversionista interesando")]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm.project.has_interested_investor
-                          ? _c("span", [
-                              _vm._v("\n                Si\n                "),
-                              _vm.project.interested_investor_name
-                                ? _c("span", [
-                                    _vm._v(
-                                      ": " +
-                                        _vm._s(
-                                          _vm.project.interested_investor_name
-                                        )
-                                    )
+                            _c("td", [
+                              _c(
+                                "ul",
+                                { staticClass: "list-unstyled" },
+                                _vm._l(_vm.project.holder_links, function(
+                                  link,
+                                  index
+                                ) {
+                                  return _c("li", { key: index }, [
+                                    _c("a", {
+                                      attrs: { href: link, target: "_blank" },
+                                      domProps: { textContent: _vm._s(link) }
+                                    })
                                   ])
+                                })
+                              )
+                            ])
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.project.sectors_list.length
+                        ? _c("tr", [
+                            _c("td", [
+                              _vm._v(
+                                "Sectores a lo que pertenece la innovación:"
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c(
+                                "ul",
+                                _vm._l(_vm.project.sectors_list, function(
+                                  sector,
+                                  index
+                                ) {
+                                  return _c("li", {
+                                    key: index,
+                                    domProps: { textContent: _vm._s(sector) }
+                                  })
+                                })
+                              )
+                            ])
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Etapa del negocio:")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            "\n              " +
+                              _vm._s(_vm.project.stage_label) +
+                              "\n              "
+                          ),
+                          _c("br"),
+                          _c("small", {
+                            domProps: {
+                              textContent: _vm._s(_vm.project.stage_description)
+                            }
+                          })
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _vm.project.address
+                        ? _c("tr", [
+                            _c("td", [_vm._v("Direccion:")]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("p", [_vm._v(_vm._s(_vm.project.address))]),
+                              _vm._v(" "),
+                              _vm.project.map
+                                ? _c("div", {
+                                    domProps: {
+                                      innerHTML: _vm._s(_vm.project.map)
+                                    }
+                                  })
                                 : _vm._e()
                             ])
-                          : _c("span", [_vm._v("No")])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [_vm._v("Ventas esperadas")]),
+                          ])
+                        : _vm._e()
+                    ])
+                  ]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-md-6" },
+              [
+                _c(
+                  "b-card",
+                  { staticClass: "mb-3", attrs: { title: "Resumen" } },
+                  [
+                    _c("div", {
+                      staticClass: "small",
+                      domProps: { innerHTML: _vm._s(_vm.project.description) }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "b-card",
+                  {
+                    staticClass: "mb-3",
+                    attrs: { title: "Oportunidad de inversión" }
+                  },
+                  [
+                    _c("div", {
+                      staticClass: "small",
+                      domProps: { innerHTML: _vm._s(_vm.project.opportunity) }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "b-card",
+                  { staticClass: "mb-3", attrs: { title: "Competencia" } },
+                  [
+                    _c("div", {
+                      staticClass: "small",
+                      domProps: { innerHTML: _vm._s(_vm.project.competition) }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "b-card",
+                  {
+                    staticClass: "mb-3",
+                    attrs: { title: "Modelo de Negocio" }
+                  },
+                  [
+                    _c("div", {
+                      staticClass: "small",
+                      domProps: {
+                        innerHTML: _vm._s(_vm.project.business_model)
+                      }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "b-card",
+                  {
+                    staticClass: "mb-3 card-table",
+                    attrs: { title: "Datos de la inversión" }
+                  },
+                  [
+                    _c("table", { staticClass: "table" }, [
+                      _c("tr", [
+                        _c("td", [_vm._v("Capital previamente obtenido")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("placeholder")(
+                                _vm._f("currency")(
+                                  _vm.project.previous_capital / 100
+                                ),
+                                "-"
+                              )
+                            )
+                          )
+                        ])
+                      ]),
                       _vm._v(" "),
-                      _c("td", [
-                        _c("ul", { staticClass: "list-unstyled m-0" }, [
-                          _c("li", [
-                            _vm._v(
-                              "Año 1: " +
-                                _vm._s(
-                                  _vm._f("placeholder")(
-                                    _vm._f("currency")(
-                                      _vm.project.expected_sales_year_1 / 100
-                                    ),
-                                    "-"
-                                  )
-                                )
+                      _c("tr", [
+                        _c("td", [_vm._v("Ventas totales al día de hoy")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("placeholder")(
+                                _vm._f("currency")(
+                                  _vm.project.total_sales / 100
+                                ),
+                                "-"
+                              )
                             )
-                          ]),
-                          _vm._v(" "),
-                          _c("li", [
-                            _vm._v(
-                              "Año 2: " +
-                                _vm._s(
-                                  _vm._f("placeholder")(
-                                    _vm._f("currency")(
-                                      _vm.project.expected_sales_year_2 / 100
-                                    ),
-                                    "-"
-                                  )
-                                )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Tamaño de la ronda")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("placeholder")(
+                                _vm._f("currency")(
+                                  _vm.project.round_size / 100
+                                ),
+                                "-"
+                              )
                             )
-                          ]),
-                          _vm._v(" "),
-                          _c("li", [
-                            _vm._v(
-                              "Año 3: " +
-                                _vm._s(
-                                  _vm._f("placeholder")(
-                                    _vm._f("currency")(
-                                      _vm.project.expected_sales_year_3 / 100
-                                    ),
-                                    "-"
-                                  )
-                                )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Mínimo para levantar capital")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("placeholder")(
+                                _vm._f("currency")(
+                                  _vm.project.minimal_needed / 100
+                                ),
+                                "-"
+                              )
                             )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Inversionista interesando")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm.project.has_interested_investor
+                            ? _c("span", [
+                                _vm._v(
+                                  "\n                Si\n                "
+                                ),
+                                _vm.project.interested_investor_name
+                                  ? _c("span", [
+                                      _vm._v(
+                                        ": " +
+                                          _vm._s(
+                                            _vm.project.interested_investor_name
+                                          )
+                                      )
+                                    ])
+                                  : _vm._e()
+                              ])
+                            : _c("span", [_vm._v("No")])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Ventas esperadas")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("ul", { staticClass: "list-unstyled m-0" }, [
+                            _c("li", [
+                              _vm._v(
+                                "Año 1: " +
+                                  _vm._s(
+                                    _vm._f("placeholder")(
+                                      _vm._f("currency")(
+                                        _vm.project.expected_sales_year_1 / 100
+                                      ),
+                                      "-"
+                                    )
+                                  )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("li", [
+                              _vm._v(
+                                "Año 2: " +
+                                  _vm._s(
+                                    _vm._f("placeholder")(
+                                      _vm._f("currency")(
+                                        _vm.project.expected_sales_year_2 / 100
+                                      ),
+                                      "-"
+                                    )
+                                  )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("li", [
+                              _vm._v(
+                                "Año 3: " +
+                                  _vm._s(
+                                    _vm._f("placeholder")(
+                                      _vm._f("currency")(
+                                        _vm.project.expected_sales_year_3 / 100
+                                      ),
+                                      "-"
+                                    )
+                                  )
+                              )
+                            ])
                           ])
                         ])
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Da a cambio de la inversión")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm.project.rewards_list.length
+                            ? _c(
+                                "ul",
+                                { staticClass: "list-unstyled m-0" },
+                                _vm._l(_vm.project.rewards_list, function(
+                                  reward,
+                                  index
+                                ) {
+                                  return _c("li", {
+                                    key: index,
+                                    domProps: { textContent: _vm._s(reward) }
+                                  })
+                                })
+                              )
+                            : _vm._e()
+                        ])
+                      ])
+                    ])
+                  ]
+                )
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row mt-3" }, [
+            _c(
+              "div",
+              { staticClass: "col-md-6" },
+              [
+                _c(
+                  "b-card",
+                  { attrs: { "no-body": "" } },
+                  [
+                    _c("b-card-body", [
+                      _c("h4", { staticClass: "card-title m-0" }, [
+                        _vm._v("Miembros del equipo")
                       ])
                     ]),
                     _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [_vm._v("Da a cambio de la inversión")]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm.project.rewards_list.length
-                          ? _c(
-                              "ul",
-                              { staticClass: "list-unstyled m-0" },
-                              _vm._l(_vm.project.rewards_list, function(
-                                reward,
-                                index
-                              ) {
-                                return _c("li", {
-                                  key: index,
-                                  domProps: { textContent: _vm._s(reward) }
-                                })
-                              })
-                            )
-                          : _vm._e()
+                    _vm.project.team.length
+                      ? _c(
+                          "b-list-group",
+                          { attrs: { flush: "" } },
+                          _vm._l(_vm.project.team, function(member) {
+                            return _c("b-list-group-item", { key: member.id }, [
+                              _vm._v(
+                                "\n            " +
+                                  _vm._s(member.name) +
+                                  "\n            "
+                              ),
+                              member.links.length
+                                ? _c(
+                                    "ul",
+                                    { staticClass: "small list-unstyled" },
+                                    _vm._l(member.links, function(link, index) {
+                                      return _c("li", { key: index }, [
+                                        _c("a", {
+                                          attrs: {
+                                            target: "_blank",
+                                            href: link
+                                          },
+                                          domProps: {
+                                            textContent: _vm._s(link)
+                                          }
+                                        })
+                                      ])
+                                    })
+                                  )
+                                : _vm._e()
+                            ])
+                          })
+                        )
+                      : _vm._e()
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-md-6" },
+              [
+                _c(
+                  "b-card",
+                  { attrs: { "no-body": "" } },
+                  [
+                    _c("b-card-body", [
+                      _c("h4", { staticClass: "card-title m-0" }, [
+                        _vm._v("KPIs")
                       ])
-                    ])
-                  ])
-                ]
-              )
-            ],
-            1
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row mt-3" }, [
+                    ]),
+                    _vm._v(" "),
+                    _vm.project.kpis.length
+                      ? _c(
+                          "b-list-group",
+                          { attrs: { flush: "" } },
+                          _vm._l(_vm.project.kpis, function(kpi) {
+                            return _c("b-list-group-item", { key: kpi.id }, [
+                              _c("strong", [_vm._v(_vm._s(kpi.time))]),
+                              _vm._v(" "),
+                              _c("p", [_vm._v(_vm._s(kpi.description))])
+                            ])
+                          })
+                        )
+                      : _vm._e()
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
           _c(
-            "div",
-            { staticClass: "col-md-6" },
+            "b-card",
+            { staticClass: "mt-3", attrs: { "no-body": "" } },
             [
-              _c(
-                "b-card",
-                { attrs: { "no-body": "" } },
-                [
-                  _c("b-card-body", [
-                    _c("h4", { staticClass: "card-title" }, [
-                      _vm._v("Miembros del equipo")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _vm.project.team.length
-                    ? _c(
-                        "b-list-group",
-                        { attrs: { flush: "" } },
-                        _vm._l(_vm.project.team, function(member) {
-                          return _c("b-list-group-item", { key: member.id }, [
-                            _vm._v(
-                              "\n            " +
-                                _vm._s(member.name) +
-                                "\n            "
-                            ),
-                            member.links.length
-                              ? _c(
-                                  "ul",
-                                  { staticClass: "small list-unstyled" },
-                                  _vm._l(member.links, function(link, index) {
-                                    return _c("li", { key: index }, [
-                                      _c("a", {
-                                        attrs: { target: "_blank", href: link },
-                                        domProps: { textContent: _vm._s(link) }
-                                      })
-                                    ])
-                                  })
-                                )
-                              : _vm._e()
-                          ])
-                        })
+              _c("b-card-body", [
+                _c("h4", { staticClass: "card-title m-0" }, [
+                  _vm._v(
+                    "Presentación, fotos y videos adicionales de la empresa"
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _vm.project.company_documents.length
+                ? _c(
+                    "b-list-group",
+                    { attrs: { flush: "" } },
+                    _vm._l(_vm.project.company_documents, function(document) {
+                      return _c(
+                        "b-list-group-item",
+                        { key: document.id, staticClass: "d-flex" },
+                        [_c("project-file", { attrs: { file: document } })],
+                        1
                       )
-                    : _vm._e()
-                ],
-                1
-              )
+                    })
+                  )
+                : _vm._e()
             ],
             1
           ),
           _vm._v(" "),
           _c(
-            "div",
-            { staticClass: "col-md-6" },
+            "b-card",
+            { staticClass: "mt-3", attrs: { "no-body": "" } },
             [
-              _c(
-                "b-card",
-                { attrs: { "no-body": "" } },
-                [
-                  _c("b-card-body", [
-                    _c("h4", { staticClass: "card-title" }, [_vm._v("KPIs")])
-                  ]),
-                  _vm._v(" "),
-                  _vm.project.kpis.length
-                    ? _c(
-                        "b-list-group",
-                        { attrs: { flush: "" } },
-                        _vm._l(_vm.project.kpis, function(kpi) {
-                          return _c("b-list-group-item", { key: kpi.id }, [
-                            _c("strong", [_vm._v(_vm._s(kpi.time))]),
-                            _vm._v(" "),
-                            _c("p", [_vm._v(_vm._s(kpi.description))])
-                          ])
-                        })
+              _c("b-card-body", [
+                _c("h4", { staticClass: "card-title m-0" }, [
+                  _vm._v("Documentos clave")
+                ])
+              ]),
+              _vm._v(" "),
+              _vm.project.key_documents.length
+                ? _c(
+                    "b-list-group",
+                    { attrs: { flush: "" } },
+                    _vm._l(_vm.project.key_documents, function(document) {
+                      return _c(
+                        "b-list-group-item",
+                        { key: document.id, staticClass: "d-flex" },
+                        [_c("project-file", { attrs: { file: document } })],
+                        1
                       )
-                    : _vm._e()
-                ],
-                1
-              )
+                    })
+                  )
+                : _vm._e()
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-card",
+            { staticClass: "mt-3", attrs: { "no-body": "" } },
+            [
+              _c("b-card-body", [
+                _c("h4", { staticClass: "card-title m-0" }, [
+                  _vm._v("Material extra")
+                ])
+              ]),
+              _vm._v(" "),
+              _vm.project.extra_documents.length
+                ? _c(
+                    "b-list-group",
+                    { attrs: { flush: "" } },
+                    _vm._l(_vm.project.extra_documents, function(document) {
+                      return _c(
+                        "b-list-group-item",
+                        { key: document.id, staticClass: "d-flex" },
+                        [_c("project-file", { attrs: { file: document } })],
+                        1
+                      )
+                    })
+                  )
+                : _vm._e()
             ],
             1
           )
-        ])
-      ])
+        ],
+        1
+      )
     : _vm._e()
 }
 var staticRenderFns = []
@@ -100526,6 +100758,43 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-50b635f4\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/views/projects/_projects_file.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("span", { staticClass: "File" }, [
+    _c(
+      "a",
+      { staticClass: "File--link", attrs: { href: _vm.file.download_link } },
+      [
+        _c("i", { class: "File--icon icon-" + _vm.file.icon }),
+        _vm._v(" "),
+        _c("span", { staticClass: "File--name" }, [
+          _vm._v(_vm._s(_vm.file.name))
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c("span", { staticClass: "File--info" }, [
+      _vm._v(_vm._s(_vm._f("currency")(_vm.file.size_mb, "", 2)) + "MB")
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-50b635f4", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-51684598\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/SideNavItem.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -100708,6 +100977,23 @@ var render = function() {
                       [
                         _vm.canDataTable(props, "update")
                           ? _c(
+                              "a",
+                              {
+                                staticClass: "btn btn-primary",
+                                attrs: {
+                                  href:
+                                    "/projects/" + props.rowData.id + "/edit"
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "icon-pen" }),
+                                _vm._v(" Editar\n        ")
+                              ]
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.canDataTable(props, "update")
+                          ? _c(
                               "router-link",
                               {
                                 staticClass: "btn btn-primary",
@@ -100720,7 +101006,7 @@ var render = function() {
                               },
                               [
                                 _c("i", { staticClass: "icon-pen" }),
-                                _vm._v(" Editar\n        ")
+                                _vm._v(" Administrar\n        ")
                               ]
                             )
                           : _vm._e(),
@@ -106995,6 +107281,33 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-508451a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./GrowlNotifications.vue", function() {
      var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-508451a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./GrowlNotifications.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-50b635f4\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/views/projects/_projects_file.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-50b635f4\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/views/projects/_projects_file.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("f0dee0a8", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-50b635f4\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./_projects_file.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-50b635f4\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./_projects_file.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -123183,6 +123496,59 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-534f682d", Component.options)
   } else {
     hotAPI.reload("data-v-534f682d", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/projects/_projects_file.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-50b635f4\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/views/projects/_projects_file.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/views/projects/_projects_file.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-50b635f4\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/views/projects/_projects_file.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/views/projects/_projects_file.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-50b635f4", Component.options)
+  } else {
+    hotAPI.reload("data-v-50b635f4", Component.options)
 ' + '  }
   module.hot.dispose(function (data) {
     disposed = true

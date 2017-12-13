@@ -2,7 +2,6 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::view('/como-funciona', 'como-funciona')->name('como-funciona');
-Route::view('/fondear-mi-proyecto', 'fondear-mi-proyecto')->name('fondear-mi-proyecto')->middleware('auth');
 Route::view('/nosotros', 'nosotros')->name('nosotros');
 Route::view('/fondo-de-inversion', 'fondo-de-inversion')->name('fondo-de-inversion');
 Route::view('/proyecto-dummy', 'proyecto-dummy')->name('proyecto-dummy');

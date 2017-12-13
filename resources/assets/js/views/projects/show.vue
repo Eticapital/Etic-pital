@@ -144,7 +144,7 @@
     <div class="col-md-6">
       <b-card no-body>
         <b-card-body>
-          <h4 class="card-title">Miembros del equipo</h4>
+          <h4 class="card-title m-0">Miembros del equipo</h4>
         </b-card-body>
         <b-list-group flush v-if="project.team.length">
           <b-list-group-item
@@ -164,7 +164,7 @@
     <div class="col-md-6">
       <b-card no-body>
         <b-card-body>
-          <h4 class="card-title">KPIs</h4>
+          <h4 class="card-title m-0">KPIs</h4>
         </b-card-body>
         <b-list-group flush v-if="project.kpis.length">
           <b-list-group-item
@@ -178,11 +178,61 @@
       </b-card>
     </div><!-- /.col-md-6 -->
   </div><!-- /.row -->
+
+  <b-card no-body class="mt-3">
+    <b-card-body>
+      <h4 class="card-title m-0">Presentación, fotos y videos adicionales de la empresa</h4>
+    </b-card-body>
+    <b-list-group flush v-if="project.company_documents.length">
+      <b-list-group-item
+        v-for="document in project.company_documents"
+        :key="document.id"
+        class="d-flex"
+      >
+        <project-file :file="document" />
+      </b-list-group-item>
+    </b-list-group>
+  </b-card>
+
+  <b-card no-body class="mt-3">
+    <b-card-body>
+      <h4 class="card-title m-0">Documentos clave</h4>
+    </b-card-body>
+    <b-list-group flush v-if="project.key_documents.length">
+      <b-list-group-item
+        v-for="document in project.key_documents"
+        :key="document.id"
+        class="d-flex"
+      >
+        <project-file :file="document" />
+      </b-list-group-item>
+    </b-list-group>
+  </b-card>
+
+  <b-card no-body class="mt-3">
+    <b-card-body>
+      <h4 class="card-title m-0">Material extra</h4>
+    </b-card-body>
+    <b-list-group flush v-if="project.extra_documents.length">
+      <b-list-group-item
+        v-for="document in project.extra_documents"
+        :key="document.id"
+        class="d-flex"
+      >
+        <project-file :file="document" />
+      </b-list-group-item>
+    </b-list-group>
+  </b-card>
 </div>
 </template>
 
 <script>
+import ProjectFile from './_projects_file.vue'
+
 export default {
+  components: {
+    ProjectFile
+  },
   data: function () {
     return {
       project: null
@@ -200,7 +250,10 @@ export default {
         'stage_description',
         'rewards_list',
         'team',
-        'kpis'
+        'kpis',
+        'key_documents',
+        'company_documents',
+        'extra_documents',
       ]
     }
     axios.get(App.basePath + 'projects/' + to.params.id, {params: params}).then((response) => {

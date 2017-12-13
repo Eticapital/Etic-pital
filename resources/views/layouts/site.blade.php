@@ -54,7 +54,7 @@
                 <a class="nav-link" href="{{ route('nosotros') }}">Nosotros</a>
               </li>
               @if(auth()->user())
-              <b-nav-item-dropdown right>
+              <b-nav-item-dropdown right v-cloak>
                 <!-- Using button-content slot -->
                 <template slot="button-content">
                   Logueado

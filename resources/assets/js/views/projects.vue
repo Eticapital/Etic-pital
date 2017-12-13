@@ -16,8 +16,16 @@
       </template>
       <template slot="actions" slot-scope="props">
         <div class="btn-group  btn-group-sm" v-if="canDataTable(props, 'update|destroy')">
-          <router-link v-if="canDataTable(props, 'update')" class="btn btn-primary" :to="{ name: 'projects.edit', params: { id: props.rowData.id } }">
+
+          <a
+            v-if="canDataTable(props, 'update')"
+            class="btn btn-primary"
+            :href="'/projects/' + props.rowData.id + '/edit'">
             <i class="icon-pen"></i> Editar
+          </a>
+
+          <router-link v-if="canDataTable(props, 'update')" class="btn btn-primary" :to="{ name: 'projects.edit', params: { id: props.rowData.id } }">
+            <i class="icon-pen"></i> Administrar
           </router-link>
 
           <button v-if="canDataTable(props, 'destroy')" @click.prevent="deleteDataTable(props, 'projects')" class="btn btn-danger">

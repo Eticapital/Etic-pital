@@ -14,11 +14,13 @@ $factory->define(ProjectDocument::class, function (Faker $faker) {
     $size = $size_kb * 1024;
     $file = \Illuminate\Http\UploadedFile::fake()->create($client_name, $size_kb);
 
-    if (is_media($file)) {
-        $file_name = basename($file->store('projects/media', ['disk' => 'public']));
-    } else {
-        $file_name = basename($file->store('documents', ['disk' => 'local']));
-    }
+    // if (is_media($file)) {
+    //     $file_name = basename($file->store('projects/media', ['disk' => 'public']));
+    // } else {
+    //     $file_name = basename($file->store('documents', ['disk' => 'local']));
+    // }
+
+    $file_name = basename($file->store('documents', ['disk' => 'local']));
 
     $extension =  pathinfo($file_name, PATHINFO_EXTENSION);
 

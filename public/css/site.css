@@ -9705,3 +9705,7 @@ a.project-card:hover {
 .is-invalid .invalid-feedback {
   display: block;
 }
+
+[v-cloak] {
+  display: none !important;
+}

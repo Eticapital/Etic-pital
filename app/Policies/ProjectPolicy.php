@@ -75,7 +75,7 @@ class ProjectPolicy
     }
 
     /**
-     * Update an user
+     * Update a project
      *
      * @param  App\User   $user
      * @param  App\Models\Project   $user
@@ -84,7 +84,22 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project)
     {
-        return $user->is_root || $user->can('projects.update');
+        return
+            $this->view($user, $project)
+            && ($user->is_root || $user->can('projects.update'));
+    }
+
+    /**
+     * show edit view
+     *
+     * @param  App\User   $user
+     * @param  App\Models\Project   $user
+     *
+     * @return boolean
+     */
+    public function edit(User $user, Project $project)
+    {
+        return $this->update($user, $project);
     }
 
     /**

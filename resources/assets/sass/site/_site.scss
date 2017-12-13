@@ -18,3 +18,7 @@
 @import "buttons";
 @import "forms";
 
+[v-cloak] {
+    display: none !important;
+}
+

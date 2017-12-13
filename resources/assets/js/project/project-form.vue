@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="onSubmit" novalidate>
+  <p v-if="projectId && !project" class="my-4 h4 text-primary text-center">
+    <i class="icon-spinner spinner"></i>  Cargando información...
+  </p>
+  <form v-else @submit.prevent="onSubmit" novalidate>
     <div class="container-fluid bg-light">
       <div class="container">
         <div class="content">
@@ -22,8 +25,8 @@
                 <form-text :form="form" name="video" placeholder="https://" label="Video de la iniciativa:" />
                 <form-map
                   ref="address"
-                  :feedback="form.errors.get('address') || form.errors.get('latitude') || form.errors.get('longitude')"
-                  :change="form.errors.clear('address') && form.errors.clear('latitude') && form.errors.clear('longitude')"
+                  :feedback="form.errors.get('address') || form.errors.get('latitude') || form.errors.get('longitude')"
+                  :change="form.errors.clear('address') && form.errors.clear('latitude') && form.errors.clear('longitude')"
                   v-model="form.address"
                   :api-key="googleMapsApiKey"
                   :initial-coordinates="{lat: form.latitude, lng: form.longitude}"
@@ -392,10 +395,6 @@
         </div> <!-- / .content -->
       </div> <!-- / .container -->
     </div> <!-- / .container-fluid -->
-<b-card v-if="results" title="Resultados del formulario: (Temporal)">
-<pre>{{ results }}</pre>
-</b-card>
-
   </form>
 </template>
 
@@ -417,6 +416,10 @@ export default {
     googleMapsApiKey: {
       type: String,
       required: true
+    },
+    projectId: {
+      required: false,
+      default: false
     }
   },
 
@@ -475,8 +478,7 @@ export default {
       stages: null,
       rewards: null,
 
-      // TEMPORAL
-      results: null
+      project: null
     }
   },
 
@@ -497,9 +499,16 @@ export default {
     }
   },
 
+  watch: {
+    project (project) {
+      this.form.appendModel(project)
+    }
+  },
+
   created () {
-    // Temporar eliminr
-    // this.loadDemoProject()
+    if (this.projectId) {
+      this.loadProject()
+    }
 
     this.loadSectors()
     this.loadStages()
@@ -507,13 +516,24 @@ export default {
   },
 
   methods: {
-    loadDemoProject () {
-      axios.get('/projects/1')
+    loadProject () {
+      let params = {
+        appends: [
+          'key_documents',
+          'extra_documents',
+          'company_documents',
+          'kpis',
+          'team',
+          'sectors',
+          'rewards'
+        ]
+      }
+      axios.get(`/projects/${this.projectId}`, { params: params })
         .then(response => {
-          this.form.appendModel(response.data)
+          this.project = response.data
         })
         .catch(errors => {
-          console.log("errors", errors)
+          console.log('Error:', errors)
         })
     },
     onSubmit () {
@@ -548,7 +568,6 @@ export default {
 
               return true
             })
-
           }
         })
     },

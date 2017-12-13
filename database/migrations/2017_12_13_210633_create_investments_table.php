@@ -15,8 +15,21 @@ class CreateInvestmentsTable extends Migration
     {
         Schema::create('investments', function (Blueprint $table) {
             $table->increments('id');
-            // $table->increments('id');
+            $table->integer('project_id')->nullable()->unsigned();
+            $table->bigInteger('amount');
+            $table->string('name');
+            $table->string('email');
+            $table->string('phone');
+            $table->string('residence')->nullable();
+            $table->string('organization')->nullable();
+            $table->integer('investment_status')->default(0);
             $table->timestamps();
+
+            $table->foreign('project_id')
+                ->references('id')
+                ->on('projects')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

@@ -28,7 +28,8 @@ class ProjectInvestmentRequest extends FormRequest
             'name' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
-            'phone' => 'required',
+            'residence' => '',
+            'organization' => '',
         ];
     }
 }

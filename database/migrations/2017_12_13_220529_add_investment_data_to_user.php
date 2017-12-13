@@ -13,7 +13,7 @@ class AddInvestmentDataToUser extends Migration
      */
     public function up()
     {
-        Schema::table('user', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->string('phone');
             $table->string('organization')->nullable();
             $table->string('residence')->nullable();
@@ -27,7 +27,7 @@ class AddInvestmentDataToUser extends Migration
      */
     public function down()
     {
-        Schema::table('user', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('phone');
             $table->dropColumn('organization');
             $table->dropColumn('residence');

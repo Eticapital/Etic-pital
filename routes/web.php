@@ -14,9 +14,9 @@ Route::get('/sectors', 'SectorController@index');
 Route::get('/stages', 'ProjectStageController@index');
 Route::get('/rewards', 'RewardController@index');
 
-Route::get('/invertir', 'ProjectController@index')->name('invertir');
-Route::post('/projects', 'ProjectController@store');
-Route::get('/projects/{project}', 'ProjectController@show')->name('projects.show');
+Route::get('/invertir', 'ProjectController@publicList')->name('invertir');
 
+// Proyectos
+Route::get('/projects/{project}', 'ProjectController@show')->name('projects.show');
 
 Auth::routes();

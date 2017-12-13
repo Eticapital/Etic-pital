@@ -4,12 +4,20 @@ namespace App\Models;
 
 use App\Models\ProjectDocument;
 use App\Models\Traits\HasImages;
+use App\Models\Traits\HasPolicyAttributes;
+use App\Models\Traits\LazyAppends;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Project extends Model
 {
-    use HasImages, Sluggable;
+    use HasImages, Sluggable, Searchable, LazyAppends;
+
+    use HasImages, HasPolicyAttributes {
+        HasPolicyAttributes::getAttribute insteadof HasImages;
+        HasPolicyAttributes::mutateAttribute insteadof HasImages;
+    }
 
     protected $casts = [
         'links' => 'json',
@@ -17,6 +25,28 @@ class Project extends Model
         'latitude' => 'float',
         'longitude' => 'float',
         'has_interested_investor' => 'boolean',
+    ];
+
+    protected $appends = [
+        'link',
+        'photo_url'
+    ];
+
+    protected $appendable = [
+        'can_update',
+        'can_destroy',
+        'can_show',
+        'owner_name',
+        'email_link',
+        'photo_380_url',
+        'photo_854_url',
+        'map',
+        'sectors_list',
+        'stage_label',
+        'stage_description',
+        'rewards_list',
+        'team',
+        'kpis',
     ];
 
     public static $images = [
@@ -78,7 +108,64 @@ class Project extends Model
         // 'extra_documents',
     ];
 
-    protected $appends = ['link'];
+
+    /**
+     * Para evitar collisions entre traits HasImages y HasPolicyAttributes
+     *
+     * @param $key
+     * @return mixec
+     */
+    public function getAttribute($key)
+    {
+        $result = $this->getImageAttribute($key);
+        if ($result !== null) {
+            return $result;
+        }
+
+        $result = $this->callGateAttribute($key);
+        if ($result !== null) {
+            return $result;
+        }
+
+        return parent::getAttribute($key);
+    }
+
+     /**
+     * Para evitar collisions entre traits HasImages y HasPolicyAttributes
+     *
+     * @param $key
+     * @param $value
+     * @return mixec
+     */
+    protected function mutateAttribute($key, $value)
+    {
+        $result = $this->getImageAttribute($key);
+        if ($result !== null) {
+            return $result;
+        }
+
+        $result = $this->callGateAttribute($key);
+        if ($result !== null) {
+            return $result;
+        }
+
+        return parent::mutateAttribute($key, $value);
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return [
+            'name' => $this->name,
+            'holder' => $this->holder,
+            'owner' => $this->owner->name,
+            'owner_email' => $this->owner->email,
+        ];
+    }
 
     /**
      * Return the sluggable configuration array for this model.
@@ -122,6 +209,20 @@ class Project extends Model
     }
 
     /**
+     * El link como un enlace html
+     *
+     * @return strin
+     */
+    public function getEmailLinkAttribute()
+    {
+        if (!$this->email) {
+            return null;
+        }
+
+        return sprintf('<a href="mailto:%s">%s</a>', $this->email, $this->email);
+    }
+
+    /**
      * El nombre del sector
      *
      * @return string
@@ -145,9 +246,23 @@ class Project extends Model
      */
     public function getSectorsAttribute()
     {
-        return $this->sectors()->get()->pluck('label')->implode(', ');
+        return $this->sectors_list->implode(', ');
     }
 
+    /**
+     * Los nombres de los sectores como lista
+     * @return array
+     */
+    public function getSectorsListAttribute()
+    {
+        return $this->sectors()->get()->pluck('label');
+    }
+
+    /**
+     * Descripción de máximo 155 caracaters
+     *
+     * @return string
+     */
     public function getShortDescriptionAttribute()
     {
         return str_limit($this->description, 155);
@@ -174,6 +289,21 @@ class Project extends Model
         return $this->minimal_needed;
     }
 
+    /**
+     * El nombre del dueño del proyecto
+     *
+     * @return string
+     */
+    public function getOwnerNameAttribute()
+    {
+        return optional($this->owner)->name;
+    }
+
+    /**
+     * El dueño del proyecto
+     *
+     * @return Builder
+     */
     public function owner()
     {
         return $this->belongsTo(\App\User::class, 'owner_id');
@@ -219,6 +349,16 @@ class Project extends Model
     public function setRewardsAttribute($rewards)
     {
         $this->rewards()->sync($rewards);
+    }
+
+    /**
+     * Devuelve un arreglo con los nombres de las recompensas
+     *
+     * @return array
+     */
+    public function getRewardsListAttribute()
+    {
+        return $this->rewards()->get()->pluck('label');
     }
 
     /**
@@ -268,6 +408,16 @@ class Project extends Model
     }
 
     /**
+     * Devuelve la lista de integrantes del equipo como un atributo
+     *
+     * @return array
+     */
+    public function getTeamAttribute()
+    {
+        return $this->team()->get();
+    }
+
+    /**
      * Un proyecto tiene N miembros del equipo
      *
      * @return HasMany
@@ -292,6 +442,16 @@ class Project extends Model
     }
 
     /**
+     * Devuelve los kpis como un atributo
+     *
+     * @return array
+     */
+    public function getKpisAttribute()
+    {
+        return $this->kpis()->get();
+    }
+
+    /**
      * Si tiene latitud y longitud
      *
      * @return boolean
@@ -301,6 +461,15 @@ class Project extends Model
         return $this->latitude && $this->longitude;
     }
 
+    /**
+     * Permite llamar el mapa como atributo
+     *
+     * @return string
+     */
+    public function getMapAttribute()
+    {
+        return $this->map();
+    }
 
     /**
      * Devuelve el código html de embed de google
@@ -352,6 +521,36 @@ HTML;
             ->where('category', $category)
             ->whereNotIn('id', $ids)
             ->delete();
+    }
+
+    /**
+     * La etapa a a que pertenece
+     *
+     * @return BelongsTo
+     */
+    public function stage()
+    {
+        return $this->belongsTo(\App\Models\ProjectStage::class);
+    }
+
+    /**
+     * El nombre de la etapa a la que pertenece la oportunidad
+     *
+     * @return string
+     */
+    public function getStageLabelAttribute()
+    {
+        return optional($this->stage)->label;
+    }
+
+    /**
+     * La descripción de la etapa a la que pertenece la oportunidad
+     *
+     * @return string
+     */
+    public function getStageDescriptionAttribute()
+    {
+        return optional($this->stage)->description;
     }
 
     /**

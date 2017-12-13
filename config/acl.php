@@ -4,11 +4,21 @@ return [
     'modules' => [
         'users' => 'Usuarios',
         'roles' => 'Grupos de Usuario',
+        'projects' => 'Proyectos',
     ],
 
     'permissions' => [
         // Resource Permissions
         'users' => [
+            'index' => 'Listar',
+            'view' => 'Ver',
+            'create' => 'Crear',
+            'update' => 'Actualizar',
+            'delete' => 'Eliminar',
+        ],
+
+        // Resource Permissions
+        'projects' => [
             'index' => 'Listar',
             'view' => 'Ver',
             'create' => 'Crear',

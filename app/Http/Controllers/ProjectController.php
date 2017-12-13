@@ -13,15 +13,58 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::featuredFirst()
-            ->published()
-            ->paginate(5);
+        $this->authorize('index', Project::class);
 
-        return view('invertir')->with(compact('projects'));
+        $query = request()->input('query')
+            ? Project::search(request()->input('query'))
+            : Project::latest();
+
+        $results = $query->paginate(request()->input('per_page', 10));
+
+        if (request()->input('appends')) {
+            return tap($results)->each(function ($project) {
+                $project->lazyAppend(request()->input('appends'));
+            });
+        }
+
+        return $results;
+    }
+
+    public function show(Project $project)
+    {
+        if (!auth()->user()) {
+            if (!$project->published_at) {
+                abort(404, 'Proyecto no encontrado');
+            }
+        } else {
+            $this->authorize('show', $project);
+        }
+
+        if (request()->ajax()) {
+            if (request()->input('appends')) {
+                $project->lazyAppend(request()->input('appends'));
+            }
+
+            return $project;
+        }
+
+        $team = $project->team()->get();
+        $kpis = $project->kpis()->get();
+        $documents = $project->documents()->limit(6)->get();
+
+        return view('projects.show')->with(compact('project', 'team', 'kpis', 'documents'));
+    }
+
+    public function destroy(Project $project)
+    {
+        $this->authorize('delete', $project);
+        return tap($project)->delete();
     }
 
     public function store(ProjectRequest $request)
     {
+        $this->authorize('create', Project::class);
+
         $data = $request->all();
 
         // Para procesar por el trait de imagenes lo convierto a un
@@ -41,30 +84,42 @@ class ProjectController extends Controller
         });
     }
 
-    public function show(Project $project)
+    public function update(Request $request, Project $project)
     {
-        if (!$project->published_at || !$project->published_at > Carbon::now()) {
-            abort(404, 'Proyecto no encontrado');
+        $this->authorize('update', $project);
+
+        $data = $this->validate($request, [
+            'name' => 'required',
+            'password' => 'sometimes|nullable|confirmed',
+            'email' => 'email|unique:users,email,'.$project->id,
+        ]);
+
+        if (!$data['password']) {
+            unset($data['password']);
         }
 
-        if (request()->ajax()) {
-            return $project->toFormArray();
-        }
-
-        $team = $project->team()->get();
-        $kpis = $project->kpis()->get();
-        $documents = $project->documents()->limit(6)->get();
-
-        return view('projects.show')->with(compact('project', 'team', 'kpis', 'documents'));
+        return tap($project)->update($data);
     }
 
-    /**
-     * Encuentra las imagenes y video de un proyecto
-     *
-     * @return json
-     */
-    public function media()
+    public function publicList()
     {
-        #code
+        $projects = Project::featuredFirst()
+            ->published()
+            ->paginate(5);
+
+        return view('invertir')->with(compact('projects'));
     }
+
+
+
+    // public function show(Project $project)
+    // {
+    //     if (!$project->published_at || !$project->published_at > Carbon::now()) {
+    //         abort(404, 'Proyecto no encontrado');
+    //     }
+
+    //     if (request()->ajax()) {
+    //         return $project->toFormArray();
+    //     }
+    // }
 }

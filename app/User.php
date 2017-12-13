@@ -90,6 +90,9 @@ class User extends Authenticatable
      */
     public function getEmailLinkAttribute()
     {
+        if (!$this->email) {
+            return null;
+        }
         return sprintf('<a href="mailto:%s">%s</a>', $this->email, $this->email);
     }
 

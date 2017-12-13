@@ -125,6 +125,45 @@ class NavController extends Controller
                     ],
                 ]
             ],
+
+            [
+                'title' => 'Proyectos',
+                'icon' => 'tree',
+                'text' => 'Proyectos',
+                'route' => 'projects.index',
+                'searchable' => true,
+                'hide' => false,
+                'permission' => ['index', \App\Models\Project::class],
+                'items' => [
+                    [
+                        'title' => 'Nuevo proyecto',
+                        'icon' => 'plus',
+                        'text' => 'Nuevo proyecto',
+                        'route' => 'projects.create',
+                        'permission' => ['create', \App\Models\Project::class],
+                        'in_top_menu' => true,
+                        'return' => true,
+                    ],
+                    [
+                        'title' => 'Perfil {name}',
+                        'text' => '{name}',
+                        'route' => 'projects.show',
+                        'hide' => true,
+                        'return' => true,
+                        'items' => [
+                            [
+                                'title' => 'Editar {name}',
+                                'icon' => 'pencil2',
+                                'text' => 'Editar',
+                                'route' => 'projects.edit',
+                                'hide' => true,
+                                'return' => true,
+                                'in_top_menu' => true,
+                            ],
+                        ]
+                    ],
+                ]
+            ],
         ];
 
         // Filtro los elementos segun los permisos del usuario

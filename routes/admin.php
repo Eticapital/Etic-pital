@@ -15,6 +15,9 @@ Route::get('account/permissions', 'AccountController@permissions')->name('accoun
 // Administrar usuarios
 Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
 
+// Proyectos
+Route::resource('projects', 'ProjectController', ['except' => ['create', 'show', 'edit']]);
+
 // Administrar grupos
 Route::group(['prefix' => 'roles/{role}'], function () {
     Route::get('permissions', 'RolePermissionController@index')->name('roles.permissions');

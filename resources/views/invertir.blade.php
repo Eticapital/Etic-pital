@@ -47,7 +47,7 @@
             </div> <!-- / .row -->
             <div class="row">
               <div class="col text-center text-md-left">
-                <a href="{{ $project->link }}" class="btn btn-primary">Ver más</a>
+                <a href="{{ $project->link }}" class="btn btn-primary btn-wide">Ver más</a>
               </div> <!-- / .col -->
             </div> <!-- / .row -->
           </div> <!-- / .col-lg-8 -->

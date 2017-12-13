@@ -4,7 +4,7 @@
 @if($project->is_pending)
 <b-alert variant="info" show v-cloak class="mt-3">
   <h5 class="alert-heading"><i class="icon-warning"></i> Aún no compartas este enlace solo tu lo puedes ver.</h5>
-  <p>Tu proyecto se encuentra actualmente en revisión y mientras tanto eres libre de <a class="alert-link" href="{{ route('projects.edit', $project) }}">modificar todos los detalles.</a></p>
+  <p>Tu proyecto se encuentra actualmente en revisión. Mientras terminamos de revisalor eres libre de <a class="alert-link" href="{{ route('projects.edit', $project) }}">modificar todos los detalles.</a></p>
 </b-alert>
 @elseif($project->is_finished)
 <b-alert variant="info" show v-cloak class="mt-3">

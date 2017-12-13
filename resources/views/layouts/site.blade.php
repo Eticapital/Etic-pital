@@ -21,7 +21,6 @@
   </head>
   <body>
   <div id="app">
-
     @if(@$is_home)
     <div class="jumbotron-fluid" id="header">
       <div class="container-fluid">
@@ -82,6 +81,8 @@
     </div> <!-- / #header -->
     @endif
 
+    @include('flash::message')
+
     @yield('content')
 
     <footer class="bg-dark footer">
@@ -122,6 +123,7 @@
         </div> <!-- / .row -->
       </div> <!-- / .container -->
     </footer>
+    <growl-notifications v-cloak></growl-notifications>
     </div><!-- /#app -->
     @stack('scripts_after')
     <script src="{{ mix('js/site.js')}}"></script>

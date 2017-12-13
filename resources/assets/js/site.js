@@ -8,6 +8,10 @@ require('./forms/inputs')
 require('./site/libs.js')
 require('./site/components.js')
 
+require('./functions.js')
+
+window.bus = new Vue();
+
 const app = new Vue({
   el: '#app',
 

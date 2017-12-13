@@ -22,9 +22,6 @@ Route::resource('projects', 'ProjectController', ['except' => ['create', 'show']
 Route::put('projects/{project}/publish', 'ProjectController@publish');
 Route::put('projects/{project}/reject', 'ProjectController@reject');
 Route::put('projects/{project}/finish', 'ProjectController@finish');
-// Route::group(['prefix' => 'projects/{project}'], function () {
-
-// });
 
 Route::get(
     '/documents/{document}/download/{name?}',

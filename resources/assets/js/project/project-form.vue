@@ -375,7 +375,6 @@
                 v-model="form.extra_documents"
                 :form="form"
               />
-
             </fieldset>
           </div> <!-- / .col-lg-8 -->
         </div> <!-- / .row -->

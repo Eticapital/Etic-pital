@@ -17,6 +17,12 @@ Route::get('/rewards', 'RewardController@index');
 Route::get('/invertir', 'ProjectController@publicList')->name('invertir');
 
 // Proyectos
-Route::get('/projects/{project}', 'ProjectController@show')->name('projects.show');
+
+Route::group(['prefix' => 'projects/{project}'], function () {
+    Route::get('/', 'ProjectController@show')->name('projects.show');
+    Route::get('/invertir', 'ProjectInvestmentController@create')->name('project.investment.create');
+    Route::post('/invertir', 'ProjectInvestmentController@store')->name('project.investment.store');
+});
+
 
 Auth::routes();

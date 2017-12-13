@@ -13,7 +13,7 @@
         </div> <!-- / .row -->
       </div> <!-- / .content -->
     </div> <!-- / .container -->
-    <investment-form :project-id="{{ $project->id }}">
+    <investment-form :project-id="{{ $project->id }}" :user="{{ auth()->user() ? auth()->user()->toFormArray() : 'null' }}">
       <p class="my-4 h4 text-primary text-center"><i class="icon-spinner spinner"></i> Cargando formulario...</p>
     </investment-form>
 @endsection

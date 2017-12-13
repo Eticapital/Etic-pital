@@ -4945,12 +4945,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     projectId: {
       type: Number,
       required: true
+    },
+    user: {
+      type: Object,
+      required: false
     }
   },
   data: function data() {
     return {
       form: new Form({
         // 1.
+        id: null,
         amount: null,
         name: '',
         email: '',
@@ -4959,6 +4964,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         residence: ''
       })
     };
+  },
+  created: function created() {
+    if (this.user) {
+      this.form.appendModel(this.user);
+    }
   },
 
 

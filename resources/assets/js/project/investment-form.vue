@@ -51,11 +51,16 @@ export default {
       type: Number,
       required: true
     },
+    user: {
+      type: Object,
+      required: false
+    }
   },
   data () {
     return {
       form: new Form({
         // 1.
+        id: null,
         amount: null,
         name: '',
         email: '',
@@ -63,6 +68,12 @@ export default {
         organization: '',
         residence: ''
       })
+    }
+  },
+
+  created () {
+    if (this.user) {
+      this.form.appendModel(this.user)
     }
   },
 

@@ -58,6 +58,16 @@ class User extends Authenticatable
     }
 
     /**
+     * La información que se usa en los formularios
+     * @return array
+     */
+    public function toFormArray()
+    {
+        return collect($this->toArray())
+            ->only('id', 'name', 'email', 'phone', 'organization', 'residence');
+    }
+
+    /**
      * La información que se usará como variable globar
      * @return array
      */

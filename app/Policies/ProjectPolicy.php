@@ -141,4 +141,70 @@ class ProjectPolicy
     {
         return $this->delete($user, $project);
     }
+
+    /**
+     * Si puede publicar un proyecto
+     *
+     * @param  App\User   $user
+     * @param  App\Models\Project   $user
+     *
+     * @return boolean
+     */
+    public function publish(User $user, Project $project)
+    {
+        if ($project->is_published) {
+            return false;
+        }
+
+        // Si el usuario tiene permisos para hacer el ajuste
+        if ($user->is_root || $user->can('projects.publish')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Si puede rechazr un proyecto
+     *
+     * @param  App\User   $user
+     * @param  App\Models\Project   $user
+     *
+     * @return boolean
+     */
+    public function reject(User $user, Project $project)
+    {
+        if ($project->is_rejected || $project->is_finished) {
+            return false;
+        }
+
+        // Si el usuario tiene permisos para hacer el ajuste
+        if ($user->is_root || $user->can('projects.reject')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Si puede finalizar un proyecto
+     *
+     * @param  App\User   $user
+     * @param  App\Models\Project   $user
+     *
+     * @return boolean
+     */
+    public function finish(User $user, Project $project)
+    {
+        if (!$project->is_published || $project->is_finished) {
+            return false;
+        }
+
+        // Si el usuario tiene permisos para hacer el ajuste
+        if ($user->is_root || $user->can('projects.finish')) {
+            return true;
+        }
+
+        return false;
+    }
 }

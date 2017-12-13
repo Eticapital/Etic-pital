@@ -24,6 +24,9 @@ return [
             'create' => 'Crear',
             'update' => 'Actualizar',
             'delete' => 'Eliminar',
+            'publish' => 'Publicar',
+            'reject' => 'Rechazar',
+            'finish' => 'Finalizar',
         ],
 
         'roles' => [

@@ -36,7 +36,7 @@
             <img src="img/home_icon2.png" class="icon">
             <p><span class="h3">Usa nuestro fondo de inversión</span></p>
             <p class="text-justify">Invierte a través de nuestro fondo de inversión para proyectos agrícolas. Si necesitas más de $300,000, esta puede ser tu solución.</p>
-            <p><a href="{{ route('invertir') }}" class="btn btn-wide btn-primary">Solicitar acceso</a></p>
+            <p><a href="{{ route('fondo-de-inversion') }}" class="btn btn-wide btn-primary">Solicitar acceso</a></p>
           </div> <!-- / .col -->
         </div> <!-- / .row -->
       </div> <!-- / .content -->

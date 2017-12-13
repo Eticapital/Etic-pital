@@ -5,7 +5,7 @@ window.notify = function notify(body, type = 'success', showIcon = false, showCl
     showCloseButton: showCloseButton,
     title: title,
     duration: duration,
-    id: +new Date,
+    id: uniqid(),
     showIcon: showIcon,
   }
 
@@ -21,7 +21,7 @@ window.growl = function growl(body, type = 'success', showIcon = false, title = 
     showCloseButton: showCloseButton,
     title: title,
     duration: duration,
-    id: +new Date,
+    id: uniqid(),
     showIcon: showIcon,
   }
   return bus.$emit('growl-notification', notification);

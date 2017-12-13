@@ -2,6 +2,8 @@ require('vue2-animate/dist/vue2-animate.min.css')
 
 window._ = require('lodash');
 
+window.uniqid = require('uniqid');
+
 window.moment = require('moment');
 import 'moment/locale/es';
 

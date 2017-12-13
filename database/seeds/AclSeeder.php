@@ -84,7 +84,7 @@ class AclSeeder extends Seeder
                 if ($new_user->roles) {
                     $user->attachRoles(explode(',', $new_user->roles));
                 }
-            });
+                });
         });
     }
 }

@@ -14,6 +14,14 @@
         </router-link>
         <template v-else>{{ props.rowData.name }}</template>
       </template>
+      <template slot="status" slot-scope="props">
+        <b-dropdown size="sm" :text="props.rowData.status" class="m-0">
+          <b-dropdown-item v-if="canDataTable(props, 'publish')" @click.prevent="publish(props.rowData)">Publicar</b-dropdown-item>
+          <b-dropdown-item v-if="canDataTable(props, 'reject')" @click.prevent="reject(props.rowData)">Rechazar</b-dropdown-item>
+          <b-dropdown-item v-if="canDataTable(props, 'finish')" @click.prevent="finish(props.rowData)">Finalizar</b-dropdown-item>
+        </b-dropdown>
+
+      </template>
       <template slot="actions" slot-scope="props">
         <div class="btn-group  btn-group-sm" v-if="canDataTable(props, 'update|destroy')">
 
@@ -58,24 +66,29 @@ export default {
       table: {
         url: '/projects',
         appendParams: {
-          appends: ['can_update', 'can_destroy', 'can_show', 'owner_name']
+          appends: [
+            'can_update',
+            'can_destroy',
+            'can_show',
+            'can_publish',
+            'can_reject',
+            'can_finish',
+            'owner_name',
+            'status'
+          ]
         },
         fields: [
           {
             name: '__slot:name',
-            title: 'Nombre'
+            title: 'Nombre del proyecto'
           },
           {
             name: 'holder',
             title: 'Titular'
           },
           {
-            name: 'phone',
-            title: 'Teléfono'
-          },
-          {
-            name: 'email',
-            title: 'Correo'
+            name: '__slot:status',
+            title: 'Estatus'
           },
           {
             name: '__slot:actions',
@@ -83,6 +96,63 @@ export default {
           }
         ]
       }
+    }
+  },
+
+  methods: {
+    publish (project) {
+      swal({
+        title: '¿Estás seguro que deseas publicar este proyecto?',
+        showCancelButton: true,
+        confirmButtonText: 'Estoy seguro',
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          return axios.put(`/projects/${project.id}/publish`)
+        }
+      }).then((response) => {
+        if (response.dismiss === 'cancel') {
+          return
+        }
+
+        project.status = response.value.data.status
+        notify(`Proyecto <strong>${project.name}</strong> publicado correctamente`)
+      })
+    },
+    reject (project) {
+      swal({
+        title: '¿Estás seguro que deseas rechazar este proyecto?',
+        showCancelButton: true,
+        confirmButtonText: 'Estoy seguro',
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          return axios.put(`/projects/${project.id}/reject`)
+        }
+      }).then((response) => {
+        if (response.dismiss === 'cancel') {
+          return
+        }
+
+        project.status = response.value.data.status
+        notify(`Proyecto <strong>${project.name}</strong> rechazado correctamente`)
+      })
+    },
+    finish (project) {
+      swal({
+        title: '¿Estás seguro que deseas finalizar este proyecto?',
+        showCancelButton: true,
+        confirmButtonText: 'Estoy seguro',
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          return axios.put(`/projects/${project.id}/finish`)
+        }
+      }).then((response) => {
+        if (response.dismiss === 'cancel') {
+          return
+        }
+
+        project.status = response.value.data.status
+        notify(`Proyecto <strong>${project.name}</strong> finalizado correctamente`)
+      })
     }
   }
 }

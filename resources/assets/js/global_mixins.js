@@ -73,7 +73,10 @@ let crudMixins = {
                 preConfirm() {
                     return axios.delete(App.basePath + url)
                 }
-            }).then(function () {
+            }).then(function (response) {
+                if (response.dismiss==='cancel') {
+                  return
+                }
                 Vue.nextTick(() => typeof this.loadData !== 'undefined' ? this.loadData() : this.items.splice(index, 1))
                 swal({
                     title: confirmationTitle,

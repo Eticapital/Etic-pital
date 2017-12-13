@@ -19,6 +19,9 @@ Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
 Route::get('/fondear-mi-proyecto', 'ProjectController@create')
     ->name('fondear-mi-proyecto');
 Route::resource('projects', 'ProjectController', ['except' => ['create', 'show']]);
+Route::put('projects/{project}/publish', 'ProjectController@publish');
+Route::put('projects/{project}/reject', 'ProjectController@reject');
+Route::put('projects/{project}/finish', 'ProjectController@finish');
 // Route::group(['prefix' => 'projects/{project}'], function () {
 
 // });

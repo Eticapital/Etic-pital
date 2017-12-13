@@ -62,11 +62,11 @@
               @endforeach
             </tbody>
           </table><!-- /.table -->
-          @if($projects->hasMorePages())
+          {{-- @if($projects->hasMorePages())
           <p class="text-center">
             <a href="" class="btn btn-primary">Ver más...</a>
           </p>
-          @endif
+          @endif --}}
         @else
         <p class="m-0"><i>No has registrado ningun proyecto.</i> <a href="{{ route('fondear-mi-proyecto') }}">Registrar un proyecto</a></p>
         @endif

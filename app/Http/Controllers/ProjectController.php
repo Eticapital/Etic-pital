@@ -44,7 +44,7 @@ class ProjectController extends Controller
     public function show(Project $project)
     {
         if (!auth()->user()) {
-            if (!$project->published_at) {
+            if (! ($project->is_published || $project->is_finished)) {
                 abort(404, 'Proyecto no encontrado');
             }
         } else {
@@ -129,16 +129,39 @@ class ProjectController extends Controller
         return view('invertir')->with(compact('projects'));
     }
 
+    /**
+     * Marca un proyecto como publicado
+     *
+     * @param  Project $project
+     * @return json
+     */
+    public function publish(Project $project)
+    {
+        $this->authorize('publish', $project);
+        return tap($project)->publish();
+    }
 
+    /**
+     * Marca un proyecto como rechazado
+     *
+     * @param  Project $project
+     * @return json
+     */
+    public function reject(Project $project)
+    {
+        $this->authorize('reject', $project);
+        return tap($project)->reject();
+    }
 
-    // public function show(Project $project)
-    // {
-    //     if (!$project->published_at || !$project->published_at > Carbon::now()) {
-    //         abort(404, 'Proyecto no encontrado');
-    //     }
-
-    //     if (request()->ajax()) {
-    //         return $project->toFormArray();
-    //     }
-    // }
+    /**
+     * Marca un proyecto como finalizado
+     *
+     * @param  Project $project
+     * @return json
+     */
+    public function finish(Project $project)
+    {
+        $this->authorize('finish', $project);
+        return tap($project)->finish();
+    }
 }

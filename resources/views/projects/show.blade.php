@@ -1,12 +1,18 @@
 @extends('layouts.site')
 
 @section('content')
-@if(!$project->is_published)
-<b-alert variant="info" show v-cloak class="container my-3">
+@if($project->is_pending)
+<b-alert variant="info" show v-cloak class="mt-3">
   <h5 class="alert-heading"><i class="icon-warning"></i> Aún no compartas este enlace solo tu lo puedes ver.</h5>
   <p>Tu proyecto se encuentra actualmente en revisión y mientras tanto eres libre de <a class="alert-link" href="{{ route('projects.edit', $project) }}">modificar todos los detalles.</a></p>
 </b-alert>
+@elseif($project->is_finished)
+<b-alert variant="info" show v-cloak class="mt-3">
+  <h5 class="alert-heading"><i class="icon-warning"></i> Proyecto finalizado.</h5>
+  <p>Este proyecto se encuentra finalizado, ya no es posible realizar más acciones sobre el.</p>
+</b-alert>
 @endif
+
 <div class="jumbotron-fluid">
       <div class="container-fluid">
         <div class="row no-gutters text-center text-md-left">

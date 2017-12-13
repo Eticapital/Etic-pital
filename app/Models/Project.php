@@ -6,6 +6,7 @@ use App\Models\ProjectDocument;
 use App\Models\Traits\HasImages;
 use App\Models\Traits\HasPolicyAttributes;
 use App\Models\Traits\LazyAppends;
+use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -30,13 +31,17 @@ class Project extends Model
 
     protected $appends = [
         'link',
-        'photo_url'
+        'photo_url',
+        'status'
     ];
 
     protected $appendable = [
         'can_update',
         'can_destroy',
         'can_show',
+        'can_publish',
+        'can_reject',
+        'can_finish',
         'owner_name',
         'email_link',
         'photo_380_url',
@@ -53,6 +58,10 @@ class Project extends Model
         'key_documents',
         'company_documents',
         'extra_documents',
+        'status',
+        'is_pending',
+        'is_published',
+        'is_rejected',
     ];
 
     public static $images = [
@@ -405,7 +414,7 @@ class Project extends Model
      */
     public function scopePublished($query)
     {
-        return $query->whereNotNull('published_at');
+        return $query->whereNotNull('published_at')->whereNull('finished_at')->whereNull('rejected_at');
     }
 
     /**
@@ -680,6 +689,14 @@ HTML;
             return 'En revisión';
         }
 
+        if ($this->is_published) {
+            return 'Publicado';
+        }
+
+        if ($this->is_finished) {
+            return 'Finalizado';
+        }
+
         return 'Sin definir';
     }
 
@@ -700,7 +717,7 @@ HTML;
      */
     public function getIsPendingAttribute()
     {
-        return !$this->published_at;
+        return !$this->published_at && !$this->rejected_at && !$this->finished_at;
     }
 
     /**
@@ -710,6 +727,55 @@ HTML;
      */
     public function getIsPublishedAttribute()
     {
-        return $this->published_at && !$this->rejected_at;
+        return $this->published_at && !$this->rejected_at && !$this->finished_at;
+    }
+
+    /**
+     * Si el proyecto está publicado
+     *
+     * @return boolena
+     */
+    public function getIsFinishedAttribute()
+    {
+        return $this->finished_at && !$this->rejected_at && !$this->published_at;
+    }
+
+    /**
+     * Marca un proyecto como publicado
+     *
+     * @return boolean
+     */
+    public function publish()
+    {
+        $this->rejected_at = null;
+        $this->published_at = Carbon::now();
+        $this->finished_at = null;
+        return $this->save();
+    }
+
+    /**
+     * Marca un proyecto como rechazado
+     *
+     * @return boolean
+     */
+    public function reject()
+    {
+        $this->rejected_at = Carbon::now();
+        $this->published_at = null;
+        $this->finished_at = null;
+        return $this->save();
+    }
+
+    /**
+     * Marca un proyecto como finalizado
+     *
+     * @return boolean
+     */
+    public function finish()
+    {
+        $this->rejected_at = null;
+        $this->published_at = null;
+        $this->finished_at = Carbon::now();
+        return $this->save();
     }
 }

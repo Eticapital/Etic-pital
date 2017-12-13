@@ -4810,6 +4810,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4821,26 +4829,81 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       table: {
         url: '/projects',
         appendParams: {
-          appends: ['can_update', 'can_destroy', 'can_show', 'owner_name']
+          appends: ['can_update', 'can_destroy', 'can_show', 'can_publish', 'can_reject', 'can_finish', 'owner_name', 'status']
         },
         fields: [{
           name: '__slot:name',
-          title: 'Nombre'
+          title: 'Nombre del proyecto'
         }, {
           name: 'holder',
           title: 'Titular'
         }, {
-          name: 'phone',
-          title: 'Teléfono'
-        }, {
-          name: 'email',
-          title: 'Correo'
+          name: '__slot:status',
+          title: 'Estatus'
         }, {
           name: '__slot:actions',
           dataClass: 'data-table-actions'
         }]
       }
     };
+  },
+
+
+  methods: {
+    publish: function publish(project) {
+      swal({
+        title: '¿Estás seguro que deseas publicar este proyecto?',
+        showCancelButton: true,
+        confirmButtonText: 'Estoy seguro',
+        showLoaderOnConfirm: true,
+        preConfirm: function preConfirm() {
+          return axios.put('/projects/' + project.id + '/publish');
+        }
+      }).then(function (response) {
+        if (response.dismiss === 'cancel') {
+          return;
+        }
+
+        project.status = response.value.data.status;
+        notify('Proyecto <strong>' + project.name + '</strong> publicado correctamente');
+      });
+    },
+    reject: function reject(project) {
+      swal({
+        title: '¿Estás seguro que deseas rechazar este proyecto?',
+        showCancelButton: true,
+        confirmButtonText: 'Estoy seguro',
+        showLoaderOnConfirm: true,
+        preConfirm: function preConfirm() {
+          return axios.put('/projects/' + project.id + '/reject');
+        }
+      }).then(function (response) {
+        if (response.dismiss === 'cancel') {
+          return;
+        }
+
+        project.status = response.value.data.status;
+        notify('Proyecto <strong>' + project.name + '</strong> rechazado correctamente');
+      });
+    },
+    finish: function finish(project) {
+      swal({
+        title: '¿Estás seguro que deseas finalizar este proyecto?',
+        showCancelButton: true,
+        confirmButtonText: 'Estoy seguro',
+        showLoaderOnConfirm: true,
+        preConfirm: function preConfirm() {
+          return axios.put('/projects/' + project.id + '/finish');
+        }
+      }).then(function (response) {
+        if (response.dismiss === 'cancel') {
+          return;
+        }
+
+        project.status = response.value.data.status;
+        notify('Proyecto <strong>' + project.name + '</strong> finalizado correctamente');
+      });
+    }
   }
 });
 
@@ -94041,6 +94104,51 @@ exports.clearImmediate = clearImmediate;
 
 /***/ }),
 
+/***/ "./node_modules/uniqid/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process, module) {/* 
+(The MIT License)
+Copyright (c) 2014 Halász Ádám <mail@adamhalasz.com>
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+//  Unique Hexatridecimal ID Generator
+// ================================================
+
+//  Dependencies
+// ================================================
+var pid = process && process.pid ? process.pid.toString(36) : '' ;
+var mac =  false ? require('macaddress').one(macHandler) : null ;
+var address = mac ? parseInt(mac.replace(/\:|\D+/gi, '')).toString(36) : '' ;
+
+//  Exports
+// ================================================
+module.exports         = function(prefix){ return (prefix || '') + address + pid + now().toString(36); }
+module.exports.process = function(prefix){ return (prefix || '')           + pid + now().toString(36); }
+module.exports.time    = function(prefix){ return (prefix || '')                 + now().toString(36); }
+
+//  Helpers
+// ================================================
+function now(){
+    var time = Date.now();
+    var last = now.last || time;
+    return now.last = time > last ? time : last + 1;
+}
+
+function macHandler(error){
+    if(module.parent && module.parent.uniqid_debug){
+        if(error) console.error('Info: No mac address - uniqid() falls back to uniqid.process().', error)
+        if(pid == '') console.error('Info: No process.pid - uniqid.process() falls back to uniqid.time().')
+    }
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/process/browser.js"), __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
 /***/ "./node_modules/velocity-animate/velocity.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -100974,6 +101082,67 @@ var render = function() {
                       ]
                     )
                   : [_vm._v(_vm._s(props.rowData.name))]
+              ]
+            }
+          },
+          {
+            key: "status",
+            fn: function(props) {
+              return [
+                _c(
+                  "b-dropdown",
+                  {
+                    staticClass: "m-0",
+                    attrs: { size: "sm", text: props.rowData.status }
+                  },
+                  [
+                    _vm.canDataTable(props, "publish")
+                      ? _c(
+                          "b-dropdown-item",
+                          {
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                _vm.publish(props.rowData)
+                              }
+                            }
+                          },
+                          [_vm._v("Publicar")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.canDataTable(props, "reject")
+                      ? _c(
+                          "b-dropdown-item",
+                          {
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                _vm.reject(props.rowData)
+                              }
+                            }
+                          },
+                          [_vm._v("Rechazar")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.canDataTable(props, "finish")
+                      ? _c(
+                          "b-dropdown-item",
+                          {
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                _vm.finish(props.rowData)
+                              }
+                            }
+                          },
+                          [_vm._v("Finalizar")]
+                        )
+                      : _vm._e()
+                  ],
+                  1
+                )
               ]
             }
           },
@@ -120793,6 +120962,8 @@ __webpack_require__("./node_modules/vue2-animate/dist/vue2-animate.min.css");
 
 window._ = __webpack_require__("./node_modules/lodash/lodash.js");
 
+window.uniqid = __webpack_require__("./node_modules/uniqid/index.js");
+
 window.moment = __webpack_require__("./node_modules/moment/moment.js");
 
 
@@ -122919,7 +123090,7 @@ window.notify = function notify(body) {
     showCloseButton: showCloseButton,
     title: title,
     duration: duration,
-    id: +new Date(),
+    id: uniqid(),
     showIcon: showIcon
   };
 
@@ -122942,7 +123113,7 @@ window.growl = function growl(body) {
     showCloseButton: showCloseButton,
     title: title,
     duration: duration,
-    id: +new Date(),
+    id: uniqid(),
     showIcon: showIcon
   };
   return bus.$emit('growl-notification', notification);
@@ -123092,9 +123263,12 @@ var crudMixins = {
                 preConfirm: function preConfirm() {
                     return axios.delete(App.basePath + url);
                 }
-            }).then(function () {
+            }).then(function (response) {
                 var _this = this;
 
+                if (response.dismiss === 'cancel') {
+                    return;
+                }
                 Vue.nextTick(function () {
                     return typeof _this.loadData !== 'undefined' ? _this.loadData() : _this.items.splice(index, 1);
                 });

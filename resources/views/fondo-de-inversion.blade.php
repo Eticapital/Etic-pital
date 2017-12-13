@@ -246,7 +246,7 @@
           <div class="content">
             <div class="row justify-content-center">
               <div class="col-lg-8">
-                <p class="text-center"><button class="btn btn-primary" type="submit">Enviar solicitud</button></p>
+                <p class="text-center"><button class="btn btn-wide btn-primary" type="submit">Enviar solicitud</button></p>
               </div> <!-- / .col-lg-8 -->
             </div> <!-- / .row -->
           </div> <!-- / .content -->

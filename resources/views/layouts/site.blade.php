@@ -92,11 +92,16 @@
             <div class="row mb-3">
               <div class="col-12 col-lg-6">
                 <a href="{{ route('invertir') }}">Invertir en un proyecto</a>
-                <br><a href="{{ route('invertir') }}">Usar un fondo de inversión</a>
+                <br><a href="{{ route('fondo-de-inversion') }}">Usar un fondo de inversión</a>
               </div> <!-- / .col-lg-6 -->
               <div class="col-12 col-lg-6">
                 <a href="{{ route('fondear-mi-proyecto') }}">Fondear mi proyecto</a>
-                <br><a href="{{ route('login') }}">Login</a>
+                <br>
+                @if(auth()->user())
+                <a href="{{ route('account.index') }}">Mi cuenta</a>
+                @else
+                <a href="{{ route('login') }}">Login</a>
+                @endif
               </div> <!-- / .col-lg-6 -->
             </div> <!-- / .row -->
           </div> <!-- / .col -->

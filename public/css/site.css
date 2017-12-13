@@ -9339,13 +9339,6 @@ a.text-dark:focus, a.text-dark:hover {
   }
 }
 
-/* Buttons */
-.btn {
-  padding: .75rem .75rem;
-  border-radius: 1.5rem;
-  min-width: 200px;
-}
-
 /* Pagination */
 .page-link {
   padding: 0.75rem 1rem;
@@ -9661,6 +9654,15 @@ a.project-card:hover {
   .project-preview .project-title {
     padding-top: 1.5rem;
   }
+}
+
+.btn {
+  padding: .75rem .75rem;
+  border-radius: 1.5rem;
+}
+
+.btn-wide {
+  min-width: 200px;
 }
 
 .btn-primary {

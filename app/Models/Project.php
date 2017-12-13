@@ -8,11 +8,12 @@ use App\Models\Traits\HasPolicyAttributes;
 use App\Models\Traits\LazyAppends;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
 class Project extends Model
 {
-    use HasImages, Sluggable, Searchable, LazyAppends;
+    use HasImages, Sluggable, Searchable, LazyAppends, SoftDeletes;
 
     use HasImages, HasPolicyAttributes {
         HasPolicyAttributes::getAttribute insteadof HasImages;
@@ -665,6 +666,18 @@ HTML;
         return $array;
     }
 
+    /**
+     * Devuevle el nombre del status
+     * @return [type] [description]
+     */
+    public function getStatusAttribute()
+    {
+        if ($this->is_pending) {
+            return 'En revisión';
+        }
+
+        return 'Sin definir';
+    }
 
     /**
      * Si el proyecto esta pendiente de publicar

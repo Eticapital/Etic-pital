@@ -14,7 +14,7 @@
       @changed="kpiChanged"
       @remove="removeKpi(index)"
     />
-    <p><b-btn variant="secondary" @click.prevent="addKpi">Agregar otro KPI</b-btn></p>
+    <p><b-btn class="btn-wide" variant="secondary" @click.prevent="addKpi">Agregar otro KPI</b-btn></p>
   </b-form-group>
 </template>
 

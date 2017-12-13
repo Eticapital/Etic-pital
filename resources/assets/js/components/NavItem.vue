@@ -1,5 +1,5 @@
 <template>
-  <b-nav-item v-if="!hasDropdown" :to="to">
+  <b-nav-item v-if="!hasDropdown" :to="to" :href="href">
     <i v-if="hasIcon" :class="'icon icon-' + link.icon"></i>
     {{link.text}}
     <b-badge v-if="link.notifications" v-text="link.notifications"/>
@@ -38,7 +38,15 @@ export default {
         return { name: this.link.route, params: this.link.params }
       }
 
-      return this.link.href ? this.link.href : '/'
+      return null
+    },
+
+    href () {
+      if (this.link.href) {
+        return format(this.link.href, bus.breadcrumbParams)
+      }
+
+      return null
     },
 
     id () {

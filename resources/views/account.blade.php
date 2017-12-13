@@ -34,9 +34,43 @@
 
     <div class="col-lg-7">
       <b-card title="Mis proyectos">
+        @if($projects->count())
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nombre del proyecto</th>
+                <th>Estatus</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($projects as $project)
+              <tr>
+                <td>{{ $project->name }}</td>
+                <td>{{ $project->status }}</td>
+                <td>
+                  <div class="btn-group btn-group-sm">
+                    <a href="" class="btn btn-primary ">test</a>
+                    <a href="" class="btn btn-primary ">test</a>
+                    <a href="" class="btn btn-primary ">test</a>
+                  </div>
+                </td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table><!-- /.table -->
+          @if($projects->hasMorePages())
+          <p class="text-center">
+            <a href="" class="btn btn-primary">Ver más...</a>
+          </p>
+          @endif
+        @else
+        <p class="m-0"><i>No has registrado ningun proyecto.</i> <a href="{{ route('fondear-mi-proyecto') }}">Registrar un proyecto</a></p>
+        @endif
       </b-card>
 
       <b-card class="mt-3" title="Proyectos para financiar">
+        <p class="m-0"><i>Sin proyectos para financiar</i></p>
       </b-card>
     </div>
   </div><!-- /.row -->

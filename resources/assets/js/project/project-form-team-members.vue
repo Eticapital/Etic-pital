@@ -14,7 +14,7 @@
       @changed="memberChanged"
       @remove="removeMember(index)"
     />
-    <p><b-btn :variant="form && form.errors.has(name) ? 'danger' : 'secondary'" @click.prevent="addMember">Agregar otro miembro</b-btn></p>
+    <p><b-btn class="btn-wide" :variant="form && form.errors.has(name) ? 'danger' : 'secondary'" @click.prevent="addMember">Agregar otro miembro</b-btn></p>
   </b-form-group>
 </template>
 

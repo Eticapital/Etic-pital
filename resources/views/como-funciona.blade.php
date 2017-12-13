@@ -50,10 +50,10 @@
                   </ol>
                   <div class="row">
                     <div class="col-6 text-center">
-                      <a href="{{ route('invertir') }}" class="btn btn-secondary">Ver proyectos para invertir</a>
+                      <a href="{{ route('invertir') }}" class="btn btn-wide btn-secondary">Ver proyectos para invertir</a>
                     </div>
                     <div class="col-6 text-center">
-                      <a href="{{ route('fondo-de-inversion') }}" class="btn btn-secondary">Solicitar acceso al fondo</a></p>
+                      <a href="{{ route('fondo-de-inversion') }}" class="btn btn-wide btn-secondary">Solicitar acceso al fondo</a></p>
                     </div>
                   </div>
               </div> <!-- / .col-lg-8 -->
@@ -96,7 +96,7 @@
                   <li>Mecanismos de distribución.</li>
                   <li>Capital de trabajo & Burning rate</li>
                 </ul>
-                <p><a href="{{ route('fondear-mi-proyecto') }}" class="btn btn-secondary">Aplicar ahora</a></p>
+                <p><a href="{{ route('fondear-mi-proyecto') }}" class="btn btn-wide btn-secondary">Aplicar ahora</a></p>
               </div> <!-- / .col-lg-8 -->
             </div> <!-- / .row -->
           </div> <!-- / .container -->

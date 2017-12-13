@@ -5315,6 +5315,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 var axiosFileupload = __webpack_require__("./node_modules/axios-fileupload/index.js");
 
@@ -6009,6 +6011,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -6146,12 +6150,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     },
     onSubmit: function onSubmit() {
-      //
+      return;
     },
     submitProject: function submitProject() {
       var _this2 = this;
 
-      var promise = this.project.id ? App.put('/projects/' + this.project.id, this.form) : App.post('/projects', this.form);
+      var promise = this.project && this.project.id ? App.put('/projects/' + this.project.id, this.form) : App.post('/projects', this.form);
 
       promise.then(function (response) {
         if (_this2.return === 'admin') {
@@ -94274,6 +94278,7 @@ var render = function() {
           _c(
             "b-btn",
             {
+              staticClass: "btn-wide",
               attrs: { variant: "secondary" },
               on: {
                 click: function($event) {
@@ -95236,7 +95241,12 @@ var render = function() {
                         _c(
                           "form-button-submit",
                           {
-                            attrs: { variant: "primary", form: _vm.form },
+                            staticClass: "btn-wide",
+                            attrs: {
+                              type: "button",
+                              variant: "primary",
+                              form: _vm.form
+                            },
                             nativeOn: {
                               click: function($event) {
                                 $event.preventDefault()
@@ -95744,10 +95754,12 @@ var render = function() {
                   {
                     class: {
                       btn: true,
+                      "btn-wide": true,
                       "btn-secondary": !_vm.form.errors.has(_vm.name),
                       "btn-danger": _vm.form.errors.has(_vm.name),
                       disabled: _vm.choosing
                     },
+                    attrs: { type: "button" },
                     on: {
                       click: function($event) {
                         $event.preventDefault()
@@ -95844,7 +95856,7 @@ var render = function() {
         {
           ref: "upload",
           class: [
-            "btn",
+            "btn btn-wide",
             _vm.form && _vm.form.errors.has(_vm.name)
               ? "btn-danger"
               : "btn-secondary"
@@ -96772,6 +96784,7 @@ var render = function() {
           _c(
             "b-btn",
             {
+              staticClass: "btn-wide",
               attrs: {
                 variant:
                   _vm.form && _vm.form.errors.has(_vm.name)

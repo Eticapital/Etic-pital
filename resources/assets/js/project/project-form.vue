@@ -389,6 +389,8 @@
             <div class="col-lg-8">
               <p class="text-center">
                 <form-button-submit
+                  type="button"
+                  class="btn-wide"
                   variant="primary"
                   :form="form"
                   @click.prevent.native="submitProject"
@@ -549,10 +551,10 @@ export default {
         })
     },
     onSubmit () {
-      //
+      return
     },
     submitProject () {
-      let promise = this.project.id
+      let promise = this.project && this.project.id
         ? App.put(`/projects/${this.project.id}`, this.form)
         : App.post('/projects', this.form)
 

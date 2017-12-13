@@ -17,9 +17,10 @@ class AccountController extends Controller
             return request()->user();
         }
 
-        return view('account', [
-            'user' => auth()->user()
-        ]);
+        $user = auth()->user();
+        $projects = $user->projects()->simplePaginate(3);
+
+        return view('account')->with(compact('user', 'projects'));
     }
 
     public function edit()

@@ -56,8 +56,10 @@
 
         <div class="mt-3">
           <button
+            type="button"
             :class="{
               'btn': true,
+              'btn-wide': true,
               'btn-secondary': !form.errors.has(name),
               'btn-danger': form.errors.has(name),
               'disabled': choosing

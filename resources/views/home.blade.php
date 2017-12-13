@@ -11,7 +11,7 @@
         <p class="text-justify">Potencializamos el crecimiento de las PyMEs agroindustriales a través de un sistema virtuoso sustentable entre buenos emprendedores y buenos inversionistas, estamos comprometidos con el bien común; generando con nuestra asistencia, la máxima rentabilidad para todos los participantes del sistema.</p>
       </div> <!-- / .col-lg-3 -->
       <div class="col-lg-3">
-        <p class="text-center"><a href="{{ route('como-funciona') }}" class="btn btn-secondary">Ver más</a></p>
+        <p class="text-center"><a href="{{ route('como-funciona') }}" class="btn btn-wide btn-secondary">Ver más</a></p>
       </div> <!-- / .col-lg-3 -->
     </div> <!-- / .row -->
 </div> <!-- / .container -->
@@ -30,13 +30,13 @@
             <img src="img/home_icon1.png" class="icon">
             <p><span class="h3">Invierte en empresas</span></p>
             <p class="text-justify">Invierte de una manera fácil y transparente, por medio de nuestra plataforma.</p>
-            <p><a href="{{ route('invertir') }}" class="btn btn-primary">Ver proyectos</a></p>
+            <p><a href="{{ route('invertir') }}" class="btn btn-wide btn-primary">Ver proyectos</a></p>
           </div> <!-- / .col -->
           <div class="col-12 col-md-6 text-center">
             <img src="img/home_icon2.png" class="icon">
             <p><span class="h3">Usa nuestro fondo de inversión</span></p>
             <p class="text-justify">Invierte a través de nuestro fondo de inversión para proyectos agrícolas. Si necesitas más de $300,000, esta puede ser tu solución.</p>
-            <p><a href="fondoinversion.html" class="btn btn-primary">Solicitar acceso</a></p>
+            <p><a href="{{ route('invertir') }}" class="btn btn-wide btn-primary">Solicitar acceso</a></p>
           </div> <!-- / .col -->
         </div> <!-- / .row -->
       </div> <!-- / .content -->
@@ -50,7 +50,7 @@
               <img src="img/home_icon3.png" class="icon">
               <p><span class="h2 text-secondary">Fondea tu proyecto</span></p>
               <p>¿Necesitas capital semilla? Inscribe tu idea o proyecto con nosotros.</p>
-              <p><a href="{{ route('fondear-mi-proyecto') }}" class="btn btn-secondary">Aplicar</a></p>
+              <p><a href="{{ route('fondear-mi-proyecto') }}" class="btn btn-wide btn-secondary">Aplicar</a></p>
             </div> <!-- / .col-lg-8 -->
           </div> <!-- / .row -->
         </div> <!-- / .content -->

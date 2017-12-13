@@ -2344,7 +2344,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return { name: this.link.route, params: this.link.params };
       }
 
-      return this.link.href ? this.link.href : '/';
+      return null;
+    },
+    href: function href() {
+      if (this.link.href) {
+        return format(this.link.href, bus.breadcrumbParams);
+      }
+
+      return null;
     },
     id: function id() {
       if (this.link.id) {
@@ -4754,6 +4761,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_js__ = __webpack_require__("./resources/assets/js/mixins.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__mixins_js__);
+//
+//
+//
+//
 //
 //
 //
@@ -100545,7 +100556,7 @@ var render = function() {
         {
           ref: "upload",
           class: [
-            "btn",
+            "btn btn-wide",
             _vm.form && _vm.form.errors.has(_vm.name)
               ? "btn-danger"
               : "btn-secondary"
@@ -100994,6 +101005,25 @@ var render = function() {
                             )
                           : _vm._e(),
                         _vm._v(" "),
+                        _vm.canDataTable(props, "show")
+                          ? _c(
+                              "router-link",
+                              {
+                                staticClass: "btn btn-primary",
+                                attrs: {
+                                  to: {
+                                    name: "projects.edit",
+                                    params: { id: props.rowData.id }
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "icon-eye" }),
+                                _vm._v(" Detalles\n        ")
+                              ]
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
                         _vm.canDataTable(props, "update")
                           ? _c(
                               "router-link",
@@ -101007,7 +101037,7 @@ var render = function() {
                                 }
                               },
                               [
-                                _c("i", { staticClass: "icon-pen" }),
+                                _c("i", { staticClass: "icon-wrench" }),
                                 _vm._v(" Administrar\n        ")
                               ]
                             )
@@ -101564,7 +101594,7 @@ var render = function() {
   return !_vm.hasDropdown
     ? _c(
         "b-nav-item",
-        { attrs: { to: _vm.to } },
+        { attrs: { to: _vm.to, href: _vm.href } },
         [
           _vm.hasIcon
             ? _c("i", { class: "icon icon-" + _vm.link.icon })

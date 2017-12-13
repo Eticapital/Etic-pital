@@ -17,7 +17,7 @@
     <p v-if="form&&form.errors.has(name)" style="display: block" class="invalid-feedback" v-text="form.errors.get(name)"></p>
     </div>
     <file-upload
-      :class="['btn', form && form.errors.has(name) ? 'btn-danger' : 'btn-secondary']"
+      :class="['btn btn-wide', form && form.errors.has(name) ? 'btn-danger' : 'btn-secondary']"
       post-action="/upload"
       :multiple="true"
       v-model="files"

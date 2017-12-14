@@ -18,8 +18,10 @@ Route::group(['prefix' => 'account/projects/{project}'], function () {
     Route::get('investments', 'AccountProjectsInvestmentsController@index')->name('account.investments');
 });
 
+Route::get('investments', 'InvestmentController@index')->name('investments.index');
 Route::post('investments/{investment}/accept', 'InvestmentController@accept')->name('investments.accept');
 Route::post('investments/{investment}/reject', 'InvestmentController@reject')->name('investments.reject');
+Route::delete('investments/{investment}', 'InvestmentController@destroy')->name('investments.destroy');
 
 // Administrar usuarios
 Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);

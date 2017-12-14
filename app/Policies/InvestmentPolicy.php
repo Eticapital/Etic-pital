@@ -10,6 +10,11 @@ class InvestmentPolicy
 {
     use HandlesAuthorization;
 
+    public function index(User $user)
+    {
+        return $user->is_root || $user->can('investments.index');
+    }
+
     /**
      * Determina si puede aceptar una inversión
      *

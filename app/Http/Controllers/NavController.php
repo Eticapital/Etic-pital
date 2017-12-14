@@ -174,6 +174,36 @@ class NavController extends Controller
                     ],
                 ]
             ],
+
+            [
+                'title' => 'Inversiones',
+                'icon' => 'coins',
+                'text' => 'Inversiones',
+                'route' => 'investments.index',
+                'searchable' => true,
+                'hide' => false,
+                'permission' => ['index', \App\Models\Investment::class],
+                'items' => [
+                    [
+                        'title' => 'Nuevo promesa de inversión',
+                        'icon' => 'plus',
+                        'text' => 'Nueva promesa de inversión',
+                        'route' => 'investments.create',
+                        'permission' => ['create', \App\Models\Investment::class],
+                        'in_top_menu' => true,
+                        'return' => true,
+                    ],
+                    [
+                        'title' => 'Editar {name}',
+                        'icon' => 'pencil2',
+                        'text' => 'Editar',
+                        'route' => 'investments.edit',
+                        'hide' => true,
+                        'return' => true,
+                        'in_top_menu' => false,
+                    ],
+                ]
+            ],
         ];
 
         // Filtro los elementos segun los permisos del usuario

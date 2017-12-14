@@ -90,6 +90,28 @@ let routes = [
     name: 'projects.edit',
     path: '/projects/:id/edit',
     component: require('./views/projects/create')
+  },
+
+  // Inversiones
+  {
+    name: 'investments.index',
+    path: '/investments',
+    component: require('./views/investments')
+  },
+  {
+    name: 'investments.create',
+    path: '/investments/create',
+    component: require('./views/investments/create')
+  },
+  {
+    name: 'investments.show',
+    path: '/investments/:id',
+    component: require('./views/investments/show')
+  },
+  {
+    name: 'investments.edit',
+    path: '/investments/:id/edit',
+    component: require('./views/investments/create')
   }
 ]
 

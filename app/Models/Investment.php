@@ -4,11 +4,13 @@ namespace App\Models;
 
 use App\Models\Project;
 use App\Models\Traits\HasPolicyAttributes;
+use App\Models\Traits\LazyAppends;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Investment extends Model
 {
-    use HasPolicyAttributes;
+    use HasPolicyAttributes, Searchable, LazyAppends;
 
     const STATUS_NEW = 0;
     const STATUS_ACCEPTED = 1;
@@ -28,6 +30,27 @@ class Investment extends Model
         'status_class',
         'status_icon',
     ];
+
+    protected $appendable = [
+        'can_update',
+        'can_delete',
+        'can_accept',
+        'can_reject',
+        'project',
+    ];
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return [
+            'name' => $this->name,
+            'email' => $this->email,
+        ];
+    }
 
     public function scopeAccepted($query)
     {
@@ -68,10 +91,10 @@ class Investment extends Model
     public function getStatusIconAttribute()
     {
         if ($this->investment_status === self::STATUS_NEW) {
-            return 'menu';
+            return 'more';
         }
         if ($this->investment_status === self::STATUS_ACCEPTED) {
-            return 'success';
+            return 'checkmark';
         }
         if ($this->investment_status === self::STATUS_REJECTED) {
             return 'cross';
@@ -86,6 +109,16 @@ class Investment extends Model
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * El proyecto como atirbuto
+     *
+     * @return [type] [description]
+     */
+    public function getProjectAttribute()
+    {
+        return $this->project()->first();
     }
 
     /**

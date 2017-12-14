@@ -31,7 +31,7 @@
           <td>{{ $investment->residenceor or '-'  }}</td>
           <td>{{ $investment->organization or '-' }}</td>
           <td>
-            <investments-status-btn :investment="{{ $investment->append(['can_accept', 'can_reject']) }}" :user="{{ auth()->user() }}">
+            <investments-status-btn :investment="{{ $investment->append(['can_accept', 'can_reject']) }}">
           </td>
         </tr>
         @endforeach

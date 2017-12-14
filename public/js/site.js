@@ -3510,6 +3510,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3521,7 +3522,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   props: {
-    user: Object,
     investment: Object
   },
 
@@ -3551,6 +3551,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).catch(function (errors) {
         console.log(errors);
         _this2.busy = false;
+        growl('Ocurrio un error inténtalo de nuevo o contacta al administrador.', 'danger');
+      });
+    },
+    doDelete: function doDelete() {
+      var _this3 = this;
+
+      swal({
+        title: '¿Estás seguro que deseas eliminar está promesa de inversión?',
+        text: 'Esta acción no se puede deshacer',
+        showCancelButton: true,
+        confirmButtonText: 'Estoy seguro',
+        showLoaderOnConfirm: true,
+        preConfirm: function preConfirm() {
+          _this3.busy = true;
+          return axios.delete('/investments/' + _this3.investment.id);
+        }
+      }).then(function (response) {
+        _this3.busy = false;
+        if (response.dismiss === 'cancel') {
+          return;
+        }
+        var investment = response.value.data;
+        _this3.$emit('deleted', investment);
+        notify('Inversi\xF3n eliminado correctamente');
+      }).catch(function (errors) {
+        console.log(errors);
+        _this3.busy = false;
         growl('Ocurrio un error inténtalo de nuevo o contacta al administrador.', 'danger');
       });
     }
@@ -97461,6 +97488,7 @@ var render = function() {
         ? _c(
             "b-dropdown-item",
             {
+              key: "accept-" + _vm.currentInvestment.id,
               staticClass: "text-success",
               on: {
                 click: function($event) {
@@ -97477,6 +97505,7 @@ var render = function() {
         ? _c(
             "b-dropdown-item",
             {
+              key: "reject-" + _vm.currentInvestment.id,
               staticClass: "text-danger",
               on: {
                 click: function($event) {
@@ -97486,6 +97515,23 @@ var render = function() {
               }
             },
             [_c("i", { staticClass: "icon-cross" }), _vm._v(" Rechazar")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.currentInvestment.can_delete
+        ? _c(
+            "b-dropdown-item",
+            {
+              key: "delete-" + _vm.currentInvestment.id,
+              staticClass: "text-danger",
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  _vm.doDelete($event)
+                }
+              }
+            },
+            [_c("i", { staticClass: "icon-bin" }), _vm._v(" Eliminar")]
           )
         : _vm._e()
     ],

@@ -5,7 +5,7 @@
 <div class="container">
   <div class="row my-3">
     <div class="col-lg-5">
-      <b-card no-body title="Hola, {{ $user->name }}">
+      <b-card v-cloak no-body title="Hola, {{ $user->name }}">
         <b-card-body>
           <h5 class="text-center">Datos de mi cuenta</h5>
         </b-card-body>
@@ -36,7 +36,8 @@
     </div><!-- /.col-lg-5 -->
 
     <div class="col-lg-7">
-      <b-card title="Mis proyectos">
+      <b-card v-cloak title="Mis proyectos">
+        <p>Proyectos que registraste en nuestro sitio para buscar financiamiento.</p>
         @if($projects->count())
           <table class="table">
             <thead>
@@ -65,18 +66,49 @@
               @endforeach
             </tbody>
           </table><!-- /.table -->
-          {{-- @if($projects->hasMorePages())
           <p class="text-center">
-            <a href="" class="btn btn-primary">Ver más...</a>
+            <a href="{{ route('account.projects') }}" class="btn btn-primary">Ver mas detalles<a>
           </p>
-          @endif --}}
         @else
         <p class="m-0"><i>No has registrado ningun proyecto.</i> <a href="{{ route('fondear-mi-proyecto') }}">Registrar un proyecto</a></p>
         @endif
       </b-card>
 
-      <b-card class="mt-3" title="Proyectos para financiar">
-        <p class="m-0"><i>Sin proyectos para financiar</i></p>
+      <b-card v-cloak class="mt-3" title="Mis promesas de inversión">
+        <p>Promesas de inversión realizadas a otros proyectos.</p>
+        @if($investments->count())
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Proyecto</th>
+                <th>Monto</th>
+                <th>Estatus</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($investments as $investment)
+              <tr>
+                <td>
+                  @can('show', $investment->project)
+                  <a href="{{ $investment->project->link }}">{{ $investment->project->name }}</a>
+                  @else
+                  {{ $investment->project->name }}
+                  @endcan
+                </td>
+                <td>{{ money($investment->amount) }}</td>
+                <td>
+                  <span class="text-{{ $investment->status_class }}">
+                    <i class="icon-{{ $investment->status_icon }}"></i>
+                    {{ $investment->status_label }}
+                  </span>
+                </td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table><!-- /.table -->
+        @else
+        <p class="m-0"><i>No has realizado ninguna promesa de inversión</i></p>
+        @endif
       </b-card>
     </div>
   </div><!-- /.row -->

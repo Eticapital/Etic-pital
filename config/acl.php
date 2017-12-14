@@ -5,6 +5,7 @@ return [
         'users' => 'Usuarios',
         'roles' => 'Grupos de Usuario',
         'projects' => 'Proyectos',
+        'investments' => 'Promesas de inversión',
     ],
 
     'permissions' => [
@@ -39,6 +40,17 @@ return [
             'permissions.toggle' => 'Actualizar permiso',
             'users' => 'Listar usuarios',
             'users.toggle' => 'Agregar/Quitar usuarios',
+        ],
+
+        // Resource Permissions
+        'investments' => [
+            'index' => 'Listar',
+            'view' => 'Ver',
+            'create' => 'Crear',
+            'update' => 'Actualizar',
+            'delete' => 'Eliminar',
+            'accept' => 'Aceptar',
+            'reject' => 'Rechazar',
         ],
 
         'show-debugbar' => 'Ejemplo de Permiso'

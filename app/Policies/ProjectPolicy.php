@@ -207,4 +207,32 @@ class ProjectPolicy
 
         return false;
     }
+
+    /**
+     * Si puede ver las inversiones de un proyecto
+     *
+     * @param  App\User   $user
+     * @param  App\Models\Project   $user
+     *
+     * @return boolean
+     */
+    public function investments(User $user, Project $project)
+    {
+        // Si esta rechazado de entrada no puedo
+        if ($project->is_rejected) {
+            return false;
+        }
+
+        // Si el usuario es dueño del prouyecto
+        if ($user->id === $project->owner_id) {
+            return true;
+        }
+
+        // Si el usuario tiene permisos para ver las inversiones
+        if ($user->is_root || $user->can('investments.index')) {
+            return true;
+        }
+
+        return false;
+    }
 }

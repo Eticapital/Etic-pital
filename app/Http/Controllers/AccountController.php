@@ -19,8 +19,9 @@ class AccountController extends Controller
 
         $user = auth()->user();
         $projects = $user->projects()->simplePaginate(3);
+        $investments = $user->investments()->get();
 
-        return view('account')->with(compact('user', 'projects'));
+        return view('account')->with(compact('user', 'projects', 'investments'));
     }
 
     public function edit()

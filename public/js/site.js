@@ -3494,6 +3494,71 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/InvestmentsStatusBtn.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      busy: false,
+      currentInvestment: this.investment
+    };
+  },
+
+
+  props: {
+    user: Object,
+    investment: Object
+  },
+
+  methods: {
+    accept: function accept() {
+      var _this = this;
+
+      this.busy = true;
+      axios.post('/investments/' + this.investment.id + '/accept').then(function (response) {
+        _this.currentInvestment = response.data;
+        _this.busy = false;
+        growl('Estatus actualizado correctamente');
+      }).catch(function (errors) {
+        console.log(errors);
+        _this.busy = false;
+        growl('Ocurrio un error inténtalo de nuevo o contacta al administrador.', 'danger');
+      });
+    },
+    reject: function reject() {
+      var _this2 = this;
+
+      this.busy = true;
+      axios.post('/investments/' + this.investment.id + '/reject').then(function (response) {
+        _this2.currentInvestment = response.data;
+        _this2.busy = false;
+        growl('Estatus actualizado correctamente');
+      }).catch(function (errors) {
+        console.log(errors);
+        _this2.busy = false;
+        growl('Ocurrio un error inténtalo de nuevo o contacta al administrador.', 'danger');
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/WaitDots.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -97364,6 +97429,81 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e60862be\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/InvestmentsStatusBtn.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "b-dropdown",
+    { attrs: { size: "sm", variant: _vm.currentInvestment.status_class } },
+    [
+      _c(
+        "template",
+        { slot: "button-content" },
+        [
+          _vm.busy
+            ? [
+                _c("i", { staticClass: "icon-spinner spinner" }),
+                _vm._v(" Actualizando")
+              ]
+            : [
+                _c("i", { class: "icon-" + _vm.currentInvestment.status_icon }),
+                _vm._v(_vm._s(_vm.currentInvestment.status_label))
+              ]
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _vm.currentInvestment.can_accept
+        ? _c(
+            "b-dropdown-item",
+            {
+              staticClass: "text-success",
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  _vm.accept($event)
+                }
+              }
+            },
+            [_c("i", { staticClass: "icon-checkmark" }), _vm._v(" Aceptar")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.currentInvestment.can_reject
+        ? _c(
+            "b-dropdown-item",
+            {
+              staticClass: "text-danger",
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  _vm.reject($event)
+                }
+              }
+            },
+            [_c("i", { staticClass: "icon-cross" }), _vm._v(" Rechazar")]
+          )
+        : _vm._e()
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-e60862be", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e96a59b4\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/project/project-form-team-members.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -110971,6 +111111,55 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/InvestmentsStatusBtn.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/InvestmentsStatusBtn.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e60862be\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/InvestmentsStatusBtn.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/InvestmentsStatusBtn.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e60862be", Component.options)
+  } else {
+    hotAPI.reload("data-v-e60862be", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/WaitDots.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -112714,6 +112903,8 @@ Vue.component('logout-link', __webpack_require__("./resources/assets/js/componen
 
 Vue.component('wait-dots', __webpack_require__("./resources/assets/js/components/WaitDots.vue"));
 Vue.component('growl-notifications', __webpack_require__("./resources/assets/js/components/GrowlNotifications.vue"));
+
+Vue.component('investments-status-btn', __webpack_require__("./resources/assets/js/components/InvestmentsStatusBtn.vue"));
 
 /***/ }),
 

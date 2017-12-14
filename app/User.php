@@ -123,4 +123,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Project::class, 'owner_id');
     }
+
+    /**
+     * Un usuario tiene multiples promesas de inversión
+     *
+     * @return HasMany
+     */
+    public function investments()
+    {
+        return $this->hasMany(\App\Models\Investment::class, 'owner_id');
+    }
 }

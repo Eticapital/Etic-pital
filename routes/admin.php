@@ -12,6 +12,15 @@ Route::get('account/password', 'AccountController@showPasswordForm')->name('acco
 Route::put('account/password', 'AccountController@password')->name('account.password');
 Route::get('account/permissions', 'AccountController@permissions')->name('account.permissions');
 
+
+Route::get('account/projects', 'AccountProjectsController@index')->name('account.projects');
+Route::group(['prefix' => 'account/projects/{project}'], function () {
+    Route::get('investments', 'AccountProjectsInvestmentsController@index')->name('account.investments');
+});
+
+Route::post('investments/{investment}/accept', 'InvestmentController@accept')->name('investments.accept');
+Route::post('investments/{investment}/reject', 'InvestmentController@reject')->name('investments.reject');
+
 // Administrar usuarios
 Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
 Route::post('users/{user}/status', 'UserController@toggleStatus');

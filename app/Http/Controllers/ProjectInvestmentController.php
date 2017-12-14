@@ -15,12 +15,13 @@ class ProjectInvestmentController extends Controller
 
     public function store(Project $project, ProjectInvestmentRequest $request)
     {
-        flash('¡Tu promesa de inversión fue registrada correctamente! Te contactaremos pronto para informate de próximos pasos.');
+        flash('¡Tu promesa de inversión fue registrada correctamente!
+            Te contactaremos pronto para informate de próximos pasos.');
 
-
+        $investment = $project->investments()->create($request->all());
 
         return [
-            'investment' => $request->all(),
+            'investment' => $investment,
             'redirect_to' => route('projects.show', $project->slug),
         ];
     }

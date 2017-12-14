@@ -14,7 +14,7 @@ class AddInvestmentDataToUser extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('phone');
+            $table->string('phone')->nullable();
             $table->string('organization')->nullable();
             $table->string('residence')->nullable();
         });

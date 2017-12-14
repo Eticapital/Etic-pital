@@ -49,9 +49,9 @@ class UserController extends Controller
             'name' => 'required',
             'password' => 'required|confirmed',
             'email' => 'required|email|unique:users',
-            'phone' => '',
-            'organization' => '',
-            'residence' => '',
+            'phone' => 'nullable',
+            'organization' => 'nullable',
+            'residence' => 'nullable',
         ]);
 
         return User::create($data);
@@ -65,9 +65,9 @@ class UserController extends Controller
             'name' => 'required',
             'password' => 'sometimes|nullable|confirmed',
             'email' => 'email|unique:users,email,'.$user->id,
-            'phone' => '',
-            'organization' => '',
-            'residence' => '',
+            'phone' => 'nullable',
+            'organization' => 'nullable',
+            'residence' => 'nullable',
         ]);
 
         if (!$data['password']) {

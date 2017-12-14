@@ -9,6 +9,18 @@
         <td>Correo:</td>
         <td><a :href="'mailto:' + user.email">{{ user.email }}</a></td>
       </tr>
+      <tr>
+        <td>Teléfono:</td>
+        <td>{{ user.phone | placeholder('-') }}</td>
+      </tr>
+      <tr>
+        <td>Organización:</td>
+        <td>{{ user.organization | placeholder('-') }}</td>
+      </tr>
+      <tr>
+        <td>Residencia:</td>
+        <td>{{ user.residence | placeholder('-') }}</td>
+      </tr>
     </table><!-- /.table -->
   </b-card>
 </template>

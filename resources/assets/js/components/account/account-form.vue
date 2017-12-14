@@ -2,6 +2,9 @@
   <form @submit.prevent="onSubmit" autocomplete="off">
     <form-text :form="form" name="name" label="Tu nombre completo" />
     <form-text :form="form" name="email" label="Tu correo electrónico" />
+    <form-text :form="form" name="phone" label="Teléfono" />
+    <form-text :form="form" name="organization" label="Organización" />
+    <form-text :form="form" name="residence" label="Residencia" />
     <form-button-submit :form="form">Guardar</form-button-submit>
   </form>
 </template>
@@ -23,7 +26,10 @@ export default {
     return {
       form: new Form({
         name: '',
-        email: ''
+        email: '',
+        phone: '',
+        organization: '',
+        residence: ''
       })
     }
   },

@@ -33,6 +33,7 @@ class AddOwnerIdToInvestments extends Migration
     public function down()
     {
         Schema::table('investments', function (Blueprint $table) {
+            $table->dropForeign('investments_owner_id_foreign');
             $table->dropColumn('owner_id');
         });
     }

@@ -12,6 +12,9 @@
         <b-list-group flush>
             <b-list-group-item><strong>Nombre: </strong> {{ $user->name }}</b-list-group-item>
             <b-list-group-item><strong>Correo: </strong> {!! $user->email_link !!}</b-list-group-item>
+            <b-list-group-item><strong>Teléfono: </strong> {!! $user->phone or '-' !!}</b-list-group-item>
+            <b-list-group-item><strong>Organización: </strong> {!! $user->organization or '-' !!}</b-list-group-item>
+            <b-list-group-item><strong>Residencia: </strong> {!! $user->residence or '-' !!}</b-list-group-item>
         </b-list-group>
         <b-card-body>
           <ul class="list-unstyled m-0">

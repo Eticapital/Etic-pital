@@ -17,6 +17,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
+        \App\Models\Investment::observe(\App\Observers\InvestmentObserver::class);
+
         \Illuminate\Pagination\AbstractPaginator::defaultView("pagination::bootstrap-4");
 
         Validator::extend('old_password', function ($attribute, $value, $parameters, $validator) {

@@ -293,14 +293,23 @@ class Project extends Model
     }
 
     /**
-     * Devuelve el avance del proyecto
+     * Devuelve el avance del proyecto como atributo
      *
      * @return integer
      */
     public function getCollectedAttribute()
     {
-        // @TODO
-        return 0;
+        return $this->collected();
+    }
+
+    /**
+     * Devuelve el avance del proyecto
+     *
+     * @return integer
+     */
+    public function collected()
+    {
+        return $this->investments()->accepted()->sum('amount');
     }
 
     /**

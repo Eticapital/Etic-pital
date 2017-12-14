@@ -3300,6 +3300,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -3317,7 +3320,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       form: new Form({
         name: '',
-        email: ''
+        email: '',
+        phone: '',
+        organization: '',
+        residence: ''
       })
     };
   },
@@ -4649,6 +4655,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -100983,6 +101001,18 @@ var render = function() {
         attrs: { form: _vm.form, name: "email", label: "Tu correo electrónico" }
       }),
       _vm._v(" "),
+      _c("form-text", {
+        attrs: { form: _vm.form, name: "phone", label: "Teléfono" }
+      }),
+      _vm._v(" "),
+      _c("form-text", {
+        attrs: { form: _vm.form, name: "organization", label: "Organización" }
+      }),
+      _vm._v(" "),
+      _c("form-text", {
+        attrs: { form: _vm.form, name: "residence", label: "Residencia" }
+      }),
+      _vm._v(" "),
       _c("form-button-submit", { attrs: { form: _vm.form } }, [
         _vm._v("Guardar")
       ])
@@ -102595,6 +102625,32 @@ var render = function() {
                 _c("a", { attrs: { href: "mailto:" + _vm.user.email } }, [
                   _vm._v(_vm._s(_vm.user.email))
                 ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("tr", [
+              _c("td", [_vm._v("Teléfono:")]),
+              _vm._v(" "),
+              _c("td", [
+                _vm._v(_vm._s(_vm._f("placeholder")(_vm.user.phone, "-")))
+              ])
+            ]),
+            _vm._v(" "),
+            _c("tr", [
+              _c("td", [_vm._v("Organización:")]),
+              _vm._v(" "),
+              _c("td", [
+                _vm._v(
+                  _vm._s(_vm._f("placeholder")(_vm.user.organization, "-"))
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("tr", [
+              _c("td", [_vm._v("Residencia:")]),
+              _vm._v(" "),
+              _c("td", [
+                _vm._v(_vm._s(_vm._f("placeholder")(_vm.user.residence, "-")))
               ])
             ])
           ])

@@ -56,6 +56,9 @@ class AccountController extends Controller
         $data = $this->validate($request, [
             'name' => 'required',
             'email' => 'email|unique:users,email,'.$user->id,
+            'phone' => 'nullable',
+            'organization' => 'nullable',
+            'residence' => 'nullable',
         ]);
 
         return tap($user)->update($data);

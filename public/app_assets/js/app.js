@@ -5741,6 +5741,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_js__ = __webpack_require__("./resources/assets/js/mixins.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__mixins_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__users_users_status_link__ = __webpack_require__("./resources/assets/js/views/users/_users_status_link.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__users_users_status_link___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__users_users_status_link__);
 //
 //
 //
@@ -5778,10 +5780,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    UsersStatusLink: __WEBPACK_IMPORTED_MODULE_1__users_users_status_link___default.a
+  },
+
   mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_js__["tableConfig"]],
 
   data: function data() {
@@ -5798,11 +5812,73 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           name: 'email',
           title: 'Correo electrónico'
         }, {
+          name: '__slot:status',
+          dataClass: 'data-table-statuss'
+        }, {
           name: '__slot:actions',
           dataClass: 'data-table-actions'
         }]
       }
     };
+  },
+
+
+  methods: {
+    statusUpdated: function statusUpdated(newUser) {
+      var user = this.table.pagination.data.find(function (user) {
+        return newUser.id === user.id;
+      });
+      user.is_published = newUser.is_published;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/views/users/_users_status_link.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    user: Object
+  },
+
+  data: function data() {
+    return {
+      busy: false
+    };
+  },
+
+
+  methods: {
+    toggleStatus: function toggleStatus() {
+      var _this = this;
+
+      this.busy = true;
+      axios.post('/users/' + this.user.id + '/status').then(function (response) {
+        _this.$emit('status-updated', response.data);
+        _this.busy = false;
+      }).catch(function (errors) {
+        console.log(errors);
+        _this.busy = false;
+        swal('Ocurrió un error, inténtalo de nuevo o contacta al administrador.');
+      });
+    }
   }
 });
 
@@ -5826,6 +5902,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -5836,8 +5915,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         name: '',
         email: '',
         password: '',
+        phone: '',
+        organization: '',
+        residence: '',
         password_confirmation: '',
-        is_published: null
+        is_published: false
       })
     };
   },
@@ -5850,6 +5932,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     axios.get(App.basePath + 'users/' + to.params.id).then(function (response) {
       next(function (vm) {
         vm.user = response.data;
+        console.log(vm.user);
         vm.form.appendModel(vm.user);
         bus.breadcrumbParams = { id: vm.user.id };
         bus.breadcrumbAttribs = { name: vm.user.name };
@@ -5884,6 +5967,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__users_status_link__ = __webpack_require__("./resources/assets/js/views/users/_users_status_link.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__users_status_link___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__users_status_link__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5900,7 +6003,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    UsersStatusLink: __WEBPACK_IMPORTED_MODULE_0__users_status_link___default.a
+  },
+
   data: function data() {
     return {
       user: null
@@ -5919,6 +6028,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       console.log(error);
       next(false);
     });
+  },
+
+
+  methods: {
+    statusUpdated: function statusUpdated(user) {
+      this.user = user;
+    }
   }
 });
 
@@ -99241,6 +99357,48 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-07413c0b\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/views/users/_users_status_link.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "a",
+    {
+      class: {
+        "text-success": _vm.user.is_published,
+        "text-danger": !_vm.user.is_published
+      },
+      attrs: { href: "#" },
+      on: {
+        click: function($event) {
+          $event.preventDefault()
+          _vm.toggleStatus($event)
+        }
+      }
+    },
+    [
+      _vm.busy
+        ? [_c("i", { staticClass: "icon-spinner spinner" })]
+        : _vm.user.is_published ? [_vm._v("Activo")] : [_vm._v("Inactivo")]
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-07413c0b", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-076474fe\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/forms/form-textarea.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -100474,6 +100632,17 @@ var render = function() {
             }
           },
           {
+            key: "status",
+            fn: function(props) {
+              return [
+                _c("users-status-link", {
+                  attrs: { user: props.rowData },
+                  on: { "status-updated": _vm.statusUpdated }
+                })
+              ]
+            }
+          },
+          {
             key: "actions",
             fn: function(props) {
               return [
@@ -100482,6 +100651,25 @@ var render = function() {
                       "div",
                       { staticClass: "btn-group  btn-group-sm" },
                       [
+                        _vm.canDataTable(props, "show")
+                          ? _c(
+                              "router-link",
+                              {
+                                staticClass: "btn btn-primary",
+                                attrs: {
+                                  to: {
+                                    name: "users.show",
+                                    params: { id: props.rowData.id }
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "icon-eye" }),
+                                _vm._v(" Ver\n        ")
+                              ]
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
                         _vm.canDataTable(props, "update")
                           ? _c(
                               "router-link",
@@ -101833,6 +102021,21 @@ var render = function() {
         [
           _c("table", { staticClass: "table" }, [
             _c("tr", [
+              _c("td", [_vm._v("Estatus:")]),
+              _vm._v(" "),
+              _c(
+                "td",
+                [
+                  _c("users-status-link", {
+                    attrs: { user: _vm.user },
+                    on: { "status-updated": _vm.statusUpdated }
+                  })
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _c("tr", [
               _c("td", [_vm._v("Nombre:")]),
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(_vm.user.name))])
@@ -101846,6 +102049,24 @@ var render = function() {
                   _vm._v(_vm._s(_vm.user.email))
                 ])
               ])
+            ]),
+            _vm._v(" "),
+            _c("tr", [
+              _c("td", [_vm._v("Teléfono:")]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(_vm.user.phone))])
+            ]),
+            _vm._v(" "),
+            _c("tr", [
+              _c("td", [_vm._v("Organización:")]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(_vm.user.organization))])
+            ]),
+            _vm._v(" "),
+            _c("tr", [
+              _c("td", [_vm._v("Residencia:")]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(_vm.user.residence))])
             ])
           ])
         ]
@@ -102877,6 +103098,18 @@ var render = function() {
         _vm._v(" "),
         _c("form-text", {
           attrs: { form: _vm.form, name: "email", label: "Correo electrónico" }
+        }),
+        _vm._v(" "),
+        _c("form-text", {
+          attrs: { form: _vm.form, name: "phone", label: "Teléfono" }
+        }),
+        _vm._v(" "),
+        _c("form-text", {
+          attrs: { form: _vm.form, name: "organization", label: "Organización" }
+        }),
+        _vm._v(" "),
+        _c("form-text", {
+          attrs: { form: _vm.form, name: "residence", label: "Residencia" }
         }),
         _vm._v(" "),
         _c("form-text", {
@@ -124196,6 +124429,55 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-37714065", Component.options)
   } else {
     hotAPI.reload("data-v-37714065", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/users/_users_status_link.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/views/users/_users_status_link.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-07413c0b\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/views/users/_users_status_link.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/views/users/_users_status_link.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-07413c0b", Component.options)
+  } else {
+    hotAPI.reload("data-v-07413c0b", Component.options)
 ' + '  }
   module.hot.dispose(function (data) {
     disposed = true

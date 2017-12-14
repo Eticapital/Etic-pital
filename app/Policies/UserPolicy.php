@@ -83,6 +83,19 @@ class UserPolicy
     }
 
     /**
+     * Actualizar el status
+     *
+     * @param  User   $logged_user
+     * @param  User   $user
+     *
+     * @return boolean
+     */
+    public function status(User $logged_user, User $user)
+    {
+        return $this->update($logged_user, $user);
+    }
+
+    /**
      * Delete an user
      *
      * @param  User   $logged_user

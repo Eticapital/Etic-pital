@@ -778,4 +778,14 @@ HTML;
         $this->finished_at = Carbon::now();
         return $this->save();
     }
+
+    /**
+     * Un proyecto tiene muchas promesas de inversión
+     *
+     * @return HasMany
+     */
+    public function investments()
+    {
+        return $this->hasMany(\App\Models\Investment::class);
+    }
 }

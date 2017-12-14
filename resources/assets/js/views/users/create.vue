@@ -3,6 +3,9 @@
     <form @submit.prevent="onSubmit" autocomplete="off">
       <form-text :form="form" name="name" label="Nombre completo" />
       <form-text :form="form" name="email" label="Correo electrónico" />
+      <form-text :form="form" name="phone" label="Teléfono" />
+      <form-text :form="form" name="organization" label="Organización" />
+      <form-text :form="form" name="residence" label="Residencia" />
       <form-text :form="form" type="password" name="password" label="Contraseña" />
       <form-text :form="form" type="password" name="password_confirmation" label="Repite Contraseña" />
       <form-checkbox :form="form" name="is_published">Marcar para activar</form-checkbox>
@@ -21,8 +24,11 @@ export default {
         name: '',
         email: '',
         password: '',
+        phone: '',
+        organization: '',
+        residence: '',
         password_confirmation: '',
-        is_published: null
+        is_published: false
       })
     }
   },
@@ -36,6 +42,7 @@ export default {
       .then((response) => {
         next(vm => {
           vm.user = response.data
+          console.log(vm.user)
           vm.form.appendModel(vm.user)
           bus.breadcrumbParams = { id: vm.user.id }
           bus.breadcrumbAttribs = { name: vm.user.name }

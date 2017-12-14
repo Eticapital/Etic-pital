@@ -49,6 +49,9 @@ class UserController extends Controller
             'name' => 'required',
             'password' => 'required|confirmed',
             'email' => 'required|email|unique:users',
+            'phone' => '',
+            'organization' => '',
+            'residence' => '',
         ]);
 
         return User::create($data);
@@ -62,12 +65,29 @@ class UserController extends Controller
             'name' => 'required',
             'password' => 'sometimes|nullable|confirmed',
             'email' => 'email|unique:users,email,'.$user->id,
+            'phone' => '',
+            'organization' => '',
+            'residence' => '',
         ]);
 
         if (!$data['password']) {
             unset($data['password']);
         }
 
-        return tap($user)->update($data);
+        return tap($user, function ($user) use ($request, $data) {
+            $user->update($data);
+            $user->is_published = boolval($request->input('is_published'));
+            $user->save();
+        });
+    }
+
+    public function toggleStatus(User $user)
+    {
+        $this->authorize('status', $user);
+
+        $user->is_published = !$user->is_published;
+        $user->save();
+
+        return $user;
     }
 }

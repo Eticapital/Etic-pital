@@ -25,7 +25,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
+        'phone',
+        'residence',
+        'organization',
     ];
 
     /**
@@ -43,6 +48,10 @@ class User extends Authenticatable
 
     protected $appends = [
         'is_admin'
+    ];
+
+    protected $casts = [
+        'is_published' => 'boolean'
     ];
 
     /**

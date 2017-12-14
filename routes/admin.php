@@ -14,6 +14,7 @@ Route::get('account/permissions', 'AccountController@permissions')->name('accoun
 
 // Administrar usuarios
 Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
+Route::post('users/{user}/status', 'UserController@toggleStatus');
 
 // Proyectos
 Route::get('/fondear-mi-proyecto', 'ProjectController@create')

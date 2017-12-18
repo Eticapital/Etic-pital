@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Project;
 use App\Models\Traits\HasPolicyAttributes;
 use App\Models\Traits\LazyAppends;
 use Illuminate\Foundation\Auth\Access\Authorizable;
@@ -143,5 +144,16 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new \App\Notifications\ResetPasswordNotification($token));
+    }
+
+    /**
+     * Si ss invesionista del proyecto
+     *
+     * @param  Project $project
+     * @return boolean
+     */
+    public function isInvestorOf(Project $project)
+    {
+        return $project->investments()->accepted()->where('owner_id', $this->id)->count() > 0;
     }
 }

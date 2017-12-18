@@ -158,21 +158,31 @@
       <div class="content">
         <div class="container">
           <p><span class="h3">Data Room</span></p>
+          @if(!$is_investor)
           <p>Para solicitar acceso a esta sección, haz una promesa de inversión.</p>
+          @endif
         </div> <!-- / .container -->
         <div class="documents">
           <div class="container">
             @if($documents->count())
             <ul class="list-group">
               @foreach($documents as $document)
-              <li class="list-group-item">{{ $document->name }}</li>
+                @can('download', $document)
+                  <li class="list-group-item">
+                    <a href="{{ $document->download_link }}">{{ $document->name }}</a>
+                  </li>
+                @else
+                  <li class="list-group-item">{{ $document->name }}</li>
+                @endcan
               @endforeach
             </ul> <!-- / .list-group -->
             @endif
           </div> <!-- / .container -->
+          @if(!$is_investor)
           <div class="no-access">
             <span class="h3">El acceso es sólo para inversionistas</span>
           </div> <!-- / .no-access -->
+          @endif
         </div> <!-- / .documents -->
       </div> <!-- / .content -->
     </div> <!-- / .jumbotron-fluid -->

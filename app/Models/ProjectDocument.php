@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Project;
 use App\Models\Traits\HasFile;
 use Illuminate\Database\Eloquent\Model;
 
@@ -49,6 +50,11 @@ class ProjectDocument extends Model
             'document' => $this->id,
             'name' => urlencode($this->name),
         ]);
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
     }
 
     public function scopeCompany($query)

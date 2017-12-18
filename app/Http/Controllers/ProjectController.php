@@ -62,8 +62,9 @@ class ProjectController extends Controller
         $team = $project->team()->get();
         $kpis = $project->kpis()->get();
         $documents = $project->documents()->limit(6)->get();
+        $is_investor = auth()->user() && auth()->user()->isInvestorOf($project);
 
-        return view('projects.show')->with(compact('project', 'team', 'kpis', 'documents'));
+        return view('projects.show')->with(compact('project', 'team', 'kpis', 'documents', 'is_investor'));
     }
 
     public function destroy(Project $project)

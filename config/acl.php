@@ -51,6 +51,7 @@ return [
             'delete' => 'Eliminar',
             'accept' => 'Aceptar',
             'reject' => 'Rechazar',
+            'download' => 'Descargar documentos',
         ],
 
         'show-debugbar' => 'Ejemplo de Permiso'

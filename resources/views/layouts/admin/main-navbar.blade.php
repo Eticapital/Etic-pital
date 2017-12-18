@@ -7,7 +7,7 @@
         <span class="navbar-title-label" v-text="pageTitle"></span>
       </router-link>
     --}}
-    <b-navbar-brand :to="{ name:'home' }"><i class="icon-cog"></i> {{ config('app.name') }}</b-navbar-brand>
+    <b-navbar-brand href="/"><i class="icon-cog"></i> {{ config('app.name') }}</b-navbar-brand>
 
     <b-collapse is-nav id="nav_collapse">
 

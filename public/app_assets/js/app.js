@@ -4914,6 +4914,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -4936,13 +4939,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         fields: [{
           name: '__slot:project',
-          title: 'Proyecto'
+          title: 'Promesa'
         }, {
           name: '__slot:amount',
           title: 'Monto'
         }, {
-          name: '__slot:amount',
-          title: 'Monto'
+          name: '__slot:date',
+          title: 'Fecha'
         }, {
           name: '__slot:investor',
           title: 'Inversionista'
@@ -100437,6 +100440,18 @@ var render = function() {
                 _vm._v(
                   "\n      " +
                     _vm._s(_vm._f("currency")(props.rowData.amount / 100)) +
+                    "\n    "
+                )
+              ]
+            }
+          },
+          {
+            key: "date",
+            fn: function(props) {
+              return [
+                _vm._v(
+                  "\n      " +
+                    _vm._s(_vm._f("moment")(props.rowData.created_at, "l LT")) +
                     "\n    "
                 )
               ]

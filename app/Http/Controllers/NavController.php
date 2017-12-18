@@ -143,6 +143,7 @@ class NavController extends Controller
                         'permission' => ['create', \App\Models\Project::class],
                         'in_top_menu' => true,
                         'return' => true,
+                        'hide' => true,
                     ],
                     [
                         'title' => 'Perfil {name}',
@@ -190,6 +191,7 @@ class NavController extends Controller
                         'text' => 'Nueva promesa de inversión',
                         'route' => 'investments.create',
                         'permission' => ['create', \App\Models\Investment::class],
+                        'hide' => true,
                         'in_top_menu' => true,
                         'return' => true,
                     ],

@@ -14,6 +14,9 @@
       <template slot="amount" slot-scope="props">
         {{ props.rowData.amount / 100 | currency() }}
       </template>
+      <template slot="date" slot-scope="props">
+        {{ props.rowData.created_at | moment('l LT') }}
+      </template>
       <template slot="status" slot-scope="props">
         <investments-status-btn :key="props.rowData.id" @deleted="deleted" :investment="props.rowData" />
       </template>
@@ -68,15 +71,15 @@ export default {
         fields: [
           {
             name: '__slot:project',
-            title: 'Proyecto'
+            title: 'Promesa'
           },
           {
             name: '__slot:amount',
             title: 'Monto'
           },
           {
-            name: '__slot:amount',
-            title: 'Monto'
+            name: '__slot:date',
+            title: 'Fecha'
           },
           {
             name: '__slot:investor',

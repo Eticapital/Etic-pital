@@ -93,6 +93,8 @@ class ProjectController extends Controller
             $project->company_documents = request()->input('company_documents');
             $project->key_documents = request()->input('key_documents');
             $project->extra_documents = request()->input('extra_documents');
+
+            event(new \App\Events\NewProjectRegistered($project));
         });
     }
 

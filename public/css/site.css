@@ -9442,6 +9442,10 @@ a.text-dark:focus, a.text-dark:hover {
   color: #fff;
 }
 
+.nav-item {
+  text-transform: uppercase;
+}
+
 #header .container {
   padding-top: 4rem;
   padding-bottom: 5.5rem;

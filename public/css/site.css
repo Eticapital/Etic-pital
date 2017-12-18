@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Lato:400,700|Open+Sans);@font-face {
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700);@font-face {
   font-family: 'icomoon';
   src: url("fonts/icomoon.eot?idq2j3");
   src: url("fonts/icomoon.eot?idq2j3#iefix") format("embedded-opentype"), url("fonts/icomoon.woff2?idq2j3") format("woff2"), url("fonts/icomoon.ttf?idq2j3") format("truetype"), url("fonts/icomoon.woff?idq2j3") format("woff"), url("fonts/icomoon.svg?idq2j3#icomoon") format("svg");
@@ -375,7 +375,7 @@
   --breakpoint-md: 768px;
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
-  --font-family-sans-serif: "Open Sans", sans-serif;
+  --font-family-sans-serif: "Roboto", sans-serif;
   --font-family-monospace: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
@@ -464,7 +464,7 @@ article, aside, dialog, figcaption, figure, footer, header, hgroup, main, nav, s
 
 body {
   margin: 0;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 1.125rem;
   font-weight: 400;
   line-height: 1.5;
@@ -5815,7 +5815,7 @@ button.close {
   z-index: 1070;
   display: block;
   margin: 0;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -5928,7 +5928,7 @@ button.close {
   z-index: 1060;
   display: block;
   max-width: 276px;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -9315,7 +9315,7 @@ a.text-dark:focus, a.text-dark:hover {
 /* Todo se sustituye con $grid-gutter-width: 80px; */
 /*Display*/
 .display-1, .display-2, .display-3, .h1, .h2, .h3, .h4, .h5 {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .display-3 {

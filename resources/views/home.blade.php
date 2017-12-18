@@ -31,13 +31,13 @@
             <img src="img/home_icon1.png" class="icon">
             <p><span class="h3">Invierte por tu cuenta</span></p>
             <p class="text-justify">Invierte en empresas de una manera fácil y transparente, por medio de nuestra plataforma.</p>
-            <p><a href="{{ route('invertir') }}" class="btn btn-wide btn-primary">Conozca más...</a></p>
+            <p><a href="{{ route('invertir') }}" class="btn btn-wide btn-primary">Ver proyectos</a></p>
           </div> <!-- / .col -->
           <div class="col-12 col-md-6 text-center">
             <img src="img/home_icon2.png" class="icon">
             <p><span class="h3">Usa los fondos de inversión</span></p>
             <p class="text-justify">¿Necesitas más de $300,000? Esta puede ser tu solución.</p>
-            <p><a href="{{ route('fondo-de-inversion') }}" class="btn btn-wide btn-primary">Conozca más...</a></p>
+            <p><a href="{{ route('fondo-de-inversion') }}" class="btn btn-wide btn-primary">Solicitar acceso</a></p>
           </div> <!-- / .col -->
         </div> <!-- / .row -->
       </div> <!-- / .content -->

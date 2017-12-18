@@ -3,12 +3,13 @@
 <div class="container">
     <div class="row">
       <div class="col-lg-12">
-        <h1 class="display-3 text-center text-sm-left">Invierte en proyectos agrícolas innovadores</h1>
+        <h1 class="display-3 text-center text-sm-left">Conoce nuestro crowfunding</h1>
       </div>
     </div>
-    <div class="row">
+    <div class="row align-items-end">
       <div class="col-lg-9">
-        <p class="text-justify">Potencializamos el crecimiento de las PyMEs agroindustriales a través de un sistema virtuoso sustentable entre buenos emprendedores y buenos inversionistas, estamos comprometidos con el bien común; generando con nuestra asistencia, la máxima rentabilidad para todos los participantes del sistema.</p>
+        <p class="text-justify">Potencializamos el crecimiento de las PyMEs en el área agroalimentaria a través de un sistema virtuoso sustentable entre buenos emprendedores y buenos inversionistas, para que formen y desarrollen buenas empresas comprometidas con el bien común, generando con nuestra asistencia, la máxima rentabilidad y que esta se reparta entre todos los participantes del sistema.</p>
+        <p>Sin embargo estamos abiertos a cualquier iniciativa innovadora que represente un potencial de negocio económico y social.</p>
       </div> <!-- / .col-lg-3 -->
       <div class="col-lg-3">
         <p class="text-center"><a href="{{ route('como-funciona') }}" class="btn btn-wide btn-secondary">Ver más</a></p>

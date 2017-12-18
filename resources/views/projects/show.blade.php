@@ -158,7 +158,7 @@
       <div class="content">
         <div class="container">
           <p><span class="h3">Data Room</span></p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc rutrum, nisi eu hendrerit auctor, nisi nulla hendrerit nibh, ac laoreet sapien ex ut odio.</p>
+          <p>Para solicitar acceso a esta sección, haz una promesa de inversión.</p>
         </div> <!-- / .container -->
         <div class="documents">
           <div class="container">

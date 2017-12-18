@@ -1,3 +1,37 @@
+/*Display*/
+
+.display-1, .display-2, .display-3, .h1, .h2, .h3, .h4, .h5 {
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+}
+
+.display-3 {
+  font-size: 2.6rem;
+}
+
+.h2 {
+  font-size: 1.6rem;
+}
+
+.h3 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+@media (min-width: 992px) {
+  .display-3 {
+    font-size: 4.6rem;
+  }
+  .h2 {
+    font-size: 2.6rem;
+  }
+  .h3 {
+    font-size: 1.6rem;
+  }
+}
+
+
+
 .text-default {
     color: $body-color;
 }

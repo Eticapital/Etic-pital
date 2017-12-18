@@ -9313,36 +9313,6 @@ a.text-dark:focus, a.text-dark:hover {
 
 /* Col */
 /* Todo se sustituye con $grid-gutter-width: 80px; */
-/*Display*/
-.display-1, .display-2, .display-3, .h1, .h2, .h3, .h4, .h5 {
-  font-family: 'Roboto', sans-serif;
-}
-
-.display-3 {
-  font-size: 2.6rem;
-}
-
-.h2 {
-  font-size: 1.6rem;
-}
-
-.h3 {
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-@media (min-width: 992px) {
-  .display-3 {
-    font-size: 4.6rem;
-  }
-  .h2 {
-    font-size: 2.6rem;
-  }
-  .h3 {
-    font-size: 1.6rem;
-  }
-}
-
 /* Pagination */
 .page-link {
   padding: 0.75rem 1rem;
@@ -9425,6 +9395,37 @@ a.text-dark:focus, a.text-dark:hover {
 #agroindustria {
   background-image: url("../img/nosotros_bg2.jpg");
   background-position: center center;
+}
+
+/*Display*/
+.display-1, .display-2, .display-3, .h1, .h2, .h3, .h4, .h5 {
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+}
+
+.display-3 {
+  font-size: 2.6rem;
+}
+
+.h2 {
+  font-size: 1.6rem;
+}
+
+.h3 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+@media (min-width: 992px) {
+  .display-3 {
+    font-size: 4.6rem;
+  }
+  .h2 {
+    font-size: 2.6rem;
+  }
+  .h3 {
+    font-size: 1.6rem;
+  }
 }
 
 .text-default {

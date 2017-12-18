@@ -46,10 +46,10 @@ class ResetPasswordNotification extends Notification
         return (new MailMessage)
             ->greeting('Hola, ' . $notifiable->name)
             ->subject('Solicitud para recuperar tu contraseña')
-            ->line('Recibiste este correo porque recibimos una petición para resetear tu contraseña.
-                Para actualizarlo da click en el siguiente enlace:')
-            ->action('Resetear contraseña', url(config('app.url').route('password.reset', $this->token, false)))
-            ->line('Si no hiciste ninguna petición para recuperar tu contraseña ignora este correo.');
+            ->line('Recibiste este correo porque recibimos una petición para recuperar tu contraseña.
+                Para crear una contraseña nueva da click en el siguiente enlace:')
+            ->action('Recuperar contraseña', url(config('app.url').route('password.reset', $this->token, false)))
+            ->line('Si no hiciste ninguna petición para recuperar tu contraseña simplemente ignora este correo.');
     }
 
     /**

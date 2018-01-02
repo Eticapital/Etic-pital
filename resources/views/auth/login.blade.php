@@ -1,4 +1,6 @@
-@extends('layouts.site')
+@extends('layouts.site', [
+  'title' => 'Ingresar'
+])
 
 @section('content')
 <div class="content bg-light">

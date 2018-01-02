@@ -1,4 +1,7 @@
-@extends('layouts.site')
+@extends('layouts.site', [
+  'title' => $project->name,
+  'description' => $project->short_description
+])
 
 @section('content')
 @if($project->is_pending)

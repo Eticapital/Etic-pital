@@ -16,11 +16,11 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
 
   <title>Inicio</title>
   <!-- CSS -->
-  <link rel="stylesheet" type="text/css" href="css/site_global.css?crc=3765861665"/>
-  <link rel="stylesheet" type="text/css" href="css/inicio.css?crc=296224759" id="pagesheet"/>
+  <link rel="stylesheet" type="text/css" href="corporativo/css/site_global.css?crc=3765861665"/>
+  <link rel="stylesheet" type="text/css" href="corporativo/css/inicio.css?crc=296224759" id="pagesheet"/>
   <!-- IE-only CSS -->
   <!--[if lt IE 9]>
-  <link rel="stylesheet" type="text/css" href="css/nomq_inicio.css?crc=3875548583" id="nomq_pagesheet"/>
+  <link rel="stylesheet" type="text/css" href="corporativo/css/nomq_inicio.css?crc=3875548583" id="nomq_pagesheet"/>
   <![endif]-->
   <!-- JS includes -->
   <!--[if lt IE 9]>
@@ -38,22 +38,22 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
       </div>
       <nav class="MenuBar clearfix mse_pre_init" id="menuu7883"><!-- horizontal box -->
        <div class="MenuItemContainer clearfix grpelem" id="u7912"><!-- vertical box -->
-        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem" id="u7913" href="inicio#inicio"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem" id="u7914" alt="INICIO" src="images/blank.gif?crc=4208392903"/><!-- state-based BG images --></a>
+        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem" id="u7913" href="inicio#inicio"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem" id="u7914" alt="INICIO" src="corporativo/images/blank.gif?crc=4208392903"/><!-- state-based BG images --></a>
        </div>
        <div class="MenuItemContainer clearfix grpelem" id="u7898"><!-- vertical box -->
-        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem" id="u7899" href="inicio#nosotros"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem" id="u7901" alt="NOSOTROS" src="images/blank.gif?crc=4208392903"/><!-- state-based BG images --></a>
+        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem" id="u7899" href="inicio#nosotros"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem" id="u7901" alt="NOSOTROS" src="corporativo/images/blank.gif?crc=4208392903"/><!-- state-based BG images --></a>
        </div>
        <div class="MenuItemContainer clearfix grpelem" id="u7905"><!-- vertical box -->
-        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem" id="u7908" href="inicio#que_hacemos"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem" id="u7911" alt="PROPÓSITO" src="images/blank.gif?crc=4208392903"/><!-- state-based BG images --></a>
+        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem" id="u7908" href="inicio#que_hacemos"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem" id="u7911" alt="PROPÓSITO" src="corporativo/images/blank.gif?crc=4208392903"/><!-- state-based BG images --></a>
        </div>
        <div class="MenuItemContainer clearfix grpelem" id="u7884"><!-- vertical box -->
-        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem" id="u7885" href="inicio#opcion"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem" id="u7886" alt="¿CÓMO ELEGIR?" src="images/blank.gif?crc=4208392903"/><!-- state-based BG images --></a>
+        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem" id="u7885" href="inicio#opcion"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem" id="u7886" alt="¿CÓMO ELEGIR?" src="corporativo/images/blank.gif?crc=4208392903"/><!-- state-based BG images --></a>
        </div>
        <div class="MenuItemContainer clearfix grpelem" id="u7891"><!-- vertical box -->
-        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem" id="u7892" href="inicio#contacto"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem" id="u7895" alt="CREZCAMOS JUNTOS" src="images/blank.gif?crc=4208392903"/><!-- state-based BG images --></a>
+        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem" id="u7892" href="inicio#contacto"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem" id="u7895" alt="CREZCAMOS JUNTOS" src="corporativo/images/blank.gif?crc=4208392903"/><!-- state-based BG images --></a>
        </div>
       </nav>
-      <a class="nonblock nontext anim_swing clip_frame mse_pre_init shared_content" id="u8116" href="inicio#inicio" data-content-guid="u8116_content"><!-- image --><img class="block temp_no_img_src" id="u8116_img" data-orig-src="images/bolitas.png?crc=4251780646" alt="" width="103" height="36" src="images/blank.gif?crc=4208392903"/></a>
+      <a class="nonblock nontext anim_swing clip_frame mse_pre_init shared_content" id="u8116" href="inicio#inicio" data-content-guid="u8116_content"><!-- image --><img class="block temp_no_img_src" id="u8116_img" data-orig-src="corporativo/images/bolitas.png?crc=4251780646" alt="" width="103" height="36" src="corporativo/images/blank.gif?crc=4208392903"/></a>
      </div>
      <div class="clearfix colelem" id="pu1768"><!-- group -->
       <div class="browser_width grpelem shared_content" id="u1768-bw" data-content-guid="u1768-bw_content">
@@ -62,13 +62,13 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
       <div class="browser_width grpelem shared_content" id="u2115-bw" data-content-guid="u2115-bw_content">
        <div class="museBGSize" id="u2115"><!-- simple frame --></div>
       </div>
-      <img class="grpelem temp_no_img_src" id="u2058-4" alt="NOSOTROS" width="588" height="80" data-orig-src="images/u2058-4.png?crc=333783836" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_img_src" id="u2058-4" alt="NOSOTROS" width="588" height="80" data-orig-src="corporativo/images/u2058-4.png?crc=333783836" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
       <a class="anchor_item grpelem shared_content" id="inicio" data-content-guid="inicio_content"></a>
       <div class="browser_width grpelem shared_content" id="u2126-bw" data-content-guid="u2126-bw_content">
        <div id="u2126"><!-- simple frame --></div>
       </div>
-      <img class="grpelem temp_no_img_src" id="u2166-4" alt="¿CUÁL ES NUESTRO PROPÓSITO?" width="1181" height="80" data-orig-src="images/u2166-4.png?crc=3922863371" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
-      <img class="grpelem temp_no_img_src" id="u2178-6" alt="&quot;La felicidad radica en la alegría del logro y la emoción del esfuerzo creativo&quot; Roosevelt." width="1162" height="61" data-orig-src="images/u2178-6.png?crc=127253538" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_img_src" id="u2166-4" alt="¿CUÁL ES NUESTRO PROPÓSITO?" width="1181" height="80" data-orig-src="corporativo/images/u2166-4.png?crc=3922863371" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_img_src" id="u2178-6" alt="&quot;La felicidad radica en la alegría del logro y la emoción del esfuerzo creativo&quot; Roosevelt." width="1162" height="61" data-orig-src="corporativo/images/u2178-6.png?crc=127253538" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
       <a class="anchor_item grpelem shared_content" id="que_hacemos" data-content-guid="que_hacemos_content"></a>
       <a class="anchor_item grpelem shared_content" id="nosotros" data-content-guid="nosotros_content"></a>
       <div class="PamphletWidget clearfix grpelem" id="pamphletu3321"><!-- none box -->
@@ -89,16 +89,16 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
        <div class="popup_anchor" id="u3328popup">
         <div class="ContainerGroup clearfix" id="u3328"><!-- none box -->
          <div class="Container rounded-corners clearfix grpelem" id="u3339"><!-- group -->
-          <img class="grpelem temp_no_img_src" id="u3340-4" alt="&quot;Somos un equipo formado en valores y principios éticos, buscando crear un círculo virtuoso entre los emprendedores e inversionistas&quot;." width="983" height="175" data-orig-src="images/u3340-4.png?crc=123111094" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+          <img class="grpelem temp_no_img_src" id="u3340-4" alt="&quot;Somos un equipo formado en valores y principios éticos, buscando crear un círculo virtuoso entre los emprendedores e inversionistas&quot;." width="983" height="175" data-orig-src="corporativo/images/u3340-4.png?crc=123111094" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
          </div>
          <div class="Container invi rounded-corners clearfix grpelem" id="u3329"><!-- group -->
-          <img class="grpelem temp_no_img_src" id="u3330-8" alt="&quot;Contamos con un equipo experimentado en negocios e inversiones con gran determinación y afán de logro&quot;." width="984" height="174" data-orig-src="images/u3330-8.png?crc=4025721694" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+          <img class="grpelem temp_no_img_src" id="u3330-8" alt="&quot;Contamos con un equipo experimentado en negocios e inversiones con gran determinación y afán de logro&quot;." width="984" height="174" data-orig-src="corporativo/images/u3330-8.png?crc=4025721694" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
          </div>
          <div class="Container invi rounded-corners clearfix grpelem" id="u3334"><!-- group -->
-          <img class="grpelem temp_no_img_src" id="u3335-6" alt="&quot;Nos entusiasmamos con las grandes ideas de negocio.&quot;" width="983" height="174" data-orig-src="images/u3335-6.png?crc=211510162" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+          <img class="grpelem temp_no_img_src" id="u3335-6" alt="&quot;Nos entusiasmamos con las grandes ideas de negocio.&quot;" width="983" height="174" data-orig-src="corporativo/images/u3335-6.png?crc=211510162" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
          </div>
          <div class="Container invi rounded-corners clearfix grpelem" id="u3414"><!-- group -->
-          <img class="grpelem temp_no_img_src" id="u3468-6" alt="&quot;Somos un equipo que se apasiona en hacer realidad los sueños&quot;." width="989" height="109" data-orig-src="images/u3468-6.png?crc=3802677294" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+          <img class="grpelem temp_no_img_src" id="u3468-6" alt="&quot;Somos un equipo que se apasiona en hacer realidad los sueños&quot;." width="989" height="109" data-orig-src="corporativo/images/u3468-6.png?crc=3802677294" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
          </div>
         </div>
        </div>
@@ -122,19 +122,19 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
       </div>
       <a class="anchor_item grpelem shared_content" id="opcion" data-content-guid="opcion_content"></a>
       <div class="clip_frame grpelem shared_content" id="u5453" data-content-guid="u5453_content"><!-- image -->
-       <img class="block temp_no_img_src" id="u5453_img" data-orig-src="images/proposito_01.png?crc=469976724" alt="" width="230" height="201" src="images/blank.gif?crc=4208392903"/>
+       <img class="block temp_no_img_src" id="u5453_img" data-orig-src="corporativo/images/proposito_01.png?crc=469976724" alt="" width="230" height="201" src="corporativo/images/blank.gif?crc=4208392903"/>
       </div>
       <div class="clip_frame grpelem shared_content" id="u5465" data-content-guid="u5465_content"><!-- image -->
-       <img class="block temp_no_img_src" id="u5465_img" data-orig-src="images/proposito_02.png?crc=475581048" alt="" width="214" height="201" src="images/blank.gif?crc=4208392903"/>
+       <img class="block temp_no_img_src" id="u5465_img" data-orig-src="corporativo/images/proposito_02.png?crc=475581048" alt="" width="214" height="201" src="corporativo/images/blank.gif?crc=4208392903"/>
       </div>
       <div class="clip_frame grpelem shared_content" id="u5477" data-content-guid="u5477_content"><!-- image -->
-       <img class="block temp_no_img_src" id="u5477_img" data-orig-src="images/proposito_03.png?crc=4044373808" alt="" width="227" height="201" src="images/blank.gif?crc=4208392903"/>
+       <img class="block temp_no_img_src" id="u5477_img" data-orig-src="corporativo/images/proposito_03.png?crc=4044373808" alt="" width="227" height="201" src="corporativo/images/blank.gif?crc=4208392903"/>
       </div>
       <div class="clip_frame grpelem shared_content" id="u5489" data-content-guid="u5489_content"><!-- image -->
-       <img class="block temp_no_img_src" id="u5489_img" data-orig-src="images/proposito_04.png?crc=3840499798" alt="" width="213" height="220" src="images/blank.gif?crc=4208392903"/>
+       <img class="block temp_no_img_src" id="u5489_img" data-orig-src="corporativo/images/proposito_04.png?crc=3840499798" alt="" width="213" height="220" src="corporativo/images/blank.gif?crc=4208392903"/>
       </div>
       <div class="clip_frame grpelem shared_content" id="u5501" data-content-guid="u5501_content"><!-- image -->
-       <img class="block temp_no_img_src" id="u5501_img" data-orig-src="images/proposito_05.png?crc=4229356292" alt="" width="221" height="220" src="images/blank.gif?crc=4208392903"/>
+       <img class="block temp_no_img_src" id="u5501_img" data-orig-src="corporativo/images/proposito_05.png?crc=4229356292" alt="" width="221" height="220" src="corporativo/images/blank.gif?crc=4208392903"/>
       </div>
      </div>
      <div class="clearfix colelem" id="pu2253"><!-- group -->
@@ -144,8 +144,8 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
       <div class="browser_width grpelem shared_content" id="u2324-bw" data-content-guid="u2324-bw_content">
        <div class="museBGSize" id="u2324"><!-- simple frame --></div>
       </div>
-      <img class="grpelem temp_no_img_src" id="u2259-4" alt="¿QUÉ OPCIÓN SE ADAPTA A MI PROYECTO?" width="1200" height="80" data-orig-src="images/u2259-4.png?crc=444028782" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
-      <img class="grpelem temp_no_img_src" id="u5782-4" alt="Etic@pitalízate y Crezcamos Juntos" width="1162" height="61" data-orig-src="images/u5782-4.png?crc=3842593000" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_img_src" id="u2259-4" alt="¿QUÉ OPCIÓN SE ADAPTA A MI PROYECTO?" width="1200" height="80" data-orig-src="corporativo/images/u2259-4.png?crc=444028782" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_img_src" id="u5782-4" alt="Etic@pitalízate y Crezcamos Juntos" width="1162" height="61" data-orig-src="corporativo/images/u5782-4.png?crc=3842593000" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
       <a class="anchor_item grpelem shared_content" id="necesito" data-content-guid="necesito_content"></a>
       <div class="browser_width grpelem shared_content" id="u2333-bw" data-content-guid="u2333-bw_content">
        <div id="u2333"><!-- simple frame --></div>
@@ -190,7 +190,7 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
         <div class="clearfix grpelem" id="u3052-4"><!-- content -->
          <p class="shared_content" data-content-guid="u3052-4_0_content">¡En breve alguien de nuestro equipo se pondrá en contacto contigo!</p>
         </div>
-        <button class="submit-btn NoWrap grpelem" id="u3053" alt="Enviar" src="images/blank.gif?crc=4208392903" type="submit" value="" tabindex="7"><!-- state-based BG images --></button>
+        <button class="submit-btn NoWrap grpelem" id="u3053" alt="Enviar" src="corporativo/images/blank.gif?crc=4208392903" type="submit" value="" tabindex="7"><!-- state-based BG images --></button>
         <div class="fld-grp clearfix grpelem" id="widgetu3055" data-required="true"><!-- none box -->
          <label class="fld-label grpelem" id="u3058" for="widgetu3055_input"><!-- state-based BG images --></label>
          <span class="fld-textarea actAsDiv shadow rounded-corners clearfix grpelem" id="u3057-4"><!-- content --><textarea class="wrapped-input" id="widgetu3055_input" name="custom_U3055" tabindex="6"></textarea><label class="wrapped-input fld-prompt" id="widgetu3055_prompt" for="widgetu3055_input"><span class="actAsPara shared_content" data-content-guid="widgetu3055_prompt_0_content">Escriba su mensaje</span></label></span>
@@ -207,8 +207,8 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
         </div>
        </form>
       </div>
-      <img class="grpelem temp_no_img_src" id="u5393-4" alt="CREZCAMOS JUNTOS" width="1045" height="84" data-orig-src="images/u5393-4.png?crc=87205152" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
-      <img class="grpelem temp_no_img_src" id="u5399-6" alt="¿Necesitas asesoría personalizada, necesitas aterrizar tu idea de negocio? Permítenos conocerte." width="1207" height="64" data-orig-src="images/u5399-6.png?crc=4195373018" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_img_src" id="u5393-4" alt="CREZCAMOS JUNTOS" width="1045" height="84" data-orig-src="corporativo/images/u5393-4.png?crc=87205152" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_img_src" id="u5399-6" alt="¿Necesitas asesoría personalizada, necesitas aterrizar tu idea de negocio? Permítenos conocerte." width="1207" height="64" data-orig-src="corporativo/images/u5399-6.png?crc=4195373018" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
       <a class="nonblock nontext museBGSize transition grpelem shared_content" id="u7819" href="corporativo-fondo-de-inversion" data-content-guid="u7819_content"><!-- content --></a>
       <a class="nonblock nontext museBGSize transition grpelem shared_content" id="u7820" href="https://www.eticapital.com.mx" data-content-guid="u7820_content"><!-- content --></a>
      </div>
@@ -223,11 +223,11 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
        <div id="u6805"><!-- simple frame --></div>
       </div>
       <div class="clip_frame grpelem" id="u6806"><!-- svg -->
-       <img class="svg temp_no_img_src" id="u6807" data-orig-src="images/svg-pegado-59964x150.svg?crc=293968353" width="236" height="59" alt="" data-mu-svgfallback="images/svg%20pegado%2059964x150_poster_.png?crc=4061079298" src="images/blank.gif?crc=4208392903"/>
+       <img class="svg temp_no_img_src" id="u6807" data-orig-src="corporativo/images/svg-pegado-59964x150.svg?crc=293968353" width="236" height="59" alt="" data-mu-svgfallback="corporativo/images/svg%20pegado%2059964x150_poster_.png?crc=4061079298" src="corporativo/images/blank.gif?crc=4208392903"/>
       </div>
-      <img class="grpelem temp_no_img_src" id="u6808-9" alt="¡Queremos Conocerte! +52 (722) 474 5926 +52 (722) 304 7852" width="209" height="101" data-orig-src="images/u6808-9.png?crc=3858196187" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
-      <img class="grpelem temp_no_img_src" id="u6809-4" alt="¡Síguenos en nuestras redes!" width="258" height="25" data-orig-src="images/u6809-4.png?crc=345417368" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
-      <img class="grpelem temp_no_img_src" id="u6810-4" alt="informes@eticapital.mx" width="265" height="41" data-orig-src="images/u6810-4.png?crc=234680660" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_img_src" id="u6808-9" alt="¡Queremos Conocerte! +52 (722) 474 5926 +52 (722) 304 7852" width="209" height="101" data-orig-src="corporativo/images/u6808-9.png?crc=3858196187" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_img_src" id="u6809-4" alt="¡Síguenos en nuestras redes!" width="258" height="25" data-orig-src="corporativo/images/u6809-4.png?crc=345417368" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_img_src" id="u6810-4" alt="informes@eticapital.mx" width="265" height="41" data-orig-src="corporativo/images/u6810-4.png?crc=234680660" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
       <a class="nonblock nontext grpelem shared_content" id="u6815" href="http://www.facebook.com" target="_blank" data-content-guid="u6815_content"><!-- simple frame --></a>
       <a class="nonblock nontext grpelem shared_content" id="u6816" href="http://www.twitter.com" target="_blank" data-content-guid="u6816_content"><!-- simple frame --></a>
       <a class="nonblock nontext grpelem shared_content" id="u6817" href="http://instagram.com" target="_blank" data-content-guid="u6817_content"><!-- simple frame --></a>
@@ -235,9 +235,9 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
       <a class="nonblock nontext grpelem shared_content" id="u6819" href="https://www.youtube.com" target="_blank" data-content-guid="u6819_content"><!-- simple frame --></a>
      </div>
      <div class="clearfix colelem" id="pu6813-4"><!-- group -->
-      <img class="grpelem temp_no_img_src" id="u6813-4" alt="Derechos Reservados" width="247" height="25" data-orig-src="images/u6813-4.png?crc=4180427767" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
-      <img class="grpelem shared_content" id="u6812" alt="Conoce nuestro aviso de privacidad" src="images/blank.gif?crc=4208392903" data-content-guid="u6812_content"/><!-- state-based BG images -->
-      <a class="nonblock nontext grpelem shared_content" id="u6814" href="assets/muselog.txt" target="_blank" data-content-guid="u6814_content"><!-- state-based BG images --><img id="u6814_states" alt="Términos y Condiciones" src="images/blank.gif?crc=4208392903"/></a>
+      <img class="grpelem temp_no_img_src" id="u6813-4" alt="Derechos Reservados" width="247" height="25" data-orig-src="corporativo/images/u6813-4.png?crc=4180427767" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem shared_content" id="u6812" alt="Conoce nuestro aviso de privacidad" src="corporativo/images/blank.gif?crc=4208392903" data-content-guid="u6812_content"/><!-- state-based BG images -->
+      <a class="nonblock nontext grpelem shared_content" id="u6814" href="assets/muselog.txt" target="_blank" data-content-guid="u6814_content"><!-- state-based BG images --><img id="u6814_states" alt="Términos y Condiciones" src="corporativo/images/blank.gif?crc=4208392903"/></a>
      </div>
      <div class="verticalspacer" data-offset-top="3864" data-content-above-spacer="3863" data-content-below-spacer="25"></div>
      <div class="browser_width colelem shared_content" id="u6811-bw" data-content-guid="u6811-bw_content">
@@ -246,34 +246,34 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
     </div>
    </div>
    <div class="preload_images">
-    <img class="preload temp_no_img_src" data-orig-src="images/u7914-r.png?crc=3770187442" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7914-a.png?crc=4100500408" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7901-r.png?crc=3866076438" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7901-a.png?crc=3760504391" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7911-r.png?crc=4224253800" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7911-a.png?crc=4224253800" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7886-r.png?crc=152044261" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7886-a.png?crc=4010393529" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7895-r.png?crc=150931565" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7895-a.png?crc=31381694" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3049-ferr.png?crc=4075755061" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3043-ferr.png?crc=3917301989" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3032-ferr.png?crc=131919593" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3060-ferr.png?crc=55507278" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3053-r.png?crc=3891972428" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3053-m.png?crc=4070110602" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3053-fs.png?crc=276208025" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3058-ferr.png?crc=10986058" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3162-ferr.png?crc=377834462" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/fce_2.png?crc=166601596" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/cf_2.png?crc=532800367" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/fb_color.png?crc=439377252" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/tw_color.png?crc=4032554286" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/in_color.png?crc=454549069" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/ln_color.png?crc=4941093" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/yt_color.png?crc=3904600323" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u6812-r.png?crc=151542321" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u6814_states-r.png?crc=4188056672" alt="" src="images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7914-r.png?crc=3770187442" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7914-a.png?crc=4100500408" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7901-r.png?crc=3866076438" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7901-a.png?crc=3760504391" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7911-r.png?crc=4224253800" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7911-a.png?crc=4224253800" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7886-r.png?crc=152044261" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7886-a.png?crc=4010393529" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7895-r.png?crc=150931565" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7895-a.png?crc=31381694" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3049-ferr.png?crc=4075755061" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3043-ferr.png?crc=3917301989" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3032-ferr.png?crc=131919593" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3060-ferr.png?crc=55507278" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3053-r.png?crc=3891972428" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3053-m.png?crc=4070110602" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3053-fs.png?crc=276208025" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3058-ferr.png?crc=10986058" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3162-ferr.png?crc=377834462" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/fce_2.png?crc=166601596" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/cf_2.png?crc=532800367" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/fb_color.png?crc=439377252" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/tw_color.png?crc=4032554286" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/in_color.png?crc=454549069" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/ln_color.png?crc=4941093" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/yt_color.png?crc=3904600323" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u6812-r.png?crc=151542321" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u6814_states-r.png?crc=4188056672" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
    </div>
   </div>
   <div class="breakpoint" id="bp_1200" data-max-width="1200"><!-- responsive breakpoint node -->
@@ -284,19 +284,19 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
       <span class="nonblock nontext anim_swing clip_frame grpelem placeholder" data-placeholder-for="u8116_content"><!-- placeholder node --></span>
       <nav class="MenuBar clearfix grpelem temp_no_id" data-orig-id="menuu7883"><!-- horizontal box -->
        <div class="MenuItemContainer clearfix grpelem temp_no_id" data-orig-id="u7912"><!-- vertical box -->
-        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem temp_no_id" href="inicio#inicio" data-orig-id="u7913"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem temp_no_id" alt="INICIO" src="images/blank.gif?crc=4208392903" data-orig-id="u7914"/><!-- state-based BG images --></a>
+        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem temp_no_id" href="inicio#inicio" data-orig-id="u7913"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem temp_no_id" alt="INICIO" src="corporativo/images/blank.gif?crc=4208392903" data-orig-id="u7914"/><!-- state-based BG images --></a>
        </div>
        <div class="MenuItemContainer clearfix grpelem temp_no_id" data-orig-id="u7898"><!-- vertical box -->
-        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem temp_no_id" href="inicio#nosotros" data-orig-id="u7899"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem temp_no_id" alt="NOSOTROS" src="images/blank.gif?crc=4208392903" data-orig-id="u7901"/><!-- state-based BG images --></a>
+        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem temp_no_id" href="inicio#nosotros" data-orig-id="u7899"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem temp_no_id" alt="NOSOTROS" src="corporativo/images/blank.gif?crc=4208392903" data-orig-id="u7901"/><!-- state-based BG images --></a>
        </div>
        <div class="MenuItemContainer clearfix grpelem temp_no_id" data-orig-id="u7905"><!-- vertical box -->
-        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem temp_no_id" href="inicio#que_hacemos" data-orig-id="u7908"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem temp_no_id" alt="PROPÓSITO" src="images/blank.gif?crc=4208392903" data-orig-id="u7911"/><!-- state-based BG images --></a>
+        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem temp_no_id" href="inicio#que_hacemos" data-orig-id="u7908"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem temp_no_id" alt="PROPÓSITO" src="corporativo/images/blank.gif?crc=4208392903" data-orig-id="u7911"/><!-- state-based BG images --></a>
        </div>
        <div class="MenuItemContainer clearfix grpelem temp_no_id" data-orig-id="u7884"><!-- vertical box -->
-        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem temp_no_id" href="inicio#opcion" data-orig-id="u7885"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem temp_no_id" alt="¿CÓMO ELEGIR?" src="images/blank.gif?crc=4208392903" data-orig-id="u7886"/><!-- state-based BG images --></a>
+        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem temp_no_id" href="inicio#opcion" data-orig-id="u7885"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem temp_no_id" alt="¿CÓMO ELEGIR?" src="corporativo/images/blank.gif?crc=4208392903" data-orig-id="u7886"/><!-- state-based BG images --></a>
        </div>
        <div class="MenuItemContainer clearfix grpelem temp_no_id" data-orig-id="u7891"><!-- vertical box -->
-        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem temp_no_id" href="inicio#contacto" data-orig-id="u7892"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem temp_no_id" alt="CREZCAMOS JUNTOS" src="images/blank.gif?crc=4208392903" data-orig-id="u7895"/><!-- state-based BG images --></a>
+        <a class="nonblock nontext MenuItem MenuItemWithSubMenu anim_swing clearfix colelem temp_no_id" href="inicio#contacto" data-orig-id="u7892"><!-- horizontal box --><img class="MenuItemLabel NoWrap grpelem temp_no_id" alt="CREZCAMOS JUNTOS" src="corporativo/images/blank.gif?crc=4208392903" data-orig-id="u7895"/><!-- state-based BG images --></a>
        </div>
       </nav>
      </div>
@@ -306,7 +306,7 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
      </div>
      <div class="clearfix colelem temp_no_id" data-orig-id="pu1768"><!-- group -->
       <span class="browser_width grpelem placeholder" data-placeholder-for="u1768-bw_content"><!-- placeholder node --></span>
-      <img class="grpelem temp_no_id temp_no_img_src" alt="NOSOTROS" width="588" height="80" data-orig-src="images/u2058-42.png?crc=333783836" data-orig-id="u2058-4" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_id temp_no_img_src" alt="NOSOTROS" width="588" height="80" data-orig-src="corporativo/images/u2058-42.png?crc=333783836" data-orig-id="u2058-4" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
       <span class="anchor_item grpelem placeholder" data-placeholder-for="nosotros_content"><!-- placeholder node --></span>
       <div class="PamphletWidget clearfix grpelem temp_no_id" data-orig-id="pamphletu3321"><!-- none box -->
        <div class="ThumbGroup clearfix grpelem temp_no_id" data-orig-id="u3344"><!-- none box -->
@@ -326,16 +326,16 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
        <div class="popup_anchor temp_no_id" data-orig-id="u3328popup">
         <div class="ContainerGroup clearfix temp_no_id" data-orig-id="u3328"><!-- none box -->
          <div class="Container rounded-corners clearfix grpelem temp_no_id" data-orig-id="u3339"><!-- group -->
-          <img class="grpelem temp_no_id temp_no_img_src" alt="&quot;Somos un equipo formado en valores y principios éticos, buscando crear un círculo virtuoso entre los emprendedores e inversionistas&quot;." width="983" height="175" data-orig-src="images/u3340-42.png?crc=123111094" data-orig-id="u3340-4" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+          <img class="grpelem temp_no_id temp_no_img_src" alt="&quot;Somos un equipo formado en valores y principios éticos, buscando crear un círculo virtuoso entre los emprendedores e inversionistas&quot;." width="983" height="175" data-orig-src="corporativo/images/u3340-42.png?crc=123111094" data-orig-id="u3340-4" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
          </div>
          <div class="Container invi rounded-corners clearfix grpelem temp_no_id" data-orig-id="u3329"><!-- group -->
-          <img class="grpelem temp_no_id temp_no_img_src" alt="&quot;Contamos con un equipo experimentado en negocios e inversiones con gran determinación y afán de logro&quot;." width="984" height="174" data-orig-src="images/u3330-82.png?crc=4025721694" data-orig-id="u3330-8" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+          <img class="grpelem temp_no_id temp_no_img_src" alt="&quot;Contamos con un equipo experimentado en negocios e inversiones con gran determinación y afán de logro&quot;." width="984" height="174" data-orig-src="corporativo/images/u3330-82.png?crc=4025721694" data-orig-id="u3330-8" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
          </div>
          <div class="Container invi rounded-corners clearfix grpelem temp_no_id" data-orig-id="u3334"><!-- group -->
-          <img class="grpelem temp_no_id temp_no_img_src" alt="&quot;Nos entusiasmamos con las grandes ideas de negocio.&quot;" width="983" height="174" data-orig-src="images/u3335-62.png?crc=211510162" data-orig-id="u3335-6" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+          <img class="grpelem temp_no_id temp_no_img_src" alt="&quot;Nos entusiasmamos con las grandes ideas de negocio.&quot;" width="983" height="174" data-orig-src="corporativo/images/u3335-62.png?crc=211510162" data-orig-id="u3335-6" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
          </div>
          <div class="Container invi rounded-corners clearfix grpelem temp_no_id" data-orig-id="u3414"><!-- group -->
-          <img class="grpelem temp_no_id temp_no_img_src" alt="&quot;Somos un equipo que se apasiona en hacer realidad los sueños&quot;." width="989" height="175" data-orig-src="images/u3468-62.png?crc=107040579" data-orig-id="u3468-6" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+          <img class="grpelem temp_no_id temp_no_img_src" alt="&quot;Somos un equipo que se apasiona en hacer realidad los sueños&quot;." width="989" height="175" data-orig-src="corporativo/images/u3468-62.png?crc=107040579" data-orig-id="u3468-6" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
          </div>
         </div>
        </div>
@@ -356,10 +356,10 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
       <span class="browser_width grpelem placeholder" data-placeholder-for="u2250-bw_content"><!-- placeholder node --></span>
       <span class="browser_width grpelem placeholder" data-placeholder-for="u2126-bw_content"><!-- placeholder node --></span>
       <span class="browser_width grpelem placeholder" data-placeholder-for="u2253-bw_content"><!-- placeholder node --></span>
-      <img class="grpelem temp_no_id temp_no_img_src" alt="¿CUÁL ES NUESTRO PROPÓSITO?" width="928" height="80" data-orig-src="images/u2166-42.png?crc=4168245868" data-orig-id="u2166-4" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
-      <img class="grpelem temp_no_id temp_no_img_src" alt="¿QUÉ OPCIÓN SE ADAPTA A MI PROYECTO?" width="1162" height="80" data-orig-src="images/u2259-42.png?crc=4027683739" data-orig-id="u2259-4" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
-      <img class="grpelem temp_no_id temp_no_img_src" alt="&quot;La felicidad radica en la alegría del logro y la emoción del esfuerzo creativo&quot; Roosevelt." width="1162" height="61" data-orig-src="images/u2178-62.png?crc=127253538" data-orig-id="u2178-6" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
-      <img class="grpelem temp_no_id temp_no_img_src" alt="Etic@pitalízate y Crezcamos Juntos" width="1162" height="61" data-orig-src="images/u5782-42.png?crc=3842593000" data-orig-id="u5782-4" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_id temp_no_img_src" alt="¿CUÁL ES NUESTRO PROPÓSITO?" width="928" height="80" data-orig-src="corporativo/images/u2166-42.png?crc=4168245868" data-orig-id="u2166-4" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_id temp_no_img_src" alt="¿QUÉ OPCIÓN SE ADAPTA A MI PROYECTO?" width="1162" height="80" data-orig-src="corporativo/images/u2259-42.png?crc=4027683739" data-orig-id="u2259-4" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_id temp_no_img_src" alt="&quot;La felicidad radica en la alegría del logro y la emoción del esfuerzo creativo&quot; Roosevelt." width="1162" height="61" data-orig-src="corporativo/images/u2178-62.png?crc=127253538" data-orig-id="u2178-6" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_id temp_no_img_src" alt="Etic@pitalízate y Crezcamos Juntos" width="1162" height="61" data-orig-src="corporativo/images/u5782-42.png?crc=3842593000" data-orig-id="u5782-4" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
       <span class="anchor_item grpelem placeholder" data-placeholder-for="que_hacemos_content"><!-- placeholder node --></span>
       <span class="anchor_item grpelem placeholder" data-placeholder-for="opcion_content"><!-- placeholder node --></span>
       <span class="clip_frame grpelem placeholder" data-placeholder-for="u5453_content"><!-- placeholder node --></span>
@@ -372,7 +372,7 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
       <span class="browser_width grpelem placeholder" data-placeholder-for="u6804-bw_content"><!-- placeholder node --></span>
       <span class="browser_width grpelem placeholder" data-placeholder-for="u6805-bw_content"><!-- placeholder node --></span>
       <span class="grpelem placeholder" data-placeholder-for="u6812_content"><!-- placeholder node --></span>
-      <img class="grpelem temp_no_id temp_no_img_src" alt="Derechos Reservados" width="1162" height="61" data-orig-src="images/u6813-42.png?crc=190115976" data-orig-id="u6813-4" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_id temp_no_img_src" alt="Derechos Reservados" width="1162" height="61" data-orig-src="corporativo/images/u6813-42.png?crc=190115976" data-orig-id="u6813-4" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
       <span class="nonblock nontext grpelem placeholder" data-placeholder-for="u6814_content"><!-- placeholder node --></span>
      </div>
      <div class="clearfix colelem" id="pu2324"><!-- group -->
@@ -419,7 +419,7 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
         <div class="clearfix grpelem temp_no_id" data-orig-id="u3052-4"><!-- content -->
          <span class="placeholder" data-placeholder-for="u3052-4_0_content"><!-- placeholder node --></span>
         </div>
-        <button class="submit-btn NoWrap grpelem temp_no_id" alt="Enviar" src="images/blank.gif?crc=4208392903" type="submit" value="" tabindex="14" data-orig-id="u3053"><!-- state-based BG images --></button>
+        <button class="submit-btn NoWrap grpelem temp_no_id" alt="Enviar" src="corporativo/images/blank.gif?crc=4208392903" type="submit" value="" tabindex="14" data-orig-id="u3053"><!-- state-based BG images --></button>
         <div class="fld-grp clearfix grpelem temp_no_id" data-required="true" data-orig-id="widgetu3055"><!-- none box -->
          <label class="fld-label grpelem temp_no_id" for="widgetu3055_input" data-orig-id="u3058"><!-- state-based BG images --></label>
          <span class="fld-textarea actAsDiv shadow rounded-corners clearfix grpelem temp_no_id" data-orig-id="u3057-4"><!-- content --><textarea class="wrapped-input temp_no_id" name="custom_U3055" tabindex="13" data-orig-id="widgetu3055_input"></textarea><label class="wrapped-input fld-prompt temp_no_id" for="widgetu3055_input" data-orig-id="widgetu3055_prompt"><span class="actAsPara placeholder" data-placeholder-for="widgetu3055_prompt_0_content"><!-- placeholder node --></span></label></span>
@@ -436,15 +436,15 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
         </div>
        </form>
       </div>
-      <img class="grpelem temp_no_id temp_no_img_src" alt="CREZCAMOS JUNTOS" width="1045" height="84" data-orig-src="images/u5393-42.png?crc=87205152" data-orig-id="u5393-4" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
-      <img class="grpelem temp_no_id temp_no_img_src" alt="¿Necesitas asesoría personalizada, necesitas aterrizar tu idea de negocio? Permítenos conocerte." width="1162" height="64" data-orig-src="images/u5399-62.png?crc=4086292888" data-orig-id="u5399-6" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
-      <img class="grpelem temp_no_id temp_no_img_src" alt="¡Queremos Conocerte! +52 (722) 474 5926 +52 (722) 304 7852" width="1162" height="88" data-orig-src="images/u6808-92.png?crc=438857150" data-orig-id="u6808-9" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
-      <img class="grpelem temp_no_id temp_no_img_src" alt="¡Síguenos en nuestras redes!" width="1162" height="61" data-orig-src="images/u6809-42.png?crc=3815963777" data-orig-id="u6809-4" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
-      <img class="grpelem temp_no_id temp_no_img_src" alt="informes@eticapital.mx" width="1162" height="61" data-orig-src="images/u6810-42.png?crc=272882631" data-orig-id="u6810-4" src="images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_id temp_no_img_src" alt="CREZCAMOS JUNTOS" width="1045" height="84" data-orig-src="corporativo/images/u5393-42.png?crc=87205152" data-orig-id="u5393-4" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_id temp_no_img_src" alt="¿Necesitas asesoría personalizada, necesitas aterrizar tu idea de negocio? Permítenos conocerte." width="1162" height="64" data-orig-src="corporativo/images/u5399-62.png?crc=4086292888" data-orig-id="u5399-6" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_id temp_no_img_src" alt="¡Queremos Conocerte! +52 (722) 474 5926 +52 (722) 304 7852" width="1162" height="88" data-orig-src="corporativo/images/u6808-92.png?crc=438857150" data-orig-id="u6808-9" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_id temp_no_img_src" alt="¡Síguenos en nuestras redes!" width="1162" height="61" data-orig-src="corporativo/images/u6809-42.png?crc=3815963777" data-orig-id="u6809-4" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
+      <img class="grpelem temp_no_id temp_no_img_src" alt="informes@eticapital.mx" width="1162" height="61" data-orig-src="corporativo/images/u6810-42.png?crc=272882631" data-orig-id="u6810-4" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
      </div>
      <div class="clearfix colelem" id="pu6806"><!-- group -->
       <div class="clip_frame grpelem temp_no_id" data-orig-id="u6806"><!-- svg -->
-       <img class="svg temp_no_id temp_no_img_src" data-orig-src="images/svg-pegado-59964x150.svg?crc=293968353" width="200" height="50" alt="" data-mu-svgfallback="images/svg%20pegado%2059964x150_poster_.png?crc=4061079298" data-orig-id="u6807" src="images/blank.gif?crc=4208392903"/>
+       <img class="svg temp_no_id temp_no_img_src" data-orig-src="corporativo/images/svg-pegado-59964x150.svg?crc=293968353" width="200" height="50" alt="" data-mu-svgfallback="corporativo/images/svg%20pegado%2059964x150_poster_.png?crc=4061079298" data-orig-id="u6807" src="corporativo/images/blank.gif?crc=4208392903"/>
       </div>
       <span class="nonblock nontext grpelem placeholder" data-placeholder-for="u6815_content"><!-- placeholder node --></span>
       <span class="nonblock nontext grpelem placeholder" data-placeholder-for="u6816_content"><!-- placeholder node --></span>
@@ -457,34 +457,34 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
     </div>
    </div>
    <div class="preload_images">
-    <img class="preload temp_no_img_src" data-orig-src="images/u7914-r2.png?crc=3770187442" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7914-a2.png?crc=4100500408" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7901-r2.png?crc=3866076438" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7901-a2.png?crc=3760504391" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7911-r2.png?crc=4224253800" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7911-a2.png?crc=4224253800" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7886-r2.png?crc=152044261" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7886-a2.png?crc=4010393529" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7895-r2.png?crc=150931565" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u7895-a2.png?crc=31381694" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/fce_2.png?crc=166601596" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/cf_2.png?crc=532800367" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u6812-r2.png?crc=3926101455" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u6814_states-r2.png?crc=387211622" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3049-ferr2.png?crc=4075755061" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3043-ferr2.png?crc=3917301989" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3032-ferr2.png?crc=131919593" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3060-ferr2.png?crc=55507278" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3053-r2.png?crc=3891972428" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3053-m2.png?crc=4070110602" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3053-fs2.png?crc=276208025" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3058-ferr2.png?crc=10986058" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/u3162-ferr2.png?crc=377834462" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/fb_color.png?crc=439377252" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/tw_color.png?crc=4032554286" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/in_color.png?crc=454549069" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/ln_color.png?crc=4941093" alt="" src="images/blank.gif?crc=4208392903"/>
-    <img class="preload temp_no_img_src" data-orig-src="images/yt_color.png?crc=3904600323" alt="" src="images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7914-r2.png?crc=3770187442" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7914-a2.png?crc=4100500408" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7901-r2.png?crc=3866076438" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7901-a2.png?crc=3760504391" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7911-r2.png?crc=4224253800" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7911-a2.png?crc=4224253800" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7886-r2.png?crc=152044261" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7886-a2.png?crc=4010393529" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7895-r2.png?crc=150931565" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u7895-a2.png?crc=31381694" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/fce_2.png?crc=166601596" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/cf_2.png?crc=532800367" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u6812-r2.png?crc=3926101455" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u6814_states-r2.png?crc=387211622" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3049-ferr2.png?crc=4075755061" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3043-ferr2.png?crc=3917301989" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3032-ferr2.png?crc=131919593" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3060-ferr2.png?crc=55507278" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3053-r2.png?crc=3891972428" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3053-m2.png?crc=4070110602" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3053-fs2.png?crc=276208025" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3058-ferr2.png?crc=10986058" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/u3162-ferr2.png?crc=377834462" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/fb_color.png?crc=439377252" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/tw_color.png?crc=4032554286" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/in_color.png?crc=454549069" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/ln_color.png?crc=4941093" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
+    <img class="preload temp_no_img_src" data-orig-src="corporativo/images/yt_color.png?crc=3904600323" alt="" src="corporativo/images/blank.gif?crc=4208392903"/>
    </div>
   </div>
   <!-- Other scripts -->

@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>{{ isset($title) ? $title . ' - ' . config('app.name', 'Eticapital') : config('app.name', 'Eticapital') }}</title>
+    @if(isset($description) && $description)
+    <meta name="description" content="{{ $description }}"ve>
+    @endif
+
 
     <link rel="stylesheet" href="{{ mix('/css/site.css') }}">
 
@@ -110,8 +114,8 @@
             <p><a href="{{ route('nosotros') }}" class="h3">Nosotros</a></p>
             <div class="row mb-3">
               <div class="col-12 col-lg-6">
-                <a href="#">Términos y condiciones</a>
-                <br><a href="#">Aviso de privacidad</a>
+                <a href="{{ route('terminos-y-condiciones') }}">Términos y condiciones</a>
+                <br><a href="{{ route('aviso-de-privacidad') }}">Aviso de privacidad</a>
                 <br><a href="/corporativo">Etic@pital Corporativo</a>
               </div> <!-- / .col-lg-6 -->
               <div class="col-12 col-lg-6">

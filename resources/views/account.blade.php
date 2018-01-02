@@ -97,7 +97,7 @@
                 </td>
                 <td>{{ money($investment->amount) }}</td>
                 <td>
-                  <span class="text-{{ $investment->status_class }}">
+                  <span class="text-nowrap text-{{ $investment->status_class }}">
                     <i class="icon-{{ $investment->status_icon }}"></i>
                     {{ $investment->status_label }}
                   </span>

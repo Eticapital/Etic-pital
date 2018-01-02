@@ -3741,6 +3741,261 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/fondo-de-inversion-form.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      form: new Form({
+        // 1.
+        name: '',
+        phone: '',
+        email: '',
+        acreditado: false,
+        portafolio: false,
+        investment: null,
+        level: 1,
+        sectors: [],
+        comments: ''
+      }),
+      sectors: null
+    };
+  },
+
+
+  computed: {
+    sectorsColumns: function sectorsColumns() {
+      if (!this.sectors) {
+        return [];
+      }
+
+      return _.chunk(this.sectors, Math.ceil(this.sectors.length / 2));
+    }
+  },
+
+  created: function created() {
+    this.loadSectors();
+  },
+
+
+  methods: {
+    loadSectors: function loadSectors() {
+      var _this = this;
+
+      axios.get('/sectors').then(function (response) {
+        _this.sectors = response.data;
+      });
+    },
+    onSubmit: function onSubmit() {
+      return false;
+    },
+    submitForm: function submitForm() {
+      var _this2 = this;
+
+      var promise = App.post('/fondo-de-inversion', this.form);
+
+      promise.then(function (response) {
+        if (response.redirect_to) {
+          window.location.replace(response.redirect_to);
+        }
+      }).catch(function (errors) {
+        if (errors.errors) {
+          _.find(errors.errors, function (error, name) {
+            name = name.split('.')[0];
+
+            if (!_this2.$refs[name]) {
+              return false;
+            }
+
+            var input = $('input:visible:not([type=file]), textarea:visible, select:visible, button:visible', _this2.$refs[name].$el).first();
+            if (input.length) {
+              $(input).focus();
+            } else {
+              _this2.$scrollTo(_this2.$refs[name].$el, 0);
+            }
+
+            if (_this2.$refs[name].editor) {
+              _this2.$refs[name].editor.focus();
+            }
+
+            return true;
+          });
+        }
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/logout-link.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -97357,6 +97612,618 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-bec7bf74\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/fondo-de-inversion-form.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "form",
+    {
+      attrs: { novalidate: "" },
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          _vm.onSubmit($event)
+        }
+      }
+    },
+    [
+      _c("div", { staticClass: "container-fluid bg-light" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "content" }, [
+            _c("div", { staticClass: "row justify-content-center" }, [
+              _c("div", { staticClass: "col-lg-8" }, [
+                _c(
+                  "fieldset",
+                  [
+                    _c("p"),
+                    _vm._m(0, false, false),
+                    _c("p"),
+                    _vm._v(" "),
+                    _c("form-text", {
+                      ref: "name",
+                      attrs: { form: _vm.form, name: "name", label: "Nombre:" }
+                    }),
+                    _vm._v(" "),
+                    _c("form-text", {
+                      ref: "email",
+                      attrs: {
+                        form: _vm.form,
+                        name: "email",
+                        type: "email",
+                        label: "Correo de contacto:"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("form-text", {
+                      ref: "phone",
+                      attrs: {
+                        form: _vm.form,
+                        name: "phone",
+                        label: "Teléfono de contacto"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "content" }, [
+          _c("div", { staticClass: "row justify-content-center" }, [
+            _c("div", { staticClass: "col-lg-8" }, [
+              _vm._m(1, false, false),
+              _vm._v(" "),
+              _c("fieldset", [
+                _c("div", { staticClass: "form-row" }, [
+                  _c("legend", { staticClass: "col-form-legend" }, [
+                    _vm._v("¿Eres un inversionista acreditado o institucional?")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col" }, [
+                    _c("div", { staticClass: "form-check" }, [
+                      _c("label", { staticClass: "form-check-label" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.acreditado,
+                              expression: "form.acreditado"
+                            }
+                          ],
+                          staticClass: "form-check-input",
+                          attrs: {
+                            type: "radio",
+                            name: "inversionista-acreeditado"
+                          },
+                          domProps: {
+                            value: true,
+                            checked: _vm._q(_vm.form.acreditado, true)
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.$set(_vm.form, "acreditado", true)
+                            }
+                          }
+                        }),
+                        _vm._v(
+                          "\n                        Sí\n                      "
+                        )
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col" }, [
+                    _c("div", { staticClass: "form-check" }, [
+                      _c("label", { staticClass: "form-check-label" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.acreditado,
+                              expression: "form.acreditado"
+                            }
+                          ],
+                          staticClass: "form-check-input",
+                          attrs: {
+                            type: "radio",
+                            name: "inversionista-acreeditado"
+                          },
+                          domProps: {
+                            value: false,
+                            checked: _vm._q(_vm.form.acreditado, false)
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.$set(_vm.form, "acreditado", false)
+                            }
+                          }
+                        }),
+                        _vm._v(
+                          "\n                        No\n                      "
+                        )
+                      ])
+                    ])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("fieldset", [
+                _c("div", { staticClass: "form-row" }, [
+                  _c("legend", { staticClass: "col-form-legend" }, [
+                    _vm._v(
+                      "¿Manejas un portafolio superior a los $100,000 pesos?"
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col" }, [
+                    _c("div", { staticClass: "form-check" }, [
+                      _c("label", { staticClass: "form-check-label" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.portafolio,
+                              expression: "form.portafolio"
+                            }
+                          ],
+                          staticClass: "form-check-input",
+                          attrs: {
+                            type: "radio",
+                            name: "inversionista-portafolio"
+                          },
+                          domProps: {
+                            value: true,
+                            checked: _vm._q(_vm.form.portafolio, true)
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.$set(_vm.form, "portafolio", true)
+                            }
+                          }
+                        }),
+                        _vm._v(
+                          "\n                        Sí\n                      "
+                        )
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col" }, [
+                    _c("div", { staticClass: "form-check" }, [
+                      _c("label", { staticClass: "form-check-label" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.portafolio,
+                              expression: "form.portafolio"
+                            }
+                          ],
+                          staticClass: "form-check-input",
+                          attrs: {
+                            type: "radio",
+                            name: "inversionista-portafolio"
+                          },
+                          domProps: {
+                            value: false,
+                            checked: _vm._q(_vm.form.portafolio, false)
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.$set(_vm.form, "portafolio", false)
+                            }
+                          }
+                        }),
+                        _vm._v(
+                          "\n                        No\n                      "
+                        )
+                      ])
+                    ])
+                  ])
+                ])
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container-fluid bg-light" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "content" }, [
+            _c("div", { staticClass: "row justify-content-center" }, [
+              _c(
+                "div",
+                { staticClass: "col-lg-8" },
+                [
+                  _c("p"),
+                  _vm._m(2, false, false),
+                  _c("p"),
+                  _vm._v(" "),
+                  _c("form-money", {
+                    ref: "investment",
+                    attrs: {
+                      form: _vm.form,
+                      name: "investment",
+                      label: "¿Cuánto deseas invertir?"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-group" },
+                    [
+                      _c("p", [
+                        _vm._v(
+                          "Elige las categorías de proyecto que más te interesan para invertir:"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm.sectors === null
+                        ? _c("p", [
+                            _c("i", { staticClass: "icon-spinner spinner" }),
+                            _vm._v(" Cargando sectores...\n                  ")
+                          ])
+                        : _c(
+                            "b-form-group",
+                            {
+                              ref: "sectors",
+                              attrs: {
+                                feedback: _vm.form.errors.get("sectors"),
+                                state: _vm.form.errors.has("sectors")
+                                  ? "invalid"
+                                  : ""
+                              }
+                            },
+                            [
+                              _c(
+                                "b-form-checkbox-group",
+                                {
+                                  staticClass: "form-row",
+                                  attrs: {
+                                    state: _vm.form.errors.has("sectors")
+                                      ? "invalid"
+                                      : ""
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      _vm.form.errors.clear("sectors")
+                                    }
+                                  },
+                                  model: {
+                                    value: _vm.form.sectors,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.form, "sectors", $$v)
+                                    },
+                                    expression: "form.sectors"
+                                  }
+                                },
+                                _vm._l(_vm.sectorsColumns, function(
+                                  chunk,
+                                  index
+                                ) {
+                                  return _c(
+                                    "div",
+                                    { key: index, staticClass: "col" },
+                                    _vm._l(chunk, function(sector) {
+                                      return _c(
+                                        "div",
+                                        {
+                                          key: sector.id,
+                                          staticClass: "form-check"
+                                        },
+                                        [
+                                          _c(
+                                            "b-form-checkbox",
+                                            { attrs: { value: sector.id } },
+                                            [_vm._v(_vm._s(sector.label))]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    })
+                                  )
+                                })
+                              )
+                            ],
+                            1
+                          ),
+                      _vm._v(" "),
+                      _c("legend", { staticClass: "col-form-legend" }, [
+                        _vm._v("¿Cuál es tu nivel de interés para invertir?")
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-rating" }, [
+                        _c("div", { staticClass: "rating-option" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.level,
+                                expression: "form.level"
+                              }
+                            ],
+                            attrs: {
+                              type: "radio",
+                              id: "rating-option-1",
+                              name: "inversionista-level",
+                              checked: ""
+                            },
+                            domProps: {
+                              value: 1,
+                              checked: _vm._q(_vm.form.level, 1)
+                            },
+                            on: {
+                              change: function($event) {
+                                _vm.$set(_vm.form, "level", 1)
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("label", { attrs: { for: "rating-option-1" } }, [
+                            _vm._v("1")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "rating-option" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.level,
+                                expression: "form.level"
+                              }
+                            ],
+                            attrs: {
+                              type: "radio",
+                              id: "rating-option-2",
+                              name: "inversionista-level"
+                            },
+                            domProps: {
+                              value: 2,
+                              checked: _vm._q(_vm.form.level, 2)
+                            },
+                            on: {
+                              change: function($event) {
+                                _vm.$set(_vm.form, "level", 2)
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("label", { attrs: { for: "rating-option-2" } }, [
+                            _vm._v("2")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "rating-option" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.level,
+                                expression: "form.level"
+                              }
+                            ],
+                            attrs: {
+                              type: "radio",
+                              id: "rating-option-3",
+                              name: "inversionista-level"
+                            },
+                            domProps: {
+                              value: 3,
+                              checked: _vm._q(_vm.form.level, 3)
+                            },
+                            on: {
+                              change: function($event) {
+                                _vm.$set(_vm.form, "level", 3)
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("label", { attrs: { for: "rating-option-3" } }, [
+                            _vm._v("3")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "rating-option" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.level,
+                                expression: "form.level"
+                              }
+                            ],
+                            attrs: {
+                              type: "radio",
+                              id: "rating-option-4",
+                              name: "inversionista-level"
+                            },
+                            domProps: {
+                              value: 4,
+                              checked: _vm._q(_vm.form.level, 4)
+                            },
+                            on: {
+                              change: function($event) {
+                                _vm.$set(_vm.form, "level", 4)
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("label", { attrs: { for: "rating-option-4" } }, [
+                            _vm._v("4")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "rating-option" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.level,
+                                expression: "form.level"
+                              }
+                            ],
+                            attrs: {
+                              type: "radio",
+                              id: "rating-option-5",
+                              name: "inversionista-level"
+                            },
+                            domProps: {
+                              value: 5,
+                              checked: _vm._q(_vm.form.level, 5)
+                            },
+                            on: {
+                              change: function($event) {
+                                _vm.$set(_vm.form, "level", 5)
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("label", { attrs: { for: "rating-option-5" } }, [
+                            _vm._v("5")
+                          ])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _vm._m(3, false, false)
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("form-textarea", {
+                    ref: "comments",
+                    attrs: {
+                      form: _vm.form,
+                      name: "comments",
+                      label: "¿Tienes algún comentario extra?"
+                    }
+                  })
+                ],
+                1
+              )
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "container-fluid" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "content" }, [
+            _c("div", { staticClass: "row justify-content-center" }, [
+              _c("div", { staticClass: "col-lg-8" }, [
+                _c(
+                  "p",
+                  { staticClass: "text-center" },
+                  [
+                    _c(
+                      "form-button-submit",
+                      {
+                        staticClass: "btn-wide",
+                        attrs: {
+                          type: "button",
+                          variant: "primary",
+                          form: _vm.form
+                        },
+                        nativeOn: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.submitForm($event)
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                Enviar solicitud\n              "
+                        )
+                      ]
+                    )
+                  ],
+                  1
+                )
+              ])
+            ])
+          ])
+        ])
+      ])
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("legend", [
+      _c("span", { staticClass: "h2 text-primary" }, [_vm._v("1.")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "h3" }, [_vm._v("Tus datos")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _c("span", { staticClass: "h2 text-primary" }, [_vm._v("2.")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "h3" }, [
+        _vm._v("¿Qué tipo de inversionista eres?")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("legend", [
+      _c("span", { staticClass: "h2 text-primary" }, [_vm._v("3.")]),
+      _vm._v(" "),
+      _c("span", { staticClass: "h3" }, [_vm._v("Acerca de tu inversión")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "d-flex justify-content-between" }, [
+      _c("small", { staticClass: "text-primary" }, [
+        _vm._v("Sólo tengo curiosidad")
+      ]),
+      _vm._v(" "),
+      _c("small", { staticClass: "text-primary" }, [
+        _vm._v("Estoy listo para invertir")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-bec7bf74", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-c617cdd4\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/WaitDots.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -111353,6 +112220,55 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/fondo-de-inversion-form.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/fondo-de-inversion-form.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-bec7bf74\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/fondo-de-inversion-form.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/fondo-de-inversion-form.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-bec7bf74", Component.options)
+  } else {
+    hotAPI.reload("data-v-bec7bf74", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/logout-link.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -112939,6 +113855,7 @@ window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 /***/ (function(module, exports, __webpack_require__) {
 
 Vue.component('investment-form', __webpack_require__("./resources/assets/js/project/investment-form.vue"));
+Vue.component('fondo-de-inversion-form', __webpack_require__("./resources/assets/js/components/fondo-de-inversion-form.vue"));
 Vue.component('project-form', __webpack_require__("./resources/assets/js/project/project-form.vue"));
 Vue.component('project-video', __webpack_require__("./resources/assets/js/components/project-video.vue"));
 Vue.component('project-carousel', __webpack_require__("./resources/assets/js/components/project-carousel.vue"));

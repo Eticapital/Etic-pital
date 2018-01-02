@@ -1,4 +1,5 @@
 Vue.component('investment-form', require('../project/investment-form'))
+Vue.component('fondo-de-inversion-form', require('../components/fondo-de-inversion-form'))
 Vue.component('project-form', require('../project/project-form'))
 Vue.component('project-video', require('../components/project-video'))
 Vue.component('project-carousel', require('../components/project-carousel'))

@@ -48,7 +48,7 @@
           <div class="container">
             <div class="row">
               <div class="col-12 col-lg-4 d-flex align-items-center justify-content-center">
-                <img src="img/comofunciona_icon3.png" class="icon">
+                <img src="{{asset('img/comofunciona_icon3.png')}}" class="icon">
               </div> <!-- / .col-lg-4 -->
               <div class="col-12 col-lg-8 text-justify">
                 <p><span class="h3">Para invertir</span></p>
@@ -85,7 +85,7 @@
           <div class="container">
             <div class="row">
               <div class="col-12 col-lg-4 d-flex align-items-center justify-content-center">
-                <img src="img/comofunciona_icon4.png" class="icon">
+                <img src="{{ asset('img/comofunciona_icon4.png') }}" class="icon">
               </div> <!-- / .col-lg-4 -->
               <div class="col-12 col-lg-8">
                 <p><span class="h3">Los principales puntos a evaluar de una compañía, entre otros, son:</span></p>

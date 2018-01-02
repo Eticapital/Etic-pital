@@ -152,7 +152,7 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
       </div>
       <a class="anchor_item grpelem shared_content" id="contacto" data-content-guid="contacto_content"></a>
       <div class="clearfix grpelem" id="u4026"><!-- group -->
-       <form class="form-grp clearfix grpelem" id="widgetu3030" method="post" enctype="multipart/form-data" action="corporativo-contacto"><!-- none box -->
+       <form class="form-grp clearfix grpelem" id="widgetu3030" method="post" enctype="multipart/form-data" action="scripts/form-u3030.php"><!-- none box -->
         <div class="fld-grp clearfix grpelem" id="widgetu3048" data-required="true"><!-- none box -->
          <label class="fld-label grpelem" id="u3049" for="widgetu3048_input"><!-- state-based BG images --></label>
          <span class="fld-input NoWrap actAsDiv shadow rounded-corners clearfix grpelem" id="u3051-4"><!-- content --><input class="wrapped-input" type="text" spellcheck="false" id="widgetu3048_input" name="custom_U3048" tabindex="1"/><label class="wrapped-input fld-prompt" id="widgetu3048_prompt" for="widgetu3048_input"><span class="actAsPara shared_content" data-content-guid="widgetu3048_prompt_0_content">Introduce tu nombre</span></label></span>
@@ -381,7 +381,7 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
       <span class="browser_width grpelem placeholder" data-placeholder-for="u2333-bw_content"><!-- placeholder node --></span>
       <span class="anchor_item grpelem placeholder" data-placeholder-for="contacto_content"><!-- placeholder node --></span>
       <div class="clearfix grpelem temp_no_id" data-orig-id="u4026"><!-- group -->
-       <form class="form-grp clearfix grpelem temp_no_id" method="post" enctype="multipart/form-data" action="corporativo-contacto" data-orig-id="widgetu3030"><!-- none box -->
+       <form class="form-grp clearfix grpelem temp_no_id" method="post" enctype="multipart/form-data" action="scripts/form-u3030.php" data-orig-id="widgetu3030"><!-- none box -->
         <div class="fld-grp clearfix grpelem temp_no_id" data-required="true" data-orig-id="widgetu3048"><!-- none box -->
          <label class="fld-label grpelem temp_no_id" for="widgetu3048_input" data-orig-id="u3049"><!-- state-based BG images --></label>
          <span class="fld-input NoWrap actAsDiv shadow rounded-corners clearfix grpelem temp_no_id" data-orig-id="u3051-4"><!-- content --><input class="wrapped-input temp_no_id" type="text" spellcheck="false" name="custom_U3048" tabindex="8" data-orig-id="widgetu3048_input"/><label class="wrapped-input fld-prompt temp_no_id" for="widgetu3048_input" data-orig-id="widgetu3048_prompt"><span class="actAsPara placeholder" data-placeholder-for="widgetu3048_prompt_0_content"><!-- placeholder node --></span></label></span>

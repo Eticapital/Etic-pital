@@ -5427,6 +5427,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -5438,7 +5443,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       table: {
         url: '/projects',
         appendParams: {
-          appends: ['can_update', 'can_destroy', 'can_show', 'can_publish', 'can_reject', 'can_finish', 'owner_name', 'status'],
+          appends: ['can_update', 'can_destroy', 'can_show', 'can_publish', 'can_reject', 'can_finish', 'owner_name', 'status', 'collected', 'goal'],
           status: this.$route.query.status
         },
         fields: [{
@@ -5453,6 +5458,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           sortField: 'status',
           name: '__slot:status',
           title: 'Estatus'
+        }, {
+          sortField: 'collected',
+          name: '__slot:collected',
+          title: 'Recaudado'
+        }, {
+          sortField: 'goal',
+          name: '__slot:goal',
+          title: 'Meta'
         }, {
           name: '__slot:actions',
           dataClass: 'data-table-actions'
@@ -102741,6 +102754,44 @@ var render = function() {
             }
           },
           {
+            key: "collected",
+            fn: function(props) {
+              return [
+                _vm._v(
+                  "\n      " +
+                    _vm._s(
+                      _vm._f("placeholder")(
+                        _vm._f("currency")(
+                          props.rowData.collected / 100,
+                          "$",
+                          0
+                        ),
+                        "-"
+                      )
+                    ) +
+                    "\n    "
+                )
+              ]
+            }
+          },
+          {
+            key: "goal",
+            fn: function(props) {
+              return [
+                _vm._v(
+                  "\n      " +
+                    _vm._s(
+                      _vm._f("placeholder")(
+                        _vm._f("currency")(props.rowData.goal / 100, "$", 0),
+                        "-"
+                      )
+                    ) +
+                    "\n    "
+                )
+              ]
+            }
+          },
+          {
             key: "actions",
             fn: function(props) {
               return [
@@ -102761,10 +102812,7 @@ var render = function() {
                                     "/edit?return=admin"
                                 }
                               },
-                              [
-                                _c("i", { staticClass: "icon-pen" }),
-                                _vm._v(" Editar\n        ")
-                              ]
+                              [_c("i", { staticClass: "icon-pen" })]
                             )
                           : _vm._e(),
                         _vm._v(" "),
@@ -102780,10 +102828,7 @@ var render = function() {
                                   }
                                 }
                               },
-                              [
-                                _c("i", { staticClass: "icon-eye" }),
-                                _vm._v(" Detalles\n        ")
-                              ]
+                              [_c("i", { staticClass: "icon-eye" })]
                             )
                           : _vm._e(),
                         _vm._v(" "),
@@ -102799,10 +102844,7 @@ var render = function() {
                                   }
                                 }
                               },
-                              [
-                                _c("i", { staticClass: "icon-wrench" }),
-                                _vm._v(" Administrar\n        ")
-                              ]
+                              [_c("i", { staticClass: "icon-wrench" })]
                             )
                           : _vm._e(),
                         _vm._v(" "),

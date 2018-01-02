@@ -17,7 +17,7 @@ class ProjectController extends Controller
 
         $query = request()->input('query')
             ? Project::search(request()->input('query'))
-            : Project::sortByRequest(request())->latest();
+            : Project::sortByRequest(request())->latest('projects.created_at');
 
         if ($status_filter = request()->input('status')) {
             if ($status_filter === 'published') {

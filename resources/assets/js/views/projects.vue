@@ -28,7 +28,12 @@
           <b-dropdown-item v-if="canDataTable(props, 'reject')" @click.prevent="reject(props.rowData)">Rechazar</b-dropdown-item>
           <b-dropdown-item v-if="canDataTable(props, 'finish')" @click.prevent="finish(props.rowData)">Finalizar</b-dropdown-item>
         </b-dropdown>
-
+      </template>
+      <template slot="collected" slot-scope="props">
+        {{ props.rowData.collected / 100 | currency('$', 0) | placeholder('-') }}
+      </template>
+      <template slot="goal" slot-scope="props">
+        {{ props.rowData.goal / 100 | currency('$', 0) | placeholder('-') }}
       </template>
       <template slot="actions" slot-scope="props">
         <div class="btn-group  btn-group-sm" v-if="canDataTable(props, 'update|destroy')">
@@ -37,15 +42,15 @@
             v-if="canDataTable(props, 'update')"
             class="btn btn-primary"
             :href="'/projects/' + props.rowData.id + '/edit?return=admin'">
-            <i class="icon-pen"></i> Editar
+            <i class="icon-pen"></i>
           </a>
 
           <router-link v-if="canDataTable(props, 'show')" class="btn btn-primary" :to="{ name: 'projects.edit', params: { id: props.rowData.id } }">
-            <i class="icon-eye"></i> Detalles
+            <i class="icon-eye"></i>
           </router-link>
 
           <router-link v-if="canDataTable(props, 'update')" class="btn btn-primary" :to="{ name: 'projects.edit', params: { id: props.rowData.id } }">
-            <i class="icon-wrench"></i> Administrar
+            <i class="icon-wrench"></i>
           </router-link>
 
           <button v-if="canDataTable(props, 'destroy')" @click.prevent="deleteDataTable(props, 'projects')" class="btn btn-danger">
@@ -82,7 +87,9 @@ export default {
             'can_reject',
             'can_finish',
             'owner_name',
-            'status'
+            'status',
+            'collected',
+            'goal'
           ],
           status: this.$route.query.status
         },
@@ -101,6 +108,16 @@ export default {
             sortField: 'status',
             name: '__slot:status',
             title: 'Estatus'
+          },
+          {
+            sortField: 'collected',
+            name: '__slot:collected',
+            title: 'Recaudado'
+          },
+          {
+            sortField: 'goal',
+            name: '__slot:goal',
+            title: 'Meta'
           },
           {
             name: '__slot:actions',

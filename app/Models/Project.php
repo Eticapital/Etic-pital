@@ -63,6 +63,8 @@ class Project extends Model
         'is_pending',
         'is_published',
         'is_rejected',
+        'collected',
+        'goal',
     ];
 
     public static $images = [
@@ -850,10 +852,18 @@ HTML;
         END
     END $order
 SQL;
+
         switch ($by) {
             case 'name':
             case 'holder':
                 return $query->orderBy($by, $order);
+            case 'goal':
+                return $query->orderBy('minimal_needed', $order);
+            case 'collected':
+                $query->select('projects.*');
+                $query->leftJoin('investments', 'projects.id', '=', 'investments.project_id');
+                $query->groupBy('projects.id');
+                return $query->orderByRaw("SUM(IF(investments.investment_status=1, investments.amount, 0)) $order");
             case 'status':
                 $query->orderByRaw($status_sort_sql);
                 return $query;

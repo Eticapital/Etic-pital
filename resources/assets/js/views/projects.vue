@@ -1,5 +1,13 @@
 <template>
   <div>
+    <b-nav pills class="mb-3">
+      <b-nav-item exact disabled>Estatus:</b-nav-item>
+      <b-nav-item exact :to="{query: null}">Todos</b-nav-item>
+      <b-nav-item exact :to="{query: { status: 'published'}}">Publicados</b-nav-item>
+      <b-nav-item exact :to="{query: { status: 'unpublished'}}">En revisión</b-nav-item>
+      <b-nav-item exact :to="{query: { status: 'rejected'}}">Rechazados</b-nav-item>
+    </b-nav>
+
     <data-table
       ref="table"
       :api-url="table.url"
@@ -75,18 +83,22 @@ export default {
             'can_finish',
             'owner_name',
             'status'
-          ]
+          ],
+          status: this.$route.query.status
         },
         fields: [
           {
             name: '__slot:name',
-            title: 'Nombre del proyecto'
+            title: 'Nombre del proyecto',
+            sortField: 'name'
           },
           {
+            sortField: 'holder',
             name: 'holder',
             title: 'Titular'
           },
           {
+            sortField: 'status',
             name: '__slot:status',
             title: 'Estatus'
           },
@@ -96,6 +108,13 @@ export default {
           }
         ]
       }
+    }
+  },
+
+  watch: {
+    '$route.query' (query) {
+      this.table.appendParams.status = query.status
+      this.$refs.table.reload()
     }
   },
 

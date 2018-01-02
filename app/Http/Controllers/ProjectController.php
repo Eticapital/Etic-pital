@@ -17,7 +17,17 @@ class ProjectController extends Controller
 
         $query = request()->input('query')
             ? Project::search(request()->input('query'))
-            : Project::latest();
+            : Project::sortByRequest(request())->latest();
+
+        if ($status_filter = request()->input('status')) {
+            if ($status_filter === 'published') {
+                $query->published();
+            } elseif ($status_filter === 'rejected') {
+                $query->rejected();
+            } elseif ($status_filter === 'unpublished') {
+                $query->unpublished();
+            }
+        }
 
         $results = $query->paginate(request()->input('per_page', 10));
 
@@ -26,6 +36,7 @@ class ProjectController extends Controller
                 $project->lazyAppend(request()->input('appends'));
             });
         }
+
 
         return $results;
     }

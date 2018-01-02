@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
 
 class Project extends Model
@@ -427,6 +428,17 @@ class Project extends Model
     }
 
     /**
+     * Filtra para solo mostrar los no publicados
+     *
+     * @param  Illuminate\Database\Eloquent\Builder $query
+     * @return Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeUnpublished($query)
+    {
+        return $query->whereNull('published_at');
+    }
+
+    /**
      * Un proyecto tiene N miembros del equipo
      *
      * @return HasMany
@@ -763,6 +775,16 @@ HTML;
     }
 
     /**
+     * Filtra los rechazados
+     * @param  [type] $query [description]
+     * @return [type]        [description]
+     */
+    public function scopeRejected($query)
+    {
+        return $query->whereNotNull('rejected_at')->whereNull('published_at')->whereNull('finished_at');
+    }
+
+    /**
      * Marca un proyecto como rechazado
      *
      * @return boolean
@@ -796,5 +818,47 @@ HTML;
     public function investments()
     {
         return $this->hasMany(\App\Models\Investment::class);
+    }
+
+    public function scopeSortByRequest($query, $request)
+    {
+        if (!$request->input('sort')) {
+            return $query;
+        }
+
+        list($by, $order) = explode('|', $request->input('sort'));
+        $order = strtolower($order) === 'desc' ? 'desc' : 'asc';
+
+        $status_sort_sql = <<<SQL
+    CASE WHEN
+        -- Pendiente
+        (published_at is NULL AND rejected_at is NULL AND finished_at is null)
+    THEN
+        1
+    ELSE
+        CASE WHEN
+            -- Publicado
+            (rejected_at IS NULL AND published_at is NOT null AND finished_at is null)
+        THEN 2
+        ELSE
+            CASE WHEN
+                -- Rechazado
+                (rejected_at IS NOT NULL AND published_at is null AND finished_at is null)
+            THEN 3
+            ELSE 4
+            END
+        END
+    END $order
+SQL;
+        switch ($by) {
+            case 'name':
+            case 'holder':
+                return $query->orderBy($by, $order);
+            case 'status':
+                $query->orderByRaw($status_sort_sql);
+                return $query;
+        }
+
+        return $query;
     }
 }

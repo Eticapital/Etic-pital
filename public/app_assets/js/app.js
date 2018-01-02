@@ -5419,6 +5419,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -5430,15 +5438,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       table: {
         url: '/projects',
         appendParams: {
-          appends: ['can_update', 'can_destroy', 'can_show', 'can_publish', 'can_reject', 'can_finish', 'owner_name', 'status']
+          appends: ['can_update', 'can_destroy', 'can_show', 'can_publish', 'can_reject', 'can_finish', 'owner_name', 'status'],
+          status: this.$route.query.status
         },
         fields: [{
           name: '__slot:name',
-          title: 'Nombre del proyecto'
+          title: 'Nombre del proyecto',
+          sortField: 'name'
         }, {
+          sortField: 'holder',
           name: 'holder',
           title: 'Titular'
         }, {
+          sortField: 'status',
           name: '__slot:status',
           title: 'Estatus'
         }, {
@@ -5449,6 +5461,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
 
+
+  watch: {
+    '$route.query': function $routeQuery(query) {
+      this.table.appendParams.status = query.status;
+      this.$refs.table.reload();
+    }
+  },
 
   methods: {
     publish: function publish(project) {
@@ -102592,6 +102611,39 @@ var render = function() {
   return _c(
     "div",
     [
+      _c(
+        "b-nav",
+        { staticClass: "mb-3", attrs: { pills: "" } },
+        [
+          _c("b-nav-item", { attrs: { exact: "", disabled: "" } }, [
+            _vm._v("Estatus:")
+          ]),
+          _vm._v(" "),
+          _c("b-nav-item", { attrs: { exact: "", to: { query: null } } }, [
+            _vm._v("Todos")
+          ]),
+          _vm._v(" "),
+          _c(
+            "b-nav-item",
+            { attrs: { exact: "", to: { query: { status: "published" } } } },
+            [_vm._v("Publicados")]
+          ),
+          _vm._v(" "),
+          _c(
+            "b-nav-item",
+            { attrs: { exact: "", to: { query: { status: "unpublished" } } } },
+            [_vm._v("En revisión")]
+          ),
+          _vm._v(" "),
+          _c(
+            "b-nav-item",
+            { attrs: { exact: "", to: { query: { status: "rejected" } } } },
+            [_vm._v("Rechazados")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
       _c("data-table", {
         ref: "table",
         attrs: {

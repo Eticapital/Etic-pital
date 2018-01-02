@@ -4631,10 +4631,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   watch: {
     coordinates: {
       handler: function handler(coordinates, oldCoordinates) {
-        if (coordinates.lat !== oldCoordinates.lat && coordinates.lng !== oldCoordinates.lng) {
-          this.marker.setPosition(coordinates);
-          // this.map.panTo(coordinates)
-        }
+        this.marker.setPosition(coordinates);
+        this.map.panTo(coordinates);
+        if (coordinates.lat !== oldCoordinates.lat && coordinates.lng !== oldCoordinates.lng) {}
       },
 
       deep: true
@@ -4716,6 +4715,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     selectAddress: function selectAddress(address) {
       this.coordinates.lat = address.geometry.location.lat;
       this.coordinates.lng = address.geometry.location.lng;
+      console.log(this.coordinates);
       this.addresses = [];
       this.address = address.formatted_address;
     },
@@ -97562,6 +97562,7 @@ var render = function() {
                     return _c(
                       "a",
                       {
+                        key: address.place_id,
                         staticClass: "FormLocation__address",
                         attrs: { href: "" },
                         on: {

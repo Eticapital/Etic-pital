@@ -7,8 +7,8 @@
       :state="feedback ? 'invalid' : ''"
     >
       <b-form-input v-model="address" @keyup.native="newAddress" :state="feedback ? 'invalid' : ''" />
-      <div v-if="firstAddresses.length || calculating" class="FormLocation__addresses" >
-        <a href="" @click.prevent="selectAddress(address)" class="FormLocation__address" v-for="address in firstAddresses">
+      <div v-if="firstAddresses.length || calculating" class="FormLocation__addresses">
+        <a href="" @click.prevent="selectAddress(address)" class="FormLocation__address" v-for="address in firstAddresses" :key="address.place_id">
           {{address.formatted_address}}
         </a>
         <span v-if="calculating" class="FormLocation__searching">
@@ -81,9 +81,9 @@ export default {
   watch: {
     coordinates: {
       handler (coordinates, oldCoordinates) {
-        if (coordinates.lat !== oldCoordinates.lat && coordinates.lng !== oldCoordinates.lng) {
           this.marker.setPosition(coordinates)
-          // this.map.panTo(coordinates)
+          this.map.panTo(coordinates)
+        if (coordinates.lat !== oldCoordinates.lat && coordinates.lng !== oldCoordinates.lng) {
         }
       },
       deep: true
@@ -163,6 +163,7 @@ export default {
     selectAddress (address) {
       this.coordinates.lat = address.geometry.location.lat
       this.coordinates.lng = address.geometry.location.lng
+      console.log(this.coordinates)
       this.addresses = []
       this.address = address.formatted_address
     },

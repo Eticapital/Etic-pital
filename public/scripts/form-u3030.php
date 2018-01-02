@@ -28,7 +28,7 @@ $form = array(
 	),
 	'email' => array(
 		'from' => 'informes@eticapital.mx',
-		'to' => 'informes@eticapital.mx'
+		'to' => 'alfonso@vexilo.com'
 	),
 	'fields' => array(
 		'custom_U3048' => array(

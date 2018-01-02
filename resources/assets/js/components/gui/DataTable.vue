@@ -52,6 +52,14 @@ export default {
     }
   },
 
+  // watch: {
+  //   sortOrder (sortOrder) {
+  //     let query = _.merge(this.$route.query, {sort: sortOrder[0].sortField + '|' + sortOrder[0].direction})
+  //     this.$router.replace({query: null})
+  //     this.$router.replace({query: query})
+  //   }
+  // },
+
   created () {
     bus.$on('header-query-set', (query) => {
       this.query = query

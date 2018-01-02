@@ -3564,6 +3564,16 @@ __WEBPACK_IMPORTED_MODULE_2_axios_cancel___default()(__WEBPACK_IMPORTED_MODULE_1
       query: null
     };
   },
+
+
+  // watch: {
+  //   sortOrder (sortOrder) {
+  //     let query = _.merge(this.$route.query, {sort: sortOrder[0].sortField + '|' + sortOrder[0].direction})
+  //     this.$router.replace({query: null})
+  //     this.$router.replace({query: query})
+  //   }
+  // },
+
   created: function created() {
     var _this = this;
 
@@ -5478,6 +5488,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   watch: {
     '$route.query': function $routeQuery(query) {
       this.table.appendParams.status = query.status;
+      // this.table.appendParams.sort = query.sort ? query.sort : null
       this.$refs.table.reload();
     }
   },

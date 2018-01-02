@@ -131,6 +131,7 @@ export default {
   watch: {
     '$route.query' (query) {
       this.table.appendParams.status = query.status
+      // this.table.appendParams.sort = query.sort ? query.sort : null
       this.$refs.table.reload()
     }
   },

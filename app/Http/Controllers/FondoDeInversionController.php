@@ -25,6 +25,11 @@ class FondoDeInversionController extends Controller
         Mail::to('alfonso@vexilo.com')
             ->send(new FondoDeInversionMail($data));
 
-        return $data;
+        flash('¡El formulario fue enviado correctamente!
+            En breve recibirás una respuesta.');
+
+        return [
+            'redirect_to' => route('home')
+        ];
     }
 }

@@ -9,7 +9,19 @@
       <form-text :form="form" type="password" name="password" label="Contraseña" />
       <form-text :form="form" type="password" name="password_confirmation" label="Repite Contraseña" />
       <form-checkbox :form="form" name="is_published">Marcar para activar</form-checkbox>
+
+      <p v-if="roles === null"><i class="spinner icon-spinner"></i> Cargando grupos...</p>
+      <b-form-group v-else label="Grupos">
+        <b-form-checkbox-group
+          stacked
+          v-model="form.roles"
+          name="roles"
+          :options="rolesOptions"
+        />
+      </b-form-group>
+
       <form-button-submit :form="form">Guardar</form-button-submit>
+
     </form>
   </b-card>
 </template>
@@ -19,6 +31,7 @@ export default {
   data: function () {
     return {
       user: null,
+      roles: null,
       form: new Form({
         id: null,
         name: '',
@@ -28,7 +41,8 @@ export default {
         organization: '',
         residence: '',
         password_confirmation: '',
-        is_published: false
+        is_published: false,
+        roles: []
       })
     }
   },
@@ -37,13 +51,15 @@ export default {
     if (!to.params.id) {
       return next()
     }
-
-    axios.get(App.basePath + 'users/' + to.params.id)
+    let params = {
+      appends: ['roles_ids']
+    }
+    axios.get(App.basePath + 'users/' + to.params.id, { params:params })
       .then((response) => {
         next(vm => {
           vm.user = response.data
-          console.log(vm.user)
           vm.form.appendModel(vm.user)
+          vm.form.roles = vm.user.roles_ids
           bus.breadcrumbParams = { id: vm.user.id }
           bus.breadcrumbAttribs = { name: vm.user.name }
           bus.$emit('view-ready')
@@ -53,7 +69,31 @@ export default {
       })
   },
 
+  computed: {
+    rolesOptions () {
+      return this.roles.map(role => {
+        return {
+          value: role.id,
+          text: role.display_name
+        }
+      })
+    }
+  },
+
+  created () {
+    this.loadRoles()
+  },
+
   methods: {
+    loadRoles () {
+      let params = {
+        per_page: 1000000
+      }
+      axios.get(App.basePath + 'roles', {params: params})
+        .then(response => {
+          this.roles = response.data.data;
+        })
+    },
     onSubmit () {
       let promise = this.user
         ? App.put(App.basePath + 'users/' + this.user.id, this.form)

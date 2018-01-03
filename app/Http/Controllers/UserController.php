@@ -52,9 +52,16 @@ class UserController extends Controller
             'phone' => 'nullable',
             'organization' => 'nullable',
             'residence' => 'nullable',
+            'roles' => 'array',
         ]);
 
-        return User::create($data);
+        return tap(User::create($data), function ($user) use ($request, $data) {
+            if (array_key_exists('roles', $data)) {
+                $user->roles()->sync($data['roles']);
+            }
+            $user->is_published = boolval($request->input('is_published'));
+            $user->save();
+        });
     }
 
     public function update(Request $request, User $user)
@@ -68,6 +75,7 @@ class UserController extends Controller
             'phone' => 'nullable',
             'organization' => 'nullable',
             'residence' => 'nullable',
+            'roles' => 'array',
         ]);
 
         if (!$data['password']) {
@@ -76,6 +84,9 @@ class UserController extends Controller
 
         return tap($user, function ($user) use ($request, $data) {
             $user->update($data);
+            if (array_key_exists('roles', $data)) {
+                $user->roles()->sync($data['roles']);
+            }
             $user->is_published = boolval($request->input('is_published'));
             $user->save();
         });

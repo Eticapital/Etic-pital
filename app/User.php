@@ -44,7 +44,7 @@ class User extends Authenticatable
     ];
 
     protected $appendable = [
-        'can_update', 'can_destroy', 'can_show'
+        'can_update', 'can_destroy', 'can_show', 'roles_ids', 'roles_list'
     ];
 
     protected $appends = [
@@ -157,5 +157,20 @@ class User extends Authenticatable
     public function isInvestorOf(Project $project)
     {
         return $project->investments()->accepted()->where('owner_id', $this->id)->count() > 0;
+    }
+
+    /**
+     * Regresa los id de los roles del usuario
+     *
+     * @return array
+     */
+    public function getRolesIdsAttribute()
+    {
+        return $this->roles()->pluck('id');
+    }
+
+    public function getRolesListAttribute()
+    {
+        return $this->roles()->pluck('display_name')->implode(', ');
     }
 }

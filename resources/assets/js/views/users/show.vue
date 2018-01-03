@@ -16,6 +16,10 @@
         <td><a :href="'mailto:' + user.email">{{ user.email }}</a></td>
       </tr>
       <tr>
+        <td>Grupos:</td>
+        <td>{{ user.roles_list || '-Ninguno-' }}</td>
+      </tr>
+      <tr>
         <td>Teléfono:</td>
         <td>{{ user.phone }}</td>
       </tr>
@@ -46,7 +50,10 @@ export default {
   },
 
   beforeRouteEnter (to, from, next) {
-    axios.get(App.basePath + 'users/' + to.params.id).then((response) => {
+    let params = {
+      appends: ['roles_list']
+    }
+    axios.get(App.basePath + 'users/' + to.params.id, {params:params}).then((response) => {
       next(vm => {
         vm.user = response.data
         bus.breadcrumbParams = { id: vm.user.id }

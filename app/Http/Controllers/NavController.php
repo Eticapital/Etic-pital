@@ -46,7 +46,7 @@ class NavController extends Controller
                 'text' => 'Usuarios',
                 'route' => 'users.index',
                 'searchable' => true,
-                'hide' => true,
+                'hide' => false,
                 'permission' => ['index', \App\User::class],
                 'items' => [
                     [
@@ -55,6 +55,7 @@ class NavController extends Controller
                         'text' => 'Nuevo usuario',
                         'route' => 'users.create',
                         'permission' => ['create', \App\User::class],
+                        'hide' => true,
                         'in_top_menu' => true,
                         'return' => true,
                     ],

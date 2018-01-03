@@ -8,6 +8,7 @@ use App\Models\Traits\HasPolicyAttributes;
 use App\Models\Traits\LazyAppends;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
@@ -15,12 +16,14 @@ use Laravel\Scout\Searchable;
 
 class Project extends Model
 {
-    use HasImages, Sluggable, Searchable, LazyAppends, SoftDeletes;
+    use HasImages, Sluggable, Searchable, LazyAppends, SoftDeletes, CascadeSoftDeletes;
 
     use HasImages, HasPolicyAttributes {
         HasPolicyAttributes::getAttribute insteadof HasImages;
         HasPolicyAttributes::mutateAttribute insteadof HasImages;
     }
+
+    protected $cascadeDeletes = ['investments'];
 
     protected $casts = [
         'links' => 'json',

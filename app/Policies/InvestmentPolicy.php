@@ -29,7 +29,7 @@ class InvestmentPolicy
             return false;
         }
 
-        if ($investment->project->owner_id === $user->id) {
+        if (optional($investment->project)->owner_id === $user->id) {
             return true;
         }
 
@@ -50,7 +50,7 @@ class InvestmentPolicy
             return false;
         }
 
-        if ($investment->project->owner_id === $user->id) {
+        if (optional($investment->project)->owner_id === $user->id) {
             return true;
         }
 

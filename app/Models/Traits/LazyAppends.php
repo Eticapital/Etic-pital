@@ -63,7 +63,9 @@ trait LazyAppends
         // util para en un solo query agregar más elementos
         foreach ($this->getSubArrayableAppends() as $key) {
             list($model, $key) = explode('.', $key);
-            $attributes[$model][$key] = $this->{$model}->mutateAttributeForArray($key, null);
+            if ($this->{$model}) {
+                $attributes[$model][$key] = $this->{$model}->mutateAttributeForArray($key, null);
+            }
         }
 
         return $attributes;

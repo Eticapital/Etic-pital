@@ -17,7 +17,7 @@ class ProjectController extends Controller
 
         $query = request()->input('query')
             ? Project::search(request()->input('query'))
-            : Project::sortByRequest(request())->latest('projects.created_at');
+            : Project::sortByRequest(request())->filterByRequest(request())->latest('projects.created_at');
 
         if ($status_filter = request()->input('status')) {
             if ($status_filter === 'published') {
@@ -28,8 +28,6 @@ class ProjectController extends Controller
                 $query->unpublished();
             }
         }
-
-        $query->filterByRequest(request());
 
         $results = $query->paginate(request()->input('per_page', 10));
 

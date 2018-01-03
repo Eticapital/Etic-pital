@@ -38,7 +38,7 @@
       :per-page="table.perPage"
       @vuetable:pagination-data="onPaginationData"
     >
-      <template slot="project" slot-scope="props">
+      <template slot="project" slot-scope="props" v-if="props.rowData.project">
         <router-link v-if="can(props.rowData.project, 'show')" :to="{ name: 'projects.show', params: { id: props.rowData.project.id } }">
           {{ props.rowData.project.name }}
         </router-link>

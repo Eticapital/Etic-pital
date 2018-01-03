@@ -1,5 +1,27 @@
 <template>
-<div v-if="data">
+<div>
+  <div class="d-flex align-items-center mb-3">
+    <span class="mr-3">Filtrar:</span>
+    <div>
+      <datepicker
+        :bootstrap-styling="true"
+        placeholder="Desde:"
+        v-model="from"
+        :clear-button="true"
+        language="es"
+      />
+    </div>
+    <div class="ml-3">
+      <datepicker
+        :bootstrap-styling="true"
+        placeholder="Hasta:"
+        v-model="to"
+        :clear-button="true"
+        language="es"
+      />
+    </div>
+  </div>
+  <template v-if="!busy">
   <b-card title="Resumen de proyectos">
     <b-card-group deck>
       <b-card bg-variant="success" text-variant="white" no-body>
@@ -98,20 +120,54 @@
       </b-card>
     </b-card-group>
   </b-card>
+  </template>
 </div>
 </template>
 
 <script>
+import Datepicker from 'vuejs-datepicker'
+
 export default {
+  components: {
+    Datepicker
+  },
+
   data: function () {
     return {
-      data: null
+      busy: true,
+      data: null,
+      from: this.$route.query.from ? moment(this.$route.query.from).toDate() : null,
+      to: this.$route.query.to ? moment(this.$route.query.to).toDate() : null
+    }
+  },
+
+  watch: {
+    from (from) {
+      this.loadData()
+    },
+    to (to) {
+      this.loadData()
+    }
+  },
+
+  methods: {
+    loadData () {
+      this.busy = true
+      let params = {
+        from: this.from,
+        to: this.to
+      }
+      axios.get(App.basePath + 'dashboard', {params: params}).then((response) => {
+        this.busy = false
+        this.data = response.data
+      })
     }
   },
 
   beforeRouteEnter (to, from, next) {
     axios.get(App.basePath + 'dashboard').then((response) => {
       next(vm => {
+        vm.busy = false
         vm.data = response.data
         bus.$emit('view-ready')
       })

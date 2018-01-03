@@ -908,4 +908,17 @@ SQL;
 
         return $query;
     }
+
+    public function scopeFilterByRequest($query, $request)
+    {
+        if ($from = $request->input('from')) {
+            $query->whereDate('created_at', '>=', Carbon::parse($from)->startOfDay());
+        }
+
+        if ($to = $request->input('to')) {
+            $query->whereDate('created_at', '<=', Carbon::parse($to)->endOfDay());
+        }
+
+        return $query;
+    }
 }

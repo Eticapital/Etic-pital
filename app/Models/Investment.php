@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Traits\HasPolicyAttributes;
 use App\Models\Traits\LazyAppends;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 
@@ -219,6 +220,19 @@ SQL;
             case 'status':
                 $query->orderByRaw($status_sort_sql);
                 return $query;
+        }
+
+        return $query;
+    }
+
+    public function scopeFilterByRequest($query, $request)
+    {
+        if ($from = $request->input('from')) {
+            $query->whereDate('created_at', '>=', Carbon::parse($from)->startOfDay());
+        }
+
+        if ($to = $request->input('to')) {
+            $query->whereDate('created_at', '<=', Carbon::parse($to)->endOfDay());
         }
 
         return $query;

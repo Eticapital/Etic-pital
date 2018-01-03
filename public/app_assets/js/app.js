@@ -4927,6 +4927,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4945,11 +4954,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         perPage: 15,
         url: '/investments',
         appendParams: {
-          appends: ['can_update', 'can_delete', 'can_accept', 'can_reject', 'project']
+          appends: ['can_update', 'can_delete', 'can_accept', 'can_reject', 'project', 'project.can_show', 'owner', 'owner.can_show']
         },
         fields: [{
           name: '__slot:project',
-          title: 'Promesa'
+          title: 'Proyecto'
         }, {
           name: '__slot:amount',
           title: 'Monto'
@@ -4959,6 +4968,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }, {
           name: '__slot:investor',
           title: 'Inversionista'
+        }, {
+          name: '__slot:owner',
+          title: 'Usuario'
         }, {
           name: '__slot:status',
           title: 'Estatus'
@@ -100470,9 +100482,53 @@ var render = function() {
             key: "project",
             fn: function(props) {
               return [
-                _vm._v(
-                  "\n      " + _vm._s(props.rowData.project.name) + "\n    "
-                )
+                _vm.can(props.rowData.project, "show")
+                  ? _c(
+                      "router-link",
+                      {
+                        attrs: {
+                          to: {
+                            name: "projects.show",
+                            params: { id: props.rowData.project.id }
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n        " +
+                            _vm._s(props.rowData.project.name) +
+                            "\n      "
+                        )
+                      ]
+                    )
+                  : [_vm._v(_vm._s(props.rowData.project.name))]
+              ]
+            }
+          },
+          {
+            key: "owner",
+            fn: function(props) {
+              return [
+                _vm.can(props.rowData.owner, "show")
+                  ? _c(
+                      "router-link",
+                      {
+                        attrs: {
+                          to: {
+                            name: "users.show",
+                            params: { id: props.rowData.owner.id }
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n        " +
+                            _vm._s(props.rowData.owner.name) +
+                            "\n      "
+                        )
+                      ]
+                    )
+                  : [_vm._v(_vm._s(props.rowData.owner.name))]
               ]
             }
           },

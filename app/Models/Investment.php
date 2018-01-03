@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Project;
 use App\Models\Traits\HasPolicyAttributes;
 use App\Models\Traits\LazyAppends;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 
@@ -37,6 +38,9 @@ class Investment extends Model
         'can_accept',
         'can_reject',
         'project',
+        'owner',
+        'owner.can_show',
+        'project.can_show',
     ];
 
     /**
@@ -141,5 +145,20 @@ class Investment extends Model
     {
         $this->investment_status = self::STATUS_REJECTED;
         return $this->save();
+    }
+
+    /**
+     * Uusairo del sistema dueño de la inversión
+     *
+     * @return
+     */
+    public function owner()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getOwnerAttribute()
+    {
+        return $this->owner()->first();
     }
 }

@@ -9,7 +9,16 @@
       @vuetable:pagination-data="onPaginationData"
     >
       <template slot="project" slot-scope="props">
-        {{ props.rowData.project.name }}
+        <router-link v-if="can(props.rowData.project, 'show')" :to="{ name: 'projects.show', params: { id: props.rowData.project.id } }">
+          {{ props.rowData.project.name }}
+        </router-link>
+        <template v-else>{{ props.rowData.project.name }}</template>
+      </template>
+      <template slot="owner" slot-scope="props">
+        <router-link v-if="can(props.rowData.owner, 'show')" :to="{ name: 'users.show', params: { id: props.rowData.owner.id } }">
+          {{ props.rowData.owner.name }}
+        </router-link>
+        <template v-else>{{ props.rowData.owner.name }}</template>
       </template>
       <template slot="amount" slot-scope="props">
         {{ props.rowData.amount / 100 | currency() }}
@@ -66,12 +75,15 @@ export default {
             'can_accept',
             'can_reject',
             'project',
+            'project.can_show',
+            'owner',
+            'owner.can_show'
           ]
         },
         fields: [
           {
             name: '__slot:project',
-            title: 'Promesa'
+            title: 'Proyecto'
           },
           {
             name: '__slot:amount',
@@ -84,6 +96,10 @@ export default {
           {
             name: '__slot:investor',
             title: 'Inversionista'
+          },
+          {
+            name: '__slot:owner',
+            title: 'Usuario'
           },
           {
             name: '__slot:status',

@@ -18,8 +18,8 @@ class InvestmentController extends Controller
         $results = $query->paginate(request()->input('per_page', 10));
 
         if (request()->input('appends')) {
-            return tap($results)->each(function ($project) {
-                $project->lazyAppend(request()->input('appends'));
+            return tap($results)->each(function ($investment) {
+                $investment->lazyAppend(request()->input('appends'));
             });
         }
 

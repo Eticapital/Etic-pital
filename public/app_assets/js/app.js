@@ -4879,137 +4879,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_js__ = __webpack_require__("./resources/assets/js/mixins.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__mixins_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_InvestmentsStatusBtn_vue__ = __webpack_require__("./resources/assets/js/components/InvestmentsStatusBtn.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_InvestmentsStatusBtn_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_InvestmentsStatusBtn_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__investments_table__ = __webpack_require__("./resources/assets/js/views/investments/table.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__investments_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__investments_table__);
 //
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    InvestmentsStatusBtn: __WEBPACK_IMPORTED_MODULE_1__components_InvestmentsStatusBtn_vue___default.a
-  },
-
-  mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_js__["tableConfig"]],
-
-  data: function data() {
-    return {
-      table: {
-        perPage: 15,
-        url: '/investments',
-        appendParams: {
-          appends: ['can_update', 'can_delete', 'can_accept', 'can_reject', 'project', 'project.can_show', 'owner', 'owner.can_show'],
-          status: this.$route.query.status
-        },
-        fields: [{
-          name: '__slot:project',
-          title: 'Proyecto',
-          sortField: 'project'
-        }, {
-          name: '__slot:amount',
-          title: 'Monto',
-          sortField: 'amount'
-        }, {
-          name: '__slot:date',
-          title: 'Fecha',
-          sortField: 'created_at'
-        }, {
-          name: '__slot:investor',
-          title: 'Inversionista',
-          sortField: 'name'
-        }, {
-          name: '__slot:owner',
-          title: 'Usuario',
-          sortField: 'owner'
-        }, {
-          name: '__slot:status',
-          title: 'Estatus',
-          sortField: 'status'
-        }]
-      }
-    };
-  },
-
-
-  watch: {
-    '$route.query': function $routeQuery(query) {
-      this.table.appendParams.status = query.status;
-      this.$refs.table.reload();
-    }
-  },
-
-  methods: {
-    deleted: function deleted(investment) {
-      var index = this.table.pagination.data.findIndex(function (data) {
-        return data.id === investment.id;
-      });
-      // this.table.pagination.data.splice(index, 1)
-      this.$refs.table.reload();
-    }
+    InvestmentsTable: __WEBPACK_IMPORTED_MODULE_0__investments_table___default.a
   }
 });
 
@@ -5399,6 +5280,159 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/views/investments/table.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_js__ = __webpack_require__("./resources/assets/js/mixins.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__mixins_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_InvestmentsStatusBtn_vue__ = __webpack_require__("./resources/assets/js/components/InvestmentsStatusBtn.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_InvestmentsStatusBtn_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_InvestmentsStatusBtn_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    InvestmentsStatusBtn: __WEBPACK_IMPORTED_MODULE_1__components_InvestmentsStatusBtn_vue___default.a
+  },
+
+  mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_js__["tableConfig"]],
+
+  props: {
+    project: {
+      type: Object,
+      required: false
+    },
+    perPage: {
+      type: Number,
+      default: 15
+    }
+  },
+
+  data: function data() {
+    return {
+      table: {
+        perPage: this.perPage,
+        url: '/investments',
+        appendParams: {
+          appends: ['can_update', 'can_delete', 'can_accept', 'can_reject', 'project', 'project.can_show', 'owner', 'owner.can_show'],
+          status: this.$route.query.status,
+          project: this.project ? this.project.id : null
+        },
+        fields: [{
+          name: '__slot:project',
+          title: 'Proyecto',
+          sortField: 'project'
+        }, {
+          name: '__slot:amount',
+          title: 'Monto',
+          sortField: 'amount'
+        }, {
+          name: '__slot:date',
+          title: 'Fecha',
+          sortField: 'created_at'
+        }, {
+          name: '__slot:investor',
+          title: 'Inversionista',
+          sortField: 'name'
+        }, {
+          name: '__slot:owner',
+          title: 'Usuario',
+          sortField: 'owner'
+        }, {
+          name: '__slot:status',
+          title: 'Estatus',
+          sortField: 'status'
+        }]
+      }
+    };
+  },
+
+
+  watch: {
+    '$route.query': function $routeQuery(query) {
+      this.table.appendParams.status = query.status;
+      this.$refs.table.reload();
+    }
+  },
+
+  methods: {
+    deleted: function deleted(investment) {
+      var index = this.table.pagination.data.findIndex(function (data) {
+        return data.id === investment.id;
+      });
+      // this.table.pagination.data.splice(index, 1)
+      this.$refs.table.reload();
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/views/projects.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -5710,6 +5744,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__projects_file_vue__ = __webpack_require__("./resources/assets/js/views/projects/_projects_file.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__projects_file_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__projects_file_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__investments_table__ = __webpack_require__("./resources/assets/js/views/investments/table.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__investments_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__investments_table__);
 //
 //
 //
@@ -5938,12 +5974,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    ProjectFile: __WEBPACK_IMPORTED_MODULE_0__projects_file_vue___default.a
+    ProjectFile: __WEBPACK_IMPORTED_MODULE_0__projects_file_vue___default.a,
+    InvestmentsTable: __WEBPACK_IMPORTED_MODULE_1__investments_table___default.a
   },
   data: function data() {
     return {
@@ -5953,7 +6012,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     var params = {
-      appends: ['email_link', 'photo_380_url', 'map', 'sectors_list', 'stage_label', 'stage_description', 'rewards_list', 'team', 'kpis', 'key_documents', 'company_documents', 'extra_documents']
+      appends: ['email_link', 'photo_380_url', 'map', 'sectors_list', 'stage_label', 'stage_description', 'rewards_list', 'team', 'kpis', 'key_documents', 'company_documents', 'extra_documents', 'goal', 'collected', 'progress']
     };
     axios.get(App.basePath + 'projects/' + to.params.id, { params: params }).then(function (response) {
       next(function (vm) {
@@ -100487,195 +100546,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c(
-        "b-nav",
-        { staticClass: "mb-3", attrs: { pills: "" } },
-        [
-          _c("b-nav-item", { attrs: { exact: "", disabled: "" } }, [
-            _vm._v("Estatus:")
-          ]),
-          _vm._v(" "),
-          _c("b-nav-item", { attrs: { exact: "", to: { query: null } } }, [
-            _vm._v("Todos")
-          ]),
-          _vm._v(" "),
-          _c(
-            "b-nav-item",
-            { attrs: { exact: "", to: { query: { status: 1 } } } },
-            [_vm._v("Aceptadas")]
-          ),
-          _vm._v(" "),
-          _c(
-            "b-nav-item",
-            { attrs: { exact: "", to: { query: { status: 0 } } } },
-            [_vm._v("Pendientes")]
-          ),
-          _vm._v(" "),
-          _c(
-            "b-nav-item",
-            { attrs: { exact: "", to: { query: { status: -1 } } } },
-            [_vm._v("Rechazadas")]
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("data-table", {
-        ref: "table",
-        attrs: {
-          "api-url": _vm.table.url,
-          fields: _vm.table.fields,
-          "append-params": _vm.table.appendParams,
-          "per-page": _vm.table.perPage
-        },
-        on: { "vuetable:pagination-data": _vm.onPaginationData },
-        scopedSlots: _vm._u([
-          {
-            key: "project",
-            fn: function(props) {
-              return [
-                _vm.can(props.rowData.project, "show")
-                  ? _c(
-                      "router-link",
-                      {
-                        attrs: {
-                          to: {
-                            name: "projects.show",
-                            params: { id: props.rowData.project.id }
-                          }
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n        " +
-                            _vm._s(props.rowData.project.name) +
-                            "\n      "
-                        )
-                      ]
-                    )
-                  : [_vm._v(_vm._s(props.rowData.project.name))]
-              ]
-            }
-          },
-          {
-            key: "owner",
-            fn: function(props) {
-              return [
-                _vm.can(props.rowData.owner, "show")
-                  ? _c(
-                      "router-link",
-                      {
-                        attrs: {
-                          to: {
-                            name: "users.show",
-                            params: { id: props.rowData.owner.id }
-                          }
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n        " +
-                            _vm._s(props.rowData.owner.name) +
-                            "\n      "
-                        )
-                      ]
-                    )
-                  : [_vm._v(_vm._s(props.rowData.owner.name))]
-              ]
-            }
-          },
-          {
-            key: "amount",
-            fn: function(props) {
-              return [
-                _vm._v(
-                  "\n      " +
-                    _vm._s(_vm._f("currency")(props.rowData.amount / 100)) +
-                    "\n    "
-                )
-              ]
-            }
-          },
-          {
-            key: "date",
-            fn: function(props) {
-              return [
-                _vm._v(
-                  "\n      " +
-                    _vm._s(_vm._f("moment")(props.rowData.created_at, "l LT")) +
-                    "\n    "
-                )
-              ]
-            }
-          },
-          {
-            key: "status",
-            fn: function(props) {
-              return [
-                _c("investments-status-btn", {
-                  key: props.rowData.id,
-                  attrs: { investment: props.rowData },
-                  on: { deleted: _vm.deleted }
-                })
-              ]
-            }
-          },
-          {
-            key: "investor",
-            fn: function(props) {
-              return [
-                _vm._v("\n      " + _vm._s(props.rowData.name)),
-                _c("br"),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "small" },
-                  [
-                    _c(
-                      "a",
-                      { attrs: { href: "mailto: " + props.rowData.email } },
-                      [_vm._v(_vm._s(props.rowData.email))]
-                    ),
-                    _c("br"),
-                    _vm._v(" "),
-                    props.rowData.organization
-                      ? [
-                          _vm._v(
-                            "\n        " + _vm._s(props.rowData.organization)
-                          ),
-                          _c("br")
-                        ]
-                      : _vm._e(),
-                    _vm._v(" "),
-                    props.rowData.residence
-                      ? [
-                          _vm._v(
-                            "\n        " +
-                              _vm._s(props.rowData.residence) +
-                              "\n      "
-                          )
-                        ]
-                      : _vm._e()
-                  ],
-                  2
-                )
-              ]
-            }
-          }
-        ])
-      }),
-      _vm._v(" "),
-      _c("data-table-pagination", {
-        staticClass: "mt-3",
-        attrs: { table: _vm.table },
-        on: { change: _vm.onChangePage }
-      })
-    ],
-    1
-  )
+  return _c("investments-table")
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -100859,6 +100730,62 @@ var render = function() {
               "div",
               { staticClass: "col-md-6" },
               [
+                _c(
+                  "b-card",
+                  {
+                    staticClass: "mb-3 card-table",
+                    attrs: { title: "Resumen inversiones" }
+                  },
+                  [
+                    _c("table", { staticClass: "table" }, [
+                      _c("tr", [
+                        _c("td", [_vm._v("Recaudado")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("placeholder")(
+                                _vm._f("currency")(_vm.project.collected / 100),
+                                "-"
+                              )
+                            )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Meta")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("placeholder")(
+                                _vm._f("currency")(_vm.project.goal / 100),
+                                "-"
+                              )
+                            )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Avance")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(
+                              _vm._f("placeholder")(
+                                _vm._f("currency")(_vm.project.progress, "", 0),
+                                "-"
+                              )
+                            ) + "%"
+                          )
+                        ])
+                      ])
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
                 _c(
                   "b-card",
                   { staticClass: "mb-3", attrs: { title: "Resumen" } },
@@ -101263,6 +101190,17 @@ var render = function() {
                     })
                   )
                 : _vm._e()
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-card",
+            { staticClass: "mt-3", attrs: { title: "Inversiones" } },
+            [
+              _c("investments-table", {
+                attrs: { project: _vm.project, "per-page": 5 }
+              })
             ],
             1
           )
@@ -104867,6 +104805,215 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-e60862be", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e63fef48\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/views/investments/table.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "b-nav",
+        { staticClass: "mb-3", attrs: { pills: "" } },
+        [
+          _c("b-nav-item", { attrs: { exact: "", disabled: "" } }, [
+            _vm._v("Estatus:")
+          ]),
+          _vm._v(" "),
+          _c("b-nav-item", { attrs: { exact: "", to: { query: null } } }, [
+            _vm._v("Todos")
+          ]),
+          _vm._v(" "),
+          _c(
+            "b-nav-item",
+            { attrs: { exact: "", to: { query: { status: 1 } } } },
+            [_vm._v("Aceptadas")]
+          ),
+          _vm._v(" "),
+          _c(
+            "b-nav-item",
+            { attrs: { exact: "", to: { query: { status: 0 } } } },
+            [_vm._v("Pendientes")]
+          ),
+          _vm._v(" "),
+          _c(
+            "b-nav-item",
+            { attrs: { exact: "", to: { query: { status: -1 } } } },
+            [_vm._v("Rechazadas")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("data-table", {
+        ref: "table",
+        attrs: {
+          "api-url": _vm.table.url,
+          fields: _vm.table.fields,
+          "append-params": _vm.table.appendParams,
+          "per-page": _vm.table.perPage
+        },
+        on: { "vuetable:pagination-data": _vm.onPaginationData },
+        scopedSlots: _vm._u([
+          {
+            key: "project",
+            fn: function(props) {
+              return [
+                _vm.can(props.rowData.project, "show")
+                  ? _c(
+                      "router-link",
+                      {
+                        attrs: {
+                          to: {
+                            name: "projects.show",
+                            params: { id: props.rowData.project.id }
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n        " +
+                            _vm._s(props.rowData.project.name) +
+                            "\n      "
+                        )
+                      ]
+                    )
+                  : [_vm._v(_vm._s(props.rowData.project.name))]
+              ]
+            }
+          },
+          {
+            key: "owner",
+            fn: function(props) {
+              return [
+                _vm.can(props.rowData.owner, "show")
+                  ? _c(
+                      "router-link",
+                      {
+                        attrs: {
+                          to: {
+                            name: "users.show",
+                            params: { id: props.rowData.owner.id }
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n        " +
+                            _vm._s(props.rowData.owner.name) +
+                            "\n      "
+                        )
+                      ]
+                    )
+                  : [_vm._v(_vm._s(props.rowData.owner.name))]
+              ]
+            }
+          },
+          {
+            key: "amount",
+            fn: function(props) {
+              return [
+                _vm._v(
+                  "\n      " +
+                    _vm._s(_vm._f("currency")(props.rowData.amount / 100)) +
+                    "\n    "
+                )
+              ]
+            }
+          },
+          {
+            key: "date",
+            fn: function(props) {
+              return [
+                _vm._v(
+                  "\n      " +
+                    _vm._s(_vm._f("moment")(props.rowData.created_at, "l LT")) +
+                    "\n    "
+                )
+              ]
+            }
+          },
+          {
+            key: "status",
+            fn: function(props) {
+              return [
+                _c("investments-status-btn", {
+                  key: props.rowData.id,
+                  attrs: { investment: props.rowData },
+                  on: { deleted: _vm.deleted }
+                })
+              ]
+            }
+          },
+          {
+            key: "investor",
+            fn: function(props) {
+              return [
+                _vm._v("\n      " + _vm._s(props.rowData.name)),
+                _c("br"),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "small" },
+                  [
+                    _c(
+                      "a",
+                      { attrs: { href: "mailto: " + props.rowData.email } },
+                      [_vm._v(_vm._s(props.rowData.email))]
+                    ),
+                    _c("br"),
+                    _vm._v(" "),
+                    props.rowData.organization
+                      ? [
+                          _vm._v(
+                            "\n        " + _vm._s(props.rowData.organization)
+                          ),
+                          _c("br")
+                        ]
+                      : _vm._e(),
+                    _vm._v(" "),
+                    props.rowData.residence
+                      ? [
+                          _vm._v(
+                            "\n        " +
+                              _vm._s(props.rowData.residence) +
+                              "\n      "
+                          )
+                        ]
+                      : _vm._e()
+                  ],
+                  2
+                )
+              ]
+            }
+          }
+        ])
+      }),
+      _vm._v(" "),
+      _c("data-table-pagination", {
+        staticClass: "mt-3",
+        attrs: { table: _vm.table },
+        on: { change: _vm.onChangePage }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-e63fef48", module.exports)
   }
 }
 
@@ -125981,6 +126128,55 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-46b01f5f", Component.options)
   } else {
     hotAPI.reload("data-v-46b01f5f", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/investments/table.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/views/investments/table.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-e63fef48\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/views/investments/table.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/views/investments/table.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e63fef48", Component.options)
+  } else {
+    hotAPI.reload("data-v-e63fef48", Component.options)
 ' + '  }
   module.hot.dispose(function (data) {
     disposed = true

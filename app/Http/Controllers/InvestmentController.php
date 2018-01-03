@@ -19,6 +19,10 @@ class InvestmentController extends Controller
             $query->where('investment_status', $status_filter);
         }
 
+        if ($project_id = request()->input('project')) {
+            $query->where('project_id', $project_id);
+        }
+
         $results = $query->paginate(request()->input('per_page', 10));
 
         if (request()->input('appends')) {

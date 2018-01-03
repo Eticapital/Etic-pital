@@ -65,6 +65,7 @@ class Project extends Model
         'is_rejected',
         'collected',
         'goal',
+        'progress',
     ];
 
     public static $images = [
@@ -324,6 +325,16 @@ class Project extends Model
     public function getGoalAttribute()
     {
         return $this->minimal_needed;
+    }
+
+    /**
+     * Devuelve el progreso del proyecto como un porcentaje de 0 a 100
+     *
+     * @return integer
+     */
+    public function getProgressAttribute()
+    {
+        return $this->collected / $this->goal * 100;
     }
 
     /**

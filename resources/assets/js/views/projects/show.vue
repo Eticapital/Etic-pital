@@ -72,6 +72,23 @@
       </b-card>
     </div><!-- /.col-md-6 -->
     <div class="col-md-6">
+      <b-card class="mb-3 card-table" title="Resumen inversiones">
+        <table class="table">
+          <tr>
+            <td>Recaudado</td>
+            <td>{{ project.collected / 100 | currency | placeholder('-') }}</td>
+          </tr>
+          <tr>
+            <td>Meta</td>
+            <td>{{ project.goal / 100 | currency | placeholder('-') }}</td>
+          </tr>
+          <tr>
+            <td>Avance</td>
+            <td>{{ project.progress | currency('', 0) | placeholder('-') }}%</td>
+          </tr>
+        </table>
+      </b-card>
+
       <b-card class="mb-3" title="Resumen">
         <div class="small" v-html="project.description"></div>
       </b-card>
@@ -223,15 +240,21 @@
       </b-list-group-item>
     </b-list-group>
   </b-card>
+
+  <b-card title="Inversiones" class="mt-3">
+  <investments-table :project="project" :per-page="5" />
+  </b-card>
 </div>
 </template>
 
 <script>
 import ProjectFile from './_projects_file.vue'
+import InvestmentsTable from '../investments/table'
 
 export default {
   components: {
-    ProjectFile
+    ProjectFile,
+    InvestmentsTable
   },
   data: function () {
     return {
@@ -254,6 +277,9 @@ export default {
         'key_documents',
         'company_documents',
         'extra_documents',
+        'goal',
+        'collected',
+        'progress'
       ]
     }
     axios.get(App.basePath + 'projects/' + to.params.id, {params: params}).then((response) => {

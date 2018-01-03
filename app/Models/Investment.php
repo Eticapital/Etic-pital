@@ -51,8 +51,10 @@ class Investment extends Model
     public function toSearchableArray()
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'project_name' => optional($this->project)->name,
         ];
     }
 

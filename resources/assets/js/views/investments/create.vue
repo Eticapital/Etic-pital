@@ -55,6 +55,9 @@ export default {
 
   watch: {
     'form.owner_id' (ownerId) {
+      if (!ownerId || !this.users) {
+        return
+      }
       let user = this.users.find(user => user.id === ownerId)
       this.form.name = user.name
       this.form.email = user.email

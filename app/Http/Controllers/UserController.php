@@ -55,6 +55,8 @@ class UserController extends Controller
             'roles' => 'array',
         ]);
 
+        $data['password'] = bcrypt($data['password']);
+
         return tap(User::create($data), function ($user) use ($request, $data) {
             if (array_key_exists('roles', $data)) {
                 $user->roles()->sync($data['roles']);
@@ -80,6 +82,8 @@ class UserController extends Controller
 
         if (!$data['password']) {
             unset($data['password']);
+        } else {
+            $data['password'] = bcrypt($data['password']);
         }
 
         return tap($user, function ($user) use ($request, $data) {

@@ -892,6 +892,7 @@ SQL;
         switch ($by) {
             case 'name':
             case 'holder':
+            case 'created_at':
                 return $query->orderBy($by, $order);
             case 'goal':
                 return $query->orderBy('minimal_needed', $order);

@@ -1,12 +1,34 @@
 <template>
   <div>
-    <b-nav pills class="mb-3">
-      <b-nav-item exact disabled>Estatus:</b-nav-item>
-      <b-nav-item exact :to="{query: null}">Todos</b-nav-item>
-      <b-nav-item exact :to="{query: { status: 'published'}}">Publicados</b-nav-item>
-      <b-nav-item exact :to="{query: { status: 'unpublished'}}">En revisión</b-nav-item>
-      <b-nav-item exact :to="{query: { status: 'rejected'}}">Rechazados</b-nav-item>
-    </b-nav>
+    <div class="d-flex mb-3">
+      <div class="d-flex">
+        <div>
+          <datepicker
+            :bootstrap-styling="true"
+            placeholder="Desde:"
+            v-model="from"
+            :clear-button="true"
+            language="es"
+          />
+        </div>
+        <div class="ml-3">
+          <datepicker
+            :bootstrap-styling="true"
+            placeholder="Hasta:"
+            v-model="to"
+            :clear-button="true"
+            language="es"
+          />
+        </div>
+      </div>
+
+      <b-nav pills class="ml-auto">
+        <b-nav-item exact :to="{query: null}">Todos</b-nav-item>
+        <b-nav-item exact :to="{query: { status: 'published'}}">Publicados</b-nav-item>
+        <b-nav-item exact :to="{query: { status: 'unpublished'}}">En revisión</b-nav-item>
+        <b-nav-item exact :to="{query: { status: 'rejected'}}">Rechazados</b-nav-item>
+      </b-nav>
+    </div><!-- /.d-flex -->
 
     <data-table
       ref="table"
@@ -39,6 +61,9 @@
       </template>
       <template slot="goal" slot-scope="props">
         {{ props.rowData.goal / 100 | currency('$', 0) | placeholder('-') }}
+      </template>
+      <template slot="created_at" slot-scope="props">
+        {{ props.rowData.created_at | moment('l LT') }}
       </template>
       <template slot="actions" slot-scope="props">
         <div class="btn-group  btn-group-sm" v-if="canDataTable(props, 'update|destroy')">
@@ -75,12 +100,19 @@
 
 <script>
 import { tableConfig } from '../mixins.js'
+import Datepicker from 'vuejs-datepicker'
 
 export default {
+  components: {
+    Datepicker
+  },
+
   mixins: [tableConfig],
 
   data () {
     return {
+      from: this.$route.query.from ? moment(this.$route.query.from).toDate() : null,
+      to: this.$route.query.to ? moment(this.$route.query.to).toDate() : null,
       table: {
         url: '/projects',
         appendParams: {
@@ -97,7 +129,9 @@ export default {
             'goal',
             'status_variant'
           ],
-          status: this.$route.query.status
+          status: this.$route.query.status,
+          from: this.$route.query.from ? moment(this.$route.query.from).toDate() : null,
+          to: this.$route.query.to ? moment(this.$route.query.to).toDate() : null,
         },
         fields: [
           {
@@ -126,6 +160,11 @@ export default {
             title: 'Meta'
           },
           {
+            sortField: 'created_at',
+            name: '__slot:created_at',
+            title: 'Creado'
+          },
+          {
             name: '__slot:actions',
             dataClass: 'data-table-actions'
           }
@@ -137,8 +176,15 @@ export default {
   watch: {
     '$route.query' (query) {
       this.table.appendParams.status = query.status
-      // this.table.appendParams.sort = query.sort ? query.sort : null
-      this.$refs.table.reload()
+      this.$refs.table.refresh()
+    },
+    from (from) {
+      this.table.appendParams.from = from
+      this.$refs.table.refresh()
+    },
+    to (to) {
+      this.table.appendParams.to = to
+      this.$refs.table.refresh()
     }
   },
 

@@ -15,6 +15,7 @@
     "notify" :true,
     "format" :true,
     "google": true,
+    "moment": true,
   },
   "parserOptions": {
     "sourceType": "module",

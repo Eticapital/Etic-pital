@@ -10902,6 +10902,10 @@ body.swal2-iosfix {
   border-radius: 50%;
 }
 
+.vdp-datepicker {
+  width: 175px;
+}
+
 html {
   height: 100%;
 }

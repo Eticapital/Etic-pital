@@ -29,6 +29,14 @@ class ProjectController extends Controller
             }
         }
 
+        if ($from = request()->input('from')) {
+            $query->whereDate('created_at', '>=', Carbon::parse($from)->startOfDay());
+        }
+
+        if ($to = request()->input('to')) {
+            $query->whereDate('created_at', '<=', Carbon::parse($to)->endOfDay());
+        }
+
         $results = $query->paginate(request()->input('per_page', 10));
 
         if (request()->input('appends')) {

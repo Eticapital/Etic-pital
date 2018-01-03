@@ -244,6 +244,8 @@
   <b-card title="Inversiones" class="mt-3">
   <investments-table :project="project" :per-page="5" />
   </b-card>
+
+  <p class="text-center small mt-3">Creado: {{ project.created_at | moment('l LT') }} | Actualizado: {{ project.updated_at | moment('l LT') }}</p>
 </div>
 </template>
 

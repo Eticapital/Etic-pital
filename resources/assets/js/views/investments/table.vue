@@ -1,12 +1,34 @@
 <template>
   <div>
-    <b-nav pills class="mb-3">
-      <b-nav-item exact disabled>Estatus:</b-nav-item>
-      <b-nav-item exact :to="{query: null}">Todos</b-nav-item>
-      <b-nav-item exact :to="{query: { status: 1}}">Aceptadas</b-nav-item>
-      <b-nav-item exact :to="{query: { status: 0}}">Pendientes</b-nav-item>
-      <b-nav-item exact :to="{query: { status: -1}}">Rechazadas</b-nav-item>
-    </b-nav>
+    <div class="d-flex mb-3">
+      <div class="d-flex">
+        <div>
+          <datepicker
+            :bootstrap-styling="true"
+            placeholder="Desde:"
+            v-model="from"
+            :clear-button="true"
+            language="es"
+          />
+        </div>
+        <div class="ml-3">
+          <datepicker
+            :bootstrap-styling="true"
+            placeholder="Hasta:"
+            v-model="to"
+            :clear-button="true"
+            language="es"
+          />
+        </div>
+      </div>
+
+      <b-nav pills class="ml-auto">
+        <b-nav-item exact :to="{query: null}">Todos</b-nav-item>
+        <b-nav-item exact :to="{query: { status: 1}}">Aceptadas</b-nav-item>
+        <b-nav-item exact :to="{query: { status: 0}}">Pendientes</b-nav-item>
+        <b-nav-item exact :to="{query: { status: -1}}">Rechazadas</b-nav-item>
+      </b-nav>
+    </div>
 
     <data-table
       ref="table"
@@ -63,10 +85,12 @@
 import { tableConfig } from '../../mixins.js'
 
 import InvestmentsStatusBtn from '../../components/InvestmentsStatusBtn.vue'
+import Datepicker from 'vuejs-datepicker'
 
 export default {
   components: {
-    InvestmentsStatusBtn
+    InvestmentsStatusBtn,
+    Datepicker
   },
 
   mixins: [tableConfig],
@@ -84,6 +108,9 @@ export default {
 
   data () {
     return {
+      to: null,
+      from: this.$route.query.from ? moment(this.$route.query.from).toDate() : null,
+      to: this.$route.query.to ? moment(this.$route.query.to).toDate() : null,
       table: {
         perPage: this.perPage,
         url: '/investments',
@@ -99,7 +126,9 @@ export default {
             'owner.can_show'
           ],
           status: this.$route.query.status,
-          project: this.project ? this.project.id : null
+          project: this.project ? this.project.id : null,
+          from: this.$route.query.from ? moment(this.$route.query.from).toDate() : null,
+          to: this.$route.query.to ? moment(this.$route.query.to).toDate() : null,
         },
         fields: [
           {
@@ -140,7 +169,15 @@ export default {
   watch: {
     '$route.query' (query) {
       this.table.appendParams.status = query.status
-      this.$refs.table.reload()
+      this.$refs.table.refresh()
+    },
+    from (from) {
+      this.table.appendParams.from = from
+      this.$refs.table.refresh()
+    },
+    to (to) {
+      this.table.appendParams.to = to
+      this.$refs.table.refresh()
     }
   },
 

@@ -13,7 +13,11 @@ class InvestmentController extends Controller
 
         $query = request()->input('query')
             ? Investment::search(request()->input('query'))
-            : Investment::latest();
+            : Investment::sortByRequest(request())->latest('investments.created_at');
+
+        if (($status_filter = request()->input('status')) !== null) {
+            $query->where('investment_status', $status_filter);
+        }
 
         $results = $query->paginate(request()->input('per_page', 10));
 

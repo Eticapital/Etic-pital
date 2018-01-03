@@ -178,6 +178,7 @@ class Project extends Model
     public function toSearchableArray()
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'holder' => $this->holder,
             'owner' => $this->owner->name,
@@ -834,7 +835,7 @@ HTML;
         $status_sort_sql = <<<SQL
     CASE WHEN
         -- Pendiente
-        (published_at is NULL AND rejected_at is NULL AND finished_at is null)
+        (investment_status is NULL AND rejected_at is NULL AND finished_at is null)
     THEN
         1
     ELSE

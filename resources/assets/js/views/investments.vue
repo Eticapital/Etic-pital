@@ -1,5 +1,13 @@
 <template>
   <div>
+    <b-nav pills class="mb-3">
+      <b-nav-item exact disabled>Estatus:</b-nav-item>
+      <b-nav-item exact :to="{query: null}">Todos</b-nav-item>
+      <b-nav-item exact :to="{query: { status: 1}}">Aceptadas</b-nav-item>
+      <b-nav-item exact :to="{query: { status: 0}}">Pendientes</b-nav-item>
+      <b-nav-item exact :to="{query: { status: -1}}">Rechazadas</b-nav-item>
+    </b-nav>
+
     <data-table
       ref="table"
       :api-url="table.url"
@@ -78,35 +86,49 @@ export default {
             'project.can_show',
             'owner',
             'owner.can_show'
-          ]
+          ],
+          status: this.$route.query.status
         },
         fields: [
           {
             name: '__slot:project',
-            title: 'Proyecto'
+            title: 'Proyecto',
+            sortField: 'project'
           },
           {
             name: '__slot:amount',
-            title: 'Monto'
+            title: 'Monto',
+            sortField: 'amount'
           },
           {
             name: '__slot:date',
-            title: 'Fecha'
+            title: 'Fecha',
+            sortField: 'created_at'
           },
           {
             name: '__slot:investor',
-            title: 'Inversionista'
+            title: 'Inversionista',
+            sortField: 'name'
           },
           {
             name: '__slot:owner',
-            title: 'Usuario'
+            title: 'Usuario',
+            sortField: 'owner'
           },
           {
             name: '__slot:status',
-            title: 'Estatus'
+            title: 'Estatus',
+            sortField: 'status'
           },
         ]
       }
+    }
+  },
+
+  watch: {
+    '$route.query' (query) {
+      this.table.appendParams.status = query.status
+      this.$refs.table.reload()
     }
   },
 

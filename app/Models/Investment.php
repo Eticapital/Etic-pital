@@ -159,8 +159,58 @@ class Investment extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Devuelve el dueño del proyecto como atributo
+     *
+     * @return User
+     */
     public function getOwnerAttribute()
     {
         return $this->owner()->first();
+    }
+
+    /**
+     * Filtra segun atributos predefinidos en el request
+     * @param  [type] $query   [description]
+     * @param  [type] $request [description]
+     * @return [type]          [description]
+     */
+    public function scopeSortByRequest($query, $request)
+    {
+        if (!$request->input('sort')) {
+            return $query;
+        }
+
+        list($by, $order) = explode('|', $request->input('sort'));
+        $order = strtolower($order) === 'desc' ? 'desc' : 'asc';
+
+         $status_sort_sql = <<<SQL
+    CASE WHEN investment_status = 0 THEN 1
+    ELSE
+        CASE WHEN investment_status = 1 THEN 2 ELSE 3 END
+    END $order
+SQL;
+
+        switch ($by) {
+            case 'name':
+            case 'created_at':
+            case 'amount':
+                return $query->orderBy($by, $order);
+            case 'project':
+                return $query->select('investments.*')
+                    ->groupBy('investments.id')
+                    ->join('projects', 'projects.id', '=', 'investments.project_id')
+                    ->orderBy('projects.name', $order);
+            case 'owner':
+                return $query->select('investments.*')
+                    ->groupBy('investments.id')
+                    ->join('users', 'users.id', '=', 'investments.owner_id')
+                    ->orderBy('users.name', $order);
+            case 'status':
+                $query->orderByRaw($status_sort_sql);
+                return $query;
+        }
+
+        return $query;
     }
 }

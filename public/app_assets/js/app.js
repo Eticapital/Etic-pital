@@ -4936,6 +4936,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4954,31 +4962,45 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         perPage: 15,
         url: '/investments',
         appendParams: {
-          appends: ['can_update', 'can_delete', 'can_accept', 'can_reject', 'project', 'project.can_show', 'owner', 'owner.can_show']
+          appends: ['can_update', 'can_delete', 'can_accept', 'can_reject', 'project', 'project.can_show', 'owner', 'owner.can_show'],
+          status: this.$route.query.status
         },
         fields: [{
           name: '__slot:project',
-          title: 'Proyecto'
+          title: 'Proyecto',
+          sortField: 'project'
         }, {
           name: '__slot:amount',
-          title: 'Monto'
+          title: 'Monto',
+          sortField: 'amount'
         }, {
           name: '__slot:date',
-          title: 'Fecha'
+          title: 'Fecha',
+          sortField: 'created_at'
         }, {
           name: '__slot:investor',
-          title: 'Inversionista'
+          title: 'Inversionista',
+          sortField: 'name'
         }, {
           name: '__slot:owner',
-          title: 'Usuario'
+          title: 'Usuario',
+          sortField: 'owner'
         }, {
           name: '__slot:status',
-          title: 'Estatus'
+          title: 'Estatus',
+          sortField: 'status'
         }]
       }
     };
   },
 
+
+  watch: {
+    '$route.query': function $routeQuery(query) {
+      this.table.appendParams.status = query.status;
+      this.$refs.table.reload();
+    }
+  },
 
   methods: {
     deleted: function deleted(investment) {
@@ -100468,6 +100490,39 @@ var render = function() {
   return _c(
     "div",
     [
+      _c(
+        "b-nav",
+        { staticClass: "mb-3", attrs: { pills: "" } },
+        [
+          _c("b-nav-item", { attrs: { exact: "", disabled: "" } }, [
+            _vm._v("Estatus:")
+          ]),
+          _vm._v(" "),
+          _c("b-nav-item", { attrs: { exact: "", to: { query: null } } }, [
+            _vm._v("Todos")
+          ]),
+          _vm._v(" "),
+          _c(
+            "b-nav-item",
+            { attrs: { exact: "", to: { query: { status: 1 } } } },
+            [_vm._v("Aceptadas")]
+          ),
+          _vm._v(" "),
+          _c(
+            "b-nav-item",
+            { attrs: { exact: "", to: { query: { status: 0 } } } },
+            [_vm._v("Pendientes")]
+          ),
+          _vm._v(" "),
+          _c(
+            "b-nav-item",
+            { attrs: { exact: "", to: { query: { status: -1 } } } },
+            [_vm._v("Rechazadas")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
       _c("data-table", {
         ref: "table",
         attrs: {

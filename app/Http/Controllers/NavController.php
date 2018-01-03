@@ -152,16 +152,16 @@ class NavController extends Controller
                         'hide' => true,
                         'return' => true,
                         'items' => [
-                            [
-                                'title' => 'Administrar {name}',
-                                'icon' => 'wrench',
-                                'text' => 'Administrar',
-                                'route' => 'projects.edit',
+                            // [
+                            //     'title' => 'Administrar {name}',
+                            //     'icon' => 'wrench',
+                            //     'text' => 'Administrar',
+                            //     'route' => 'projects.edit',
 
-                                'hide' => true,
-                                'return' => true,
-                                'in_top_menu' => true,
-                            ],
+                            //     'hide' => true,
+                            //     'return' => true,
+                            //     'in_top_menu' => true,
+                            // ],
                             [
                                 'title' => 'Editar',
                                 'icon' => 'pencil2',

@@ -102892,22 +102892,6 @@ var render = function() {
                             )
                           : _vm._e(),
                         _vm._v(" "),
-                        _vm.canDataTable(props, "update")
-                          ? _c(
-                              "router-link",
-                              {
-                                staticClass: "btn btn-primary",
-                                attrs: {
-                                  to: {
-                                    name: "projects.edit",
-                                    params: { id: props.rowData.id }
-                                  }
-                                }
-                              },
-                              [_c("i", { staticClass: "icon-wrench" })]
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
                         _vm.canDataTable(props, "destroy")
                           ? _c(
                               "button",

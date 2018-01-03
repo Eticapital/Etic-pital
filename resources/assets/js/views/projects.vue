@@ -49,9 +49,9 @@
             <i class="icon-eye"></i>
           </router-link>
 
-          <router-link v-if="canDataTable(props, 'update')" class="btn btn-primary" :to="{ name: 'projects.edit', params: { id: props.rowData.id } }">
+          <!-- <router-link v-if="canDataTable(props, 'update')" class="btn btn-primary" :to="{ name: 'projects.edit', params: { id: props.rowData.id } }">
             <i class="icon-wrench"></i>
-          </router-link>
+          </router-link> -->
 
           <button v-if="canDataTable(props, 'destroy')" @click.prevent="deleteDataTable(props, 'projects')" class="btn btn-danger">
             <i class="icon-bin"></i>

@@ -7,6 +7,12 @@
     <b-dropdown-item :key="'accept-' + currentInvestment.id" @click.prevent="accept" v-if="currentInvestment.can_accept" class="text-success"><i class="icon-checkmark"></i> Aceptar</b-dropdown-item>
     <b-dropdown-item :key="'reject-' + currentInvestment.id" @click.prevent="reject" v-if="currentInvestment.can_reject" class="text-danger"><i class="icon-cross"></i> Rechazar</b-dropdown-item>
     <b-dropdown-item :key="'delete-' + currentInvestment.id" @click.prevent="doDelete" v-if="currentInvestment.can_delete" class="text-danger"><i class="icon-bin"></i> Eliminar</b-dropdown-item>
+    <b-dropdown-item
+      :to="{name: 'investments.edit', params: { id: currentInvestment.id } }"
+      :key="'edit-' + currentInvestment.id"
+      v-if="currentInvestment.can_update">
+        <i class="icon-pencil"></i> Editar
+    </b-dropdown-item>
   </b-dropdown>
 </template>
 

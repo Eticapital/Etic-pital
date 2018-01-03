@@ -25,6 +25,8 @@ class Investment extends Model
         'phone',
         'residence',
         'organization',
+        'project_id',
+        'owner_id',
     ];
 
     protected $appends = [

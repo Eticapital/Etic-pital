@@ -69,4 +69,30 @@ class InvestmentPolicy
     {
         return $user->is_root || $user->can('investments.delete');
     }
+
+    /**
+     * Determina si puede editar una inversión
+     *
+     * @param  App\User   $user
+     * @param  App\Models\Investment   $investment
+     *
+     * @return boolean
+     */
+    public function update(User $user, Investment $investment)
+    {
+        return $this->view($user, $investment) && ($user->is_root || $user->can('investments.update'));
+    }
+
+    /**
+     * Determina si puede ver una inversión
+     *
+     * @param  App\User   $user
+     * @param  App\Models\Investment   $investment
+     *
+     * @return boolean
+     */
+    public function view(User $user, Investment $investment)
+    {
+        return $user->is_root || $user->can('investments.view');
+    }
 }

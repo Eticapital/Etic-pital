@@ -3511,6 +3511,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -4800,6 +4806,71 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     label: {
       type: String,
       required: false
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/forms/form-select.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    form: {
+      type: Object,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    label: {
+      type: String,
+      required: false
+    },
+    placeholder: {
+      type: String,
+      required: false
+    },
+    options: {
+      type: Array,
+      required: false
+    }
+  },
+
+  computed: {
+    optionsWithPlaceholder: function optionsWithPlaceholder() {
+      if (!this.placeholder) {
+        return this.options;
+      }
+
+      return _.merge(this.options, [{
+        value: null,
+        text: this.placeholder
+      }]);
     }
   }
 });
@@ -97218,6 +97289,63 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7098f203\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/forms/form-select.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "b-form-group",
+    {
+      ref: "group",
+      attrs: {
+        label: _vm.label,
+        feedback: _vm.form.errors.get(_vm.name),
+        state: _vm.form.errors.has(_vm.name) ? "invalid" : ""
+      }
+    },
+    [
+      _c("b-form-select", {
+        ref: "input",
+        attrs: {
+          state: _vm.form.errors.has(_vm.name) ? "invalid" : "",
+          disabled: _vm.form.busy,
+          options: _vm.optionsWithPlaceholder
+        },
+        on: {
+          input: function($event) {
+            _vm.form.errors.clear(_vm.name)
+          },
+          change: function($event) {
+            _vm.form.errors.clear(_vm.name)
+          }
+        },
+        model: {
+          value: _vm.form[_vm.name],
+          callback: function($$v) {
+            _vm.$set(_vm.form, _vm.name, $$v)
+          },
+          expression: "form[name]"
+        }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7098f203", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-75d151ab\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/project-carousel.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -98400,6 +98528,22 @@ var render = function() {
               }
             },
             [_c("i", { staticClass: "icon-bin" }), _vm._v(" Eliminar")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.currentInvestment.can_update
+        ? _c(
+            "b-dropdown-item",
+            {
+              key: "edit-" + _vm.currentInvestment.id,
+              attrs: {
+                to: {
+                  name: "investments.edit",
+                  params: { id: _vm.currentInvestment.id }
+                }
+              }
+            },
+            [_c("i", { staticClass: "icon-pencil" }), _vm._v(" Editar\n  ")]
           )
         : _vm._e()
     ],
@@ -112891,6 +113035,55 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/forms/form-select.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/forms/form-select.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-7098f203\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/forms/form-select.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/forms/form-select.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7098f203", Component.options)
+  } else {
+    hotAPI.reload("data-v-7098f203", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/forms/form-text.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -113202,6 +113395,7 @@ Vue.component('form-checkbox', __webpack_require__("./resources/assets/js/forms/
 Vue.component('form-button-submit', __webpack_require__("./resources/assets/js/forms/form-button-submit.vue"));
 Vue.component('form-map', __webpack_require__("./resources/assets/js/forms/form-map.vue"));
 Vue.component('form-files', __webpack_require__("./resources/assets/js/forms/form-files.vue"));
+Vue.component('form-select', __webpack_require__("./resources/assets/js/forms/form-select.vue"));
 
 // Form inputs
 Vue.component('input-float', __webpack_require__("./resources/assets/js/forms/input-float.vue"));

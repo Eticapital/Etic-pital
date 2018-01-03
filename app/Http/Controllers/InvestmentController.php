@@ -64,4 +64,42 @@ class InvestmentController extends Controller
         $this->authorize('delete', $investment);
         return tap($investment)->delete();
     }
+
+    public function show(Investment $investment)
+    {
+        $this->authorize('view', $investment);
+        return $investment;
+    }
+
+    public function update(Investment $investment, Request $request)
+    {
+        $data = $this->validate($request, [
+            'project_id' => 'required',
+            'owner_id' => 'required',
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'residence' => '',
+            'organization' => 'required',
+            'amount' => 'required|numeric',
+        ]);
+
+        return tap($investment)->update($data);
+    }
+
+    public function store(Request $request)
+    {
+        $data = $this->validate($request, [
+            'project_id' => 'required',
+            'owner_id' => 'required',
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'residence' => '',
+            'organization' => 'required',
+            'amount' => 'required|numeric',
+        ]);
+
+        return Investment::create($data);
+    }
 }

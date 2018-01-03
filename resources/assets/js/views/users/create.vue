@@ -54,6 +54,7 @@ export default {
     let params = {
       appends: ['roles_ids']
     }
+
     axios.get(App.basePath + 'users/' + to.params.id, { params:params })
       .then((response) => {
         next(vm => {

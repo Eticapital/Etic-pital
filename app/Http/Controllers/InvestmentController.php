@@ -24,6 +24,10 @@ class InvestmentController extends Controller
             $query->where('project_id', $project_id);
         }
 
+        if ($user_id = request()->input('user')) {
+            $query->where('owner_id', $user_id);
+        }
+
         if ($from = request()->input('from')) {
             $query->whereDate('created_at', '>=', Carbon::parse($from)->startOfDay());
         }

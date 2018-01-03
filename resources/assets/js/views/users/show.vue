@@ -1,5 +1,6 @@
 <template>
-  <b-card v-if="user" title="Datos del usuario" class="card-table">
+  <div v-if="user">
+  <b-card title="Datos del usuario" class="card-table">
     <table class="table">
       <tr>
         <td>Estatus:</td>
@@ -33,14 +34,22 @@
       </tr>
     </table><!-- /.table -->
   </b-card>
+
+  <b-card title="Inversiones" class="mt-3">
+    <investments-table :per-page="5" :user="user" />
+  </b-card>
+  </div>
+
 </template>
 
 <script>
 import UsersStatusLink from './_users_status_link'
+import InvestmentsTable from '../investments/investments-table'
 
 export default {
   components: {
-    UsersStatusLink
+    UsersStatusLink,
+    InvestmentsTable
   },
 
   data: function () {

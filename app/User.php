@@ -173,4 +173,23 @@ class User extends Authenticatable
     {
         return $this->roles()->pluck('display_name')->implode(', ');
     }
+
+    public function scopeSortByRequest($query, $request)
+    {
+        if (!$request->input('sort')) {
+            return $query;
+        }
+
+        list($by, $order) = explode('|', $request->input('sort'));
+        $order = strtolower($order) === 'desc' ? 'desc' : 'asc';
+
+        switch ($by) {
+            case 'name':
+            case 'email':
+            case 'is_published':
+                return $query->orderBy($by, $order);
+        }
+
+        return $query;
+    }
 }

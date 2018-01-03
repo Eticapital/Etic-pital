@@ -13,7 +13,7 @@ class UserController extends Controller
 
         $query = request()->input('query')
             ? User::search(request()->input('query'))
-            : User::latest();
+            : User::sortByRequest(request())->latest('users.created_at');
 
         $results = $query->paginate(request()->input('per_page', 10));
 

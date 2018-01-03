@@ -63,15 +63,19 @@ export default {
         fields: [
           {
             name: '__slot:name',
-            title: 'Nombre'
+            title: 'Nombre',
+            sortField: 'name'
           },
           {
             name: 'email',
-            title: 'Correo electrónico'
+            title: 'Correo electrónico',
+            sortField: 'email'
           },
           {
             name: '__slot:status',
-            dataClass: 'data-table-statuss'
+            title: 'Estatus',
+            dataClass: 'data-table-status',
+            sortField: 'is_published'
           },
           {
             name: '__slot:actions',

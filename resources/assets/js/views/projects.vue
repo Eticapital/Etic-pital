@@ -23,7 +23,12 @@
         <template v-else>{{ props.rowData.name }}</template>
       </template>
       <template slot="status" slot-scope="props">
-        <b-dropdown size="sm" :text="props.rowData.status" class="m-0">
+        <b-dropdown
+          size="sm"
+          :text="props.rowData.status"
+          class="m-0"
+          :variant="props.rowData.status_variant"
+        >
           <b-dropdown-item v-if="canDataTable(props, 'publish')" @click.prevent="publish(props.rowData)">Publicar</b-dropdown-item>
           <b-dropdown-item v-if="canDataTable(props, 'reject')" @click.prevent="reject(props.rowData)">Rechazar</b-dropdown-item>
           <b-dropdown-item v-if="canDataTable(props, 'finish')" @click.prevent="finish(props.rowData)">Finalizar</b-dropdown-item>
@@ -89,7 +94,8 @@ export default {
             'owner_name',
             'status',
             'collected',
-            'goal'
+            'goal',
+            'status_variant'
           ],
           status: this.$route.query.status
         },
@@ -152,6 +158,7 @@ export default {
         }
 
         project.status = response.value.data.status
+        project.status_variant = response.value.data.status_variant
         notify(`Proyecto <strong>${project.name}</strong> publicado correctamente`)
       })
     },
@@ -170,6 +177,7 @@ export default {
         }
 
         project.status = response.value.data.status
+        project.status_variant = response.value.data.status_variant
         notify(`Proyecto <strong>${project.name}</strong> rechazado correctamente`)
       })
     },
@@ -188,6 +196,7 @@ export default {
         }
 
         project.status = response.value.data.status
+        project.status_variant = response.value.data.status_variant
         notify(`Proyecto <strong>${project.name}</strong> finalizado correctamente`)
       })
     }

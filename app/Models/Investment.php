@@ -58,9 +58,19 @@ class Investment extends Model
         ];
     }
 
+    public function scopeNew($query)
+    {
+        return $query->whereInvestmentStatus(self::STATUS_NEW);
+    }
+
     public function scopeAccepted($query)
     {
         return $query->whereInvestmentStatus(self::STATUS_ACCEPTED);
+    }
+
+    public function scopeRejected($query)
+    {
+        return $query->whereInvestmentStatus(self::STATUS_REJECTED);
     }
 
     public function scopeActive($query)

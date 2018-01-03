@@ -139,7 +139,7 @@ class NavController extends Controller
                         'title' => 'Nuevo proyecto',
                         'icon' => 'plus',
                         'text' => 'Nuevo proyecto',
-                        'route' => 'projects.create',
+                        'href' => '/fondear-mi-proyecto?return=admin',
                         'permission' => ['create', \App\Models\Project::class],
                         'in_top_menu' => true,
                         'return' => true,

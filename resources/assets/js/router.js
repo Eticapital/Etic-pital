@@ -3,7 +3,8 @@ import VueRouter from 'vue-router'
 let routes = [
   {
     name: 'home',
-    path: '/'
+    path: '/',
+    component: require('./views/dashboard')
   },
   {
     name: 'account.index',

@@ -33,7 +33,8 @@ class Project extends Model
     protected $appends = [
         'link',
         'photo_url',
-        'status'
+        'status',
+        'status_variant'
     ];
 
     protected $appendable = [
@@ -63,9 +64,11 @@ class Project extends Model
         'is_pending',
         'is_published',
         'is_rejected',
+        'is_finished',
         'collected',
         'goal',
         'progress',
+        'status_variant'
     ];
 
     public static $images = [
@@ -733,6 +736,27 @@ HTML;
         }
 
         return 'Sin definir';
+    }
+
+    public function getStatusVariantAttribute()
+    {
+        if ($this->is_rejected) {
+            return 'danger';
+        }
+
+        if ($this->is_pending) {
+            return 'info';
+        }
+
+        if ($this->is_published) {
+            return 'success';
+        }
+
+        if ($this->is_finished) {
+            return null;
+        }
+
+        return null;
     }
 
     /**

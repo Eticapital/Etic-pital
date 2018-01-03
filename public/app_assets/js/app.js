@@ -4874,6 +4874,137 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/views/dashboard.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      data: null
+    };
+  },
+
+  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+    axios.get(App.basePath + 'dashboard').then(function (response) {
+      next(function (vm) {
+        vm.data = response.data;
+        bus.$emit('view-ready');
+      });
+    }).catch(function (error) {
+      console.log(error);
+      next(false);
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/views/investments.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -5510,6 +5641,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -5521,7 +5657,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       table: {
         url: '/projects',
         appendParams: {
-          appends: ['can_update', 'can_destroy', 'can_show', 'can_publish', 'can_reject', 'can_finish', 'owner_name', 'status', 'collected', 'goal'],
+          appends: ['can_update', 'can_destroy', 'can_show', 'can_publish', 'can_reject', 'can_finish', 'owner_name', 'status', 'collected', 'goal', 'status_variant'],
           status: this.$route.query.status
         },
         fields: [{
@@ -5577,6 +5713,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
 
         project.status = response.value.data.status;
+        project.status_variant = response.value.data.status_variant;
         notify('Proyecto <strong>' + project.name + '</strong> publicado correctamente');
       });
     },
@@ -5595,6 +5732,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
 
         project.status = response.value.data.status;
+        project.status_variant = response.value.data.status_variant;
         notify('Proyecto <strong>' + project.name + '</strong> rechazado correctamente');
       });
     },
@@ -5613,6 +5751,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
 
         project.status = response.value.data.status;
+        project.status_variant = response.value.data.status_variant;
         notify('Proyecto <strong>' + project.name + '</strong> finalizado correctamente');
       });
     }
@@ -100072,6 +100211,500 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-067b0c71\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/views/dashboard.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.data
+    ? _c(
+        "div",
+        [
+          _c(
+            "b-card",
+            { attrs: { title: "Resumen de proyectos" } },
+            [
+              _c(
+                "b-card-group",
+                { attrs: { deck: "" } },
+                [
+                  _c(
+                    "b-card",
+                    {
+                      attrs: {
+                        "bg-variant": "success",
+                        "text-variant": "white",
+                        "no-body": ""
+                      }
+                    },
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-white",
+                          attrs: {
+                            slot: "header",
+                            to: {
+                              name: "projects.index",
+                              query: { status: "published" }
+                            }
+                          },
+                          slot: "header"
+                        },
+                        [_vm._v("\n          Proyectos publicados\n        ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-white",
+                          attrs: {
+                            to: {
+                              name: "projects.index",
+                              query: { status: "published" }
+                            }
+                          }
+                        },
+                        [
+                          _c("b-card-body", [
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v("No. de proyectos: "),
+                              _c("strong", [
+                                _vm._v(
+                                  _vm._s(_vm.data.total_published_projects)
+                                )
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v("Meta total: "),
+                              _c("strong", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("placeholder")(
+                                      _vm._f("currency")(
+                                        _vm.data.goal_published_projects / 100
+                                      ),
+                                      "-"
+                                    )
+                                  )
+                                )
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v("Recaudado: "),
+                              _c("strong", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("placeholder")(
+                                      _vm._f("currency")(
+                                        _vm.data.collected_published_projects /
+                                          100
+                                      ),
+                                      "-"
+                                    )
+                                  )
+                                )
+                              ])
+                            ])
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-card",
+                    {
+                      attrs: {
+                        "bg-variant": "info",
+                        "text-variant": "white",
+                        "no-body": ""
+                      }
+                    },
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-white",
+                          attrs: {
+                            slot: "header",
+                            to: {
+                              name: "projects.index",
+                              query: { status: "unpublished" }
+                            }
+                          },
+                          slot: "header"
+                        },
+                        [_vm._v("\n          Proyectos por revisar\n        ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-white",
+                          attrs: {
+                            to: {
+                              name: "projects.index",
+                              query: { status: "unpublished" }
+                            }
+                          }
+                        },
+                        [
+                          _c("b-card-body", [
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v("No. de proyectos: "),
+                              _c("strong", [
+                                _vm._v(_vm._s(_vm.data.total_pending_projects))
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v("Meta total: "),
+                              _c("strong", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("placeholder")(
+                                      _vm._f("currency")(
+                                        _vm.data.goal_pending_projects / 100
+                                      ),
+                                      "-"
+                                    )
+                                  )
+                                )
+                              ])
+                            ])
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-card",
+                    {
+                      attrs: {
+                        "bg-variant": "danger",
+                        "text-variant": "white",
+                        "no-body": ""
+                      }
+                    },
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-white",
+                          attrs: {
+                            slot: "header",
+                            to: {
+                              name: "projects.index",
+                              query: { status: "rejected" }
+                            }
+                          },
+                          slot: "header"
+                        },
+                        [_vm._v("\n          Proyectos rechazados\n        ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-white",
+                          attrs: {
+                            to: {
+                              name: "projects.index",
+                              query: { status: "rejected" }
+                            }
+                          }
+                        },
+                        [
+                          _c("b-card-body", [
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v(
+                                "No. de proyectos: " +
+                                  _vm._s(_vm.data.total_rejected_projects)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v("Meta total: "),
+                              _c("strong", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("placeholder")(
+                                      _vm._f("currency")(
+                                        _vm.data.goal_rejected_projects / 100
+                                      ),
+                                      "-"
+                                    )
+                                  )
+                                )
+                              ])
+                            ])
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-card",
+            { staticClass: "mt-3", attrs: { title: "Resumen de inversiones" } },
+            [
+              _c(
+                "b-card-group",
+                { attrs: { deck: "" } },
+                [
+                  _c(
+                    "b-card",
+                    {
+                      attrs: {
+                        "bg-variant": "success",
+                        "text-variant": "white",
+                        "no-body": ""
+                      }
+                    },
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-white",
+                          attrs: {
+                            slot: "header",
+                            to: {
+                              name: "investments.index",
+                              query: { status: 1 }
+                            }
+                          },
+                          slot: "header"
+                        },
+                        [_vm._v("\n          Inversiones aceptadas\n        ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-white",
+                          attrs: {
+                            to: {
+                              name: "investments.index",
+                              query: { status: 1 }
+                            }
+                          }
+                        },
+                        [
+                          _c("b-card-body", [
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v(
+                                "No. de inversiones: " +
+                                  _vm._s(_vm.data.total_accepted_investments)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v("Valor total: "),
+                              _c("strong", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("placeholder")(
+                                      _vm._f("currency")(
+                                        _vm.data.value_accepted_investments /
+                                          100
+                                      ),
+                                      "-"
+                                    )
+                                  )
+                                )
+                              ])
+                            ])
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-card",
+                    {
+                      attrs: {
+                        "bg-variant": "info",
+                        "text-variant": "white",
+                        "no-body": ""
+                      }
+                    },
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-white",
+                          attrs: {
+                            slot: "header",
+                            to: {
+                              name: "investments.index",
+                              query: { status: 0 }
+                            }
+                          },
+                          slot: "header"
+                        },
+                        [
+                          _vm._v(
+                            "\n          Inversiones por revisar\n        "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-white",
+                          attrs: {
+                            to: {
+                              name: "investments.index",
+                              query: { status: 0 }
+                            }
+                          }
+                        },
+                        [
+                          _c("b-card-body", [
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v(
+                                "No. de inversiones: " +
+                                  _vm._s(_vm.data.total_pending_investments)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v("Valor total: "),
+                              _c("strong", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("placeholder")(
+                                      _vm._f("currency")(
+                                        _vm.data.value_pending_investments / 100
+                                      ),
+                                      "-"
+                                    )
+                                  )
+                                )
+                              ])
+                            ])
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-card",
+                    {
+                      attrs: {
+                        "bg-variant": "danger",
+                        "text-variant": "white",
+                        "no-body": ""
+                      }
+                    },
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-white",
+                          attrs: {
+                            slot: "header",
+                            to: {
+                              name: "investments.index",
+                              query: { status: -1 }
+                            }
+                          },
+                          slot: "header"
+                        },
+                        [_vm._v("\n          Inversiones rechazadas\n        ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "text-white",
+                          attrs: {
+                            to: {
+                              name: "investments.index",
+                              query: { status: -1 }
+                            }
+                          }
+                        },
+                        [
+                          _c("b-card-body", [
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v(
+                                "No. de inversiones: " +
+                                  _vm._s(_vm.data.total_rejected_investments)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("p", { staticClass: "card-text" }, [
+                              _vm._v("Valor total: "),
+                              _c("strong", [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm._f("placeholder")(
+                                      _vm._f("currency")(
+                                        _vm.data.value_rejected_investments /
+                                          100
+                                      ),
+                                      "-"
+                                    )
+                                  )
+                                )
+                              ])
+                            ])
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-067b0c71", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-069d297a\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/gui/DataTablePagination.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -102760,7 +103393,11 @@ var render = function() {
                   "b-dropdown",
                   {
                     staticClass: "m-0",
-                    attrs: { size: "sm", text: props.rowData.status }
+                    attrs: {
+                      size: "sm",
+                      text: props.rowData.status,
+                      variant: props.rowData.status_variant
+                    }
                   },
                   [
                     _vm.canDataTable(props, "publish")
@@ -125674,7 +126311,8 @@ module.exports = {
 
 var routes = [{
   name: 'home',
-  path: '/'
+  path: '/',
+  component: __webpack_require__("./resources/assets/js/views/dashboard.vue")
 }, {
   name: 'account.index',
   path: '/account',
@@ -125912,6 +126550,55 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-79f5c120", Component.options)
   } else {
     hotAPI.reload("data-v-79f5c120", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dashboard.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/views/dashboard.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-067b0c71\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/views/dashboard.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/views/dashboard.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-067b0c71", Component.options)
+  } else {
+    hotAPI.reload("data-v-067b0c71", Component.options)
 ' + '  }
   module.hot.dispose(function (data) {
     disposed = true

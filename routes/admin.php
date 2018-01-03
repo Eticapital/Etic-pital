@@ -3,6 +3,7 @@
 Route::get('/admin', 'AdminController@index')->name('admin');
 
 Route::get('/nav', 'NavController@get');
+Route::get('/dashboard', 'DashboardController@getData');
 
 // Mi cuenta
 Route::get('account', 'AccountController@index')->name('account.index');

@@ -29,7 +29,7 @@
     <div class="jumbotron-fluid" id="header">
       <div class="container-fluid">
     @endif
-<b-navbar  id="navbarheader" class="{{ @$is_home ? 'navbar navbar-expand-lg navbar-dark pt-3 px-0' : 'navbar navbar-expand-lg navbar-light bg-white sticky-top'}}">
+<b-navbar v-cloak  id="navbarheader" class="{{ @$is_home ? 'navbar navbar-expand-lg navbar-dark pt-3 px-0' : 'navbar navbar-expand-lg navbar-light bg-white sticky-top'}}">
 
   <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 

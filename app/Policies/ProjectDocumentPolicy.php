@@ -17,13 +17,12 @@ class ProjectDocumentPolicy
             return true;
         }
 
-        $project = $document->project;
-
-        if ($project->owner_id === $user->id) {
+        // Si es inversionista puede descargar
+        if ($user->is_investor) {
             return true;
         }
 
-        // Si es inversionista
-        return $user->isInvestorOf($project);
+        $project = $document->project;
+        return ($project->owner_id === $user->id);
     }
 }

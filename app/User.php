@@ -192,4 +192,14 @@ class User extends Authenticatable
 
         return $query;
     }
+
+    /**
+     * Si el usuario es un inversinista validado
+     *
+     * @return boolean
+     */
+    public function getIsInvestorAttribute()
+    {
+        return $this->investments()->accepted()->count() > 0;
+    }
 }

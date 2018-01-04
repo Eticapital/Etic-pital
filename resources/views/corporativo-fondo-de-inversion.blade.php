@@ -166,7 +166,7 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
        <img class="colelem temp_no_img_src" id="u9449-6" alt="¿Necesitas asesoría personalizada, necesitas aterrizar tu idea de negocio? Permítenos conocerte." width="1207" height="64" data-orig-src="corporativo/images/u9449-6.png?crc=4195373018" src="corporativo/images/blank.gif?crc=4208392903"/><!-- rasterized frame -->
        <div class="clearfix colelem shared_content" id="pu9450" data-content-guid="pu9450_content"><!-- group -->
         <!-- m_editable region-id="editable-static-tag-U9450-BP_infinity" template="fondos-de-inversión.html" data-type="html" data-ice-options="clickable" data-ice-editable="link" -->
-        <a class="nonblock nontext museBGSize grpelem shared_content" id="u9450" href="http://www.eticapital.mx/plaforma" data-muse-uid="U9450" data-content-guid="u9450_content"><!-- content --></a>
+        <a class="nonblock nontext museBGSize grpelem shared_content" id="u9450" href="http://www.eticapital.mx/plataforma" data-muse-uid="U9450" data-content-guid="u9450_content"><!-- content --></a>
         <!-- /m_editable -->
         <!-- m_editable region-id="editable-static-tag-U9451-BP_infinity" template="fondos-de-inversión.html" data-type="html" data-ice-options="clickable" data-ice-editable="link" -->
         <a class="nonblock nontext museBGSize grpelem shared_content" id="u9451" href="contacto-inversionista.html" data-href="page:U17783" data-muse-uid="U9451" data-content-guid="u9451_content"><!-- content --></a>

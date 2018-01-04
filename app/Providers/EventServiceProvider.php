@@ -25,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\ProjectFinished' => [
             'App\Listeners\ProjectFinishedListener',
         ],
+        'App\Events\NewProjectInvestment' => [
+            'App\Listeners\NewProjectInvestmentListener',
+        ],
     ];
 
     /**

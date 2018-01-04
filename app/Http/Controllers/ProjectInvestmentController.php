@@ -19,6 +19,7 @@ class ProjectInvestmentController extends Controller
             Te contactaremos pronto para informate de próximos pasos.');
 
         $investment = $project->investments()->create($request->all());
+        event(new \App\Events\NewProjectInvestment($investment));
 
         return [
             'investment' => $investment,

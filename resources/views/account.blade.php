@@ -4,7 +4,7 @@
 @section('header')
 <div class="container">
   <div class="row my-3">
-    <div class="col-lg-5">
+    <div class="col-lg-4">
       <b-card v-cloak no-body title="Hola, {{ $user->name }}">
         <b-card-body>
           <h5 class="text-center">Datos de mi cuenta</h5>
@@ -35,7 +35,7 @@
       </b-card>
     </div><!-- /.col-lg-5 -->
 
-    <div class="col-lg-7">
+    <div class="col-lg-8">
       <b-card v-cloak title="Mis proyectos">
         <p>Proyectos que registraste en nuestro sitio para buscar financiamiento.</p>
         @if($projects->count())
@@ -60,6 +60,10 @@
                     @can('edit', $project)
                     <a href="{{ route('projects.edit', $project) }}" class="btn btn-primary">Editar</a>
                     @endif
+                    @if(auth()->user()->policyCan('investments', $project)&&$project->investments()->active()->count())
+                    <a class="btn btn-primary" href="{{ route('account.investments', $project) }}">{{ $project->investments()->active()->count() }} promesa() de inversión</a>
+                    @endif
+
                   </div>
                 </td>
               </tr>
@@ -67,7 +71,7 @@
             </tbody>
           </table><!-- /.table -->
           <p class="text-center">
-            <a href="{{ route('account.projects') }}" class="btn btn-primary">Ver mas detalles<a>
+            <a href="{{ route('account.projects') }}" class="btn btn-primary">Ver más detalles<a>
           </p>
         @else
         <p class="m-0"><i>No has registrado ningun proyecto.</i> <a href="{{ route('fondear-mi-proyecto') }}">Registrar un proyecto</a></p>

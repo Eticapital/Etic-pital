@@ -16,6 +16,15 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\NewProjectRegistered' => [
             'App\Listeners\NewProjectRegisteredListener',
         ],
+        'App\Events\ProjectPublished' => [
+            'App\Listeners\ProjectPublishedListener',
+        ],
+        'App\Events\ProjectRejected' => [
+            'App\Listeners\ProjectRejectedListener',
+        ],
+        'App\Events\ProjectFinished' => [
+            'App\Listeners\ProjectFinishedListener',
+        ],
     ];
 
     /**

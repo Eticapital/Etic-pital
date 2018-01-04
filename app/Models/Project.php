@@ -812,6 +812,7 @@ HTML;
         $this->rejected_at = null;
         $this->published_at = Carbon::now();
         $this->finished_at = null;
+        event(new \App\Events\ProjectPublished($this));
         return $this->save();
     }
 
@@ -835,6 +836,7 @@ HTML;
         $this->rejected_at = Carbon::now();
         $this->published_at = null;
         $this->finished_at = null;
+        event(new \App\Events\ProjectRejected($this));
         return $this->save();
     }
 
@@ -848,6 +850,7 @@ HTML;
         $this->rejected_at = null;
         $this->published_at = null;
         $this->finished_at = Carbon::now();
+        event(new \App\Events\ProjectFinished($this));
         return $this->save();
     }
 

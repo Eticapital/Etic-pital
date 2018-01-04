@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\NewProjectRegistered;
 use App\Notifications\NewProjectRegisteredNotification;
+use App\Notifications\YourProjectWasRegisteredNotification;
 use App\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -23,5 +24,6 @@ class NewProjectRegisteredListener
 
         $users = User::where('email', config('eticapital.admin_emails'))->get();
         Notification::send($users, new NewProjectRegisteredNotification($project));
+        $project->owner->notify(new YourProjectWasRegisteredNotification($project));
     }
 }

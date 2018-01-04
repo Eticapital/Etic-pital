@@ -4,6 +4,7 @@ Vue.component('project-form', require('../project/project-form'))
 Vue.component('project-video', require('../components/project-video'))
 Vue.component('project-carousel', require('../components/project-carousel'))
 Vue.component('password-form', require('../components/account/password-form'))
+Vue.component('activate-form', require('../components/account/activate-form'))
 Vue.component('account-form', require('../components/account/account-form'))
 
 Vue.component('logout-link', require('../components/logout-link'))

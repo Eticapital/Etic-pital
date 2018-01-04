@@ -24,6 +24,9 @@ Route::group(['prefix' => 'plataforma'], function () {
     Route::get('/invertir', 'ProjectController@publicList')->name('invertir');
 });
 
+Route::get('account/{email}/activate/{token}', 'AccountController@showActivationForm')->name('account.activate');
+Route::put('account/{email}/activate/{token}', 'AccountController@activate');
+
 // Proyectos url fija
 Route::group(['prefix' => 'projects/{project}'], function () {
     Route::get('/', 'ProjectController@show');
@@ -38,8 +41,6 @@ Route::post('/fondo-de-inversion', 'FondoDeInversionController@submitForm');
 Route::get('/sectors', 'SectorController@index');
 Route::get('/stages', 'ProjectStageController@index');
 Route::get('/rewards', 'RewardController@index');
-
-
 
 
 Auth::routes();

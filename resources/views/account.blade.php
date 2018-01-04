@@ -1,7 +1,7 @@
 @extends('layouts.site', [
   'title' => 'Mi cuenta'
 ])
-@section('header')
+@section('content')
 <div class="container">
   <div class="row my-3">
     <div class="col-lg-4">

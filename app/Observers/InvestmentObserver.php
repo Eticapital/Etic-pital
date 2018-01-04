@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\NewUserCreatedFromInvestment;
 use App\Models\Investment;
 
 class InvestmentObserver
@@ -22,6 +23,7 @@ class InvestmentObserver
             $user_data = $investment->toArray();
             $user_data['password'] = bcrypt(uniqid());
             $user = \App\User::firstOrCreate(['email' => $investment->email], $user_data);
+            event(new NewUserCreatedFromInvestment($user, $investment));
             $investment->owner_id = $user->id;
         }
     }

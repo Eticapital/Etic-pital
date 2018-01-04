@@ -51,6 +51,12 @@ class ProjectInvestmentSendedNotification extends Notification implements Should
                 money($this->investment->amount),
                 $this->project->name
             ))
+            ->line('Para aprobar tu inversión deberás cumplir los siguientes requisitos')
+            ->line('<ul>
+                <li>Ser contactado por Eticapital</li>
+                <li>Agendar una cita con Eticapital y el Dueño de Proyecto.</li>
+                <li>Una vez validada la información se marcará tu inversión como aprobada/rechazada según sea el caso</li>
+            </ul>')
             ->line('A la brevedad el dueño del proyecto debería contactarte para informarte de los siguientes pasos.')
             ->line('Recuerda que puedes revisar el estatus de tu promesa de inversión desde tu cuenta.')
             ->action('Ir a mi cuenta', route('account.index'));

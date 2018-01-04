@@ -1,8 +1,14 @@
 <template>
   <div>
     <div class="d-flex mb-3">
+      <b-nav pills>
+          <b-nav-item exact :to="{query: null}">Todos</b-nav-item>
+          <b-nav-item exact :to="{query: { status: 'published'}}">Publicados</b-nav-item>
+          <b-nav-item exact :to="{query: { status: 'unpublished'}}">En revisión</b-nav-item>
+          <b-nav-item exact :to="{query: { status: 'rejected'}}">Rechazados</b-nav-item>
+        </b-nav>
       <div class="d-flex">
-        <div>
+        <div class="ml-3">
           <datepicker
             :bootstrap-styling="true"
             placeholder="Desde:"
@@ -20,14 +26,12 @@
             language="es"
           />
         </div>
+        <b-form-select
+          class="ml-3"
+          v-model="sector_id"
+          :options="sectorsOptions"
+        />
       </div>
-
-      <b-nav pills class="ml-auto">
-        <b-nav-item exact :to="{query: null}">Todos</b-nav-item>
-        <b-nav-item exact :to="{query: { status: 'published'}}">Publicados</b-nav-item>
-        <b-nav-item exact :to="{query: { status: 'unpublished'}}">En revisión</b-nav-item>
-        <b-nav-item exact :to="{query: { status: 'rejected'}}">Rechazados</b-nav-item>
-      </b-nav>
     </div><!-- /.d-flex -->
 
     <data-table
@@ -113,6 +117,8 @@ export default {
     return {
       from: this.$route.query.from ? moment(this.$route.query.from).toDate() : null,
       to: this.$route.query.to ? moment(this.$route.query.to).toDate() : null,
+      sector_id: null,
+      sectors: null,
       table: {
         url: '/projects',
         appendParams: {
@@ -132,6 +138,7 @@ export default {
           status: this.$route.query.status,
           from: this.$route.query.from ? moment(this.$route.query.from).toDate() : null,
           to: this.$route.query.to ? moment(this.$route.query.to).toDate() : null,
+          sector: null
         },
         fields: [
           {
@@ -185,10 +192,40 @@ export default {
     to (to) {
       this.table.appendParams.to = to
       this.$refs.table.refresh()
+    },
+    sector_id (sector) {
+      this.table.appendParams.sector = sector
+      this.$refs.table.refresh()
     }
   },
 
+  computed: {
+    sectorsOptions () {
+      if (!this.sectors) {
+        return []
+      }
+      let options = this.sectors.map(sector => {
+        return {
+          value: sector.id,
+          text: sector.label
+        }
+      })
+
+      return  _.concat([{value: null, text: '- Sector -'}], options)
+    }
+  },
+
+  created () {
+    this.loadSectors()
+  },
+
   methods: {
+    loadSectors () {
+      axios.get('/sectors')
+        .then(response => {
+          this.sectors = response.data
+        })
+    },
     publish (project) {
       swal({
         title: '¿Estás seguro que deseas publicar este proyecto?',

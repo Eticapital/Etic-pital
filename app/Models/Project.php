@@ -925,6 +925,14 @@ SQL;
             $query->whereDate('created_at', '<=', Carbon::parse($to)->endOfDay());
         }
 
+
+        if ($sector = $request->input('sector')) {
+            $query->select('projects.*');
+            $query->groupBy('projects.id');
+            $query->join('project_sector', 'project_sector.project_id', '=', 'projects.id');
+            $query->where('project_sector.sector_id', $sector);
+        }
+
         return $query;
     }
 }

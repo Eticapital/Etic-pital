@@ -1,235 +1,30 @@
-Logging in build 2017.0.1.11 started at: Mon Sep 18 11:15:39 2017
+Logging in build 2017.0.1.11 started at: Tue Dec 19 11:03:16 2017
 ========================================
-[00:03:45.855] 11:19:27.741 | Error - IMS : ErrorCode=67 ErrorMessage=
-[00:43:46.948] 11:59:28.835 | Trying to open file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse with size:9961472 mod Date:Sat Sep 16 23:57:06 GMT-0500 2017
-[00:43:46.971] 11:59:28.858 | Opening file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' with status:success size:9961472 mod Date:Sat Sep 16 23:57:06 GMT-0500 2017 highestUID: 2286
-[05:36:57.715] 16:52:39.446 | Beginning SaveAs of 'Moebius' to file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:2406
-[05:37:02.619] 16:52:44.506 | Save.onError called with error: 
-[05:37:02.701] 16:52:44.588 | DataBase::onSaveAsError got error:3128: Error al guardar como.
-3128: Error al guardar.
-[SQLErrorEvent type="error" bubbles=false cancelable=false error=SQLError: 'Error #3128', details:'', operation:'begin']
-[SQLErrorEvent type="error" bubbles=false cancelable=false error=SQLError: 'Error #3128', details:'', operation:'begin']
-[05:37:27.081] 16:53:08.968 | Beginning SaveAs of 'Moebius' to file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:2406
-[05:37:28.365] 16:53:10.252 | Save.onError called with error: 
-[05:37:28.365] 16:53:10.252 | DataBase::onSaveAsError got error:3128: Error al guardar como.
-3128: Error al guardar.
-[SQLErrorEvent type="error" bubbles=false cancelable=false error=SQLError: 'Error #3128', details:'', operation:'attach']
-[SQLErrorEvent type="error" bubbles=false cancelable=false error=SQLError: 'Error #3128', details:'', operation:'attach']
-IntervalMgr::Interval::Fire called during dispatchEvent of event error
-[05:37:34.729] 16:53:16.617 | Beginning Save for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:2406
-[05:37:35.669] 16:53:17.556 | Save.onError called with error: 
-[05:37:35.669] 16:53:17.557 | DataBase::onSaveError got error:3128: Error al guardar.
-[SQLErrorEvent type="error" bubbles=false cancelable=false error=SQLError: 'Error #3128', details:'', operation:'attach']
-[05:37:42.108] 16:53:23.995 | Beginning SaveAs of 'Moebius' to file '/Users/soportec161/Desktop/Moebius.muse' highest UID:2406
-[05:37:44.294] 16:53:26.181 | EXCEPTION:[] SQLError: 'Error #3128', details:'disk I/O error', operation:'execute', detailID:'2206'-
-[05:37:44.372] AlertAndExit because of: [] SQLError: 'Error #3128', details:'disk I/O error', operation:'execute', detailID:'2206'
-
-Logging in build 2017.0.1.11 started at: Mon Sep 18 16:56:21 2017
-========================================
-[00:00:38.683] 16:57:00.033 | Error - IMS : ErrorCode=67 ErrorMessage=
-[00:00:44.106] 16:57:05.456 | Doing recovery for /Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse minisave fileA:vFztSzveIxAaoxNofWYQzw fileB:p3-jdhoRv-QTl2iQ2zwz1Q
-[00:00:44.152] 16:57:05.502 | Trying to recover file:/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse with size:9961472 with mod date:Sat Sep 16 23:57:06 GMT-0500 2017
-[00:00:47.139] 16:57:08.489 | Calling initializeMiniSaveConnections for already initialized connections
-[00:00:49.971] 16:57:11.321 | Recovered file:Moebius path:/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse highest UID:2406 filesize:9961472 mod date:Sat Sep 16 23:57:06 GMT-0500 2017
-[00:00:52.037] 16:57:13.388 | Recovery Complete
-Logging in build 2017.0.1.11 started at: Mon Sep 18 17:45:02 2017
-========================================
-[00:08:24.989] 17:53:28.684 | Error - IMS : ErrorCode=67 ErrorMessage=
-[00:09:21.925] 17:54:25.621 | Doing recovery for /Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse minisave fileA:p3-jdhoRv-QTl2iQ2zwz1Q fileB:vFztSzveIxAaoxNofWYQzw
-[00:09:21.998] 17:54:25.694 | Trying to recover file:/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse with size:9961472 with mod date:Sat Sep 16 23:57:06 GMT-0500 2017
-[00:09:25.100] 17:54:28.796 | Calling initializeMiniSaveConnections for already initialized connections
-[00:09:27.697] 17:54:31.393 | Recovered file:Moebius path:/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse highest UID:2867 filesize:9961472 mod date:Sat Sep 16 23:57:06 GMT-0500 2017
-[00:09:29.676] 17:54:33.372 | Recovery Complete
-[00:11:22.847] 17:56:26.544 | Beginning SaveAs of 'Moebius' to file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:2867
-[00:11:33.075] 17:56:36.771 | SaveAs complete for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' file size:11010048 mod Date:Mon Sep 18 17:56:34 GMT-0500 2017 highest UID:2867
-[16:21:36.908] 10:06:40.605 | Trying to open file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse with size:11010048 mod Date:Mon Sep 18 17:56:34 GMT-0500 2017
-[16:21:36.950] 10:06:40.647 | Opening file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' with status:success size:11010048 mod Date:Mon Sep 18 17:56:34 GMT-0500 2017 highestUID: 2867
-[20:09:31.137] 13:54:34.834 | Beginning Save for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:3153
-[20:09:34.615] 13:54:38.312 | Save complete for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' file size:11010048 mod Date:Tue Sep 19 13:54:38 GMT-0500 2017 highest UID:3153
-Logging in build 2017.0.1.11 started at: Thu Sep 21 09:33:26 2017
-========================================
-[00:04:35.239] 09:38:01.433 | Error - IMS : ErrorCode=67 ErrorMessage=
-[00:57:43.640] 10:31:09.834 | Trying to open file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse with size:11010048 mod Date:Tue Sep 19 13:54:38 GMT-0500 2017
-[00:57:43.822] 10:31:10.016 | Opening file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' with status:success size:11010048 mod Date:Tue Sep 19 13:54:38 GMT-0500 2017 highestUID: 3153
-[01:58:08.012] 11:31:34.206 | Beginning Save for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:3244
-[01:58:11.294] 11:31:37.488 | Save complete for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' file size:11632640 mod Date:Thu Sep 21 11:31:36 GMT-0500 2017 highest UID:3244
-[01:59:18.080] 11:32:44.274 | quitWithUI:Quitting Application. Called by: 
-[01:59:18.081] 11:32:44.275 | Quitting Application after 117.5 minutes. Called by: MuseApp/quitAfterProcessesComplete+closeOne+SiteFacade$/internalCloseAllSitesWithUI+SiteFacade$/attemptCloseAllSitesWithUI+MuseApp/quitWithUI
-[01:59:21.414] Logging shutdown normally
+[00:00:48.244] 11:04:05.447 | Error - IMS : ErrorCode=67 ErrorMessage=
+[00:03:39.462] 11:06:56.666 | Trying to open file '/Users/soportec161/Documents/03 Gab/01 Eticapital/02 Sitio/Eticapital/Eticapital.muse with size:17858560 mod Date:Thu Dec 7 14:27:19 GMT-0600 2017
+[00:03:39.486] 11:06:56.690 | Opening file '/Users/soportec161/Documents/03 Gab/01 Eticapital/02 Sitio/Eticapital/Eticapital.muse' with status:success size:17858560 mod Date:Thu Dec 7 14:27:19 GMT-0600 2017 highestUID: 28045
+[00:13:51.443] 11:17:08.647 | FTPUpload Eticapital(3 pages) to 'eticapital.mx' completed with 2 warnings.
+[00:13:51.450] 11:17:08.654 | 91033:Forms::php_request_failed
+[00:13:51.450] 11:17:08.654 | 91033:Forms::unexpected_php_response
+[00:33:09.834] 11:36:27.038 | FTPUpload Eticapital(3 pages) to 'eticapital.mx' completed with 2 warnings.
+[00:33:09.860] 11:36:27.063 | 91033:Forms::php_request_failed
+[00:33:09.860] 11:36:27.063 | 91033:Forms::unexpected_php_response
+[00:35:48.146] 11:39:05.349 | Beginning Save for file '/Users/soportec161/Documents/03 Gab/01 Eticapital/02 Sitio/Eticapital/Eticapital.muse' highest UID:28149
+[00:35:51.549] 11:39:08.753 | Save complete for file '/Users/soportec161/Documents/03 Gab/01 Eticapital/02 Sitio/Eticapital/Eticapital.muse' file size:18513920 mod Date:Tue Dec 19 11:39:08 GMT-0600 2017 highest UID:28149
+[00:45:37.672] 11:48:54.876 | HTMLExport Eticapital(3 pages) to 'eticapital.com/corporativo' completed with 2 warnings.
+[00:45:37.672] 11:48:54.876 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de informes@eticapital.mx que no coincide con el nombre de servidor eticapital.com. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de eticapital.com y vuelva a intentarlo.
+[00:45:37.672] 11:48:54.876 | 91027:El formulario Formulario Contacto Inversionista está configurado con una dirección de correo electrónico de informes@eticapital.mx que no coincide con el nombre de servidor eticapital.com. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de eticapital.com y vuelva a intentarlo.
+[00:46:43.979] 11:50:01.183 | Beginning Save for file '/Users/soportec161/Documents/03 Gab/01 Eticapital/02 Sitio/Eticapital/Eticapital.muse' highest UID:28275
+[00:46:46.292] 11:50:03.495 | Save complete for file '/Users/soportec161/Documents/03 Gab/01 Eticapital/02 Sitio/Eticapital/Eticapital.muse' file size:18546688 mod Date:Tue Dec 19 11:50:03 GMT-0600 2017 highest UID:28275
+[02:17:51.000] 13:21:08.203 | quitWithUI:Quitting Application. Called by: 
+[02:17:51.039] 13:21:08.242 | Quitting Application after 137.4 minutes. Called by: 
+[02:17:57.219] Logging shutdown normally
 
 ==========
-Logging ended at: Thu Sep 21 11:32:48 2017
+Logging ended at: Tue Dec 19 13:21:18 2017
 
-Logging in build 2017.0.1.11 started at: Mon Sep 25 10:39:39 2017
+Logging in build 2017.0.1.11 started at: Thu Dec 21 13:22:37 2017
 ========================================
-[00:01:03.646] 10:40:43.190 | Error - IMS : ErrorCode=67 ErrorMessage=
-[00:16:15.482] 10:55:55.027 | Trying to open file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse with size:33980416 mod Date:Sat Sep 23 10:56:48 GMT-0500 2017
-[00:16:15.504] 10:55:55.049 | Opening file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' with status:success size:33980416 mod Date:Sat Sep 23 10:56:48 GMT-0500 2017 highestUID: 26321
-[00:19:07.006] 10:58:46.551 | Trying to open file '/Users/soportec161/Downloads/1A3JSISWSOERKEWP5HKLWA2PKI0FFF/AccordionWidget.muse with size:425984 mod Date:Fri Jan 6 09:30:02 GMT-0600 2017
-[00:19:07.018] 10:58:46.563 | Opening file '/Users/soportec161/Downloads/1A3JSISWSOERKEWP5HKLWA2PKI0FFF/AccordionWidget.muse' with status:success size:425984 mod Date:Fri Jan 6 09:30:02 GMT-0600 2017 highestUID: 98
-[00:33:21.897] 11:13:01.442 | Trying to open file '/Users/soportec161/Desktop/1A3JSISWSOERKEWP5HKLWA2PKI0FFF/AccordionWidget.muse with size:425984 mod Date:Fri Jan 6 09:30:02 GMT-0600 2017
-[00:33:21.901] 11:13:01.447 | Opening file '/Users/soportec161/Desktop/1A3JSISWSOERKEWP5HKLWA2PKI0FFF/AccordionWidget.muse' with status:success size:425984 mod Date:Fri Jan 6 09:30:02 GMT-0600 2017 highestUID: 98
-[00:36:13.879] 11:15:53.425 | Beginning SaveAs of 'user-library-site' to file '/Users/soportec161/Library/Preferences/Adobe/Adobe Muse CC Libraries/2017.0/Sin título/Sin título.muse' highest UID:98
-[00:36:18.448] 11:15:57.993 | SaveAs complete for file '/Users/soportec161/Library/Preferences/Adobe/Adobe Muse CC Libraries/2017.0/Sin título/Sin título.muse' file size:425984 mod Date:Mon Sep 25 11:15:57 GMT-0500 2017 highest UID:98
-[00:39:48.895] 11:19:28.440 | Beginning SaveAs of 'user-library-site' to file '/Users/soportec161/Library/Preferences/Adobe/Adobe Muse CC Libraries/2017.0/Sin título 2/Sin título.muse' highest UID:98
-[00:39:53.572] 11:19:33.117 | SaveAs complete for file '/Users/soportec161/Library/Preferences/Adobe/Adobe Muse CC Libraries/2017.0/Sin título 2/Sin título.muse' file size:425984 mod Date:Mon Sep 25 11:19:32 GMT-0500 2017 highest UID:98
-[01:35:43.736] 12:15:23.282 | FTPUpload Moebius(1 pages) to 'moebius.com.mx' completed with 4 warnings.
-[01:35:43.772] 12:15:23.318 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de g.anaya.v@gmail.com que no coincide con el nombre de servidor moebius.com.mx. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de moebius.com.mx y vuelva a intentarlo.
-[01:35:43.773] 12:15:23.318 | 91023:No se ha exportado el activo /Users/soportec161/Downloads/1A3JSISWSOERKEWP5HKLWA2PKI0FFF/AccordionWidget.muse porque no se ha encontrado.
-[01:35:43.773] 12:15:23.318 | 91033:Forms::php_request_failed
-[01:35:43.773] 12:15:23.318 | 91033:Forms::unexpected_php_response
-[01:53:51.232] 12:33:30.777 | Beginning Save for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:26485
-[01:53:56.816] 12:33:36.361 | Save complete for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' file size:33980416 mod Date:Mon Sep 25 12:33:36 GMT-0500 2017 highest UID:26485
-[01:58:19.315] 12:37:58.860 | Beginning Save for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:27157
-[01:58:25.187] 12:38:04.732 | Save complete for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' file size:34013184 mod Date:Mon Sep 25 12:38:04 GMT-0500 2017 highest UID:27157
-[01:59:48.601] 12:39:28.146 | FTPUpload Moebius(1 pages) to 'moebius.com.mx' completed with 4 warnings.
-[01:59:48.644] 12:39:28.189 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de g.anaya.v@gmail.com que no coincide con el nombre de servidor moebius.com.mx. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de moebius.com.mx y vuelva a intentarlo.
-[01:59:48.644] 12:39:28.189 | 91023:No se ha exportado el activo /Users/soportec161/Downloads/1A3JSISWSOERKEWP5HKLWA2PKI0FFF/AccordionWidget.muse porque no se ha encontrado.
-[01:59:48.644] 12:39:28.189 | 91033:Forms::php_request_failed
-[01:59:48.644] 12:39:28.190 | 91033:Forms::unexpected_php_response
-[02:07:49.297] 12:47:28.843 | FTPUpload Moebius(1 pages) to 'moebius.com.mx' completed with 4 warnings.
-[02:07:49.342] 12:47:28.887 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de g.anaya.v@gmail.com que no coincide con el nombre de servidor moebius.com.mx. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de moebius.com.mx y vuelva a intentarlo.
-[02:07:49.342] 12:47:28.888 | 91023:No se ha exportado el activo /Users/soportec161/Downloads/1A3JSISWSOERKEWP5HKLWA2PKI0FFF/AccordionWidget.muse porque no se ha encontrado.
-[02:07:49.342] 12:47:28.888 | 91033:Forms::php_request_failed
-[02:07:49.342] 12:47:28.888 | 91033:Forms::unexpected_php_response
-[02:08:44.773] 12:48:24.318 | Beginning Save for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:27267
-[02:08:50.180] 12:48:29.726 | Save complete for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' file size:36077568 mod Date:Mon Sep 25 12:48:28 GMT-0500 2017 highest UID:27267
-[02:11:19.557] 12:50:59.102 | FTPUpload Moebius(1 pages) to 'moebius.com.mx' completed with 3 warnings.
-[02:11:19.602] 12:50:59.147 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de g.anaya.v@gmail.com que no coincide con el nombre de servidor moebius.com.mx. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de moebius.com.mx y vuelva a intentarlo.
-[02:11:19.602] 12:50:59.147 | 91033:Forms::php_request_failed
-[02:11:19.602] 12:50:59.147 | 91033:Forms::unexpected_php_response
-[02:13:51.020] 12:53:30.566 | Beginning SaveAs of 'user-library-site' to file '/Users/soportec161/Library/Preferences/Adobe/Adobe Muse CC Libraries/2017.0/Sin título 3/Sin título.muse' highest UID:152
-[02:13:56.596] 12:53:36.141 | SaveAs complete for file '/Users/soportec161/Library/Preferences/Adobe/Adobe Muse CC Libraries/2017.0/Sin título 3/Sin título.muse' file size:491520 mod Date:Mon Sep 25 12:53:36 GMT-0500 2017 highest UID:152
-[02:15:14.043] 12:54:53.588 | FTPUpload Moebius(1 pages) to 'moebius.com.mx' completed with 3 warnings.
-[02:15:14.051] 12:54:53.596 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de g.anaya.v@gmail.com que no coincide con el nombre de servidor moebius.com.mx. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de moebius.com.mx y vuelva a intentarlo.
-[02:15:14.051] 12:54:53.596 | 91033:Forms::php_request_failed
-[02:15:14.051] 12:54:53.596 | 91033:Forms::unexpected_php_response
-[02:18:04.502] 12:57:44.047 | FTPUpload Moebius(1 pages) to 'moebius.com.mx' completed with 3 warnings.
-[02:18:04.521] 12:57:44.066 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de g.anaya.v@gmail.com que no coincide con el nombre de servidor moebius.com.mx. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de moebius.com.mx y vuelva a intentarlo.
-[02:18:04.521] 12:57:44.066 | 91033:Forms::php_request_failed
-[02:18:04.521] 12:57:44.066 | 91033:Forms::unexpected_php_response
-[02:21:49.558] 13:01:29.104 | FTPUpload Moebius(1 pages) to 'moebius.com.mx' completed with 3 warnings.
-[02:21:49.603] 13:01:29.148 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de g.anaya.v@gmail.com que no coincide con el nombre de servidor moebius.com.mx. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de moebius.com.mx y vuelva a intentarlo.
-[02:21:49.603] 13:01:29.148 | 91033:Forms::php_request_failed
-[02:21:49.603] 13:01:29.148 | 91033:Forms::unexpected_php_response
-[02:24:55.603] 13:04:35.148 | FTPUpload Moebius(1 pages) to 'moebius.com.mx' completed with 3 warnings.
-[02:24:55.617] 13:04:35.163 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de g.anaya.v@gmail.com que no coincide con el nombre de servidor moebius.com.mx. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de moebius.com.mx y vuelva a intentarlo.
-[02:24:55.618] 13:04:35.163 | 91033:Forms::php_request_failed
-[02:24:55.618] 13:04:35.163 | 91033:Forms::unexpected_php_response
-[02:27:09.019] 13:06:48.564 | Beginning Save for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:27387
-[02:27:13.045] 13:06:52.590 | Save complete for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' file size:36077568 mod Date:Mon Sep 25 13:06:52 GMT-0500 2017 highest UID:27387
-[02:39:09.628] 13:18:49.173 | AssertInDebug: There's a problem with the cacheing scheme because we are cacheing too many images.-
-[02:39:23.074] 13:19:02.619 | AssertInDebug: There's a problem with the cacheing scheme because we are cacheing too many images.-
-[02:46:23.367] 13:26:02.912 | AssertInDebug: There's a problem with the cacheing scheme because we are cacheing too many images.-
-[02:46:29.613] 13:26:09.158 | Beginning Save for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:27493
-[02:46:34.405] 13:26:13.951 | Save complete for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' file size:36339712 mod Date:Mon Sep 25 13:26:12 GMT-0500 2017 highest UID:27493
-[02:48:15.238] 13:27:54.783 | FTPUpload Moebius(1 pages) to 'moebius.com.mx' completed with 3 warnings.
-[02:48:15.278] 13:27:54.823 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de g.anaya.v@gmail.com que no coincide con el nombre de servidor moebius.com.mx. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de moebius.com.mx y vuelva a intentarlo.
-[02:48:15.278] 13:27:54.823 | 91033:Forms::php_request_failed
-[02:48:15.278] 13:27:54.823 | 91033:Forms::unexpected_php_response
-[02:51:48.235] 13:31:27.781 | FTPUpload Moebius(1 pages) to 'moebius.com.mx' completed with 3 warnings.
-[02:51:48.248] 13:31:27.793 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de g.anaya.v@gmail.com que no coincide con el nombre de servidor moebius.com.mx. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de moebius.com.mx y vuelva a intentarlo.
-[02:51:48.248] 13:31:27.794 | 91033:Forms::php_request_failed
-[02:51:48.249] 13:31:27.794 | 91033:Forms::unexpected_php_response
-[03:24:47.747] 14:04:27.292 | HTMLExport Moebius(1 pages) to 'moebius.com.mx' completed with 2 warnings.
-[03:24:47.765] 14:04:27.310 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de g.anaya.v@gmail.com que no coincide con el nombre de servidor moebius.com.mx. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de moebius.com.mx y vuelva a intentarlo.
-[03:24:47.765] 14:04:27.310 | 91023:No se ha exportado el activo /Users/soportec161/Downloads/1A3JSISWSOERKEWP5HKLWA2PKI0FFF/AccordionWidget.muse porque no se ha encontrado.
-[03:30:21.938] 14:10:01.483 | DataError:91001 at 
-[03:30:22.014] 14:10:01.559 | HTMLExport Moebius(1 pages) to 'moebius.com.mx' failed with error 91001:Operación cancelada por el usuario.
-[03:32:27.898] 14:12:07.443 | HTMLExport Moebius(1 pages) to 'moebius.com.mx' completed with 2 warnings.
-[03:32:27.907] 14:12:07.452 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de g.anaya.v@gmail.com que no coincide con el nombre de servidor moebius.com.mx. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de moebius.com.mx y vuelva a intentarlo.
-[03:32:27.907] 14:12:07.453 | 91023:No se ha exportado el activo /Users/soportec161/Downloads/1A3JSISWSOERKEWP5HKLWA2PKI0FFF/AccordionWidget.muse porque no se ha encontrado.
-[03:38:25.755] 14:18:05.300 | Beginning Save for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:27617
-[03:38:30.873] 14:18:10.418 | Save complete for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' file size:36339712 mod Date:Mon Sep 25 14:18:10 GMT-0500 2017 highest UID:27617
-[03:39:27.518] 14:19:07.063 | HTMLExport Moebius(1 pages) to 'moebius.com.mx' completed with 2 warnings.
-[03:39:27.527] 14:19:07.072 | 91027:El formulario Formulario Inicio está configurado con una dirección de correo electrónico de g.anaya.v@gmail.com que no coincide con el nombre de servidor moebius.com.mx. Algunos proveedores de alojamiento rechazan el envío de correo electrónico desde direcciones de correo de diferentes hosts. Si al enviar el formulario no se envía el correo electrónico correspondiente, cambie la primera dirección de correo electrónico que aparece en el formulario de Muse por una dirección de moebius.com.mx y vuelva a intentarlo.
-[03:39:27.527] 14:19:07.072 | 91023:No se ha exportado el activo /Users/soportec161/Downloads/1A3JSISWSOERKEWP5HKLWA2PKI0FFF/AccordionWidget.muse porque no se ha encontrado.
-[07:33:23.390] 18:13:02.935 | quitWithUI:Quitting Application. Called by: 
-[07:33:23.418] 18:13:02.963 | Quitting Application after 453.3 minutes. Called by: 
-[07:34:32.048] Logging shutdown normally
-
-==========
-Logging ended at: Mon Sep 25 18:14:27 2017
-
-Logging in build 2017.0.1.11 started at: Thu Sep 28 12:49:58 2017
-========================================
-[00:01:10.890] 12:51:09.114 | Error - IMS : ErrorCode=67 ErrorMessage=
-[00:01:27.445] 12:51:25.669 | Trying to open file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse with size:4423680 mod Date:Thu Jul 20 14:59:53 GMT-0500 2017
-[00:01:27.448] 12:51:25.672 | Opening file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' with status:success size:4423680 mod Date:Thu Jul 20 14:59:53 GMT-0500 2017 highestUID: 5344
-[00:01:42.302] 12:51:40.527 | deleteHiddenBreakpointsOnMasters deleted 1 hidden breakpoints on masters
-[00:04:51.889] 12:54:50.113 | Warning: Failed to find {param_height} in HTML string to replace in widget:Google Maps
-[00:04:51.911] 12:54:50.136 | Warning: Failed to find {param_width} in HTML string to replace in widget:Google Maps
-[00:04:53.404] 12:54:51.629 | Warning: Failed to find {param_height} in HTML string to replace in widget:Google Maps
-[00:04:53.405] 12:54:51.629 | Warning: Failed to find {param_width} in HTML string to replace in widget:Google Maps
-[00:55:17.190] 13:45:15.415 | Warning: Failed to find {param_height} in HTML string to replace in widget:Google Maps
-[00:55:17.190] 13:45:15.415 | Warning: Failed to find {param_width} in HTML string to replace in widget:Google Maps
-[00:55:18.648] 13:45:16.873 | Warning: Failed to find {param_height} in HTML string to replace in widget:Google Maps
-[00:55:18.649] 13:45:16.873 | Warning: Failed to find {param_width} in HTML string to replace in widget:Google Maps
-[01:28:33.209] 14:18:31.433 | Warning: Failed to find {param_height} in HTML string to replace in widget:Google Maps
-[01:28:33.209] 14:18:31.434 | Warning: Failed to find {param_width} in HTML string to replace in widget:Google Maps
-[01:28:34.716] 14:18:32.940 | Warning: Failed to find {param_height} in HTML string to replace in widget:Google Maps
-[01:28:34.716] 14:18:32.940 | Warning: Failed to find {param_width} in HTML string to replace in widget:Google Maps
-[03:01:11.584] 15:51:09.809 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:5422
-[03:01:15.516] 15:51:13.740 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:4423680 mod Date:Thu Sep 28 15:51:13 GMT-0500 2017 highest UID:5422
-[03:11:35.160] 16:01:33.385 | quitWithUI:Quitting Application. Called by: 
-[03:11:35.200] 16:01:33.424 | Quitting Application after 191.2 minutes. Called by: 
-[03:12:17.453] Logging shutdown normally
-
-==========
-Logging ended at: Thu Sep 28 16:02:35 2017
-
-Logging in build 2017.0.1.11 started at: Wed Oct  4 10:35:31 2017
-========================================
-[00:00:24.833] 10:35:56.087 | Error - IMS : ErrorCode=67 ErrorMessage=
-[00:01:54.023] 10:37:25.278 | Trying to open file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse with size:4423680 mod Date:Thu Sep 28 15:51:13 GMT-0500 2017
-[00:01:54.056] 10:37:25.310 | Opening file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' with status:success size:4423680 mod Date:Thu Sep 28 15:51:13 GMT-0500 2017 highestUID: 5422
-[04:03:49.938] 14:39:21.164 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:5775
-[04:03:53.212] 14:39:24.467 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:5996544 mod Date:Wed Oct 4 14:39:24 GMT-0500 2017 highest UID:5775
-[04:25:45.612] 15:01:16.866 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:5809
-[04:25:48.408] 15:01:19.662 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:5996544 mod Date:Wed Oct 4 15:01:19 GMT-0500 2017 highest UID:5809
-[06:03:43.541] 16:39:14.795 | Trying to open file '/Volumes/GAB/Trabajo/01 Eticapital/02 Sitio/Eticapital/Eticapital.muse with size:4423680 mod Date:Thu Sep 28 15:51:12 GMT-0500 2017
-[06:03:43.572] 16:39:14.827 | Opening file '/Volumes/GAB/Trabajo/01 Eticapital/02 Sitio/Eticapital/Eticapital.muse' with status:success size:4423680 mod Date:Thu Sep 28 15:51:12 GMT-0500 2017 highestUID: 5422
-[07:28:09.732] 18:03:40.986 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:7656
-[07:28:12.424] 18:03:43.678 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:5996544 mod Date:Wed Oct 4 18:03:43 GMT-0500 2017 highest UID:7656
-[07:39:09.367] 18:14:40.622 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:7782
-[07:39:12.001] 18:14:43.256 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:6127616 mod Date:Wed Oct 4 18:14:42 GMT-0500 2017 highest UID:7782
-[07:43:45.425] 18:19:16.680 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:8079
-[07:43:47.664] 18:19:18.918 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:6127616 mod Date:Wed Oct 4 18:19:18 GMT-0500 2017 highest UID:8079
-[24:09:19.478] 10:44:50.733 | Trying to open file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse with size:6127616 mod Date:Wed Oct 4 18:19:18 GMT-0500 2017
-[24:09:19.500] 10:44:50.754 | Opening file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' with status:success size:6127616 mod Date:Wed Oct 4 18:19:18 GMT-0500 2017 highestUID: 8079
-[24:09:24.792] 10:44:56.046 | deleteHiddenBreakpointsOnMasters deleted 1 hidden breakpoints on masters
-[24:19:19.102] 10:54:50.357 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:8166
-[24:19:21.421] 10:54:52.675 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:6193152 mod Date:Thu Oct 5 10:54:52 GMT-0500 2017 highest UID:8166
-[24:28:06.808] 11:03:38.062 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:8377
-[24:28:09.123] 11:03:40.377 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:6324224 mod Date:Thu Oct 5 11:03:40 GMT-0500 2017 highest UID:8377
-[24:57:11.300] 11:32:42.554 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:8409
-[24:57:13.645] 11:32:44.900 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:6324224 mod Date:Thu Oct 5 11:32:44 GMT-0500 2017 highest UID:8409
-[25:07:26.957] 11:42:58.211 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:8547
-[25:07:29.578] 11:43:00.832 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:6520832 mod Date:Thu Oct 5 11:43:00 GMT-0500 2017 highest UID:8547
-[25:38:16.928] 12:13:48.183 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:8959
-[25:38:19.516] 12:13:50.770 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:8847360 mod Date:Thu Oct 5 12:13:50 GMT-0500 2017 highest UID:8959
-[26:08:00.847] 12:43:32.101 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:9047
-[26:08:03.328] 12:43:34.583 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:8912896 mod Date:Thu Oct 5 12:43:34 GMT-0500 2017 highest UID:9047
-[26:13:59.031] 12:49:30.286 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:9125
-[26:14:01.408] 12:49:32.662 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:9043968 mod Date:Thu Oct 5 12:49:32 GMT-0500 2017 highest UID:9125
-[27:56:05.361] 14:31:36.616 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:9635
-[27:56:08.425] 14:31:39.680 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:9043968 mod Date:Thu Oct 5 14:31:39 GMT-0500 2017 highest UID:9635
-[28:02:28.996] 14:38:00.251 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:9647
-[28:02:31.171] 14:38:02.426 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:9043968 mod Date:Thu Oct 5 14:38:02 GMT-0500 2017 highest UID:9647
-[28:04:10.466] 14:39:41.721 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:9647
-[28:04:12.668] 14:39:43.922 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:9043968 mod Date:Thu Oct 5 14:39:43 GMT-0500 2017 highest UID:9647
-[28:30:42.837] 15:06:14.091 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:9653
-[28:30:45.152] 15:06:16.407 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:9043968 mod Date:Thu Oct 5 15:06:16 GMT-0500 2017 highest UID:9653
-[28:31:19.455] 15:06:50.709 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:9653
-[28:31:21.607] 15:06:52.862 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:9043968 mod Date:Thu Oct 5 15:06:52 GMT-0500 2017 highest UID:9653
-[28:32:50.199] 15:08:21.454 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:9669
-[28:32:53.355] 15:08:24.609 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:9076736 mod Date:Thu Oct 5 15:08:24 GMT-0500 2017 highest UID:9669
-[29:42:39.434] 16:18:10.688 | Beginning Save for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' highest UID:9669
-[29:42:41.521] 16:18:12.776 | Save complete for file '/Users/soportec161/Documents/Gab/01 Jaime/02 Sitio/Eticapital/Eticapital.muse' file size:9109504 mod Date:Thu Oct 5 16:18:12 GMT-0500 2017 highest UID:9669
-[29:51:53.767] 16:27:25.022 | Trying to open file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse with size:36339712 mod Date:Mon Sep 25 14:18:10 GMT-0500 2017
-[29:51:53.792] 16:27:25.047 | Opening file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' with status:success size:36339712 mod Date:Mon Sep 25 14:18:10 GMT-0500 2017 highestUID: 27617
-[29:52:00.234] 16:27:31.489 | deleteHiddenBreakpointsOnMasters deleted 1 hidden breakpoints on masters
-[29:52:28.604] 16:27:59.858 | Beginning Save for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:27621
-[29:52:32.095] 16:28:03.350 | Save complete for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' file size:36339712 mod Date:Thu Oct 5 16:28:02 GMT-0500 2017 highest UID:27621
-[31:09:35.135] 17:45:06.390 | Beginning Save for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' highest UID:27673
-[31:09:43.342] 17:45:14.597 | Save complete for file '/Volumes/GAB/Trabajo/07 Cubo/02 Moebius/02 Sitio/Moebius.muse' file size:36339712 mod Date:Thu Oct 5 17:45:14 GMT-0500 2017 highest UID:27673
+[00:01:45.979] 13:24:23.955 | Error - IMS : ErrorCode=67 ErrorMessage=
+[00:03:49.362] 13:26:27.338 | Trying to open file '/Users/soportec161/Documents/03 Gab/01 Eticapital/02 Sitio/Eticapital/Eticapital.muse with size:18546688 mod Date:Tue Dec 19 11:50:03 GMT-0600 2017
+[00:03:49.385] 13:26:27.361 | Opening file '/Users/soportec161/Documents/03 Gab/01 Eticapital/02 Sitio/Eticapital/Eticapital.muse' with status:success size:18546688 mod Date:Tue Dec 19 11:50:03 GMT-0600 2017 highestUID: 28275

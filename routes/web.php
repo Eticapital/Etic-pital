@@ -2,8 +2,10 @@
 
 // Rutas para integrar sitio de eticapital entregado por tercero con plataforma
 Route::view('/', 'corporativo')->name('corporativo');
-Route::view('/inicio', 'inicio');
-Route::view('/corporativo-fondo-de-inversion', 'corporativo-fondo-de-inversion');
+Route::view('/index.html', 'corporativo')->name('corporativo');
+Route::view('/fondos-de-inversión.html', 'corporativo-fondo-de-inversion');
+Route::view('/contacto-inversionista.html', 'corporativo-contacto-inversionista');
+
 Route::group(['prefix' => 'plataforma'], function () {
     Route::get('/', 'HomeController@index')->name('home');
     Route::view('/como-funciona', 'como-funciona')->name('como-funciona');

@@ -29,21 +29,21 @@
     <div class="jumbotron-fluid" id="header">
       <div class="container-fluid">
     @endif
-        <!-- navbar navbar-expand-lg navbar-dark pt-3 px-0 -->
-        <nav id="navbarheader" class="{{ @$is_home ? 'navbar navbar-expand-lg navbar-dark pt-3 px-0' : 'navbar navbar-expand-lg navbar-light bg-white sticky-top'}}">
-          <a class="navbar-brand" href="{{ route('home') }}">
-            @if(@$is_home)
-            <img id="logo" src="{{ asset('img/logolight.png') }}" alt="Eticapital">
-            @else
-            <img id="logo" src="{{ asset('img/logodark.png') }}" alt="Eticapital">
-            @endif
-          </a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
+<b-navbar  id="navbarheader" class="{{ @$is_home ? 'navbar navbar-expand-lg navbar-dark pt-3 px-0' : 'navbar navbar-expand-lg navbar-light bg-white sticky-top'}}">
 
-          <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-            <ul class="navbar-nav">
+  <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+
+  <a class="navbar-brand" href="{{ route('home') }}">
+    @if(@$is_home)
+    <img id="logo" src="{{ asset('img/logolight.png') }}" alt="Eticapital">
+    @else
+    <img id="logo" src="{{ asset('img/logodark.png') }}" alt="Eticapital">
+    @endif
+  </a>
+
+  <b-collapse is-nav id="nav_collapse">
+
+    <b-navbar-nav class="ml-auto">
               <li class="nav-item">
                 <a class="nav-link" href="{{ route('como-funciona') }}">¿Cómo funciona?</a>
               </li>
@@ -73,9 +73,11 @@
                 <a class="nav-link" href="{{ route('login') }}">Ingresar</a>
               </li>
               @endif
-            </ul> <!-- / .navbar-nav -->
-          </div> <!-- / #navbarSupportedContent -->
-        </nav> <!-- / #navbarheader -->
+    </b-navbar-nav>
+
+  </b-collapse>
+</b-navbar>
+
       @if(@$is_home)
       </div> <!-- / .container-fluid -->
       @endif

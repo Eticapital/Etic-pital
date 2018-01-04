@@ -89,11 +89,15 @@
               @foreach($investments as $investment)
               <tr>
                 <td>
-                  @can('show', $investment->project)
-                  <a href="{{ $investment->project->link }}">{{ $investment->project->name }}</a>
+                  @if($investment->project)
+                    @can('show', $investment->project)
+                    <a href="{{ $investment->project->link }}">{{ $investment->project->name }}</a>
+                    @else
+                    {{ $investment->project->name }}
+                    @endcan
                   @else
-                  {{ $investment->project->name }}
-                  @endcan
+                  -
+                  @endif
                 </td>
                 <td>{{ money($investment->amount) }}</td>
                 <td>

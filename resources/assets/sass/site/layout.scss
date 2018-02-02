@@ -53,12 +53,106 @@
   padding-top: 0.5rem;
 }
 
-/* Footer */
-.footer {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+#footer{
+    background: #FFF url('../img/bg-footer.png') no-repeat center center;
+    background-size: cover;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 22px;
+    color: #7F7F7F;
+    font-family: Roboto, sans-serif;
+    h4 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #95C11F;
+    }
 }
 
+.menu-footer {
+  line-height: 19px;
+  text-align: center;
+  li {
+    padding: 15px 0 10px;
+  }
+  a {
+    font-weight: 500;
+    font-size: 16px;
+    font-family: Roboto, sans-serif;
+    color: #7F7F7F;
+  }
+  text-transform: uppercase;
+}
+
+.menu-footer-crowfunding {
+  a {
+    color: #95C11F !important;
+  }
+  border-bottom: 1px solid #7F7F7F;
+}
+.footer-legals{
+  clear: both;
+  display: block;
+  background: #575757;
+  font-weight: 300;
+  font-size: 15px;
+  color: #FFF;
+  a {
+    font-weight: 300;
+  font-size: 15px;
+  color: #FFF;
+  &:hover {
+    font-weight: bold;
+    text-decoration: none;
+  }
+  }
+}
+.footer-social {
+  background: #FFF;
+  padding: 10px 0;
+}
+.footer-menu {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.footer-icon {
+  display: block;
+  overflow: hidden;
+  width: 55px;
+  height: 0;
+  padding-top: 55px;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.footer-icon-fb {
+  background-image: url('../img/fb_bn.png');
+  &:hover {
+    background-image: url('../img/fb_color.png');
+  }
+}
+.footer-icon-tw {
+  background-image: url('../img/tw_bn.png');
+  &:hover {
+    background-image: url('../img/tw_color.png');
+  }
+}
+.footer-icon-in {
+  background-image: url('../img/in_bn.png');
+  &:hover {
+    background-image: url('../img/in_color.png');
+  }
+}
+.footer-icon-li {
+  background-image: url('../img/lk_bn.png');
+  &:hover {
+    background-image: url('../img/ln_color.png');
+  }
+}
+.footer-icon-yt {
+  background-image: url('../img/yt_bn.png');
+  &:hover {
+    background-image: url('../img/yt_color.png');
+  }
+}
 
 /*Project image*/
 

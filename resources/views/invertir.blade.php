@@ -6,7 +6,7 @@
         <div class="row justify-content-center">
           <div class="col-lg-8 text-center">
             <p><span class="h2 text-primary">Invertir</span></p>
-            <p class="text-justify">Esta es la lista de los proyectos que hemos seleccionado para abrirlos a la inversión del público en general.</p>
+            <p class="text-center">Esta es la lista de los proyectos que hemos seleccionado para abrirlos a la inversión del público en general.</p>
           </div> <!-- / .col-lg-8 -->
         </div> <!-- / .row -->
       </div> <!-- / .content -->

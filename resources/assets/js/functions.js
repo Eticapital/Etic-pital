@@ -95,3 +95,14 @@ _.mixin({
     return false;
   }
 });
+
+$(document).ready(function () {
+  $(window).scroll(function (event) {
+    var top = $('#navbarheader').height();
+    var y = $(this).scrollTop();
+    if (y >= top)
+      $('#navbarheader').addClass('scrolled');
+    else
+      $('#navbarheader').removeClass('scrolled');
+  });
+})

@@ -1,6 +1,6 @@
     // Fonts
 // @import url("https://fonts.googleapis.com/css?family=Lato:400,700|Open+Sans");
-@import url("https://fonts.googleapis.com/css?family=Roboto:400,700");
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700");
 
 @import "resources/assets/lib/icomoon_site/style";
 // @import "~sweetalert2/src/sweetalert2.scss";
@@ -19,6 +19,20 @@
 @import "alerts";
 @import "buttons";
 @import "forms";
+
+.asi-funciona-rows {
+  // flex-wrap: wrap;
+}
+.asi-funciona {
+  display: flex;
+  flex:1 1 0%;
+  flex-direction: column;
+}
+
+.asi-funciona-texto {
+  display: block;
+  flex: 1 0 auto;
+}
 
 [v-cloak] {
     display: none !important;

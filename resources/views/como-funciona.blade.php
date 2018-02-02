@@ -1,7 +1,36 @@
 @extends('layouts.site')
 
 @section('content')
-      <div class="container">
+    <div class="container-fluid content-img-bg" id="agroindustria">
+      <div class="content">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-4 text-center">
+              <img src="{{ asset('img/nosotros_icon2.png') }}" class="icon">
+              <p class="text-center">Creamos un sistema virtuoso sustentable entre buenos emprendedores y buenos inversionistas.</p>
+            </div> <!-- / .col-lg-8 -->
+            <div class="col-12 col-lg-4 text-center">
+              <img src="{{ asset('img/nosotros_icon3.png') }}" class="icon">
+              <p class="text-center">Formamos y desarrollamos buenas empresas en el sector agroalimentario y/o proyectos innovadores con potencial de crecimiento.</p>
+            </div> <!-- / .col-lg-8 -->
+            <div class="col-12 col-lg-4 text-center">
+              <img src="{{ asset('img/nosotros_icon4.png') }}" class="icon">
+              <p class="text-center">Generamos máxima rentabilidad y la distribuimos entre todos los participantes del sistema.</p>
+            </div> <!-- / .col-lg-8 -->
+            <div class="col-12 col-lg-4 text-center">
+              <img src="{{ asset('img/nosotros_icon5.png') }}" class="icon">
+              <p class="text-center">Buscamos una rentabilidad sostenida mediante la sinergia a lo largo de la cadena de valor de cada proyecto.</p>
+            </div> <!-- / .col-lg-8 -->
+            <div class="col-12 col-lg-4 text-center">
+              <img src="{{ asset('img/nosotros_icon6.png') }}" class="icon">
+              <p class="text-center">Desarrollamos talento y capacidades del equipo directivo del emprendedor para una mejor ejecución de los proyectos (Alto desempeño).</p>
+            </div> <!-- / .col-lg-8 -->
+          </div> <!-- / .row -->
+        </div> <!-- / .container -->
+      </div> <!-- / .content -->
+    </div> <!-- / .container-fluid -->
+
+      {{-- <div class="container">
         <div class="content">
           <div class="row justify-content-center">
             <div class="col-lg-8 text-justify">
@@ -14,7 +43,7 @@
             </div> <!-- / .col-lg-8 -->
           </div> <!-- / .row -->
         </div> <!-- / .content -->
-      </div> <!-- / .container -->
+      </div> <!-- / .container --> --}}
 
       <div class="container-fluid content-img-bg py-5" id="invertir">
         <div class="content">
@@ -43,7 +72,7 @@
         </div> <!-- / .content -->
       </div> <!-- / .container-fluid -->
 
-      <div class="container-fluid bg-light">
+      {{-- <div class="container-fluid bg-light">
         <div class="content">
           <div class="container">
             <div class="row">
@@ -63,9 +92,9 @@
             </div> <!-- / .row -->
           </div> <!-- / .container -->
         </div> <!-- / .content -->
-      </div> <!-- / .container-fluid -->
+      </div> <!-- / .container-fluid --> --}}
 
-      <div class="container-fluid py-5 content-img-bg" id="levantar-fondos">
+      <div class="container-fluid py-5 bg-white -content-img-bg" id="slevantar-fondos">
         <div class="content">
           <div class="container">
             <div class="row justify-content-center">
@@ -90,7 +119,6 @@
               <div class="col-12 col-lg-8">
                 <p><span class="h3">Los principales puntos a evaluar de una compañía, entre otros, son:</span></p>
                 <ul>
-                  <li>Los principales puntos a evaluar de una compañía, entre otros, son:</li>
                   <li>La experiencia que tiene realizando su actividad</li>
                   <li>En nivel de desarrollo tecnológico</li>
                   <li>Su impacto social o ambiental</li>

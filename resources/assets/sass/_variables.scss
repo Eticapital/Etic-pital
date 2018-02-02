@@ -226,7 +226,7 @@ $font-size-base:              1.125rem;
 // $font-size-sm:                ($font-size-base * .875) !default;
 
 // $font-weight-light:           300 !default;
-// $font-weight-normal:          400 !default;
+$font-weight-normal:          300;
 // $font-weight-bold:            700 !default;
 
 // $font-weight-base:            $font-weight-normal !default;
@@ -352,7 +352,7 @@ $font-size-base:              1.125rem;
 // $input-btn-border-width:                $border-width !default; // For form controls and buttons
 // $input-box-shadow:                      inset 0 1px 1px rgba($black,.075) !default;
 
-// $input-border-radius:                   $border-radius !default;
+$input-border-radius:                   15px;
 // $input-border-radius-lg:                $border-radius-lg !default;
 // $input-border-radius-sm:                $border-radius-sm !default;
 

@@ -1,21 +1,17 @@
 @extends('layouts.site', ['is_home' => true])
 @section('header')
-<div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <h1 class="display-3 text-center text-sm-left">Conoce nuestro crowfunding</h1>
-      </div>
-    </div>
-    <div class="row align-items-end">
+    <div class="container d-flex flex-column align-items-center">
+      <div class="row align-items-end">
       <div class="col-lg-9">
+        <h1 class="display-3 text-center text-sm-left">Conoce nuestro crowfunding</h1>
         <p class="text-justify">Potencializamos el crecimiento de las PyMEs en el área agroalimentaria a través de un sistema virtuoso sustentable entre buenos emprendedores y buenos inversionistas, para que formen y desarrollen buenas empresas comprometidas con el bien común, generando con nuestra asistencia, la máxima rentabilidad y que esta se reparta entre todos los participantes del sistema.</p>
         <p>Sin embargo estamos abiertos a cualquier iniciativa innovadora que represente un potencial de negocio económico y social.</p>
       </div> <!-- / .col-lg-3 -->
       <div class="col-lg-3">
-        <p class="text-center"><a href="{{ route('como-funciona') }}" class="btn btn-wide btn-secondary">Ver más</a></p>
+        <p class="text-center"><a href="{{ route('como-funciona') }}" class="btn btn-wide btn-primary">Ver más</a></p>
       </div> <!-- / .col-lg-3 -->
     </div> <!-- / .row -->
-</div> <!-- / .container -->
+  </div><!-- / .container -->
 @endsection
 
 @section('content')
@@ -27,41 +23,34 @@
           </div> <!-- / .col -->
         </div> <!-- / .row -->
         <div class="row">
-          <div class="col-12 col-md-6 text-center">
-            <img src="img/home_icon1.png" class="icon">
+          <div class="asi-funciona col-md-4 text-center">
+            <p><img src="img/home_icon3.png" class="icon"></p>
+            <p><span class="h3">Fondea tu proyecto</span></p>
+            <p class="text-justify asi-funciona-texto">¿Necesitas capital semilla? Inscribe tu idea o proyecto con nosotros.</p>
+            <p><a href="{{ route('fondear-mi-proyecto') }}" class="btn btn-wide btn-primary">Aplicar</a></p>
+          </div> <!-- / .col-lg-8 -->
+          <div class="asi-funciona col-md-4 text-center">
+            <p><img src="img/home_icon1.png" class="icon"></p>
             <p><span class="h3">Invierte por tu cuenta</span></p>
-            <p class="text-justify">Invierte en empresas de una manera fácil y transparente, por medio de nuestra plataforma.</p>
+            <p class="text-justify asi-funciona-texto">Invierte en empresas de una manera fácil y transparente, por medio de nuestra plataforma.</p>
             <p><a href="{{ route('invertir') }}" class="btn btn-wide btn-primary">Ver proyectos</a></p>
           </div> <!-- / .col -->
-          <div class="col-12 col-md-6 text-center">
-            <img src="img/home_icon2.png" class="icon">
+          <div class="asi-funciona col-md-4 text-center">
+            <p><img src="img/home_icon2.png" class="icon"></p>
             <p><span class="h3">Usa los fondos de inversión</span></p>
-            <p class="text-justify">¿Necesitas más de $300,000? Esta puede ser tu solución.</p>
-            <p><a href="{{ route('fondo-de-inversion') }}" class="btn btn-wide btn-primary">Solicitar acceso</a></p>
+            <p class="text-justify asi-funciona-texto">¿Necesitas más de $300,000? Esta puede ser tu solución.</p>
+            <p><a href="/fondos-de-inversi%C3%B3n.html" class="btn btn-wide btn-primary">Solicitar acceso</a></p>
           </div> <!-- / .col -->
+
         </div> <!-- / .row -->
       </div> <!-- / .content -->
     </div> <!-- / .container -->
 
-    <div class="container-fluid bg-light">
-      <div class="container">
-        <div class="content">
-          <div class="row justify-content-center">
-            <div class="col-lg-8 text-center">
-              <img src="img/home_icon3.png" class="icon">
-              <p><span class="h2 text-secondary">Fondea tu proyecto</span></p>
-              <p>¿Necesitas capital semilla? Inscribe tu idea o proyecto con nosotros.</p>
-              <p><a href="{{ route('fondear-mi-proyecto') }}" class="btn btn-wide btn-secondary">Aplicar</a></p>
-            </div> <!-- / .col-lg-8 -->
-          </div> <!-- / .row -->
-        </div> <!-- / .content -->
-      </div> <!-- / .container -->
-    </div> <!-- / .bg-light -->
-
+  <div class="bg-light py-2">
     <div class="container">
       <div class="content">
         <div class="row">
-          <div class="col text-center">
+          <div class="col text-center pb-3">
             <p><span class="h2 text-primary">Proyectos destacados</span></p>
           </div>
         </div> <!-- / .row -->
@@ -90,7 +79,7 @@
                       <small class="card-text text-muted">{{ $project->sector }}</small>
                     </div> <!-- / .col -->
                   </div> <!-- / .row -->
-                  <p class="card-text text-justify">{!! nl2br($project->short_description) !!}</p>
+                  <div class="card-text text-justify">{!! nl2br($project->short_description) !!}</div>
                   <p>
                     <small class="card-text text-muted">Fondos recaudados:</small>
                     <br><span class="h3 text-primary">{{ money($project->collected) }}</span> / {{ money($project->goal) }}
@@ -106,4 +95,5 @@
         @endif
       </div> <!-- / .content -->
     </div> <!-- / .container -->
+  </div><!-- /.bg-light -->
 @endsection

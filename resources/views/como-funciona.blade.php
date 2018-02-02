@@ -4,6 +4,7 @@
     <div class="container-fluid content-img-bg" id="agroindustria">
       <div class="content">
         <div class="container">
+          <h1 class="text-center text-white h2 my-4">¿Cómo funciona?</h1>
           <div class="row justify-content-center">
             <div class="col-12 col-lg-4 text-center">
               <img src="{{ asset('img/nosotros_icon2.png') }}" class="icon">

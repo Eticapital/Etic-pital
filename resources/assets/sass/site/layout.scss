@@ -4,6 +4,26 @@
   color: #fff;
 }
 
+#app {
+  padding-top: 60px;
+  &.home {
+    padding-top: 0;
+  }
+}
+
+.bg-blue {
+  background-color: #496da8 !important;
+}
+
+.bg-green {
+  background-color: #93a85b !important;
+}
+
+.sticky-top {
+  width: 100%;
+  position: fixed;
+}
+
 /* Navigation */
 
 @media (max-width: 768px) {

@@ -97,8 +97,13 @@ _.mixin({
 });
 
 $(document).ready(function () {
+  var top = $('#navbarheader').height();
+  var y = $(this).scrollTop();
+  if (y >= top)
+    $('#navbarheader').addClass('scrolled');
+  else
+    $('#navbarheader').removeClass('scrolled');
   $(window).scroll(function (event) {
-    var top = $('#navbarheader').height();
     var y = $(this).scrollTop();
     if (y >= top)
       $('#navbarheader').addClass('scrolled');

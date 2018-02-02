@@ -24,11 +24,11 @@
     </script>
   </head>
   <body>
-  <div id="app">
+  <div id="app" @if(@$is_home)class="home"@endif>
     @if(@$is_home)
-    <div class="jumbotron-fluid" id="header">
+    <div class="jumbotron-fluid bg-blue" id="header">
     @endif
-<b-navbar v-cloak id="navbarheader" class="{{ @$is_home ? 'navbar navbar-expand-lg navbar-dark pt-3 sticky-top' : 'navbar navbar-expand-lg navbar-light bg-white sticky-top'}}">
+<b-navbar v-cloak id="navbarheader" class="{{ @$is_home ? 'navbar navbar-expand-lg navbar-dark sticky-top' : 'navbar navbar-expand-lg navbar-light bg-white sticky-top'}}">
   <div class="container">
 
     <a class="navbar-brand" href="{{ route('home') }}">

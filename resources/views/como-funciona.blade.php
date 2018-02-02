@@ -1,7 +1,7 @@
 @extends('layouts.site')
 
 @section('content')
-    <div class="container-fluid content-img-bg" id="agroindustria">
+    <div class="container-fluid content-img-bg bg-blue" id="agroindustria">
       <div class="content">
         <div class="container">
           <h1 class="text-center text-white h2 my-4">¿Cómo funciona?</h1>
@@ -46,7 +46,7 @@
         </div> <!-- / .content -->
       </div> <!-- / .container --> --}}
 
-      <div class="container-fluid content-img-bg py-5" id="invertir">
+      <div class="container-fluid content-img-bg py-5 bg-green" id="invertir">
         <div class="content">
           <div class="container">
             <div class="row justify-content-center">

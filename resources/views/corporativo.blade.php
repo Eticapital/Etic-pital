@@ -322,7 +322,7 @@ if(typeof Muse == "undefined") window.Muse = {}; window.Muse.assets = {"required
       <a class="nonblock nontext museBGSize transition grpelem shared_content" id="u7819" href="fondos-de-inversi%c3%b3n.html" data-href="page:U5588" data-muse-uid="U7819" data-content-guid="u7819_content"><!-- content --></a>
       <!-- /m_editable -->
       <!-- m_editable region-id="editable-static-tag-U7820-BP_infinity" template="index.html" data-type="html" data-ice-options="clickable" data-ice-editable="link" -->
-      <a class="nonblock nontext museBGSize transition grpelem shared_content" id="u7820" href="https://www.eticapital.com.mx" data-muse-uid="U7820" data-content-guid="u7820_content"><!-- content --></a>
+      <a class="nonblock nontext museBGSize transition grpelem shared_content" id="u7820" href="/plataforma" data-muse-uid="U7820" data-content-guid="u7820_content"><!-- content --></a>
       <!-- /m_editable -->
      </div>
      <div class="clearfix colelem shared_content" id="pu6804" data-content-guid="pu6804_content"><!-- group -->

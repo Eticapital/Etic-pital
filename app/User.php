@@ -13,6 +13,8 @@ use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
 {
+    public $asYouType = true;
+
     use Notifiable, LaratrustUserTrait, Searchable, HasPolicyAttributes, LazyAppends;
 
     use Authorizable {

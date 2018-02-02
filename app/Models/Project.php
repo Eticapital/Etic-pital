@@ -23,6 +23,8 @@ class Project extends Model
         HasPolicyAttributes::mutateAttribute insteadof HasImages;
     }
 
+    public $asYouType = true;
+
     protected $cascadeDeletes = ['investments'];
 
     protected $casts = [

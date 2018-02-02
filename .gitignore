@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /storage/seeds/*
+/storage/scout/*
 /storage/*.key
 /vendor
 /.idea

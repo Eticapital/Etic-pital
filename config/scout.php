@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'driver' => env('SCOUT_DRIVER', 'elasticsearch'),
+    'driver' => env('SCOUT_DRIVER', 'tntsearch'),
 
     /*
     |--------------------------------------------------------------------------
@@ -81,5 +81,17 @@ return [
             env('ELASTICSEARCH_HOST', 'http://localhost:9200'),
         ],
     ],
+
+    'tntsearch' => [
+    'storage'  => storage_path() . '/scout', //place where the index files will be stored
+    'fuzziness' => env('TNTSEARCH_FUZZINESS', false),
+    'fuzzy' => [
+        'prefix_length' => 2,
+        'max_expansions' => 50,
+        'distance' => 2
+    ],
+    'asYouType' => false,
+    'searchBoolean' => env('TNTSEARCH_BOOLEAN', false),
+],
 
 ];

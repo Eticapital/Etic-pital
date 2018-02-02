@@ -18,6 +18,8 @@ class Investment extends Model
     const STATUS_ACCEPTED = 1;
     const STATUS_REJECTED = -1;
 
+    public $asYouType = true;
+
     protected $fillable = [
         'amount',
         'name',

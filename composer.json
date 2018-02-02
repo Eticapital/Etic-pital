@@ -18,7 +18,8 @@
         "laravel/tinker": "~1.0",
         "maatwebsite/excel": "~2.1.0",
         "santigarcor/laratrust": "5.0.*",
-        "tamayo/laravel-scout-elastic": "^3.0"
+        "tamayo/laravel-scout-elastic": "^3.0",
+        "teamtnt/laravel-scout-tntsearch-driver": "^3.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

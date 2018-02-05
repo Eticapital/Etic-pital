@@ -83,15 +83,15 @@ return [
     ],
 
     'tntsearch' => [
-    'storage'  => storage_path() . '/scout', //place where the index files will be stored
-    'fuzziness' => env('TNTSEARCH_FUZZINESS', false),
-    'fuzzy' => [
-        'prefix_length' => 2,
-        'max_expansions' => 50,
-        'distance' => 2
+        'storage'  => storage_path() . '/scout', //place where the index files will be stored
+        'fuzziness' => env('TNTSEARCH_FUZZINESS', false),
+        'fuzzy' => [
+            'prefix_length' => 2,
+            'max_expansions' => 50,
+            'distance' => 2
+        ],
+        'asYouType' => true,
+        'searchBoolean' => env('TNTSEARCH_BOOLEAN', false),
     ],
-    'asYouType' => false,
-    'searchBoolean' => env('TNTSEARCH_BOOLEAN', false),
-],
 
 ];

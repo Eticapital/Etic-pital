@@ -65,7 +65,7 @@ class ProjectPolicy
      */
     public function create(User $user)
     {
-        return $user->is_root;
+        return true;
     }
 
     /**

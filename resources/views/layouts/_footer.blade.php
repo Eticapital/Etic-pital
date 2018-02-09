@@ -31,7 +31,7 @@
           </div><!-- /.col-sm-6 -->
           <div class="col-sm-6">
             <ul class="menu-footer list-unstyled">
-              <li class="menu-footer-crowfunding"><a href="{{ route('home') }}">Crowfunding</a></li>
+              <li class="menu-footer-crowfunding"><a href="{{ route('home') }}">Crowdfunding</a></li>
               <li><a href="{{ route('invertir') }}">Invertir</a></li>
               <li><a href="{{ route('fondear-mi-proyecto') }}">Fondear mi proyecto</a></li>
               <li><a href="{{ route('login') }}">Ingresar</a></li>

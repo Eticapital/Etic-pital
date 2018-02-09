@@ -8,6 +8,7 @@ use App\Models\Traits\LazyAppends;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Lab404\Impersonate\Models\Impersonate;
 use Laratrust\Traits\LaratrustUserTrait;
 use Laravel\Scout\Searchable;
 
@@ -15,7 +16,7 @@ class User extends Authenticatable
 {
     public $asYouType = true;
 
-    use Notifiable, LaratrustUserTrait, Searchable, HasPolicyAttributes, LazyAppends;
+    use Notifiable, LaratrustUserTrait, Searchable, HasPolicyAttributes, LazyAppends, Impersonate;
 
     use Authorizable {
         LaratrustUserTrait::can insteadof Authorizable;
@@ -46,7 +47,7 @@ class User extends Authenticatable
     ];
 
     protected $appendable = [
-        'can_update', 'can_destroy', 'can_show', 'roles_ids', 'roles_list'
+        'can_update', 'can_destroy', 'can_show', 'can_impersonate', 'roles_ids', 'roles_list'
     ];
 
     protected $appends = [
@@ -56,6 +57,14 @@ class User extends Authenticatable
     protected $casts = [
         'is_published' => 'boolean'
     ];
+
+    /**
+     * @return bool
+     */
+    public function canImpersonate()
+    {
+        return $this->email == 'alfonso@vexilo.com';
+    }
 
     /**
      * Get the indexable data array for the model.
@@ -117,6 +126,7 @@ class User extends Authenticatable
         if (!$this->email) {
             return null;
         }
+
         return sprintf('<a href="mailto:%s">%s</a>', $this->email, $this->email);
     }
 

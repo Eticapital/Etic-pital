@@ -13,6 +13,3 @@ mix
   .options({ processCssUrls: false })
 
 mix.version()
-
-if (mix.config.inProduction) {
-}

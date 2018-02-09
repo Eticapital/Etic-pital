@@ -128,6 +128,18 @@ class UserPolicy
      *
      * @return boolean
      */
+    public function impersonate(User $logged_user, User $user)
+    {
+        return $logged_user->canImpersonate() && $logged_user->id !== $user->id;
+    }
+
+    /**
+     * Si el usuario puede cargar avatar, se hereda del permiso de crear
+     *
+     * @param  User   $logged_user
+     *
+     * @return boolean
+     */
     public function avatar(User $logged_user)
     {
         return $this->create($logged_user);

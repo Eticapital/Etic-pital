@@ -27,6 +27,10 @@
             <i class="icon-pen"></i> Editar
           </router-link>
 
+          <a v-if="canDataTable(props, 'impersonate')" :href="'/impersonate/take/' + props.rowData.id" class="btn btn-primary">
+            <i class="icon-user"></i> Impersonar
+          </a>
+
           <button v-if="canDataTable(props, 'destroy')" @click.prevent="deleteDataTable(props, 'users')" class="btn btn-danger">
             <i class="icon-bin"></i>
           </button>
@@ -58,7 +62,7 @@ export default {
       table: {
         url: '/users',
         appendParams: {
-          appends: ['can_update', 'can_destroy', 'can_show']
+          appends: ['can_update', 'can_destroy', 'can_show', 'can_impersonate']
         },
         fields: [
           {

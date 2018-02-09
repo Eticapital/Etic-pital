@@ -63,6 +63,11 @@
           @if(auth()->user()->is_admin)
           <b-dropdown-item href="{{ route('admin') }}">Administración</b-dropdown-item>
           @endif
+          @impersonating
+          <b-dropdown-item href="{{ route('impersonate.leave') }}">
+            <i class="icon-user"></i> Regresar a mi usuario
+          </b-dropdown-item >
+          @endImpersonating
           <logout-link class="dropdown-item">Cerrar sesión</logout-link>
         </b-nav-item-dropdown>
         @else

@@ -65,6 +65,13 @@
 
           <b-dropdown-divider></b-dropdown-divider>
 
+
+          @impersonating
+          <b-dropdown-item href="{{ route('impersonate.leave') }}">
+            <i class="icon-exit"></i> Regresar a mi usuario
+          </b-dropdown-item >
+          @endImpersonating
+
           <b-dropdown-item @click.prevent="logout">
             <i class="icon-exit"></i> Salir
           </b-dropdown-item >

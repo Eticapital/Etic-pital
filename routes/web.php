@@ -6,6 +6,9 @@ Route::view('/index.html', 'corporativo')->name('corporativo');
 Route::view('/fondos-de-inversión.html', 'corporativo-fondo-de-inversion');
 Route::view('/contacto-inversionista.html', 'corporativo-contacto-inversionista');
 
+
+Route::impersonate();
+
 Route::group(['prefix' => 'plataforma'], function () {
     Route::get('/', 'HomeController@index')->name('home');
     Route::view('/como-funciona', 'como-funciona')->name('como-funciona');
@@ -43,6 +46,7 @@ Route::post('/fondo-de-inversion', 'FondoDeInversionController@submitForm');
 Route::get('/sectors', 'SectorController@index');
 Route::get('/stages', 'ProjectStageController@index');
 Route::get('/rewards', 'RewardController@index');
+
 
 
 Auth::routes();

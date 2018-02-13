@@ -72,7 +72,7 @@ export default {
 
   computed: {
     rolesOptions () {
-      return this.roles.map(role => {
+      return this.roles.filter(role => role.id !== 1 && role.id !== 2).map(role => {
         return {
           value: role.id,
           text: role.display_name
@@ -90,7 +90,7 @@ export default {
       let params = {
         per_page: 1000000
       }
-      axios.get(App.basePath + 'roles', {params: params})
+      axios.get(App.basePath + 'roles', { params: params })
         .then(response => {
           this.roles = response.data.data;
         })

@@ -118,6 +118,9 @@ export default {
   font-weight: 400;
   line-height: 1.5;
   color: #4C4E52;
+
+}
+.ql-editor {
   min-height: 180px
 }
 .ql-container strong {

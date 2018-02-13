@@ -1,15 +1,16 @@
 <template>
   <li class="File" >
     <i v-if="file.error" class="File__icon icon-file-empty text-danger"></i>
-    <i v-else-if="file.active" class="File__icon icon-file-empty text-muted"></i>
-    <i v-else :class="['File__icon', 'text-success', 'icon-' + (file.icon || 'file-empty')]"></i>
+    <i v-else-if="isActive" class="File__icon icon-file-empty text-muted"></i>
+    <i v-else :class="['File__icon', 'text-success', 'icon-file-empty']"></i>
 
     <span class="File__name">{{ file.name }}</span>
+
     <span v-if="file.error" class="File__iconstatus text-danger" v-b-tooltip.hover :title="errorMessage">
       <i class="icon-warning"></i>
       (más)
     </span>
-    <i v-else-if="file.active" class="File__iconstatus icon-spinner spinner text-muted"></i>
+    <i v-else-if="isActive" class="File__iconstatus icon-spinner spinner text-muted"></i>
     <i v-else class="File__iconstatus icon-checkmark text-success"></i>
 
     <a @click.prevent="doDelete" href="#" class="text-danger ml-auto"><i class="icon-bin"></i><span class="d-none d-lg-inline"> Eliminar</span></a>
@@ -18,6 +19,7 @@
 
 <script>
 export default {
+
   props: {
     file: {
       type: Object,
@@ -30,6 +32,12 @@ export default {
   },
 
   computed: {
+    isActive () {
+      if (this.file.project_id) {
+        return false
+      }
+      return this.file.active|| !this.file.success
+    },
     maxFileSizeFormatted () {
       return Math.floor(this.maxFileSize / (1024 * 1024)) + 'MB'
     },

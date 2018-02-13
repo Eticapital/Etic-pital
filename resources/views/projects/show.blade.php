@@ -56,7 +56,7 @@
               <p class="py-3"><a href="{{ route('project.investment.create', $project->slug) }}" class="btn btn-primary btn-wide">Invertir</a></p>
             </div> <!-- / .container -->
             <div class="container-fluid bg-light d-inline-flex align-items-center">
-                <img class="user-img rounded-circle m-3" src="/img/placeholdergrey.png">
+                <img class="user-img rounded-circle m-3" src="/img/persona.png">
                 <p class="pl-4 mb-0">Titular del proyecto:
                 <br><span class="h3">{{ $project->owner->name }}</span></p>
             </div> <!-- / .container-fluid -->

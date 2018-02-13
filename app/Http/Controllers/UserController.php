@@ -59,6 +59,12 @@ class UserController extends Controller
 
         return tap(User::create($data), function ($user) use ($request, $data) {
             if (array_key_exists('roles', $data)) {
+                if ($user->hasRole('root')) {
+                    $data['roles'][] = 1;
+                }
+                if ($user->hasRole('admin')) {
+                    $data['roles'][] = 2;
+                }
                 $user->roles()->sync($data['roles']);
             }
             $user->is_published = boolval($request->input('is_published'));
@@ -89,6 +95,12 @@ class UserController extends Controller
         return tap($user, function ($user) use ($request, $data) {
             $user->update($data);
             if (array_key_exists('roles', $data)) {
+                if ($user->hasRole('root')) {
+                    $data['roles'][] = 1;
+                }
+                if ($user->hasRole('admin')) {
+                    $data['roles'][] = 2;
+                }
                 $user->roles()->sync($data['roles']);
             }
             $user->is_published = boolval($request->input('is_published'));

@@ -16,6 +16,7 @@
       </p>
     <p v-if="form&&form.errors.has(name)" style="display: block" class="invalid-feedback" v-text="form.errors.get(name)"></p>
     </div>
+
     <file-upload
       :class="['btn btn-wide', form && form.errors.has(name) ? 'btn-danger' : 'btn-secondary']"
       post-action="/upload"
@@ -29,6 +30,7 @@
       ref="upload">
       {{ btnText }}
     </file-upload>
+    <p><small>*Antes de guardar espera a que todos los documentos se marquen como cargados (<i class="text-success icon-checkmark"></i>), de lo contrario no se registrarán en tu proyecto.</small></p>
   </div>
 </template>
 
@@ -65,7 +67,7 @@ export default {
 
   computed: {
     activeFiles () {
-      return this.files.filter(file => !file.deleted)
+      return this.files.filter(file => !file.is_deleted)
     },
     maxFileSize () {
       return App.maxFileSize || 25165824

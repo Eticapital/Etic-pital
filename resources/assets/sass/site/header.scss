@@ -6,6 +6,18 @@
   background-position: center bottom;
   background-size: cover;
   color: #fff;
+    padding-top: 70px;
+
+  @include media-breakpoint-up(lg) {
+    #navbarheader {
+      background-color: transparent !important;
+    }
+    a.nav-link {
+      color: #FFF !important;
+    }
+  }
+  @include media-breakpoint-down(md) {
+  }
 }
 
 

@@ -17,7 +17,7 @@ export default {
       this.busy = true
       axios.post('/logout')
         .then(response => {
-          window.location.replace('/')
+          window.location.replace('/plataforma')
         })
     }
   }

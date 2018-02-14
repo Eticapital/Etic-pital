@@ -26,7 +26,7 @@ class ProjectInvestmentRequest extends FormRequest
         return [
             'amount' => 'required|numeric',
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|confirmed',
             'phone' => 'required',
             'residence' => '',
             'organization' => '',

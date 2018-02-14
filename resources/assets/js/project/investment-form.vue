@@ -21,6 +21,7 @@
               <p><legend><span class="h2 text-primary">2.</span> <span class="h3">Tus datos</span></legend></p>
               <form-text :form="form" ref="name" name="name" label="Tu nombre completo:" />
               <form-text :form="form" ref="email" name="email" label="Dirección de correo:" />
+              <form-text :form="form" ref="email_confirmation" name="email_confirmation" label="Confirma tu correo electrónico:" />
               <form-text :form="form" ref="phone" name="phone" label="Teléfono" />
               <form-text :form="form" ref="organization" name="organization" label="Organización (Opcional)" />
               <form-text :form="form" ref="residence" name="residence" label="Lugar de residencia" />
@@ -64,6 +65,7 @@ export default {
         amount: null,
         name: '',
         email: '',
+        email_confirmation: '',
         phone: '',
         organization: '',
         residence: ''

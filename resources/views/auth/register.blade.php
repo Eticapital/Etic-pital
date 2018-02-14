@@ -33,6 +33,18 @@
                     @endif
             </div>
 
+            <div class="form-group{{ $errors->has('email_confirmation') ? ' has-error' : '' }}">
+                <label for="email_confirmation" class="control-label">Confirma tu correo electrónico</label>
+
+                    <input id="email_confirmation" type="email" class="form-control" name="email_confirmation" value="{{ old('email_confirmation') }}" required>
+
+                    @if ($errors->has('email_confirmation'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('email_confirmation') }}</strong>
+                        </span>
+                    @endif
+            </div>
+
             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                 <label for="password" class="control-label">Contraseña</label>
 

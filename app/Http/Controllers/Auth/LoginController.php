@@ -50,4 +50,19 @@ class LoginController extends Controller
         $credentials = array_add($credentials, 'is_published', 1);
         return $credentials;
     }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return redirect('/plataforma');
+    }
 }

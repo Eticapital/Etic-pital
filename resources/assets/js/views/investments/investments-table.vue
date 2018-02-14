@@ -9,6 +9,7 @@
             v-model="from"
             :clear-button="true"
             language="es"
+            :disabled="disableFrom"
           />
         </div>
         <div class="ml-3">
@@ -18,6 +19,7 @@
             v-model="to"
             :clear-button="true"
             language="es"
+            :disabled="disableTo"
           />
         </div>
       </div>
@@ -175,6 +177,20 @@ export default {
         ]
       }
     }
+  },
+
+  computed: {
+    disableFrom () {
+      return {
+        from: this.to || moment().toDate()
+      }
+    },
+    disableTo () {
+      return {
+        from: moment().toDate(),
+        to: this.from
+      }
+    },
   },
 
   watch: {

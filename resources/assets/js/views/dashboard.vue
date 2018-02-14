@@ -9,6 +9,7 @@
         v-model="from"
         :clear-button="true"
         language="es"
+        :disabled="disableFrom"
       />
     </div>
     <div class="ml-3">
@@ -18,6 +19,7 @@
         v-model="to"
         :clear-button="true"
         language="es"
+        :disabled="disableTo"
       />
     </div>
   </div>
@@ -138,6 +140,20 @@ export default {
       data: null,
       from: this.$route.query.from ? moment(this.$route.query.from).toDate() : null,
       to: this.$route.query.to ? moment(this.$route.query.to).toDate() : null
+    }
+  },
+
+  computed: {
+    disableFrom () {
+      return {
+        from: this.to || moment().toDate()
+      }
+    },
+    disableTo () {
+      return {
+        from: moment().toDate(),
+        to: this.from
+      }
     }
   },
 
